@@ -48,12 +48,6 @@ make
 ./BindingOfIsaac
 ```
 
-
-
-### Open the project with an IDE under Linux
-
-See [IDE_USAGE.md](IDE_USAGE.md) for details.
-
 ## License
 
 Author: Pecquery Matthias [@MTthoas](https://github.com/MTthoas/)
