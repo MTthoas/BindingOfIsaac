@@ -45,12 +45,12 @@ The improvements made to these modules are as follows:
 ## Usage
 
 In order to use the SDL2 CMake modules, we have to clone this repository in a
-sud-directory `cmake/sdl2` in our project as follows:
+sud-directory `ext/sdl2` in our project as follows:
 
 ```sh
 cd <PROJECT_DIR>
-git clone https://gitlab.com/aminosbh/sdl2-cmake-modules.git cmake/sdl2
-rm -rf cmake/sdl2/.git
+git clone https://gitlab.com/aminosbh/sdl2-cmake-modules.git ext/sdl2
+rm -rf ext/sdl2/.git
 ```
 
 Or if we are using git for our project, we can add this repository as a
@@ -58,7 +58,7 @@ submodule as follows:
 
 ```sh
 cd <PROJECT_DIR>
-git submodule add https://gitlab.com/aminosbh/sdl2-cmake-modules.git cmake/sdl2
+git submodule add https://gitlab.com/aminosbh/sdl2-cmake-modules.git ext/sdl2
 git commit -m "Add SDL2 CMake modules"
 ```
 
@@ -66,7 +66,7 @@ Then we should specify the modules path in the main CMakeLists.txt file like
 the following:
 
 ```cmake
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/ext/sdl2)
 ```
 
 Finally, we can use the SDL2 modules. There is two approaches that can be

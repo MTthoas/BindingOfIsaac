@@ -4,9 +4,9 @@ project(BindingOfIsaac)
 
 cmake_minimum_required(VERSION 3.5.1)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/ext/sdl2)
 
-file(GLOB SOURCES "src/*.c")
+file(GLOB SOURCES "sources/*.c")
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 target_include_directories(${PROJECT_NAME} PRIVATE include)
