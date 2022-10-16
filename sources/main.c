@@ -1,80 +1,98 @@
 #include <SDL2/SDL.h>
+
 #include <SDL2/SDL_image.h>
- 
-#define LARGEUR_TILE 24  // hauteur et largeur des tiles.
+
+#include "parseRoom.h"
+
+
+#define LARGEUR_TILE 24 // hauteur et largeur des tiles.
 #define HAUTEUR_TILE 16
- 
-#define NOMBRE_BLOCS_LARGEUR 15  // nombre a afficher en x et y
+
+#define NOMBRE_BLOCS_LARGEUR 15 // nombre a afficher en x et y
 #define NOMBRE_BLOCS_HAUTEUR 13
 
 
- 
- 
- 
-void Afficher(SDL_Renderer *renderer,SDL_Texture *texture, SDL_Surface* tileset,int nombre_blocs_largeur,int nombre_blocs_hauteur)
-{
+int main(int argc, char * argv[]) {
 
-    
-    int i,j;
-    SDL_Rect Rect_dest;
-    SDL_Rect Rect_source;
-    Rect_dest.w = LARGEUR_TILE;
-    Rect_dest.h = HAUTEUR_TILE;
-    Rect_source.w = LARGEUR_TILE;
-    Rect_source.h = HAUTEUR_TILE;
-    texture=SDL_CreateTextureFromSurface(renderer,tileset);
+    (void) argc;
+    (void) argv;
 
-    
-    for(i=0;i<nombre_blocs_largeur;i++)
-    {
-        for(j=0;j<nombre_blocs_hauteur;j++)
-        {
-            Rect_dest.x = i*LARGEUR_TILE;
-            Rect_dest.y = j*HAUTEUR_TILE;
-            Rect_source.x = (98-'0')*LARGEUR_TILE;
-            Rect_source.y = 0;
-            //SDL_QueryTexture(texture,NULL,NULL,&Rect_dest.w,&Rect_dest.h);
-            SDL_RenderCopy(renderer, texture, &Rect_source, &Rect_dest);
-            //SDL_BlitSurface(tileset,NULL,screen,&Rect_dest);
-        }
-    }
-    SDL_RenderPresent(renderer);
-    SDL_DestroyTexture(texture);
-}
- 
-int main(int argc,char** argv)
-{
+    // int ** matrix;
 
-    (void)argc;
-    (void)argv;
 
-    SDL_Surface *tileset;
-    SDL_Event event;
-    SDL_Init(SDL_INIT_VIDEO);
-     
-        // prepare SDL
-        SDL_Window * window = SDL_CreateWindow("Tile",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, LARGEUR_TILE*NOMBRE_BLOCS_LARGEUR,HAUTEUR_TILE*NOMBRE_BLOCS_HAUTEUR,0);
-        SDL_Renderer * renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED);
-        SDL_Texture *texture = NULL;
-        //screen = SDL_GetWindowSurface(window);
-        tileset = IMG_Load("/home/matthias/Bureau/Projet/BindingOfIsaac/resources/ProjectUtumno_full.png");
- 
-    if (!tileset)
-    {
-        printf("IMG_Load: %s\n", IMG_GetError());
-        SDL_Quit();
-        system("pause");
-        exit(-1);
-    }
-    Afficher(renderer,texture,tileset,NOMBRE_BLOCS_LARGEUR,NOMBRE_BLOCS_HAUTEUR);
- 
-    do
-    {
-        SDL_WaitEvent(&event);
-    } while (event.type!=SDL_KEYDOWN);
-     
-    SDL_FreeSurface(tileset);
-    SDL_DestroyRenderer(renderer);
-    SDL_Quit();
+    // matrix = FetchRoom();
+    // printf("Matrix is : \n");
+    // for (int i = 0; i < 3; i++) {
+    //     for (int j = 0; j < 3; j++) {
+    //         printf("%d", matrix[i][j]);
+    //         printf("\t");
+    //     }
+    //     printf("\n");
+    // }
+
+
+
+  Room(3);
+  
+
+  printf("\n");
+  printf("\n");
+    // for(int i = 0; i<2; i++){
+    //     printf("%d", tab[i]);
+    // }
+
+
     return 0;
+
+    //     SDL_Window *window = NULL;
+    //     SDL_Renderer *renderer = NULL;
+    //     SDL_Texture *texture = NULL;
+    //     int statut = EXIT_FAILURE;
+    //     SDL_Rect rect = {100, 100, 100, 100}, dst = {0, 0, 0, 0};
+    //     SDL_Color rouge = {255, 0, 0, 255}, bleu = {0, 0, 255, 255};
+
+    //     if(0 != SDL_Init(SDL_INIT_VIDEO))
+    //     {
+    //         fprintf(stderr, "Erreur SDL_Init : %s", SDL_GetError());
+    //         goto Quit;
+    //     }
+    //     if(0 != SDL_CreateWindowAndRenderer(640, 480, SDL_WINDOW_SHOWN, &window, &renderer))
+    //     {
+    //         fprintf(stderr, "Erreur SDL_CreateWindowAndRenderer : %s", SDL_GetError());
+    //         goto Quit;
+    //     }
+    //     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, 
+    //                                 SDL_TEXTUREACCESS_TARGET, 200, 200);
+    //     if(NULL == texture)
+    //     {
+    //         fprintf(stderr, "Erreur SDL_CreateTexture : %s", SDL_GetError());
+    //         goto Quit;
+    //     }
+
+    //     SDL_SetRenderTarget(renderer, texture);
+    //     /* La texture est la cible de rendu, maintenant, on dessine sur la texture. */
+    //     SDL_SetRenderDrawColor(renderer, bleu.r, bleu.g, bleu.b, bleu.a);
+    //     SDL_RenderClear(renderer);
+    //     SDL_SetRenderDrawColor(renderer, rouge.r, rouge.g, rouge.b, rouge.a);
+    //     SDL_RenderFillRect(renderer, &rect); /* On dessine un rectangle rouge sur la texture. */
+
+    //     SDL_SetRenderTarget(renderer, NULL); /* Le renderer est la cible de rendu. */
+
+    //     /* On récupère les dimensions de la texture, on la copie sur le renderer
+    //        et on met à jour l’écran. */
+    //     SDL_QueryTexture(texture, NULL, NULL, &dst.w, &dst.h);
+    //     SDL_RenderCopy(renderer, texture, NULL, &dst);
+    //     SDL_RenderPresent(renderer);
+    //     statut = EXIT_SUCCESS;
+    //     SDL_Delay(3000);
+
+    // Quit:
+    //     if(NULL != texture)
+    //         SDL_DestroyTexture(texture);
+    //     if(NULL != renderer)
+    //         SDL_DestroyRenderer(renderer);
+    //     if(NULL != window)
+    //         SDL_DestroyWindow(window);
+    //     SDL_Quit();
+    //     return statut;
 }
