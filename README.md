@@ -15,7 +15,7 @@ It uses the [SDL2][SDL] library to render graphics and uses [CMake][] as a bin s
 **On Debian/Ubuntu based distributions, use the following command:**
 
 ```sh
-sudo apt install git bin-essential pkg-config cmake cmake-data libsdl2-dev libsdl2-gfx-dev
+sudo apt install git pkg-config cmake cmake-data libsdl2-dev libsdl2-gfx-dev
 ```
 
 **Optional packages:**
