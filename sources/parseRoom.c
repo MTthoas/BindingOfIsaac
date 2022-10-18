@@ -11,6 +11,7 @@
 #include <ctype.h>
 
 char ** RoomByNumber(int height, int length, int number);
+char *copy_not_empty(const char *str);
 
 
 int ** FetchRoom() {
@@ -80,7 +81,7 @@ void Room(int number) {
 
     int * tab = 0;
     int iteration = 1;
-    char ** matrix;
+
 
     while ((read = getline( & line, & len, fp)) != -1) {
         if (strcspn(line, "[") == 0) {
@@ -100,16 +101,16 @@ void Room(int number) {
             if (iteration == number) {
                 printf("%d %d %d \n", tab[0], tab[1], tab[2]);
 
+                char ** matrix = malloc(sizeof(char*) * tab[0]);
+
                 matrix = RoomByNumber(tab[0], tab[1], tab[2]);
+
                  printf("\n");
 
-                for (int i = 0; i < 3; i++) {
-                    for (int j = 0; j < 3; j++) {
-                        printf("%d", matrix[i][j]);
-                        printf("\t");
-                    }
-                    printf("\n");
-                }
+                for( int i = 0; i < tab[0]; i++){
+                    printf("%s", matrix[i]);  
+                        printf("\n");                                                       
+                }                                                               
 
 
             }
@@ -127,26 +128,86 @@ void Room(int number) {
 
 }
 
+char *copy_not_empty(const char *str)
+{
+  size_t i;
+  size_t j;
+  char *new = malloc(strlen(str) + 1);
+
+  for (i = j = 0; i < strlen(str); ++i)
+  {
+    if (str[i] != ' ')
+      new[j++] = str[i];
+  }
+  for (; j <= i; j++)
+    new[j] = 0; // pad with nulbytes
+  return new;
+}
+
 char ** RoomByNumber(int height, int length, int number) {
 
-    char ** matrix;
-    int i = 0;
-    int j = 0;
+    // char ** matrix;
+    // int i = 0;
+    // int j = 0;
 
-    (void) number;
+    int iteration = 0;
+        
+    FILE * fp;
+    char * line = NULL;
+    size_t len = 0;
+    ssize_t read;
 
-    matrix = malloc(sizeof(char * ) * length);
+    int num = 0;
 
-    for (i = 0; i < length; i++) {
-        matrix[i] = malloc(sizeof(char * ) * height);
-    }
+    // size_t numLines = 0;
+    char **lines = malloc(sizeof(char*) * height);
 
-    for (i = 0; i < height; i++) {
-        for (j = 0; j < height; j++) {
-            matrix[i][j] = 3;
+    // int lines = 0;
+
+     fp = fopen("/home/matthias/Bureau/Projet/BindingOfIsaac/resources/room.rtbob", "r");
+    if (fp == NULL)
+        exit(EXIT_FAILURE);
+
+          printf("\n");
+            // printf("\n");
+
+    while ((read = getline( &line, & len, fp)) != -1) {
+       iteration++;
+
+        if(iteration > 2 + (number - 1) * (height + 1) && iteration <= 2 + (number - 1) * (height + 1) + height){
+           
+            // printf("%d ", height);
+            // printf("%d ", num);
+
+            if (num == height) {
+                 char **newlines = realloc(lines, sizeof(char*) * height);
+                  if (!newlines) {
+                    printf("error reallocating array\n");
+                    break;
+                }
+                lines = newlines;
+                printf("Test");
+            }
+            
+            lines[ num ] = line;
+            num++;
+
+            line = NULL;
+            len = 0;
+
         }
-    }
+       
+    };
 
-    return matrix;
+    // free(lines);
+
+    (void)length;
+
+    fclose(fp);
+
+    if (line)
+        free(line);
+
+    return lines;
 
 }
