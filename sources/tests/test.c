@@ -1,8 +1,10 @@
 #include<stdio.h>
 #include<string.h>
 #include<string.h>
+#include<stdlib.h>
 
 #include "test.h"
+#include "../include/mystring.h"
 
 int main(void) {
     test_extensionType();
@@ -13,38 +15,33 @@ int main(void) {
 void test_extensionType() {
 
     printf("[TEST] extensionType() :\n\n");
-
-    int res = extensionType("o.itbob");
-    printf("REs : %d\n", res);
-
-    /*
-    printf("Fichier : %s\nAttendu : %d\nRésultat : %d\n\n", "o.itbob", 1, extensionType("o.itbob"));
-    printf("Fichier : %s\nAttendu : %d\nRésultat : %d\n\n", "m.rtbob", 1, extensionType("m.rtbob"));
-    printf("Fichier : %s\nAttendu : %d\nRésultat : %d\n\n", "m.mtbob", 1, extensionType("m.mtbob"));
-    printf("Fichier : %s\nAttendu : %d\nRésultat : %d\n\n", "", 1, extensionType(""));
-    printf("Fichier : %s\nAttendu : %d\nRésultat : %d\n\n", "sujet.pdf", 1, extensionType("sujet.pdf"));
-    printf("Fichier : %s\nAttendu : %d\nRésultat : %d\n\n   ", "jeidjioc", 1, extensionType("jeidjioc")); 
-    */
-
+   
+    printf("Fichier : %s\nAttendu : %d\nRésultat : %d\n\n", "o.itbob", EXTENSION_FICHIER_OBJET, extensionType("o.itbob"));
+    printf("Fichier : %s\nAttendu : %d\nRésultat : %d\n\n", "m.rtbob", EXTENSION_FICHIER_MONSTRES, extensionType("m.mtbob"));
+    printf("Fichier : %s\nAttendu : %d\nRésultat : %d\n\n", "m.rtbob", EXTENSION_FICHIER_SALLES, extensionType("m.rtbob"));
+    printf("Fichier : %s\nAttendu : %d\nRésultat : %d\n\n", "", EXTENSION_INVALIDE, extensionType(""));
+    printf("Fichier : %s\nAttendu : %d\nRésultat : %d\n\n", "sujet.pdf", EXTENSION_INVALIDE, extensionType("sujet.pdf"));
+    printf("Fichier : %s\nAttendu : %d\nRésultat : %d\n\n", "jeidjioc", EXTENSION_INVALIDE, extensionType("jeidjioc"));
 
 }
 
 int extensionType(char* filename) { 
-    if(strlen(filename) <= 6) { // .*tbob == 6 caractères
+    char* nomFichier = duplicateString(filename);
+    if(strlen(nomFichier) == 0) {
+        return EXTENSION_INVALIDE;
+    }
+    
+    char* prefix = strtok(nomFichier, ".");
+    if(strcmp(prefix, nomFichier) == 0) { // pas de "."
         return EXTENSION_INVALIDE;
     }
 
-    char* prefixe = malloc(sizeof(char) * 255);
-    prefixe = strtok(filename, ".");
-
-    char* extension = malloc(sizeof(char) * 255);
-    extension = strtok(NULL, ".");
-
-    if(strcmp(extension, "itbob")) { 
-        return EXTENSION_FICHIER_OBJET;
-    } else if(strcmp(extension, "mtbob")) { 
+    char* extension = strtok(NULL, ".");
+    if(strcmp(extension, "mtbob") == 0) {
         return EXTENSION_FICHIER_MONSTRES;
-    } else if(strcmp(extension, "rtbob")) { 
+    } else if(strcmp(extension, "itbob") == 0) {
+        return EXTENSION_FICHIER_OBJET;
+    } else if(strcmp(extension, "rtbob") == 0) {
         return EXTENSION_FICHIER_SALLES;
     } 
 

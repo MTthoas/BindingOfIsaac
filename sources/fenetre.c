@@ -9,7 +9,7 @@
  * 
  */
 #include <SDL2/SDL.h>
-#include "headers/fenetre.h"
+#include "include/fenetre.h"
 
 int lancerInterfaceGraphique()
 {

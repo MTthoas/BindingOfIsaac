@@ -65,11 +65,11 @@
     /**
      * @brief Renvoie 1 si fichier conforme, 0 sinon.
      * 
-     * @param fichier fichier, toutes les extensions sont prises en charge 
-     * @param extension nom du fichier
+     * @param fichier fichier
+     * @param filename nom du fichier , toutes les extensions sont prises en charge 
      * @return int 
      */
-    int fichierValide(FILE* fichier, int extension);
+    int fichierValide(FILE* fichier, char* filename);
 
     /**
      * @brief Renvoie l'extension du fichier sous forme d'un entier tel quel :

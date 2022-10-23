@@ -10,9 +10,9 @@
  */
 
 //#include <SDL2/SDL.h>
-#include "headers/fenetre.h"
-#include "headers/lectureFichiers.h"
-#include "headers/objets.h"
+#include "include/fenetre.h"
+#include "include/lectureFichiers.h"
+#include "include/objets.h"
 
 int main(int argc, char const *argv[]) {
     //int res = lancerInterfaceGraphique();

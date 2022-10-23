@@ -8,10 +8,10 @@
  * @copyright Copyright (c) 2022
  * 
  */
-#include "headers/lectureFichiers.h"
-#include "headers/cheminsFichiers.h"
-#include "headers/array.h"
-#include "headers/mystring.h"
+#include "include/lectureFichiers.h"
+#include "include/cheminsFichiers.h"
+#include "include/array.h"
+#include "include/mystring.h"
 
 #include <string.h>
 
@@ -91,21 +91,44 @@ void afficherFichier(FILE* fichier) {
     return;
 }
 
-int fichierValide(FILE* fichier, int extension) {
+int fichierValide(FILE* fichier, char* filename) {
+    printf(" à coder :)\n");
 
+    /**
+     * prendre l'extension. 
+     * si ok, vérifer que premiere ligne {x}
+     * ensuite
+     * si salle :
+     * - vérifier dimensions, lettre inconnues
+     * 
+     * si mobs / items à chaque ligne :
+     * - vérifier si lettre ou -
+     * - si -, vérifier que buffer == ---
+     * - si lettre, vérifier que mot avant = est une stat existante 
+     * 
+     * 2 heures pour coder ça, donc vérifier le besoin avant
+     */
 
     return 0;
 }
 
-int extensionType(char* filename) {
-    strtok(filename, ".");
-    char* extension = strtok(NULL, ".");
+int extensionType(char* filename) { 
+    char* nomFichier = duplicateString(filename);
+    if(strlen(nomFichier) == 0) {
+        return EXTENSION_INVALIDE;
+    }
+    
+    char* prefix = strtok(nomFichier, ".");
+    if(strcmp(prefix, nomFichier) == 0) { // pas de "."
+        return EXTENSION_INVALIDE;
+    }
 
-    if(strcmp(extension, "itbob")) { 
-        return EXTENSION_FICHIER_OBJET;
-    } else if(strcmp(extension, "mtbob")) { 
+    char* extension = strtok(NULL, ".");
+    if(strcmp(extension, "mtbob") == 0) {
         return EXTENSION_FICHIER_MONSTRES;
-    } else if(strcmp(extension, "rtbob")) { 
+    } else if(strcmp(extension, "itbob") == 0) {
+        return EXTENSION_FICHIER_OBJET;
+    } else if(strcmp(extension, "rtbob") == 0) {
         return EXTENSION_FICHIER_SALLES;
     } 
 

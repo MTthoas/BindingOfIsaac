@@ -1,5 +1,15 @@
-#include "headers/objets.h"
+/**
+ * @file objets.c
+ * @author TheGreat-Chain
+ * @brief Structures et fonctions relatives aux objets de personnage
+ * @version 0.1
+ * @date 2022-10-24
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #include <stdio.h>
+#include "include/objets.h"
 
 void displayObjet(Objet* objet) {
     printf("\n");

@@ -9,7 +9,7 @@
  *
  */
 
-#include "headers/array.h"
+#include "include/array.h"
 
 void clearIntArray(int *array, int size)
 {

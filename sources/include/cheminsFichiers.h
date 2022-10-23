@@ -12,9 +12,9 @@
 #ifndef CHEMINS_FICHIERS_H
 #define CHEMINS_FICHIERS_H
 
-    #define CHEMIN_FICHIER_OBJETS "./ressources/objetsBonus.itbob"
-    #define CHEMIN_FICHIER_MONSTRES 0
-    #define CHEMIN_FICHIER_PIECES 0
+    #define CHEMIN_FICHIER_OBJETS "./resources/items.itbob"
+    #define CHEMIN_FICHIER_MONSTRES "./resources/mob.rtbob"
+    #define CHEMIN_FICHIER_PIECES 0 "./resources/room.rtbob"
 
 #endif
 

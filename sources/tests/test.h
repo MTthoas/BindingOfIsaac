@@ -15,4 +15,15 @@
     #define EXTENSION_INVALIDE 0
 
 void test_extensionType();
+
+    /**
+     * @brief Renvoie l'extension du fichier sous forme d'un entier tel quel :
+     * 0 : fichier invalide,
+     * 1 : fichier objets,
+     * 2 : fichier monstres,
+     * 3 : fichier salles
+     * 
+     * @param filename nom du fichier. ex : salles.rtbob
+     * @return int 
+     */
 int extensionType(char* filename);

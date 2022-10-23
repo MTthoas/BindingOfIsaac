@@ -1,4 +1,4 @@
-#include "headers/mystring.h"
+#include "include/mystring.h"
 
 #include <string.h>
 #include <stdlib.h>
