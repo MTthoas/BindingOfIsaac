@@ -25,11 +25,26 @@
         int flight; //passer au dessus de trous rochers et pic
     } Objet;
 
-    /**
+        /**
      * @brief Liste de tous les objets du fichier des objets. 
      */
     typedef struct ListeObjets {
+        /**
+         * @brief Nombre d'objets effectivement dans le tableau.
+         * 
+         */
         int nombreObjets;
+
+        /**
+         * @brief Capacité totale du tableau d'objets.
+         * 
+         */
+        int capacite;
+
+        /**
+         * @brief Tableau des objets bonus utilisés dans le jeu.
+         * 
+         */
         Objet* tabObjets;
         
     } ListeObjets;
@@ -41,24 +56,26 @@
      * 
      * @param listeObjets 
      */
-    void displayListeObjets(ListeObjets* listeObjets);
+    void* displayListeObjets(ListeObjets* listeObjets);
 
     /**
      * @brief Affiche l'objet et ses attributs dans le terminal.
+     * Tous les champs doivent être remplis sinon erreur de segmentation !
      * 
      * @param objet objet à afficher
      */
-    void displayObjet(Objet* objet);
+    void* displayObjet(Objet* objet);
 
     /**
      * @brief Ajouter un objet dans la liste des objets.
+     * Retourne l'id du nouvel objet.
      * 
      * CREATE du CRUD
      * 
      * @param listeObjets 
      * @param newObjet 
      */
-    void addObjet(ListeObjets* listeObjets, Objet* newObjet);
+    int addObjet(ListeObjets* listeObjets, Objet* newObjet);
 
     /**
      * @brief Retire un objet de la structure de la liste des objets
@@ -82,13 +99,24 @@
     void modifyObjet(ListeObjets* listeObjets, int idObjetToReplace, Objet* newObjet);
 
     /**
-     * @brief Retourne l'adresse de l'objet ayant l'id correspondant
+     * @brief Retourne l'adresse de l'objet de la liste ayant l'id correspondant.
+     * Retourne NULL si l'id demandé n'existe pas.
      * 
      * @param ListeObjets 
      * @param id 
      * @return Objet* 
      */
-    Objet* findObjetById(ListeObjets* ListeObjets, int id);
+    Objet* getObjetById(ListeObjets* ListeObjets, int id);
+
+
+    /**
+     * @brief Retourne l'adresse d'un nouvel espace mémoire alloué à un objet dont la valeur des champs est identique
+     * à ceux de l'objet en paramètre.
+     * 
+     * @param objet objet à copier
+     * @return Objet* 
+     */
+    Objet* duplicateObject(Objet* objet);
 
 
 

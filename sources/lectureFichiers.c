@@ -26,7 +26,7 @@ ListeObjets* fichierToListeObjets() {
         exit(EXIT_FAILURE);
     }
 
-    // vérifier validité du fichier !!
+    // vérifier validité du fichier ?
 
     int nbObjets = getNombreObjets(fichier);
     if(nbObjets == 0) {

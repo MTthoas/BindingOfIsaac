@@ -7,10 +7,195 @@
 #include "../include/mystring.h"
 
 int main(void) {
-    test_extensionType();
+    //test_extensionType();
+    //test_displayObjet();
+    //test_displayListeObjets();
+    //test_addObjet();
+    //test_duplicateObject();
+    test_copierEtGrandirListeObjets();
+    
     return 0;
 }
 
+void test_copierEtGrandirListeObjets() {
+    
+}
+
+ListeObjets* copierEtGrandirListeObjets(ListeObjets* listeObjets) {
+    return NULL;
+}
+
+void test_duplicateObject() {
+    printf("[TEST] duplicateObject() :\n\n");
+
+    Objet o1;
+    o1.id = 1;
+    o1.name = "Un objet";
+    o1.hpMax = 100;
+    o1.shield = 20;
+    o1.damage = 30;
+    o1.piercingShot = 1;
+    o1.spectralShot = 0;
+    o1.flight = 0;
+
+    Objet* o1copy = duplicateObject(&o1);
+    printf("Objet 1 : \n");
+    displayObjet(&o1);
+    printf("\nCopie Objet 1 : \n");
+    displayObjet(o1copy);
+
+    Objet* o2copy = duplicateObject(NULL);
+    printf("Objet 2 (NULL) : \n");
+    displayObjet(NULL);
+    printf("\nCopie Objet 2 : \n");
+    displayObjet(o2copy);
+    
+}
+
+Objet* duplicateObject(Objet* objet) {
+    if(objet == NULL) {
+        return NULL;
+    }
+
+    Objet* newObjet = malloc(sizeof(Objet)* 1);
+    newObjet->id = objet->id;
+    newObjet->name = duplicateString(objet->name);
+    newObjet->hpMax = objet->hpMax;
+    newObjet->shield = objet->shield;
+    newObjet->damage = objet->damage;
+    newObjet->piercingShot = objet->piercingShot;
+    newObjet->spectralShot = objet->spectralShot;
+    newObjet->flight = objet->flight;
+    
+    return newObjet;
+}
+
+void test_addObjet() {
+    printf("[TEST] addObjet() :\n\n");
+
+    Objet o1, o2, o3, o4;
+    o1.id = 1;
+    o1.name = "Un objet";
+    o1.hpMax = 100;
+    o1.shield = 20;
+    o1.damage = 30;
+    o1.piercingShot = 1;
+    o1.spectralShot = 0;
+    o1.flight = 0;
+
+    o2.id = 2;
+    o2.name = "Belek";
+    o2.hpMax = 150;
+    o2.shield = 20;
+    o2.damage = 30;
+    o2.piercingShot = 1;
+    o2.spectralShot = 0;
+    o2.flight = 0;
+
+    o3.id = 3;
+    o3.name = "Un autre objet";
+    o3.hpMax = 100;
+    o3.shield = 20;
+    o3.damage = 30;
+    o3.piercingShot = 1;
+    o3.spectralShot = 0;
+    o3.flight = 1;
+
+    o4.id = 4;
+    o4.name = "PFolala ça n'en finit pas";
+    o4.hpMax = 120;
+    o4.shield = 2;
+    o4.damage = 3;
+    o4.piercingShot = 0;
+    o4.spectralShot = 0;
+    o4.flight = 0;
+
+    Objet tab[3];
+    tab[0] = o1;
+    tab[1] = o2;
+
+    ListeObjets listeObjets;
+    listeObjets.tabObjets = tab;
+    listeObjets.capacite = 3;
+    listeObjets.nombreObjets = 2;
+
+    printf("Avant insertion :\n");
+    displayListeObjets(&listeObjets);
+    addObjet(&listeObjets, &o3);
+    printf("Après insertion :\n");
+    displayListeObjets(&listeObjets);
+    addObjet(&listeObjets, &o4);
+    printf("Après insertion :\n");
+    displayListeObjets(&listeObjets);
+
+}
+
+int addObjet(ListeObjets* listeObjets, Objet* newObjet) {
+    int index = listeObjets->nombreObjets;
+    int capacite = listeObjets->capacite;
+    
+    if(listeObjets->nombreObjets == listeObjets->capacite) { // tableau rempli
+        ListeObjets* listeObjets = copierEtGrandirListeObjets(listeObjets);
+        listeObjets->tabObjets[index] = *newObjet;
+        listeObjets->nombreObjets += 1;
+    } 
+    
+    return listeObjets->nombreObjets;
+}
+
+void test_displayListeObjets() {
+    printf("[TEST] displayListeObjets() :\n\n");
+
+    Objet o1, o2, o3;
+    o1.id = 1;
+    o1.name = "Un objet";
+    o1.hpMax = 100;
+    o1.shield = 20;
+    o1.damage = 30;
+    o1.piercingShot = 1;
+    o1.spectralShot = 0;
+    o1.flight = 0;
+
+    o2.id = 2;
+    o2.name = "Belek";
+    o2.hpMax = 150;
+    o2.shield = 20;
+    o2.damage = 30;
+    o2.piercingShot = 1;
+    o2.spectralShot = 0;
+    o2.flight = 0;
+
+    o3.id = 3;
+    o3.name = "Un autre objet";
+    o3.hpMax = 100;
+    o3.shield = 20;
+    o3.damage = 30;
+    o3.piercingShot = 1;
+    o3.spectralShot = 0;
+    o3.flight = 1;
+
+    Objet mesObjets[3] = {o1, o2, o3};
+    ListeObjets listeObjets;
+    listeObjets.tabObjets = mesObjets;
+    listeObjets.nombreObjets = 3;
+
+    displayListeObjets(&listeObjets);
+
+}
+
+void* displayListeObjets(ListeObjets* listeObjets) {
+    if(listeObjets == NULL) {
+        return NULL;
+    }
+
+    int nbObjets = listeObjets->nombreObjets;
+    printf("\n");
+    for (int i = 0 ; i < nbObjets ; i+=1) {
+        displayObjet(&listeObjets->tabObjets[i]);
+    }
+
+    return NULL;
+}
 
 void test_extensionType() {
 
@@ -23,6 +208,51 @@ void test_extensionType() {
     printf("Fichier : %s\nAttendu : %d\nRésultat : %d\n\n", "sujet.pdf", EXTENSION_INVALIDE, extensionType("sujet.pdf"));
     printf("Fichier : %s\nAttendu : %d\nRésultat : %d\n\n", "jeidjioc", EXTENSION_INVALIDE, extensionType("jeidjioc"));
 
+}
+
+void test_displayObjet() {
+    printf("[TEST] displayObjet() :\n\n");
+    Objet o;
+    o.id = 1;
+    o.name = "Mon objet";
+    o.hpMax = 100;
+    o.shield = 100;
+    o.damage = 0;
+    o.piercingShot = 1;
+    o.spectralShot = 0;
+    o.flight = 0;
+
+    Objet o2;
+    o2.id=2;
+
+    Objet o3;
+
+    displayObjet(&o); 
+    displayObjet(&o2);
+    displayObjet(&o3);
+}
+
+void* displayObjet(Objet* objet) {
+    if(objet == NULL) {
+        printf("Pas d'objet\n");
+        return NULL;
+    }
+
+    printf("[WARN] Utilisation de displayObjet(). \nSi les champs ne sont pas remplis, erreur de segmentation possible.\n");
+    char* nomObjet = duplicateString(objet->name);
+    
+    printf("\n");
+    printf("id : %d\n", objet->id);
+    printf("name : %s\n", nomObjet);
+    printf("hpMax : %d\n", objet->hpMax);
+    printf("shield : %d\n", objet->shield);
+    printf("damage : %d\n", objet->damage);
+    printf("piercingShot : %d\n", objet->piercingShot);
+    printf("spectralShot : %d\n", objet->spectralShot);
+    printf("flight : %d\n", objet->flight);
+    printf("\n");
+
+    return NULL;
 }
 
 int extensionType(char* filename) { 
