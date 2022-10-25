@@ -15,33 +15,6 @@
 
 #include <string.h>
 
-ListeObjets* fichierToListeObjets() {
-    ListeObjets* listeObjets = malloc(sizeof(ListeObjets) * 1);
-
-    FILE* fichier = NULL;
-    fichier = fopen(CHEMIN_FICHIER_OBJETS, "r");
-
-    if(fichier == NULL) { //gestion erreur
-        printf("Impossible d'ouvrir le fichier : %s.\nFin.\n", CHEMIN_FICHIER_OBJETS);
-        exit(EXIT_FAILURE);
-    }
-
-    // vérifier validité du fichier ?
-
-    int nbObjets = getNombreObjets(fichier);
-    if(nbObjets == 0) {
-        printf("Attention, 0 objets bonus créés.\n");
-    }
-    listeObjets->nombreObjets = nbObjets;
-
-    Objet* tabObjets = getTabObjets(fichier, nbObjets);
-    listeObjets->tabObjets = tabObjets;
-
-    //afficherFichier(fichier);
-    fclose(fichier);
-    return listeObjets;
-}
-
 int getNombreObjets(FILE* fichierObjets){
     char token[256];
     int index = 0;
@@ -62,22 +35,7 @@ int getNombreObjets(FILE* fichierObjets){
 }
 
 Objet* getTabObjets(FILE* fichierObjets, int nbObjets) {
-    rewind(fichierObjets); 
-
-    Objet* tabObjets = malloc(sizeof(Objet) * nbObjets);
-    
-    Objet* objet = NULL;
-    char buffer[255]; 
-    char* stat = malloc(sizeof(char) * 255);
-    char* value = malloc(sizeof(char) * 255);
-    unsigned int id = 0;
-
-    while(fgets(buffer, 255, fichierObjets)) { // lecture ligne par ligne
-        printf("A finir");
-    }   
-
-    free(tabObjets);
-    return NULL;
+    printf("Retourner l'adresse du premier élément de la liste :)");
 }
 
 void afficherFichier(FILE* fichier) {

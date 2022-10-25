@@ -9,21 +9,13 @@
 int main(void) {
     //test_extensionType();
     //test_displayObjet();
-    //test_displayListeObjets();
+    test_displayListeObjets();
     //test_addObjet();
     //test_duplicateObject();
-    test_copierEtGrandirListeObjets();
     
     return 0;
 }
 
-void test_copierEtGrandirListeObjets() {
-    
-}
-
-ListeObjets* copierEtGrandirListeObjets(ListeObjets* listeObjets) {
-    return NULL;
-}
 
 void test_duplicateObject() {
     printf("[TEST] duplicateObject() :\n\n");
@@ -68,133 +60,6 @@ Objet* duplicateObject(Objet* objet) {
     newObjet->flight = objet->flight;
     
     return newObjet;
-}
-
-void test_addObjet() {
-    printf("[TEST] addObjet() :\n\n");
-
-    Objet o1, o2, o3, o4;
-    o1.id = 1;
-    o1.name = "Un objet";
-    o1.hpMax = 100;
-    o1.shield = 20;
-    o1.damage = 30;
-    o1.piercingShot = 1;
-    o1.spectralShot = 0;
-    o1.flight = 0;
-
-    o2.id = 2;
-    o2.name = "Belek";
-    o2.hpMax = 150;
-    o2.shield = 20;
-    o2.damage = 30;
-    o2.piercingShot = 1;
-    o2.spectralShot = 0;
-    o2.flight = 0;
-
-    o3.id = 3;
-    o3.name = "Un autre objet";
-    o3.hpMax = 100;
-    o3.shield = 20;
-    o3.damage = 30;
-    o3.piercingShot = 1;
-    o3.spectralShot = 0;
-    o3.flight = 1;
-
-    o4.id = 4;
-    o4.name = "PFolala ça n'en finit pas";
-    o4.hpMax = 120;
-    o4.shield = 2;
-    o4.damage = 3;
-    o4.piercingShot = 0;
-    o4.spectralShot = 0;
-    o4.flight = 0;
-
-    Objet tab[3];
-    tab[0] = o1;
-    tab[1] = o2;
-
-    ListeObjets listeObjets;
-    listeObjets.tabObjets = tab;
-    listeObjets.capacite = 3;
-    listeObjets.nombreObjets = 2;
-
-    printf("Avant insertion :\n");
-    displayListeObjets(&listeObjets);
-    addObjet(&listeObjets, &o3);
-    printf("Après insertion :\n");
-    displayListeObjets(&listeObjets);
-    addObjet(&listeObjets, &o4);
-    printf("Après insertion :\n");
-    displayListeObjets(&listeObjets);
-
-}
-
-int addObjet(ListeObjets* listeObjets, Objet* newObjet) {
-    int index = listeObjets->nombreObjets;
-    int capacite = listeObjets->capacite;
-    
-    if(listeObjets->nombreObjets == listeObjets->capacite) { // tableau rempli
-        ListeObjets* listeObjets = copierEtGrandirListeObjets(listeObjets);
-        listeObjets->tabObjets[index] = *newObjet;
-        listeObjets->nombreObjets += 1;
-    } 
-    
-    return listeObjets->nombreObjets;
-}
-
-void test_displayListeObjets() {
-    printf("[TEST] displayListeObjets() :\n\n");
-
-    Objet o1, o2, o3;
-    o1.id = 1;
-    o1.name = "Un objet";
-    o1.hpMax = 100;
-    o1.shield = 20;
-    o1.damage = 30;
-    o1.piercingShot = 1;
-    o1.spectralShot = 0;
-    o1.flight = 0;
-
-    o2.id = 2;
-    o2.name = "Belek";
-    o2.hpMax = 150;
-    o2.shield = 20;
-    o2.damage = 30;
-    o2.piercingShot = 1;
-    o2.spectralShot = 0;
-    o2.flight = 0;
-
-    o3.id = 3;
-    o3.name = "Un autre objet";
-    o3.hpMax = 100;
-    o3.shield = 20;
-    o3.damage = 30;
-    o3.piercingShot = 1;
-    o3.spectralShot = 0;
-    o3.flight = 1;
-
-    Objet mesObjets[3] = {o1, o2, o3};
-    ListeObjets listeObjets;
-    listeObjets.tabObjets = mesObjets;
-    listeObjets.nombreObjets = 3;
-
-    displayListeObjets(&listeObjets);
-
-}
-
-void* displayListeObjets(ListeObjets* listeObjets) {
-    if(listeObjets == NULL) {
-        return NULL;
-    }
-
-    int nbObjets = listeObjets->nombreObjets;
-    printf("\n");
-    for (int i = 0 ; i < nbObjets ; i+=1) {
-        displayObjet(&listeObjets->tabObjets[i]);
-    }
-
-    return NULL;
 }
 
 void test_extensionType() {

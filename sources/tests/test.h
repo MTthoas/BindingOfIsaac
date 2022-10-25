@@ -19,7 +19,6 @@
     void test_displayListeObjets();
     void test_addObjet();
     void test_duplicateObject();
-    void test_copierEtGrandirListeObjets();
 
         /**
          * @brief Renvoie l'extension du fichier sous forme d'un entier tel quel :
@@ -34,7 +33,8 @@
     int extensionType(char* filename); // testé OK
 
     /**
-     * @brief Objets apportant des bonus de statistique au personnage. Un objet dont l'id est à 0 indique l'absence d'objet.
+     * @brief Objets apportant des bonus de statistique au personnage.
+     * Element de la liste chaînée ListeObjets. Pointe sur l'objet suivant.
      */
     typedef struct Objet {
         int id;
@@ -45,30 +45,17 @@
         int piercingShot; //tirs passent à travers les ennemis mais pas les rochers
         int spectralShot; //tirs passent à travers les rochers mais pas les ennemis
         int flight; //passer au dessus de trous rochers et pic
+
+        Objet* suivant;
+
     } Objet;
 
     /**
-     * @brief Liste de tous les objets du fichier des objets. 
+     * @brief Liste de tous les objets du jeu. 
+     * Liste chainée pointant vers le premier objet du jeu.
      */
     typedef struct ListeObjets {
-        /**
-         * @brief Nombre d'objets effectivement dans le tableau.
-         * 
-         */
-        int nombreObjets;
-
-        /**
-         * @brief Capacité totale du tableau d'objets.
-         * 
-         */
-        int capacite;
-
-        /**
-         * @brief Tableau des objets bonus utilisés dans le jeu.
-         * 
-         */
-        Objet* tabObjets;
-        
+        Objet* premier;
     } ListeObjets;
 
     /**
@@ -78,14 +65,14 @@
      * 
      * @param listeObjets 
      */
-    void* displayListeObjets(ListeObjets* listeObjets); // testé ok
+    void* displayListeObjets(ListeObjets* listeObjets); 
 
     /**
      * @brief Affiche l'objet et ses attributs dans le terminal.
      * 
      * @param objet objet à afficher
      */
-    void* displayObjet(Objet* objet); // testé OK
+    void* displayObjet(Objet* objet); 
 
     /**
      * @brief Retourne l'adresse d'un nouvel espace mémoire alloué à un objet dont la valeur des champs est identique
@@ -94,7 +81,7 @@
      * @param objet objet à copier
      * @return Objet* 
      */
-    Objet* duplicateObject(Objet* objet);
+    Objet* duplicateObject(Objet* objet); // testé OK
 
     /**
      * @brief Ajouter un objet dans la liste des objets. 
@@ -127,14 +114,19 @@
      */
     Objet* getObjetById(ListeObjets* ListeObjets, int id);
 
+
     /**
-     * @brief Crée un nouvel espace mémoire pour une liste objet plus grande que celle passée en
-     * paramètres, recopie ses valeurs et retourne l'adresse de cet espace mémoire.
+     * @brief Retire un objet de la structure de la liste des objets
      * 
-     * @param listeObjets listeObjets à dupliquer et grandir
-     * @return Objet* 
+     * REMOVE du CRUD
+     * 
+     * @param listeObjets 
+     * @param idObjet 
      */
-    ListeObjets* copierEtGrandirListeObjets(ListeObjets* listeObjets);
+    void removeObjet(ListeObjets* listeObjets, int idObjet);
+
+
+
 
 
 

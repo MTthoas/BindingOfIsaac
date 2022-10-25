@@ -13,6 +13,7 @@
 
     /**
      * @brief Objets apportant des bonus de statistique au personnage.
+     * Element de la liste chaînée ListeObjets. Pointe sur l'objet suivant.
      */
     typedef struct Objet {
         int id;
@@ -23,30 +24,18 @@
         int piercingShot; //tirs passent à travers les ennemis mais pas les rochers
         int spectralShot; //tirs passent à travers les rochers mais pas les ennemis
         int flight; //passer au dessus de trous rochers et pic
+
+        Objet* suivant;
+
     } Objet;
 
-        /**
-     * @brief Liste de tous les objets du fichier des objets. 
+    /**
+     * @brief Liste de tous les objets du jeu. 
+     * Liste chainée pointant vers le premier objet du jeu.
+     * 
      */
     typedef struct ListeObjets {
-        /**
-         * @brief Nombre d'objets effectivement dans le tableau.
-         * 
-         */
-        int nombreObjets;
-
-        /**
-         * @brief Capacité totale du tableau d'objets.
-         * 
-         */
-        int capacite;
-
-        /**
-         * @brief Tableau des objets bonus utilisés dans le jeu.
-         * 
-         */
-        Objet* tabObjets;
-        
+        Objet* premier;
     } ListeObjets;
 
     /**

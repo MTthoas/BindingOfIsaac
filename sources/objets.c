@@ -36,18 +36,7 @@ void* displayObjet(Objet* objet) {
 }
 
 void* displayListeObjets(ListeObjets* listeObjets) {
-    if(listeObjets == NULL) {
-        printf("Pas de liste d'objet\n");
-        return NULL;
-    }
-
-    int nbObjets = listeObjets->nombreObjets;
-    printf("\n");
-    for (int i = 0 ; i < nbObjets ; i+=1) {
-        displayObjet(&listeObjets->tabObjets[i]);
-    }
-
-    return NULL;
+    printf("A coder");
 }
 
 Objet* duplicateObject(Objet* objet) {
