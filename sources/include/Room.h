@@ -1,8 +1,9 @@
-#ifndef H_PROOM
+#ifndef H_ROOM
 #define H_ROOM
 
 struct Room {
     char** room;
+    int** roomInt;
     int number;
     int width;
     int height;

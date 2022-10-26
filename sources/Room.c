@@ -15,16 +15,54 @@ char * copy_not_empty(const char * str);
 
 void printRoom(Room room) {
 
+    // Room * s = malloc(sizeof(Room));
+
+    // int puzzle[room.height][room.width];
+
+    int count = 0;
+
     printf("Number : %d / Height : %d / Width : %d \n",
         room.number,
         room.height,
         room.width);
 
     for (int i = 0; i < room.height; i++) {
-        for (int j = 0; j < room.width; j++) {
-            printf("%c", room.room[i][j]);
+        for (int j = 0; j < room.width-1; j++) {
+            printf("%d", room.room[i][j]);
+            printf(" ");
+            count++;
         }
+        printf("\n");
+
     }
+
+    printf("\n");
+
+//    // convert room to int array
+
+//    for (int i = 0; i < room.height; i++) {
+//         for (int j = 0; j < room.width; j++) {
+//             puzzle[i][j] = room.room[i][j];            
+//         }
+//    }
+
+
+//     int * s = malloc(sizeof(int) * room.height * room.width);
+//     for (int i = 0; i < room.height; i++) {
+//         for (int j = 0; j < room.width; j++) {
+//             s[i * room.width + j] = puzzle[i][j];
+//         }
+//     }
+//     printf("\n");
+//     for (int i = 0; i < room.height; i++) {
+//         for (int j = 0; j < room.width; j++) {
+//             printf("%d", s[i * room.width + j]);
+//             printf(" ");
+//         }
+//         printf("\n");
+//     }
+//     free(s);
+
 }
 
 /* Attribution à la structure Room de la room appelé ( number ) */
@@ -40,10 +78,9 @@ Room * newRoom(int number) {
     char delim[] = "[]";
     int * tab = 0;
     int iteration = 1;
-
     /* Ouverture du fichier & éxeption */
 
-    fp = fopen("/home/matthias/Bureau/Projet/BindingOfIsaac/resources/room.rtbob", "r");
+    fp = fopen("/home/matthias/Bureau/BindingOfIsaac/resources/room.rtbob", "r");
     if (fp == NULL)
         exit(EXIT_FAILURE);
 
@@ -78,13 +115,16 @@ Room * newRoom(int number) {
             /* Si le numéro de la room est égale à l'itération, alors on stocke les données dans la structure Room */
 
             if (iteration == number) {
-                printf("%d %d %d \n", tab[0], tab[1], tab[2]);
 
-                s -> room = RoomByNumber(tab[0], tab[1], tab[2]);
+               s -> room = RoomByNumber(tab[0], tab[1], tab[2]);
                 s -> number = tab[2];
                 s -> height = tab[0];
                 s -> width = tab[1] * 2;
-                                                
+                
+                // print RoomByNumber
+
+                
+
             }
 
             iteration++;
@@ -137,7 +177,7 @@ char ** RoomByNumber(int height, int length, int number) {
 
     char ** lines = malloc(sizeof(char * ) * height);
 
-    fp = fopen("/home/matthias/Bureau/Projet/BindingOfIsaac/resources/room.rtbob", "r");
+    fp = fopen("/home/matthias/Bureau/BindingOfIsaac/resources/room.rtbob", "r");
     if (fp == NULL)
         exit(EXIT_FAILURE);
 
