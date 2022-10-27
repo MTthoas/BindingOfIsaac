@@ -15,28 +15,44 @@
      * @brief Objets apportant des bonus de statistique au personnage.
      * Element de la liste chaînée ListeObjets. Pointe sur l'objet suivant.
      */
-    typedef struct Objet {
+    typedef struct Objet Objet;
+    struct Objet {
         int id;
         char* name;
-        int hpMax;
-        int shield;
-        int damage; //dégâts provoqués par les tirs
+        float hpMax;
+        float shield;
+        float damage; //dégâts provoqués par les tirs
         int piercingShot; //tirs passent à travers les ennemis mais pas les rochers
         int spectralShot; //tirs passent à travers les rochers mais pas les ennemis
         int flight; //passer au dessus de trous rochers et pic
 
         Objet* suivant;
 
-    } Objet;
+    };
 
     /**
      * @brief Liste de tous les objets du jeu. 
-     * Liste chainée pointant vers le premier objet du jeu.
-     * 
+     * Pointe vers le premier objet de la liste chainée.
      */
     typedef struct ListeObjets {
         Objet* premier;
     } ListeObjets;
+
+    /**
+     * @brief Constructeur d'objets
+     * 
+     * @param id 
+     * @param name 
+     * @param hpMax 
+     * @param shield 
+     * @param damage 
+     * @param piercingShot 
+     * @param spectralShot 
+     * @param flight 
+     * 
+     * @return Objet* adresse de l'objet suivant (NULL par défaut)
+     */
+    Objet* createObjet(int id, char* name, float hpMax, float shield, float damage, int piercingShot, int spectralShot, int flight);
 
     /**
      * @brief Afficher le contenu de la liste des objets.
@@ -57,7 +73,7 @@
 
     /**
      * @brief Ajouter un objet dans la liste des objets.
-     * Retourne l'id du nouvel objet.
+     * Retourne l'id du nouvel objet, 0 si l'objet n'a pas pu être ajouté.
      * 
      * CREATE du CRUD
      * 
@@ -105,7 +121,7 @@
      * @param objet objet à copier
      * @return Objet* 
      */
-    Objet* duplicateObject(Objet* objet);
+    Objet* duplicateObjet(Objet* objet);
 
 
 

@@ -71,13 +71,12 @@ int fichierValide(FILE* fichier, char* filename) {
 }
 
 int extensionType(char* filename) { 
-    char* nomFichier = duplicateString(filename);
-    if(strlen(nomFichier) == 0) {
+    if(strlen(duplicateString(filename)) == 0) {
         return EXTENSION_INVALIDE;
     }
     
-    char* prefix = strtok(nomFichier, ".");
-    if(strcmp(prefix, nomFichier) == 0) { // pas de "."
+    char* prefix = strtok(duplicateString(filename), ".");
+    if(strcmp(prefix, filename) == 0) { // pas de "."
         return EXTENSION_INVALIDE;
     }
 
