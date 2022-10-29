@@ -3,183 +3,58 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-
 #include "Room.h"
-
-#define KRED  "\x1B[31m"
-
-#define KNRM  "\x1B[0m"
+#define KRED "\x1B[31m"
+#define KNRM "\x1B[0m"
 
 /* Prototypes */
 
+// char * copy_not_empty(const char * str);
+// void NumberOfRooms();
+// void newRooms(Room *s, RoomInSpace * v);
+// int NumberOfDoorsByRoom(Room * s);
+// void freeRoom(Room *s);
+int numberOfRooms();
+void newStageByNumber(struct Donjon * d, int stage, int numberOfRooms);
+void InitialiseRoom(struct Donjon * d, int stage, int number, int numberOfRooms);
 char ** RoomByNumber(int height, int length, int number);
-char * copy_not_empty(const char * str);
-void NumberOfRooms();
-void newRooms(Room *s, RoomInSpace * v);
-int NumberOfDoorsByRoom(Room * s);
-void freeRoom(Room *s);
+int NumberOfDoorsByRoom(char ** s, int height, int width);
 
-void InitialisationGame(){
+void InitialisationGame() {
 
-    // Calculer le nombre de salle
-    Room * s = malloc(sizeof(Room));
-    NumberOfRooms(s);
-    free(s);
+    Donjon * d = malloc(sizeof(Donjon));
 
-    // Trouver le nombre de "D" par Room
+    for (int i = 1; i <= NUMBER_STAGES_MAX; i++) {
+        printf("Stage : %d\n", i);
+        int NumberOfRoomsInt = numberOfRooms();
+        printf("Nombre de salles : %d\n", NumberOfRoomsInt);
 
-    //  s->rooms = malloc(sizeof(char * ) * s->numberOfRoomsReturned+1);
-    // printf("Nombre de room : %d\n", s->numberOfRoomsReturned);
-        
-    // for(int i = 0; i< s->numberOfRoomsReturned+1; i++){
-    //     s->rooms[i] = malloc(sizeof(char) * s->numberOfRoomsReturned+1);
-    // }
+        newStageByNumber(d, i, NumberOfRoomsInt);
+            
+        for (int y = 1; y <= NumberOfRoomsInt; y++) {
 
-    // // Pour le nombre de tableau
-    // for(int i = 0; i < s->numberOfRoomsReturned; i++){
-    //        Room * room = newRoom(i+1);
+            InitialiseRoom(d, i, y, NumberOfRoomsInt);
 
-    //        printf("Width : %d\n", room -> width);   
-    //        printf("Height : %d\n", room -> height);
-    //        printf("Doors : %d\n", NumberOfDoorsByRoom(room));
-                   
-    // }
-}
+        }
 
-void freeRoom(Room *s){
-    free(s);
-}
+            
 
-
-int NumberOfDoorsByRoom(Room * s){
-
-    int iteration = 0;
-
-    for(int i  = 0; i< s->height; i++){
-        for(int y = 0; y < s->width; y++){
-            if(s->room[i][y] == 'D'){
-                iteration++;
+        for (int k = 0; k < NumberOfRoomsInt + 1; k++) {
+            for (int j = 0; j < NumberOfRoomsInt + 1; j++) {
+                printf("%c", d -> stages[i].stage[k][j]);
             }
+            printf("\n");
         }
-    }
-    return iteration;
-}
-
-
-
-void newRooms(Room * s, RoomInSpace *  v){
-
-    (void)v;
-
-    s->rooms = malloc(sizeof(char * ) * s->numberOfRoomsReturned+1);
-
-    printf("Nombre de room : %d\n", s->numberOfRoomsReturned);
-    
-    for(int i = 0; i< s->numberOfRoomsReturned+1; i++){
-        s->rooms[i] = malloc(sizeof(char) * s->numberOfRoomsReturned+1);
-    }
-
-    for(int i = 0; i < s->numberOfRoomsReturned+1; i++){
-        Room * room = newRoom(i+1);
-        int numberOfDoors = s->numberOfDoors;
-        printf("Number of door : %d", numberOfDoors);
-                (void)numberOfDoors;
-                (void)room;
-        // printf("%d", numberOfDoors);
-        for(int j = 0; j < s->numberOfRoomsReturned+1; j++){
-            if(i == ( s->numberOfRoomsReturned ) / 2  && j == (s->numberOfRoomsReturned) / 2 ){
-                s->rooms[i][j] = 'P';
-
-            }else{
-                   s->rooms[i][j] = ' ';
-            }
-        
 
         }
-    }
 
-    for(int i = 0; i < s->numberOfRoomsReturned+1 ; i++){
-        for(int j = 0; j< s->numberOfRoomsReturned+1 ; j++){
-            printf("%c", s->rooms[i][j]);
-        }
-        printf("\n");
-    }
-
-
-
-
-
-}
-
-void NumberOfRooms(Room * s){
-
-    FILE * fp;
-    size_t len = 0;
-    ssize_t read;
-    int iteration = 0;
-    char * line = NULL;
-
-     fp = fopen("/home/matthias/Bureau/BindingOfIsaac/resources/room.rtbob", "r");
-     if (fp == NULL)
-        exit(EXIT_FAILURE);
-
-    while ((read = getline( &line, & len, fp)) != -1) {
-          if (strcspn(line, "[") == 0) {
-            iteration++;
-          }
-    }
-
-    s->numberOfRoomsReturned = iteration;
-
-    fclose(fp);
-    if (line)
-        free(line);
-}
-
-void printRooms(Room room){
-    int count = 0;
-
-    for (int i = 0; i < room.numberOfRoomsReturned; i++) {
-        for (int j = 0; j < room.numberOfRoomsReturned-1; j++) {
-            printf("%d", room.rooms[i][j]);
-            printf(" ");
-            count++;
-        }
-        printf("\n");
+        (void) d;
 
     }
 
-    printf("\n");
-}
+void InitialiseRoom(struct Donjon * d, int stage, int number, int numberOfRooms){
 
-void printRoom(Room room) {
-
-    int count = 0;
-
-    printf("Number : %d / Height : %d / Width : %d \n",
-        room.number,
-        room.height,
-        room.width);
-
-    for (int i = 0; i < room.height; i++) {
-        for (int j = 0; j < room.width-1; j++) {
-            printf("%d", room.room[i][j]);
-            printf(" ");
-            count++;
-        }
-        printf("\n");
-
-    }
-
-    printf("\n");
-
-}
-
-/* Attribution à la structure Room de la room appelé ( number ) */
-
-Room * newRoom(int number) {
-
-    Room * s = malloc(sizeof(Room)); 
+    // d-> stages[stage].rooms[number].room = malloc(sizeof(char) * (numberOfRooms + 1));
 
     FILE * fp;
     char * line = NULL;
@@ -188,28 +63,17 @@ Room * newRoom(int number) {
     char delim[] = "[]";
     int * tab = 0;
     int iteration = 1;
-    int numberDoors = 0;
-    /* Ouverture du fichier & éxeption */
+    // int numberDoors = 0;
 
-    fp = fopen("/home/matthias/Bureau/BindingOfIsaac/resources/room.rtbob", "r");
-    if (fp == NULL)
+    fp = fopen("/home/matthias/Bureau/Projet/BindingOfIsaac/resources/room.rtbob", "r");
+    if (fp == NULL){
+        printf("errot for reading file");
         exit(EXIT_FAILURE);
-
-    /* Tant qu'une vide n'est pas vide en Bytes */
+    }
 
     while ((read = getline( & line, & len, fp)) != -1) {
 
-        /* Si la ligne commence par un "[", afin de prendre le "headers" de chaque Rooms 
-            @[9|16]2
-         */
-
         if (strcspn(line, "[") == 0) {
-
-            /* Analyse du Header afin de stocker dans tab les données de chaque Headers, tab est reinitialisé à chaque itération 
-                tab[0] = 9
-                tab[1] = 16
-                tab[2] = 2
-            */
 
             char * stockPtr = strtok(line, delim);
 
@@ -223,75 +87,106 @@ Room * newRoom(int number) {
 
             tab[2] = iteration;
 
-            /* Si le numéro de la room est égale à l'itération, alors on stocke les données dans la structure Room */
-
             if (iteration == number) {
 
-             
+                d-> stages[stage].rooms[number].room = malloc(sizeof(char) * tab[0]);
 
-               s -> room = RoomByNumber(tab[0], tab[1], tab[2]);
-                s -> number = tab[2];
-                s -> height = tab[0];
-                s -> width = tab[1] * 2;
-
-                   for(int i = 0; i<tab[0]; i++){
-                    for(int y = 0; y<tab[1]*2; y++){
-                        
-                        if(s->room[i][y] == 'D'){
-                            numberDoors++;
-                        }
-                    }
+                for (int i = 0; i < tab[0]; i++) {
+                    d-> stages[stage].rooms[number].room[i] = malloc(sizeof(char) * tab[1]);
                 }
 
-                s-> numberOfDoors = numberDoors;
-                
-                // print RoomByNumber
+                d-> stages[stage].rooms[number].room = RoomByNumber(tab[0], tab[1], number);
+                d-> stages[stage].rooms[number].number = number;
+                d-> stages[stage].rooms[number].height = tab[0];
+                d-> stages[stage].rooms[number].width = tab[1];
+                d-> stages[stage].rooms[number].numberOfDoors = NumberOfDoorsByRoom( d-> stages[stage].rooms[number].room, tab[0], tab[1]);
 
-                
-
+                printf("Room number : %d\n", d-> stages[stage].rooms[number].number);
+                printf("Height : %d\n",tab[0]);
+                printf("Width : %d \n", tab[1]);
+                printf("NumberOfDoors : %d \n", d-> stages[stage].rooms[number].numberOfDoors);
             }
 
             iteration++;
             free(tab);
+
         }
-
-
-
-    
     }
-    
-    s->numberOfRoomsReturned = iteration;
 
     fclose(fp);
 
     if (line)
         free(line);
 
-    return s;
-
+    (void)d;
+    (void)stage;
+    (void)number;
+    (void)numberOfRooms;
 }
 
-/* Fonction qui retourne un tableau de char sans les espaces */
 
-char * copy_not_empty(const char * str) {
-    size_t i;
-    size_t j;
-    char * new = malloc(strlen(str) + 1);
 
-    for (i = j = 0; i < strlen(str); ++i) {
-        if (str[i] != ' ')
-            new [j++] = str[i];
+void newStageByNumber(struct Donjon * d, int stage, int numberOfRooms) {
+
+    d -> stages[stage].stage = malloc(sizeof(char * ) * numberOfRooms + 1);
+
+    for (int i = 0; i < numberOfRooms + 1; i++) {
+        d -> stages[stage].stage[i] = malloc(sizeof(char) * numberOfRooms + 1);
     }
-    for (; j <= i; j++)
-        new [j] = 0;
-    return new;
+
+    for (int i = 0; i < numberOfRooms + 1; i++) {
+        for (int y = 0; y < numberOfRooms + 1; y++) {
+            if (i == (numberOfRooms / 2) && y == (numberOfRooms / 2)) {
+                d -> stages[stage].stage[i][y] = 'P';
+            } else {
+                d -> stages[stage].stage[i][y] = ' ';
+            }
+        }
+    }
+
 }
 
-/* Fonction qui retourne la room sélectionné via le paramètre number 
-    @param height : hauteur de la room
-    @param length : longueur de la room
-    @param number : numéro de la room
-*/
+int numberOfRooms() {
+
+    FILE * fp;
+    size_t len = 0;
+    ssize_t read;
+    int iteration = 0;
+    char * line = NULL;
+
+    fp = fopen("/home/matthias/Bureau/Projet/BindingOfIsaac/resources/room.rtbob", "r");
+    if (fp == NULL)
+        exit(EXIT_FAILURE);
+
+    while ((read = getline( & line, & len, fp)) != -1) {
+        if (strcspn(line, "[") == 0) {
+            iteration++;
+        }
+    }
+
+    fclose(fp);
+    if (line)
+        free(line);
+
+    return iteration;
+
+
+}
+
+int NumberOfDoorsByRoom(char ** s, int height, int width){
+
+    int iteration = 0;
+
+    for(int i  = 0; i< height; i++){
+        for(int y = 0; y < width; y++){
+            if(s[i][y] == 'D'){
+                iteration++;
+            }
+        }
+    }
+    return iteration;
+}
+
 
 char ** RoomByNumber(int height, int length, int number) {
 
@@ -306,7 +201,7 @@ char ** RoomByNumber(int height, int length, int number) {
 
     char ** lines = malloc(sizeof(char * ) * height);
 
-    fp = fopen("/home/matthias/Bureau/BindingOfIsaac/resources/room.rtbob", "r");
+    fp = fopen("/home/matthias/Bureau/Projet/BindingOfIsaac/resources/room.rtbob", "r");
     if (fp == NULL)
         exit(EXIT_FAILURE);
 
@@ -321,7 +216,7 @@ char ** RoomByNumber(int height, int length, int number) {
         if (iteration > 2 + (number - 1) * (height + 1) && iteration <= 2 + (number - 1) * (height + 1) + height) {
 
             /* Sécurité pour éviter une fuite de mémoire */
-            
+
             if (num == height) {
                 char ** newlines = realloc(lines, sizeof(char * ) * height);
                 if (!newlines) {
@@ -352,3 +247,55 @@ char ** RoomByNumber(int height, int length, int number) {
     return lines;
 
 }
+
+
+// void freeRoom(Room *s){
+//     free(s);
+// }
+
+
+
+// void newRooms(Room * s, RoomInSpace *  v){
+
+//     (void)v;
+
+//     s->rooms = malloc(sizeof(char * ) * s->numberOfRoomsReturned+1);
+
+//     printf("Nombre de room : %d\n", s->numberOfRoomsReturned);
+
+//     for(int i = 0; i< s->numberOfRoomsReturned+1; i++){
+//         s->rooms[i] = malloc(sizeof(char) * s->numberOfRoomsReturned+1);
+//     }
+
+//     for(int i = 0; i < s->numberOfRoomsReturned+1; i++){
+//         Room * room = newRoom(i+1);
+//         int numberOfDoors = s->numberOfDoors;
+//         printf("Number of door : %d", numberOfDoors);
+//                 (void)numberOfDoors;
+//                 (void)room;
+//         // printf("%d", numberOfDoors);
+//         for(int j = 0; j < s->numberOfRoomsReturned+1; j++){
+//             if(i == ( s->numberOfRoomsReturned ) / 2  && j == (s->numberOfRoomsReturned) / 2 ){
+//                 s->rooms[i][j] = 'P';
+
+//             }else{
+//                    s->rooms[i][j] = ' ';
+//             }
+
+
+//         }
+//     }
+
+//     for(int i = 0; i < s->numberOfRoomsReturned+1 ; i++){
+//         for(int j = 0; j< s->numberOfRoomsReturned+1 ; j++){
+//             printf("%c", s->rooms[i][j]);
+//         }
+//         printf("\n");
+//     }
+
+
+
+
+
+// }
+

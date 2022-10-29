@@ -12,7 +12,7 @@ struct Player{
 typedef struct Player  Player;
 // typedef struct Room Room;
 
-int kbhit(void) ;
-void gestionPosition(Player * player, Room * room, int KeyboardEntry);
+// int kbhit(void) ;
+// void gestionPosition(Player * player, Room * room, int KeyboardEntry);
 
 #endif

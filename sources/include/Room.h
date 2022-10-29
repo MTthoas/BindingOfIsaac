@@ -2,21 +2,24 @@
 #define H_ROOM
 
 #define NUMBER_ROOM_MAX 10
-#define NUMBER_STAGES_MAX 10
+#define NUMBER_STAGES_MAX 1
 
 // Structure Donjon
 struct Donjon{
 
     char name[256];
+    int numberStage;
 
     // Structure Etages
     struct Stage{
 
+        char** stage;
         int id;
         int axeX;
         int axeY;
         int numberOfVoisins;
         char name[256];
+        int numberOfRooms;
 
         // Structure Salles
         struct Room{
@@ -31,8 +34,10 @@ struct Donjon{
 
     }stages[NUMBER_STAGES_MAX];
     
-}donjon;
+};
 
+
+typedef struct Donjon Donjon;
 
 // Room* newRoom(int number);
 
