@@ -9,6 +9,9 @@
  * 
  */
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "include/objets.h"
 #include "include/mystring.h"
 
@@ -90,7 +93,7 @@ int addObjet(ListeObjets* listeObjets, Objet* newObjet) {
     return 0;
 }
 
-Objet* createObjet(int id, char* name, float hpMax, float shield, float damage, int piercingShot, int spectralShot, int flight) {
+Objet* createObjet(char* name, float hpMax, float shield, float damage, int piercingShot, int spectralShot, int flight) {
     Objet* o = malloc(sizeof(Objet) * 1);
     
     // verification des entrees
@@ -102,7 +105,7 @@ Objet* createObjet(int id, char* name, float hpMax, float shield, float damage, 
     flight = (flight == 0) ? 0 : 1;
 
     // allocation 
-    o->id = id;
+    o->id = 1;
     o->name = duplicateString(name);
     o->hpMax = hpMax;
     o->shield = shield;

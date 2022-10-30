@@ -48,7 +48,6 @@
     /**
      * @brief Constructeur d'objets
      * 
-     * @param id 
      * @param name 
      * @param hpMax 
      * @param shield 
@@ -59,7 +58,7 @@
      * 
      * @return Objet* adresse de l'objet suivant (NULL par défaut)
      */
-    Objet* createObjet(int id, char* name, float hpMax, float shield, float damage, int piercingShot, int spectralShot, int flight);
+    Objet* createObjet(char* name, float hpMax, float shield, float damage, int piercingShot, int spectralShot, int flight);
 
     /**
      * @brief Afficher le contenu de la liste des objets.

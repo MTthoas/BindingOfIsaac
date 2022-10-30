@@ -9,7 +9,6 @@
  * 
  */
 #include "include/lectureFichiers.h"
-#include "include/cheminsFichiers.h"
 #include "include/array.h"
 #include "include/mystring.h"
 
@@ -32,10 +31,6 @@ int getNombreObjets(FILE* fichierObjets){
         }    
     }
     return 0; 
-}
-
-Objet* getTabObjets(FILE* fichierObjets, int nbObjets) {
-    printf("Retourner l'adresse du premier élément de la liste :)");
 }
 
 void afficherFichier(FILE* fichier) {

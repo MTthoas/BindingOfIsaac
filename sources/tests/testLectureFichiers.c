@@ -18,12 +18,96 @@
 #include "../include/objets.h"
 #include "../include/lectureFichiers.h"
 
-void test_extensionType();
+void test_extensionType(); //ok
+
+void test_fichierToListeObjets();
 
 int main(void) {
-    test_extensionType();
+    test_fichierToListeObjets();
+    //test_extensionType();
 
     return 0;
+}
+
+void test_fichierToListeObjets() {
+    fichierObjetsToListeObjets();
+}
+
+ListeObjets* fichierObjetsToListeObjets() {
+    FILE* fichier = fopen(CHEMIN_FICHIER_OBJETS, "r"); // ouverture fichier
+    if(fichier == NULL) { 
+        fichier = fopen("../../resources/items.itbob", "r");
+        if(fichier == NULL) {
+            printf("yo\n");
+            return NULL;
+        }
+    }
+   
+    ListeObjets* liste = createListeObjets(); // variables
+    Objet* o;
+    char* name = "";
+    float hpMax = 0;
+    float shield = 0;
+    float damage = 0;
+    int piercingShot = 0;
+    int spectralShot = 0;
+    int flight = 0;
+    int activated = 0;
+
+    char buffer[255];
+    char* stat = malloc(sizeof(char) * 255); 
+    char* value = malloc(sizeof(char) * 255);
+    int creatingObjet = 0;
+
+    while(fgets(buffer, 255, fichier)) { // lecture fichier ligne par ligne
+        if(creatingObjet == 0 && strcmp(buffer, "---\n") == 0) { // creation de l'objet
+            creatingObjet = 1;
+            continue;
+        }
+
+        if(creatingObjet == 1 && strcmp(buffer, "---\n") != 0) { // preparation de l'objet
+            stat = strtok(buffer, "="); //ex : hpMax (depuis "hpMax=1")
+            value = strtok(NULL, "="); //ex : 1 (depuis "hpMax=1")
+            uppercase(stat);
+            uppercase(value);
+
+            if(strcmp(stat, "NAME") == 0) {
+                name = duplicateString(value);
+            } else if((strcmp(stat, "HPMAX") == 0)) {
+                hpMax = atof(value);
+            } else if((strcmp(stat, "SHIELD") == 0)) {
+                shield = atof(value);
+            } else if((strcmp(stat, "DMG") == 0)) {
+                damage = atof(value);
+            } else if((strcmp(stat, "PS") == 0)) {
+                activated = (strcmp(value, "TRUE\n") == 0);
+                piercingShot = activated;
+            } else if((strcmp(stat, "SS") == 0)) {
+                activated = (strcmp(value, "TRUE\n") == 0);
+                spectralShot = activated;
+            } else if((strcmp(stat, "FLIGHT") == 0)) {
+                activated = (strcmp(value, "TRUE\n") == 0);
+                flight = activated;
+            }            
+        }
+
+        if(creatingObjet == 1 && strcmp(buffer, "---\n") == 0) { // ajouter l'objet
+            //printf("%s%f, %f, %f, %d, %d, %d\n\n", name, hpMax, shield, damage, piercingShot, spectralShot, flight);
+            o = createObjet(name, hpMax, shield, damage, piercingShot, spectralShot, flight);
+            addObjet(liste, o);
+            displayListeObjets(liste);
+            name = "";
+            hpMax = 0;
+            shield = 0;
+            damage = 0;
+            piercingShot = 0;
+            spectralShot = 0;
+            flight = 0;
+        }
+    }
+
+    fclose(fichier);
+    return liste;
 }
 
 void test_extensionType() {

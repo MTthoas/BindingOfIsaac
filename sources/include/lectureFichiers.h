@@ -12,26 +12,27 @@
 
     #define LECTURE_FICHIERS_H
 
-
+    #include "cheminsFichiers.h"
     #include <stdlib.h>
     #include <stdio.h>
     #include "objets.h"
 
     /**
-     * @brief Transforme le fichier des objets bonus en structure de type
-     * ListeObjets.
+     * @brief Transforme le fichier des objets bonus en structure de type ListeObjets et retourne
+     * l'adresse de l'espace mémoire alloué à la liste d'objets. 
+     * 
+     * retourne NULL si erreur dans le traitement du fichier. 
      * 
      * @return ListeObjets* 
      */
-    ListeObjets* fichierToListeObjets();
+    ListeObjets* fichierObjetsToListeObjets();
 
     /**
-     * @brief A utiliser pour actualiser le fichier des objets bonus. 
-     * Réécrit le fichier en fonction de la structure ListeObjets 
+     * @brief Réécrit le fichier en fonction de la structure ListeObjets 
      * 
      * @param listeObjets 
      */
-    void actualiserFichierObjets(ListeObjets* listeObjets);
+    void listeToFichierObjets(ListeObjets* listeObjets);
 
     /**
      * @brief Retourne le nombre d'objets du fichier, lu à la première ligne entre les accolades.
@@ -40,16 +41,6 @@
      * @return int nombre d'objets bonus
      */
     int getNombreObjets(FILE* fichierObjets);
-
-    /**
-     * @brief Retourne le pointeur vers tableau contenant tous les objets du fichier des objets.
-     * 
-     * @param fichierObjets fichier des objets bonus (.itbob)
-     * @param nbObjets nombre d'objets dans le fichier des objets
-     * 
-     * @return Objet* 
-     */
-    Objet* getTabObjets(FILE* fichierObjets, int nbObjets);
 
     /**
      * @brief Permet d'afficher le contenu du fichier dans le terminal
@@ -61,15 +52,6 @@
     #define EXTENSION_FICHIER_MONSTRES 2
     #define EXTENSION_FICHIER_SALLES 3
     #define EXTENSION_INVALIDE 0
-
-    /**
-     * @brief Renvoie 1 si fichier conforme, 0 sinon.
-     * 
-     * @param fichier fichier
-     * @param filename nom du fichier , toutes les extensions sont prises en charge 
-     * @return int 
-     */
-    int fichierValide(FILE* fichier, char* filename);
 
     /**
      * @brief Renvoie l'extension du fichier sous forme d'un entier tel quel :
