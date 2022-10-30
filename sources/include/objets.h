@@ -27,7 +27,6 @@
         int flight; //passer au dessus de trous rochers et pic
 
         Objet* suivant;
-
     };
 
     /**
@@ -37,6 +36,14 @@
     typedef struct ListeObjets {
         Objet* premier;
     } ListeObjets;
+
+    /**
+     * @brief Alloue un espace mémoire pour une liste d'objet et renvoie son adresse. 
+     * Pour ajouter des Objets dans la liste, utiliser addObjet().
+     * 
+     * @return ListeObjet* 
+     */
+    ListeObjets* createListeObjets();
 
     /**
      * @brief Constructeur d'objets
@@ -111,8 +118,7 @@
      * @param id 
      * @return Objet* 
      */
-    Objet* getObjetById(ListeObjets* ListeObjets, int id);
-
+    Objet* getObjetById(ListeObjets* , int );
 
     /**
      * @brief Retourne l'adresse d'un nouvel espace mémoire alloué à un objet dont la valeur des champs est identique
@@ -122,6 +128,24 @@
      * @return Objet* 
      */
     Objet* duplicateObjet(Objet* objet);
+
+    /**
+     * @brief Désalloue la mémoire allouée à un objet
+     * 
+     */
+    void freeObjet(Objet*);
+    
+    /**
+     * @brief Désalloue la mémoire allouée à une liste d'objets.
+     * 
+     */
+    void freeListeObjets(ListeObjets*);
+
+    /**
+     * @brief Remet les identifiants des objets dans l'ordre.
+     * A utiliser par exemple après une suppression.
+     */
+    void rangerListeObjets(ListeObjets*);
 
 
 

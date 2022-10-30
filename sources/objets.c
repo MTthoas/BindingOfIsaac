@@ -114,3 +114,99 @@ Objet* createObjet(int id, char* name, float hpMax, float shield, float damage, 
 
     return o;
 }
+
+void modifyObjet(ListeObjets* liste, int id, Objet* newObjet) {
+    Objet* toDelete;
+    if(liste->premier != NULL && liste->premier->id == id) { // modifier premier element
+        toDelete = liste->premier;
+        newObjet->suivant = liste->premier->suivant;
+        liste->premier = newObjet;
+        freeObjet(toDelete);
+        rangerListeObjets(liste);
+        return;
+    }
+
+    Objet* courant = liste->premier;
+    while(courant != NULL ) {
+
+        if(courant->suivant != NULL && courant->suivant->id == id) { // modifier
+            toDelete = courant->suivant;
+            newObjet->suivant = courant->suivant->suivant;
+            courant->suivant = newObjet;
+            freeObjet(toDelete);
+            rangerListeObjets(liste);
+            return;
+        }
+        
+        courant = courant->suivant;
+    }
+}
+
+void rangerListeObjets(ListeObjets* liste) {
+    int count = 1;
+    Objet* courant = liste->premier;
+    while(courant != NULL) {
+        courant->id = count;
+        count += 1;
+        courant = courant->suivant;
+    }
+}
+
+void removeObjet(ListeObjets* liste, int id) {
+    Objet* toDelete;
+    if(liste->premier != NULL && liste->premier->id == id) { // supprimer premier element
+        toDelete = liste->premier;
+        liste->premier = liste->premier->suivant;
+        freeObjet(toDelete);
+        rangerListeObjets(liste);
+        return;
+    }
+
+    Objet* courant = liste->premier;
+    while(courant != NULL ) {
+
+        if(courant->suivant != NULL && courant->suivant->id == id) { // suppression
+            toDelete = courant->suivant;
+            courant->suivant = courant->suivant->suivant;
+            freeObjet(toDelete);
+            rangerListeObjets(liste);
+            return;
+        }
+        
+        courant = courant->suivant;
+    }
+
+}
+
+Objet* getObjetById(ListeObjets* liste, int id) {
+    Objet* result = liste->premier;
+
+    while(result != NULL) {
+        if(result->id == id) {
+            return result;
+        }
+        result = result->suivant;
+    }
+
+    return NULL;
+}
+
+void freeListeObjets(ListeObjets* liste) {
+    Objet* courant = liste->premier;
+    Objet* suivant;
+
+    while(courant != NULL) {
+        suivant = courant->suivant;
+        free(courant);
+        courant = suivant;
+    }
+}
+
+ListeObjets* createListeObjets() {
+    ListeObjets* liste = malloc(sizeof(ListeObjets) * 1);
+    return liste;   
+}
+
+void freeObjet(Objet* objet) {
+    free(objet);
+}
