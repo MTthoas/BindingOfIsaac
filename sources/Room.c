@@ -86,8 +86,11 @@ void InitialiseRoom(struct Donjon * d, int stage, int number, int numberOfRooms)
             }
 
             tab[2] = iteration;
+            tab[1] = tab[1]*2;
+            // tab[0] = tab[0];
 
             if (iteration == number) {
+                
 
                 d-> stages[stage].rooms[number].room = malloc(sizeof(char) * tab[0]);
 
@@ -101,14 +104,45 @@ void InitialiseRoom(struct Donjon * d, int stage, int number, int numberOfRooms)
                 d-> stages[stage].rooms[number].width = tab[1];
                 d-> stages[stage].rooms[number].numberOfDoors = NumberOfDoorsByRoom( d-> stages[stage].rooms[number].room, tab[0], tab[1]);
 
-                printf("Room number : %d\n", d-> stages[stage].rooms[number].number);
-                printf("Height : %d\n",tab[0]);
-                printf("Width : %d \n", tab[1]);
-                printf("NumberOfDoors : %d \n", d-> stages[stage].rooms[number].numberOfDoors);
-            }
+                // printf("Room number : %d\n", d-> stages[stage].rooms[number].number);
+                // printf("Height : %d\n",tab[0]);
+                // printf("Width : %d \n", tab[1]);
+                // printf("NumberOfDoors : %d \n", d-> stages[stage].rooms[number].numberOfDoors);
 
+                // for(int i = 0; i < tab[0]; i++){
+                //     for(int j = 0; j < tab[1]; j++){
+                //         printf("%c", d-> stages[stage].rooms[number].room[i][j]);
+                //     }
+                //     // printf("\n");
+                // }
+
+                    d-> stages[stage].rooms[number].doorTop = 0;
+                    d-> stages[stage].rooms[number].doorBottom = 0;
+                    d-> stages[stage].rooms[number].doorLeft = 0;
+                    d-> stages[stage].rooms[number].doorRight = 0;
+
+                for(int i  = 0; i< tab[0]; i++){
+                    for(int j = 0; j < tab[1]; j++){
+                        if(d-> stages[stage].rooms[number].room[i][j] == 'D' && i == 0){
+                        d-> stages[stage].rooms[number].doorTop = 1;
+                        }
+                        if(d-> stages[stage].rooms[number].room[i][j] == 'D' && i == tab[0] - 1){
+                        d-> stages[stage].rooms[number].doorBottom = 1;
+                        }
+                        if(d-> stages[stage].rooms[number].room[i][j] == 'D' && j == tab[1] - 2){
+                        d-> stages[stage].rooms[number].doorRight = 1;
+                        }
+                        if(d-> stages[stage].rooms[number].room[i][j] == 'D' && j == 0){
+                        d-> stages[stage].rooms[number].doorLeft = 1;
+                        }
+                    }
+                }
+
+                free(tab);
+            }
+            
             iteration++;
-            free(tab);
+            // free(tab);
 
         }
     }
@@ -173,9 +207,10 @@ int numberOfRooms() {
 
 }
 
+
 int NumberOfDoorsByRoom(char ** s, int height, int width){
 
-    int iteration = 0;
+    int iteration = 1;
 
     for(int i  = 0; i< height; i++){
         for(int y = 0; y < width; y++){
@@ -204,8 +239,6 @@ char ** RoomByNumber(int height, int length, int number) {
     fp = fopen("/home/matthias/Bureau/Projet/BindingOfIsaac/resources/room.rtbob", "r");
     if (fp == NULL)
         exit(EXIT_FAILURE);
-
-    printf("\n");
 
 
     while ((read = getline( & line, & len, fp)) != -1) {

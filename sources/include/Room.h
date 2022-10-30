@@ -28,6 +28,10 @@ struct Donjon{
             int width;
             int height;
             int numberOfDoors;
+            int doorTop;
+            int doorBottom; 
+            int doorLeft;
+            int doorRight;
             int numberOfRoomsReturned;
 
         }rooms[NUMBER_ROOM_MAX];
