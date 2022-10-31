@@ -22,7 +22,7 @@ void test_extensionType(); //ok
 void test_getNbLignesFichier(); //ok
 void test_correctFile(); //ok
 
-void test_fichierToListeObjets();
+void test_fichierToListeObjets(); //ok
 
 
 
@@ -129,8 +129,6 @@ void test_fichierToListeObjets() {
 }
 
 ListeObjets* fichierObjetsToListeObjets() {
-    correctFile("../../resources/items.itbob"); // remplacer par MACRO hors des test !!
-
     FILE* fichier = fopen(CHEMIN_FICHIER_OBJETS, "r"); // ouverture fichier
     if(fichier == NULL) { 
         fichier = fopen("../../resources/items.itbob", "r");
@@ -201,6 +199,9 @@ ListeObjets* fichierObjetsToListeObjets() {
             piercingShot = 0;
             spectralShot = 0;
             flight = 0;
+        } else if(feof(fichier)) { // fin de fichier -> ajouter l'objet
+            o = createObjet(name, hpMax, shield, damage, piercingShot, spectralShot, flight);
+            addObjet(liste, o);
         }
     }
 
