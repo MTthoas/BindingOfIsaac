@@ -65,4 +65,19 @@
      */
     int extensionType(char* filename);
 
+    /**
+     * @brief Ajoute "---" à la toute fin du fichier pour permettre à fichierObjetsToListeObjets() 
+     * de parser le dernier objet. 
+     * Ne fait rien si le fichier en paramètre est le fichier des salles
+     */
+    void correctFile(char* cheminFichier);
+
+    /**
+     * @brief Récupérer le nombre de lignes écrites dans un fichier
+     * 
+     * @param chemin_fichier chemin du fichier 
+     * @return int 
+     */
+    int getNbLignesFichier(char* chemin_fichier);
+
 #endif //LECTURE_FICHIERS_H
