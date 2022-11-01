@@ -20,18 +20,12 @@
 
 void test_extensionType(); //ok
 void test_getNbLignesFichier(); //ok
-void test_correctFile(); //ok
-
 void test_fichierToListeObjets(); //ok
-
-
-
 
 int main(void) {
     test_fichierToListeObjets();
 
     //test_extensionType();
-    //test_correctFile();
     //test_getNbLignesFichier();
     return 0;
 }
@@ -62,59 +56,6 @@ int getNbLignesFichier(char* chemin_fichier) {
     return nbLignes;
 }
 
-void test_correctFile() {
-    char* chemin = "./test.itbob";
-
-    printf("Fichier avant correction : \n");
-    FILE* fichier = fopen(chemin, "r");
-    if(fichier == NULL) {
-        printf("Impossible d'ouvrire le fichier %s. Fin\n", chemin);
-        return;
-    }
-    afficherFichier(fichier);
-    fclose(fichier);
-
-    printf("\nTEST 1 - Correction d'un fichier sans --- : \n");
-    correctFile(chemin);
-    fichier = fopen(chemin, "r");
-    if(fichier == NULL) {
-        printf("Impossible d'ouvrire le fichier %s. Fin\n", chemin);
-        return;
-    }
-    afficherFichier(fichier);
-    fclose(fichier);
-
-    printf("\nTEST 2 - Correction d'un fichier avec --- : \n");
-    fichier = fopen(chemin, "r");
-    if(fichier == NULL) {
-        printf("Impossible d'ouvrire le fichier %s. Fin\n", chemin);
-        return;
-    }
-    afficherFichier(fichier);
-    fclose(fichier);
-}
-
-void correctFile(char* chemin_fichier) {
-    FILE* fichier = fopen(chemin_fichier, "r");
-    if(fichier == NULL) { 
-        return;
-    } // ouverture fichier
-
-    int nbLines = getNbLignesFichier(chemin_fichier);
-    char buffer[255];
-    for(int i = 0 ; i < nbLines ; i+=1) {
-        fgets(buffer, 255, fichier);
-    } // aller à la dernière ligne
-
-    fclose(fichier);
-    if(strcmp(buffer, "---") != 0) {
-        fichier = fopen(chemin_fichier, "a");
-        if (fichier == NULL) return;
-        fwrite("\n---", 1 , sizeof('-'*3) , fichier);
-    } // corriger fichier pour aider parseur
-    fclose(fichier);
-}
-
 void test_fichierToListeObjets() {
     printf("[TEST] fichierObjetsToListeObjets() :\n\n");
 
@@ -125,7 +66,9 @@ void test_fichierToListeObjets() {
     fclose(fichier);
 
     printf("\nAffichage de la liste : \n");
-    fichierObjetsToListeObjets();
+    ListeObjets* l = fichierObjetsToListeObjets();
+    displayListeObjets(l);
+    freeListeObjets(l);
 }
 
 ListeObjets* fichierObjetsToListeObjets() {
@@ -205,7 +148,6 @@ ListeObjets* fichierObjetsToListeObjets() {
         }
     }
 
-    displayListeObjets(liste);
     fclose(fichier);
     return liste;
 }
@@ -222,6 +164,7 @@ void test_extensionType() {
     printf("Fichier : %s\nAttendu : %d\nRésultat : %d\n\n", "jeidjioc", EXTENSION_INVALIDE, extensionType("jeidjioc"));
 
 }
+
 /*
 int extensionType(char* filename) { 
     if(strlen(duplicateString(filename)) == 0) {
