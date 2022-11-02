@@ -25,6 +25,8 @@ int main(int argc, char * argv[]) {
 
 	InitialisationGame();
 
+	
+
  
 	// Room * room = newRoom(1);
 

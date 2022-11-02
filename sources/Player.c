@@ -36,50 +36,52 @@ int kbhit(void) {
 	return 0;
 }
 
-void gestionPosition(Player * player, Room * room, int keyboardEntry){
+// void gestionPosition(Player * player, Room * room, int keyboardEntry){
 
-	player->positionX = 1;
-	player->positionY = 1;
+// 	player->positionX = 1;
+// 	player->positionY = 1;
 
-    if(keyboardEntry != 'e'){
+//     if(keyboardEntry != 'e'){
 
-        // system("clear");
+//         // system("clear");
 
-		switch (keyboardEntry) {
-				case 'z':
-					if (room ->room[player->positionY - 1][player->positionX] != 'W' && room ->room[player->positionY - 1][player->positionX] != 'D') {
-						room ->room[player->positionY][player->positionX] = ' ';
-						player->positionY--;
-						room ->room[player->positionY][player->positionX] = 'P';
-						player->directionView = 'z';
-					}
-					break;
-				case 's':
-					if (room ->room[player->positionY + 1][player->positionX] != 'W' && room ->room[player->positionY + 1][player->positionX] != 'D') {
-						room ->room[player->positionY][player->positionX] = ' ';
-						player->positionY++;
-						room ->room[player->positionY][player->positionX] = 'P';
-						player->directionView = 's';
-					}
-					break;
-				case 'q':
-					if (room ->room[player->positionY][player->positionX - 2] != 'W' && room ->room[player->positionY][player->positionX - 2] != 'D') {
-						room ->room[player->positionY][player->positionX] = ' ';
-						player->positionX -= 2;
-						room ->room[player->positionY][player->positionX] = 'P';
-						player->directionView = 'q';
-					}
-					break;
-				case 'd':
-					if (room ->room[player->positionY][player->positionX + 2] != 'W' && room ->room[player->positionY][player->positionX + 2] != 'D') {
-						room ->room[player->positionY][player->positionX] = ' ';
-						player->positionX += 2;
-						room ->room[player->positionY][player->positionX] = 'P';
-						player->directionView = 'd';
-					}
-			}
+// 		switch (keyboardEntry) {
+// 				case 'z':
+// 					if (room ->room[player->positionY - 1][player->positionX] != 'W' && room ->room[player->positionY - 1][player->positionX] != 'D') {
+// 						room ->room[player->positionY][player->positionX] = ' ';
+// 						player->positionY--;
+// 						room ->room[player->positionY][player->positionX] = 'P';
+// 						player->directionView = 'z';
+// 					}
+// 					break;
+// 				case 's':
+// 					if (room ->room[player->positionY + 1][player->positionX] != 'W' && room ->room[player->positionY + 1][player->positionX] != 'D') {
+// 						room ->room[player->positionY][player->positionX] = ' ';
+// 						player->positionY++;
+// 						room ->room[player->positionY][player->positionX] = 'P';
+// 						player->directionView = 's';
+// 					}
+// 					break;
+// 				case 'q':
+// 					if (room ->room[player->positionY][player->positionX - 2] != 'W' && room ->room[player->positionY][player->positionX - 2] != 'D') {
+// 						room ->room[player->positionY][player->positionX] = ' ';
+// 						player->positionX -= 2;
+// 						room ->room[player->positionY][player->positionX] = 'P';
+// 						player->directionView = 'q';
+// 					}
+// 					break;
+// 				case 'd':
+// 					if (room ->room[player->positionY][player->positionX + 2] != 'W' && room ->room[player->positionY][player->positionX + 2] != 'D') {
+// 						room ->room[player->positionY][player->positionX] = ' ';
+// 						player->positionX += 2;
+// 						room ->room[player->positionY][player->positionX] = 'P';
+// 						player->directionView = 'd';
+// 					}
+// 			}
 
-    }
+// 			void(Room);
+
+//     }
     
 
-}
+// }
