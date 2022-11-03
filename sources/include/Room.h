@@ -31,6 +31,7 @@ struct Donjon{
             int height;
             int VoisinRight;
             int VoisinLeft;
+            char * Doors;
             int VoisinBottom;
             int VoisinTop;
             int numberOfDoors;

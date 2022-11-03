@@ -21,8 +21,11 @@ void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms);
 char ** RoomByNumber(int height, int length, int number);
 int NumberOfDoorsByRoom(char ** s, int height, int width);
 void PlaceRoomsInStage(struct Donjon * d, int stage, int numberOfRooms);
+int * RandomBetweenRange(int number);
 
 void InitialisationGame() {
+
+       srand(time(NULL));
 
     Donjon * d = malloc(sizeof(Donjon));
 
@@ -30,31 +33,65 @@ void InitialisationGame() {
 
         printf("Stage : %d\n", i);
         int NumberOfRoomsInt = numberOfRooms();
-        printf("Nombre de salles : %d\n", NumberOfRoomsInt);
+        printf("Nombre de salles : %d\n\n", NumberOfRoomsInt);
 
         newStageByNumber(d, i, NumberOfRoomsInt);
         InitialiseRoom(d, i, NumberOfRoomsInt);
+
+        for (int v = 0; v < NumberOfRoomsInt + 1; v++) {
+
+            for (int y = 0; y < NumberOfRoomsInt + 1; y++) {
+
+                if(v == NumberOfRoomsInt / 2 && y == NumberOfRoomsInt / 2) {
+                    d->stages[i].stage[v][y] = 'P';     
+                    d->stages[i].id = 1;     
+
+                    for(int u = 0; u < NumberOfRoomsInt-1; u++) {
+
+                        int NumberOfDoors = NumberOfDoorsByRoom(d->stages[i].rooms[u].room, d->stages[i].rooms[u].height, d->stages[i].rooms[u].width);
+                           
+                            int * array = malloc(sizeof(int *) * NumberOfDoors);
+                            array = RandomBetweenRange( NumberOfDoors);
+
+                            for(int x = 0; x < NumberOfDoors; x++) {
+                                
+                                printf("%c ", d->stages[i].rooms[u].Doors[x]);
+
+
+                            }
+
+                               printf(" <--- PORTES [%d] / Nombre de portes : %d\n", u, NumberOfDoors);
+
+                            (void)array;
+                           
+                        }
+                }  
+
+            }
+            
+        }
+
+
+
+        printf("\n");
+        
+
+         for (int v = 0; v < NumberOfRoomsInt + 1; v++) {
+            for (int y = 0; y < NumberOfRoomsInt + 1; y++) {
+                printf("%c ", d->stages[i].stage[v][y]);
+            }
+            printf("\n");
+        }
+
+
+
+
+
+
+
+
         printf("\n");
 
-        // for(int i = 15; i < 9; i++){
-        //     for(int j = 1; j < 15; j++){
-        //         printf("%c", d-> stages[0].rooms[2].room[i][j]);
-        //     }
-        //     // printf("\n");
-        // }
-        
-        // printf("%d\n", d->stages[i].rooms[5].doorLeft);
-        //  printf("%d\n", d->stages[i].rooms[3].doorLeft);
-        //   printf("%d\n", d->stages[i].rooms[4].doorLeft);
-        //    printf("%d\n", d->stages[i].rooms[2].doorLeft);
-        // PlaceRoomsInStage(d, i, NumberOfRoomsInt);
-
-        // for (int k = 0; k < NumberOfRoomsInt + 1; k++) {
-        //     for (int j = 0; j < NumberOfRoomsInt + 1; j++) {
-        //         printf("%c", d -> stages[i].stage[k][j]);
-        //     }
-        //     printf("\n");
-        // }
 
         }
 
@@ -62,12 +99,36 @@ void InitialisationGame() {
 
 }
 
+int * RandomBetweenRange(int number){
+
+     int * tab = malloc(sizeof(int)* 4);
+        int newNumber = 0;
+
+        for(int i = 0; i < number; i++){
+            
+            newNumber = rand() % number + 1;
+
+            for(int y = 0; y < number; y++){
+                if(tab[y] == newNumber){
+                    newNumber = rand() % number;
+                    y = 0;
+                }
+            }
+
+            tab[i] = newNumber;
+        }
+
+        return tab;
+}
+
 void searchSpecificRoom(struct Donjon * d, int roomNumber, char * specific){
-(void)d;
-(void)roomNumber;
-(void)specific;
 
     printf("TEST : %s", specific);
+
+    (void)d;
+    (void)roomNumber;
+    (void)specific;
+
 }
 
 
@@ -154,76 +215,21 @@ void PlaceRoomsInStage(struct Donjon * d, int stage, int numberOfRooms) {
         }
     }
 
-    // int iteration = 2;
-
-    // for (int i = 0; i < numberOfRooms + 1; i++) {
-    //     for (int y = 0; y < numberOfRooms + 1; y++) {
-
-    //         // for(int j = 0; j< numberOfRooms; j++) {
-
-    //             if(i == (numberOfRooms / 2) || i == (numberOfRooms / 2  )){
-
-    //                 // Right
-    //                 if( y == (numberOfRooms / 2) + 1){
-
-    //                     // iteration++;
-
-    //                     if( d -> stages[stage].rooms[iteration].doorLeft == 1){
-    //                         d -> stages[stage].stage[i][y] = 'S';
-    //                         d -> stages[stage].rooms[iteration].positionX = i;
-    //                         d -> stages[stage].rooms[iteration].positionY = y;
-
-    //                         iteration++;
-    //                     }
-                        
-                        
-    //                 }
-
-    //                 // Left
-
-    //                 if( y == (numberOfRooms / 2) -1){
-
-    //                      if( d -> stages[stage].rooms[iteration].doorRight == 1){
-    //                         d -> stages[stage].stage[i][y] = 'S';
-    //                         d -> stages[stage].rooms[iteration].positionX = i;
-    //                         d -> stages[stage].rooms[iteration].positionY = y;
-
-    //                         iteration++;
-    //                     }
-    //                 }
-
-                    
-    //             }
-    //         // }
-    //     }
-    // }
-
-
-
-    // printf("%d\n",d -> stages[stage].rooms[1].positionX);
-    // printf("%d\n",d -> stages[stage].rooms[1].positionX);
-
-    // printf("%d\n",d -> stages[stage].rooms[1].number);
-    //  printf("%d\n",d -> stages[stage].rooms[1].width);
-
     (void)d;
     (void)stage;
     (void)numberOfRooms;
-
 
 }
 
 void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms){
 
-    // d-> stages[stage].rooms[number].room = malloc(sizeof(char) * (numberOfRooms + 1));
-
-     FILE * fp;
+    FILE * fp;
     char * line = NULL;
     size_t len = 0;
     ssize_t read;
     char delim[] = "[]";
     int * tab = 0;
-    int iteration = 1;
+    int iteration = 0;
 
     fp = fopen("/home/matthias/Bureau/Projet/BindingOfIsaac/resources/room.rtbob", "r");
     if (fp == NULL){
@@ -245,14 +251,10 @@ void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms){
                 stockPtr = strtok(NULL, "|");
             }
 
-            // for (int i = 0; i < 2; i++) {
-            //     printf("Iteration : %d, tab[%d] : %d\n", iteration, i, tab[i]);
-            // }
-            // printf("\n");
             int width = tab[1]*2;
             int height = tab[0];
 
-            if(iteration !=1){
+            if(iteration !=0){
 
                 d-> stages[stage].rooms[iteration-1].room = malloc(sizeof(char) * height);
         
@@ -260,58 +262,102 @@ void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms){
                     d-> stages[stage].rooms[iteration-1].room[i] = malloc(sizeof(char) * width);
                 }
 
-                printf("\nSTAGE %d / Room %d \n", stage, iteration);
+                // printf("\nSTAGE %d / Room %d \n", stage, iteration);
                 d-> stages[stage].rooms[iteration-1].room = RoomByNumber(height, width, iteration);
                 d-> stages[stage].rooms[iteration-1].number = iteration;
                 d-> stages[stage].rooms[iteration-1].width = width;
                 d-> stages[stage].rooms[iteration-1].height = height;
                 d-> stages[stage].rooms[iteration-1].numberOfDoors = NumberOfDoorsByRoom( d-> stages[stage].rooms[iteration-1].room, height, width);
 
-                d-> stages[stage].rooms[iteration-1].doorTop = 0;
-                    d-> stages[stage].rooms[iteration-1].doorBottom = 0;
-                    d-> stages[stage].rooms[iteration-1].doorLeft = 0;
-                    d-> stages[stage].rooms[iteration-1].doorRight = 0;
+                // d-> stages[stage].rooms[iteration-1].doorTop = 0;
+                //     d-> stages[stage].rooms[iteration-1].doorBottom = 0;
+                //     d-> stages[stage].rooms[iteration-1].doorLeft = 0;
+                //     d-> stages[stage].rooms[iteration-1].doorRight = 0;
+
+                // printf("Width : %d\n",width);
+                // printf("Height : %d\n",height);
+                int iterationMallocDoors = 0;
+
+                 for(int i  = 0; i< height; i++){
+
+                    for(int j = 0; j < width+1; j++){
+
+                        if(d-> stages[stage].rooms[iteration-1].room[i][j] == 'D'){
+                            iterationMallocDoors++;
+                        }
+                    
+                    }
+
+                }
+
+                 d-> stages[stage].rooms[iteration-1].Doors = malloc(sizeof(char) * iterationMallocDoors);
+                 
+                int iterationDoors = 0;
 
                 for(int i  = 0; i< height; i++){
-                    for(int j = 0; j < width; j++){
-                        if(d-> stages[stage].rooms[iteration-1].room[i][j] == 'D' && i == 0){
-                        d-> stages[stage].rooms[iteration-1].doorTop = 1;
+
+                    for(int j = 0; j < width+1; j++){
+
+                        if(d-> stages[stage].rooms[iteration-1].room[i][j] == 'D'){
+
+                            if(i == 0){
+                                d-> stages[stage].rooms[iteration-1].Doors[iterationDoors] = 'T';
+                                    iterationDoors++;
+                            }
+                            if(i == height-1){
+                                d-> stages[stage].rooms[iteration-1].Doors[iterationDoors] = 'B';
+                                    iterationDoors++;
+                            }
+                            if(j == 0){
+                               d-> stages[stage].rooms[iteration-1].Doors[iterationDoors] = 'L';
+                                   iterationDoors++;
+                            }
+                            if(j == width-4 || j == width-3 || j == width-2 || j == width-1 || j == width){
+                                d-> stages[stage].rooms[iteration-1].Doors[iterationDoors] = 'R';
+                                    iterationDoors++;
+                            }
+
+                            // printf("[i][j] : [%d][%d] \n", i, j);
                         }
-                        if(d-> stages[stage].rooms[iteration-1].room[i][j] == 'D' && i == tab[0] - 1){
-                        d-> stages[stage].rooms[iteration-1].doorBottom = 1;
-                        }
-                        if(d-> stages[stage].rooms[iteration-1].room[i][j] == 'D' && j == tab[1] - 2){
-                        d-> stages[stage].rooms[iteration-1].doorRight = 1;
-                        }
-                        if(d-> stages[stage].rooms[iteration-1].room[i][j] == 'D' && j == 0){
-                        d-> stages[stage].rooms[iteration-1].doorLeft = 1;
-                        }
+
+                        // if(d-> stages[stage].rooms[iteration-1].room[i][j] == 'D' && i == 0){
+                        // d-> stages[stage].rooms[iteration-1].doorTop = 1;
+                        // }
+                        // if(d-> stages[stage].rooms[iteration-1].room[i][j] == 'D' && i == height - 1){
+                        // d-> stages[stage].rooms[iteration-1].doorBottom = 1;
+                        // }
+                        // if(d-> stages[stage].rooms[iteration-1].room[i][j] == 'D' && j == width - 2){
+                        // d-> stages[stage].rooms[iteration-1].doorRight = 1;
+                        // }
+                        // if(d-> stages[stage].rooms[iteration-1].room[i][j] == 'D' && j == 0){
+                        // d-> stages[stage].rooms[iteration-1].doorLeft = 1;
+                        // }
                     }
                 }
+
+                // printf("DoorTop : %d \n", d-> stages[stage].rooms[iteration-1].doorTop);
+                // printf("DoorBottom : %d \n", d-> stages[stage].rooms[iteration-1].doorBottom);
+                // printf("DoorLeft : %d \n", d-> stages[stage].rooms[iteration-1].doorLeft);
+                // printf("DoorRight : %d \n", d-> stages[stage].rooms[iteration-1].doorRight);
+
+
             }
 
-   
             iteration++;
             free(tab); 
 
         }     
         continue;
-
     }        
+
 
     fclose(fp);
 
     if (line)
         free(line);
 
-    // (void)iteration;
-    // (void)tab;
-    // (void)delim;  
-    // (void)d;
-    // (void)stage;
     (void)numberOfRooms;   
                                    
-     
 }
 
 
@@ -356,8 +402,6 @@ int numberOfRooms() {
         free(line);
 
     return iteration;
-
-
 }
 
 
@@ -366,7 +410,7 @@ int NumberOfDoorsByRoom(char ** s, int height, int width){
     int iteration = 0;
 
     for(int i  = 0; i< height; i++){
-        for(int y = 0; y < width; y++){
+        for(int y = 0; y < width+1; y++){
             if(s[i][y] == 'D'){
                 iteration++;
             }
@@ -431,64 +475,17 @@ char ** RoomByNumber(int height, int length, int number) {
     if (line)
         free(line);
 
-    // print lines
-
-    for (int i = 0; i < height; i++) {
-        printf("%s", lines[i]);
-    }
+    // for(int i = 0; i < height; i++){
+    //     printf("%s", lines[i]);
+    // }
 
     return lines;
 
+    // printf lines
+
+
+    
+
 }
 
-
-// void freeRoom(Room *s){
-//     free(s);
-// }
-
-
-
-// void newRooms(Room * s, RoomInSpace *  v){
-
-//     (void)v;
-
-//     s->rooms = malloc(sizeof(char * ) * s->numberOfRoomsReturned+1);
-
-//     printf("Nombre de room : %d\n", s->numberOfRoomsReturned);
-
-//     for(int i = 0; i< s->numberOfRoomsReturned+1; i++){
-//         s->rooms[i] = malloc(sizeof(char) * s->numberOfRoomsReturned+1);
-//     }
-
-//     for(int i = 0; i < s->numberOfRoomsReturned+1; i++){
-//         Room * room = newRoom(i+1);
-//         int numberOfDoors = s->numberOfDoors;
-//         printf("Number of door : %d", numberOfDoors);
-//                 (void)numberOfDoors;
-//                 (void)room;
-//         // printf("%d", numberOfDoors);
-//         for(int j = 0; j < s->numberOfRoomsReturned+1; j++){
-//             if(i == ( s->numberOfRoomsReturned ) / 2  && j == (s->numberOfRoomsReturned) / 2 ){
-//                 s->rooms[i][j] = 'P';
-
-//             }else{
-//                    s->rooms[i][j] = ' ';
-//             }
-
-
-//         }
-//     }
-
-//     for(int i = 0; i < s->numberOfRoomsReturned+1 ; i++){
-//         for(int j = 0; j< s->numberOfRoomsReturned+1 ; j++){
-//             printf("%c", s->rooms[i][j]);
-//         }
-//         printf("\n");
-//     }
-
-
-
-
-
-// }
 
