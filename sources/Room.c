@@ -42,44 +42,46 @@ void InitialisationGame() {
                     d->stages[i].stage[v][y] = 'P';     
                     d->stages[i].id = 1;     
 
-                    for(int u = 0; u < NumberOfRoomsInt-1; u++) {
+                    for(int u = 0; u < NumberOfRoomsInt; u++) {
 
                         int NumberOfDoors = NumberOfDoorsByRoom(d->stages[i].rooms[u].room, d->stages[i].rooms[u].height, d->stages[i].rooms[u].width);
                            
                             int * array = malloc(sizeof(int *) * NumberOfDoors);
-                            array = RandomBetweenRange( NumberOfDoors);
+                            // array = RandomBetweenRange( NumberOfDoors);
 
-                            for(int x = 0; x < NumberOfDoors; x++) {
+                            // for(int x = 0; x < NumberOfDoors; x++) {
                                 
-                                printf("%c ", d->stages[i].rooms[u].Doors[x]);
+                            //     printf("%c ", d->stages[i].rooms[u].Doors[x]);
 
 
-                            }
-                               int * randomNumber = RandomBetweenRange(NumberOfDoors);
-                               printf(" <--- PORTES [%d] / Nombre de portes : %d \n", u, NumberOfDoors);
+                            // }
+
+                            //    int * randomNumber = RandomBetweenRange(NumberOfDoors);
+                               printf(" <--- PORTES [%d] / Nombre de portes : %d \n", u+1, NumberOfDoors);
                                
-                               for(int x = 0; x < NumberOfDoors; x++) {
-                                printf("%d ", randomNumber[x]);
-                               }
+                            //    for(int x = 0; x < NumberOfDoors; x++) {
+                            //     printf("%d ", randomNumber[x]);
+                            //    }
 
                                
-                            printf("\n");
+                            // printf("\n");
 
 
-                            for(int j = 0; j < NumberOfDoors; j++) {
+                            // for(int j = 0; j < NumberOfDoors; j++) {
 
-                                int random = randomNumber[j];
+                            //     int random = randomNumber[j];
 
-                                printf("%c ", d->stages[i].rooms[u].Doors[random]);
+                            //     printf("%c ", d->stages[i].rooms[u].Doors[random]);
                                   
-                            }
+                            // }
 
                                
 
                             printf("\n");
                             printf("\n");
                             (void)array;
-                            free(randomNumber);
+                            // free(randomNumber);
+                            free(array);
                            
                         }
                 }  
@@ -423,7 +425,7 @@ int NumberOfDoorsByRoom(char ** s, int height, int width){
         }
     }
 
-    return iteration;
+    return iteration-1;
 }
 
 

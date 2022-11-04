@@ -12,6 +12,7 @@
 #include <Player.h>
 
 int kbhit(void) {
+	
 	struct termios oldt, newt;
 	int ch;
 	int oldf;
