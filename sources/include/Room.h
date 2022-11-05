@@ -20,9 +20,11 @@ struct Donjon{
         int numberOfVoisins;
         char name[256];
         int numberOfRooms;
+        int * randomNumberRooms;
 
         // Structure Salles
         struct Room{
+            int id;
             char** room;
             int positionX;
             int positionY;
@@ -58,7 +60,7 @@ typedef struct Donjon Donjon;
 
 // void printRoom(Room room);
 // void printRooms(Room room);
-void InitialisationGame();
+void InitialisationGame(Donjon * d);
 // int NumberOfDoorsByRoom(Room * s);
 // void numberOfRooms(Room *s);
 // void freeRoom(Room *s);

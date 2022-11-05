@@ -23,163 +23,154 @@ int main(int argc, char * argv[]) {
 	(void) argc;
 	(void) argv;
 
-	InitialisationGame();
+	Donjon * d = malloc(sizeof(Donjon));
+
+	InitialisationGame(d);
 
 	// Room * room = newRoom(1);
 
 	// printf("\n");
 
-	// Player * player = malloc(sizeof(Player));
-	// player->positionX = 1;
-	// player->positionY = 1;
-	// player->directionView = 'D';
+	Player * player = malloc(sizeof(Player));
+	player->positionX = 1;
+	player->positionY = 1;
+	player->directionView = 'D';
+
+	for (int i = 0; i < d -> stages[0].rooms[0].height; i++) {
+		for (int y = 0; y < d -> stages[0].rooms[0].width; y++) {
+			if(i == d -> stages[0].rooms[0].height/2 && y == d -> stages[0].rooms[0].width/2){
+				if(y % 2 == 0){
+					d -> stages[0].rooms[0].room[i][y] = 'P';
+				}else{
+					d -> stages[0].rooms[0].room[i][y+1] = 'P';
+				}
+			}
+			
+		}
+	}
 
 
-	// for (int i = 0; i < room -> height; i++) {
-	// 	for (int y = 0; y < room -> width - 1; y++) {
-	// 		if (y % 2 == 0) {
-	// 			if(room -> room[i][y] == 'P'){
-	// 				printf("%s", KRED);
-	// 				printf("%c ", room ->room[i][y]);
-    //         		printf("%s", KNRM);
-	// 			}else{
-	// 				printf("%c ", room ->room[i][y]);
-	// 			}
-	// 			if (room ->room[i][y] == 'P') {
-	// 				player->positionX = y;
-	// 				player->positionY = i;
-	// 			}
-	// 		}
-	// 	}
-	// 	printf("\n");
-	// }
-
-	// // Initialise player informations
+	for (int i = 0; i < d -> stages[0].rooms[0].height; i++) {
+		for (int y = 0; y < d -> stages[0].rooms[0].width; y++) {
+			if (y % 2 == 0) {
+				if(d-> stages[0].rooms[0].room[i][y] == 'P'){
+					printf("%s", KRED);
+					printf("%c ", d-> stages[0].rooms[0].room[i][y]);
+            		printf("%s", KNRM);
+				}else{
+					printf("%c ", d-> stages[0].rooms[0].room[i][y]);
+				}
+				if (d-> stages[0].rooms[0].room[i][y] == 'P') {
+					player->positionX = y;
+					player->positionY = i;
+				}
+			}
+		}
+		printf("\n");
+	}
 
 
-	// printf("Player position : %d, %d", player->positionX, player->positionY);
-
-	// printf("\n");
-	// printf("\n");
-
-	// static struct termios oldt, newt;
-
-	// tcgetattr(STDIN_FILENO, & oldt);
-	// newt = oldt;
-	// newt.c_lflag &= ~(ICANON);
-	// tcsetattr(STDIN_FILENO, TCSANOW, & newt);
-
-	// int c;
-	// bool condition = true;
-	// int iteration = 0;
-	// int frame = 0;
+	int c;
+	bool condition = true;
+	int iteration = 0;
+	int frame = 0;
 
 	
 
-	// while (condition ) {
+	while (condition ) {
 
-	// 	SDL_Delay(50);
+		SDL_Delay(25);
 		
-	// 	c = 'p';
-	// 	iteration++;
+		c = 'p';
+		iteration++;
 
-	// 	if (kbhit()) {
-	// 		c = getchar();
-	// 	}
+		if (kbhit()) {
+			c = getchar();
+		}
 
 
-	// 	if (c == ' ') {
-	// 		if (player->directionView == 'd') {
+		if (c == ' ') {
+			
+			if (player->directionView == 'd') {
 
-	// 			int separator = 0;
-
-	// 				for(int v = 0; v<room->width; v++){
-	// 					if(room->room[player->positionY][v] != 'W' && room->room[player->positionY][v] != 'D'  ){
-	// 						separator++;
-	// 					}
-	// 				}
-
-	// 				for(int x = 0; x<separator;)
 				
-	// 				if (room ->room[player->positionY][player->positionX + 1] != 'W' && room ->room[player->positionY][player->positionX + 1] != 'D') {
-	// 					room ->room[player->positionY][player->positionX + 1] = 'o';
-	// 				}
-	// 		}
-	// 			if (player->directionView == 'q') {
-	// 				if (room ->room[player->positionY][player->positionX - 1] != 'W' && room ->room[player->positionY][player->positionX - 1] != 'D') {
-	// 					room ->room[player->positionY][player->positionX - 1] = 'o';
-	// 				}
-	// 			}
-	// 	}
+			}
 
-	// 	if (c == 'x') {
-	// 		condition = false;
-	// 	}
-
-	// 	if (c != 'e') {
-
-	// 		printf("\n Char = %c\n", c);
-	// 		system("clear");
-
-	// 		switch (c) {
-	// 			case 'z':
-	// 				if (room ->room[player->positionY - 1][player->positionX] != 'W' && room ->room[player->positionY - 1][player->positionX] != 'D') {
-	// 					room ->room[player->positionY][player->positionX] = ' ';
-	// 					player->positionY--;
-	// 					room ->room[player->positionY][player->positionX] = 'P';
-	// 					player->directionView = 'z';
-	// 				}
-	// 				break;
-	// 			case 's':
-	// 				if (room ->room[player->positionY + 1][player->positionX] != 'W' && room ->room[player->positionY + 1][player->positionX] != 'D') {
-	// 					room ->room[player->positionY][player->positionX] = ' ';
-	// 					player->positionY++;
-	// 					room ->room[player->positionY][player->positionX] = 'P';
-	// 					player->directionView = 's';
-	// 				}
-	// 				break;
-	// 			case 'q':
-	// 				if (room ->room[player->positionY][player->positionX - 2] != 'W' && room ->room[player->positionY][player->positionX - 2] != 'D') {
-	// 					room ->room[player->positionY][player->positionX] = ' ';
-	// 					player->positionX -= 2;
-	// 					room ->room[player->positionY][player->positionX] = 'P';
-	// 					player->directionView = 'q';
-	// 				}
-	// 				break;
-	// 			case 'd':
-	// 				if (room ->room[player->positionY][player->positionX + 2] != 'W' && room ->room[player->positionY][player->positionX + 2] != 'D') {
-	// 					room ->room[player->positionY][player->positionX] = ' ';
-	// 					player->positionX += 2;
-	// 					room ->room[player->positionY][player->positionX] = 'P';
-	// 					player->directionView = 'd';
-	// 				}
-	// 		}
-
-
-	// 		for (int i = 0; i < room ->height; i++) {
-	// 			for (int y = 0; y < room ->width - 1; y++) {
-	// 				if (y % 2 == 0) {
-	// 					printf("%c", room ->room[i][y]);
-	// 				}
-	// 			}
-	// 			printf("\n");
+			if (player->directionView == 'q') {
 				
-	// 		}
+			}
 
-	// 		printf("Player position : %d, %d / Player direction : %c / Iteration : %d", player->positionX, player->positionY, player->directionView, iteration);
-	// 		continue;
-
-
-	// 	}
+		}
 
 
+		// Touche pour cancel le jeu
+
+		if (c == 'x') {
+			condition = false;
+		}
+
+		if (c != 'e') {
+			system("clear");
+
+			switch (c) {
+				case 'z':
+					if (d->stages[0].rooms[0].room[player->positionY - 1][player->positionX] != 'W' && d->stages[0].rooms[0].room[player->positionY - 1][player->positionX] != 'D') {
+						d->stages[0].rooms[0].room[player->positionY][player->positionX] = ' ';
+						player->positionY--;
+						d->stages[0].rooms[0].room[player->positionY][player->positionX] = 'P';
+						player->directionView = 'z';
+					}
+					break;
+				case 's':
+					if (d->stages[0].rooms[0].room[player->positionY + 1][player->positionX] != 'W' && d->stages[0].rooms[0].room[player->positionY + 1][player->positionX] != 'D') {
+						d->stages[0].rooms[0].room[player->positionY][player->positionX] = ' ';
+						player->positionY++;
+						d->stages[0].rooms[0].room[player->positionY][player->positionX] = 'P';
+						player->directionView = 's';
+					}
+					break;
+				case 'q':
+					if (d->stages[0].rooms[0].room[player->positionY][player->positionX - 2] != 'W' && d->stages[0].rooms[0].room[player->positionY][player->positionX - 2] != 'D') {
+						d->stages[0].rooms[0].room[player->positionY][player->positionX] = ' ';
+						player->positionX -= 2;
+						d->stages[0].rooms[0].room[player->positionY][player->positionX] = 'P';
+						player->directionView = 'q';
+					}
+					break;
+				case 'd':
+					if (d->stages[0].rooms[0].room[player->positionY][player->positionX + 2] != 'W' && d->stages[0].rooms[0].room[player->positionY][player->positionX + 2] != 'D') {
+						d->stages[0].rooms[0].room[player->positionY][player->positionX] = ' ';
+						player->positionX += 2;
+						d->stages[0].rooms[0].room[player->positionY][player->positionX] = 'P';
+						player->directionView = 'd';
+					}
+			}
+
+			printf("\n");
+			for (int i = 0; i < d->stages[0].rooms[0].height; i++) {
+				for (int y = 0; y < d->stages[0].rooms[0].width - 1; y++) {
+					if (y % 2 == 0) {
+						if(d-> stages[0].rooms[0].room[i][y] == 'P'){
+							printf("%s", KRED);
+							printf("%c ", d-> stages[0].rooms[0].room[i][y]);
+							printf("%s", KNRM);
+						}else{
+							printf("%c ", d-> stages[0].rooms[0].room[i][y]);
+						}
+					}
+				}
+				printf("\n");
+				
+			}
+
+			printf("Player position : %d, %d / Player direction : %c / Iteration : %d", player->positionX, player->positionY, player->directionView, iteration);
+			continue;
 
 
-	// 	/*restore the old settings*/
-	// 	tcsetattr(STDIN_FILENO, TCSANOW, & oldt);
-
+		}
 		
-	// frame++;
-	// }
+	frame++;
+	}
+
 
 }
