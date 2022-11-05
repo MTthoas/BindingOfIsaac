@@ -22,12 +22,20 @@ void test_extensionType(); //ok
 void test_getNbLignesFichier(); //ok
 void test_fichierToListeObjets(); //ok
 
-int main(void) {
-    test_fichierToListeObjets();
+void test_listeToFichierObjets();
 
+int main(void) {
+    test_listeToFichierObjets();
+    //test_fichierToListeObjets();
     //test_extensionType();
     //test_getNbLignesFichier();
     return 0;
+}
+
+void test_listeToFichierObjets() {
+    printf("\033[1;32m");
+    printf("[TEST] fichierObjetsToListeObjets() :\n\n");
+    printf("\033[0m"); 
 }
 
 void test_getNbLignesFichier() {
@@ -72,6 +80,7 @@ void test_fichierToListeObjets() {
 }
 
 ListeObjets* fichierObjetsToListeObjets() {
+
     FILE* fichier = fopen(CHEMIN_FICHIER_OBJETS, "r"); // ouverture fichier
     if(fichier == NULL) { 
         fichier = fopen("../../resources/items.itbob", "r");
@@ -81,7 +90,6 @@ ListeObjets* fichierObjetsToListeObjets() {
         }
     }
     rewind(fichier);
-    
    
     ListeObjets* liste = createListeObjets(); // variables
     Objet* o;
@@ -97,57 +105,66 @@ ListeObjets* fichierObjetsToListeObjets() {
     char buffer[255];
     char* stat = malloc(sizeof(char) * 255); 
     char* value = malloc(sizeof(char) * 255);
-    int creatingObjet = 0;
+    int creatingObjet = 1;
+    char firstLetter;
 
     while(fgets(buffer, 255, fichier)) { // lecture fichier ligne par ligne
-        if(creatingObjet == 0 && strcmp(buffer, "---\n") == 0) { // creation de l'objet
-            creatingObjet = 1;
-            continue;
-        }
+        firstLetter = buffer[0];
+        //printf("%s", buffer);
 
-        if(creatingObjet == 1 && strcmp(buffer, "---\n") != 0) { // preparation de l'objet
-            stat = strtok(buffer, "="); //ex : hpMax (depuis "hpMax=1")
-            value = strtok(NULL, "="); //ex : 1 (depuis "hpMax=1")
-            uppercase(stat);
-            uppercase(value);
+        if(firstLetter == 'n' || firstLetter == '-' || firstLetter == 'h' || firstLetter == 'd' || firstLetter == 's' || firstLetter == 'p' || firstLetter == 'f' || firstLetter == EOF) {
+            if(firstLetter == '-') { 
+                creatingObjet = (creatingObjet) ? 0 : 1;
 
-            if(strcmp(stat, "NAME") == 0) {
-                name = duplicateString(value);
-            } else if((strcmp(stat, "HPMAX") == 0)) {
-                hpMax = atof(value);
-            } else if((strcmp(stat, "SHIELD") == 0)) {
-                shield = atof(value);
-            } else if((strcmp(stat, "DMG") == 0)) {
-                damage = atof(value);
-            } else if((strcmp(stat, "PS") == 0)) {
-                activated = (strcmp(value, "TRUE\n") == 0);
-                piercingShot = activated;
-            } else if((strcmp(stat, "SS") == 0)) {
-                activated = (strcmp(value, "TRUE\n") == 0);
-                spectralShot = activated;
-            } else if((strcmp(stat, "FLIGHT") == 0)) {
-                activated = (strcmp(value, "TRUE\n") == 0);
-                flight = activated;
-            }            
-        }
+            } else { // construction objet
+                stat = strtok(buffer, "="); //ex : hpMax (depuis "hpMax=1")
+                value = strtok(NULL, "="); //ex : 1 (depuis "hpMax=1")
+                uppercase(stat);
+                uppercase(value);
 
-        if(creatingObjet == 1 && strcmp(buffer, "---\n") == 0) { // ajouter l'objet
-            //printf("%s%f, %f, %f, %d, %d, %d\n\n", name, hpMax, shield, damage, piercingShot, spectralShot, flight);
-            o = createObjet(name, hpMax, shield, damage, piercingShot, spectralShot, flight);
-            addObjet(liste, o);
-            name = "";
-            hpMax = 0;
-            shield = 0;
-            damage = 0;
-            piercingShot = 0;
-            spectralShot = 0;
-            flight = 0;
-        } else if(feof(fichier)) { // fin de fichier -> ajouter l'objet
-            o = createObjet(name, hpMax, shield, damage, piercingShot, spectralShot, flight);
-            addObjet(liste, o);
+                if(strcmp(stat, "NAME") == 0) {
+                    name = duplicateString(value);
+                } else if((strcmp(stat, "HPMAX") == 0)) {
+                    hpMax = atof(value);
+                } else if((strcmp(stat, "SHIELD") == 0)) {
+                    shield = atof(value);
+                } else if((strcmp(stat, "DMG") == 0)) {
+                    damage = atof(value);
+                } else if((strcmp(stat, "PS") == 0)) {
+                    activated = (strcmp(value, "TRUE\n") == 0);
+                    piercingShot = activated;
+                } else if((strcmp(stat, "SS") == 0)) {
+                    activated = (strcmp(value, "TRUE\n") == 0);
+                    spectralShot = activated;
+                } else if((strcmp(stat, "FLIGHT") == 0)) {
+                    activated = (strcmp(value, "TRUE\n") == 0);
+                    flight = activated;
+                }
+            }
+
+            if(firstLetter == '-' && creatingObjet == 1) { // ajout objet
+                o = createObjet(name, hpMax, shield, damage, piercingShot, spectralShot, flight);
+                addObjet(liste, o);
+                name = "";
+                hpMax = 0;
+                shield = 0;
+                damage = 0;
+                piercingShot = 0;
+                spectralShot = 0;
+                flight = 0;
+
+                creatingObjet = (creatingObjet) ? 0 : 1;
+            }   
         }
     }
 
+    if(feof(fichier)) { 
+        if(strcmp(name, "") != 0) {
+            o = createObjet(name, hpMax, shield, damage, piercingShot, spectralShot, flight);
+            addObjet(liste, o);
+        }
+    } // ajout du dernier objet
+    
     fclose(fichier);
     return liste;
 }
