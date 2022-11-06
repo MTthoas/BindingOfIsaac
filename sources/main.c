@@ -162,6 +162,13 @@ int main(int argc, char * argv[]) {
 				printf("\n");
 				
 			}
+			
+			switch (c) {
+				case '8': //shoot
+					if(player->directionView == 'z'){
+						d->stages[0].rooms[0].room[player->positionY - 1][player->positionX] = '*';
+					}
+			}
 
 			printf("Player position : %d, %d / Player direction : %c / Iteration : %d", player->positionX, player->positionY, player->directionView, iteration);
 			continue;
