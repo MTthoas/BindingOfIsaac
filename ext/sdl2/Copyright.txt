@@ -73,7 +73,7 @@ The following individuals and institutions are among the Contributors:
 * Mathieu Malaterre <mathieu.malaterre@gmail.com>
 * Matthaeus G. Chajdas
 * Matthias Kretz <kretz@kde.org>
-* Matthias Maennich <matthias@maennich.net>
+* Matthias Maennich <dorian@maennich.net>
 * Michael Hirsch, Ph.D. <www.scivision.co>
 * Michael Stürmer
 * Miguel A. Figueroa-Villanueva

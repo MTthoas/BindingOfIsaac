@@ -20,6 +20,20 @@
 
 int main(int argc, char * argv[]) {
 
+	int choix;
+
+    printf("------------ Binding Of Briatte --------------\n");
+    printf("Press 1 to start the game\n");
+    printf("Press 2 for the monster's CRUD\n");
+    printf("Press 3 for the item's CRUD\n");
+    printf("Press 4 for the map's CRUD\n");
+    printf("-----------Dorian-Alexandre-Matthias----------\n");
+
+    scanf("%d", &choix);
+
+    if (choix == 1)
+    {
+        
 	(void) argc;
 	(void) argv;
 
@@ -178,6 +192,55 @@ int main(int argc, char * argv[]) {
 		
 	frame++;
 	}
+	}
 
+
+	 if (choix == 2) {
+        printf("-- You chose the monster's CRUD --\n");
+        printf("Press 1 to create a monster\n");
+        printf("Press 2 to delete a monster\n");
+        printf("Press 3 to modify a monster\n");
+        scanf("%d", &choix);
+        if (choix == 1) {
+            printf("-- You chose to create a monster --\n");
+            system("CLS");
+            printf("------------ Binding Of Briatte --------------\n");
+            printf("Choississez le nom du monstre à créer :\n");
+            //monstre.name = malloc(sizeof(char) * 20);
+            printf("Choississez les hpMax du montre à créer :\n");
+            //createMonster();
+
+        } else if (choix == 2) {
+            printf("-- You chose to delete a monster --\n");
+            //deleteMonster();
+        } else if (choix == 3) {
+            printf("-- You chose to modify a monster --\n");
+            //modifyMonster();
+        } else {
+            printf("-- You didn't choose a valid option --\n");
+        }
+        
+        {
+            /* code */
+        }
+        
+
+    } else if (choix == 3) {
+        printf("-- You chose the item's CRUD --\n");
+        printf("Press 1 to create an item\n");
+        printf("Press 2 to delete an item\n");
+        printf("Press 3 to modify an item\n");
+        scanf("%d", &choix);
+    } else if (choix == 3) {
+        printf("-- You chose the map's CRUD --\n");
+        printf("Press 1 to create a map\n");
+        printf("Press 2 to delete a map\n");
+        printf("Press 3 to modify a map\n");
+        scanf("%d", &choix);
+    {
+        /* code */
+    }
+
+}
 
 }
