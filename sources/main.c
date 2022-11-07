@@ -13,6 +13,7 @@
 
 #include "Room.h"
 #include "Player.h"
+#include "shoot.h"
 
 #define KRED  "\x1B[31m"
 #define KNRM  "\x1B[0m"
@@ -177,12 +178,7 @@ int main(int argc, char * argv[]) {
 				
 			}
 			
-			switch (c) {
-				case '8': //shoot
-					if(player->directionView == 'z'){
-						d->stages[0].rooms[0].room[player->positionY - 1][player->positionX] = '*';
-					}
-			}
+			bangishard(d, player);
 
 			printf("Player position : %d, %d / Player direction : %c / Iteration : %d", player->positionX, player->positionY, player->directionView, iteration);
 			continue;
