@@ -1,7 +1,15 @@
-
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include<stdio.h>
-#include<stdlib.h>
-#include<unistd.h>
+#include <termios.h>          
+#include <unistd.h>     
+#include <stdlib.h>
+#include <sys/select.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <termios.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 #include "shoot.h"
 #include "Room.h"
@@ -35,15 +43,18 @@ switch (c) {
 						if(d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] == ' '){
 							d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] = '*';
 							shoot->positionY = shoot->positionY - 1;
-						// sleep(0.3);	
+							// mettre du delai
+							
 							// d->stages[0].rooms[0].room[player->positionY - 1][player->positionX] = ' ';
 
 							while(d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] == ' '){
 							
 							d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] = '*';
-							shoot->positionY = shoot->positionY - 1;
-					//	sleep(0.5);
+							
+							// mettre du delai
+
 							// d->stages[0].rooms[0].room[player->positionY - 1][player->positionX] = ' ';
+							shoot->positionY = shoot->positionY - 1;
  							iteration++;
 							}
 							

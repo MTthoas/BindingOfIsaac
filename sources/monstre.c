@@ -14,6 +14,9 @@
 
 #include "include/monstre.h"
 #include "include/mystring.h"
+#include "Room.h"
+#include "Player.h"
+
 
 void* displayMonstre(Monstre* monstre) {
     if(monstre == NULL) {
@@ -204,4 +207,18 @@ ListeMonstres* createListeMonstres() {
 
 void freeMonstre(Monstre* monstre) {
     free(monstre);
+}
+
+//TODO
+void monsterAttack(Monstre* monstre, Player* player) {
+    if(monstre == NULL || player == NULL) {
+        return;
+    }
+
+    float damage = monstre->shoot;
+    if(monstre->flight == 1) {
+        damage *= 1.5;
+    }
+
+    player->hpMax -= damage;
 }

@@ -7,6 +7,7 @@ struct Player{
     int positionX;
     int positionY;
     char directionView;
+    float hpMax;
 };
 
 typedef struct Player  Player;

@@ -95,7 +95,15 @@ int main(int argc, char * argv[]) {
 	while (condition ) {
 
 		SDL_Delay(25);
-		
+		// float i=0.1;
+		// 	while(i<5000){
+		// 		if(i == 5000){
+		// 			printf("test");
+		// 		}
+		// 		i= i + 0.1;
+		// 		printf("%.2f \n",i);
+		// 	}
+						
 		c = 'p';
 		iteration++;
 
@@ -186,9 +194,9 @@ int main(int argc, char * argv[]) {
 
 		}
 		
-	frame++;
-	}
-	}
+	 frame++;
+	 }
+	 }
 
 
 	 if (choix == 2) {
