@@ -11,11 +11,13 @@
 /* Prototypes */
 
 int numberOfRooms();
+int PickRoomNotUsed(struct Donjon * d, int NumberOfRoomsInt);
 void newStageByNumber(struct Donjon * d, int stage, int numberOfRooms);
 void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms);
 char ** RoomByNumber(int height, int length, int number);
 int NumberOfDoorsByRoom(char ** s, int height, int width);
-int * RandomBetweenRange(int number);
+int * RandomBetweenRange(int number, int zero);
+int NowRoomIsUsed(struct Donjon *d, int NumberOfRoomsInt, int id);
 
 /**
  * @brief Ininitialise le jeu
@@ -40,24 +42,48 @@ void InitialisationGame(Donjon * d) {
         newStageByNumber(d, i, NumberOfRoomsInt);
         InitialiseRoom(d, i, NumberOfRoomsInt);
 
-        int * randomNumberRooms = RandomBetweenRange(NumberOfRoomsInt);
+        int * randomNumberRooms = RandomBetweenRange(NumberOfRoomsInt, 1);
         d->stages[i].randomNumberRooms = malloc(sizeof(int) * NumberOfRoomsInt);
 
         for (int y = 0; y < NumberOfRoomsInt; y++) {
 
-            d->stages[i].randomNumberRooms[y] = randomNumberRooms[y];
+            d->stages[i].randomNumberRooms[y] = randomNumberRooms[y];	
+
         }
+
+        printf("\n");	
 
         for (int y = 0; y < NumberOfRoomsInt; y++) {
 
-            d->stages[i].rooms[y].id = d->stages[i].randomNumberRooms[y];
-        }
+            int stock = 0;
 
+            if(y==0){
+                 d->stages[i].rooms[y].id = 0;
+                 d->stages[i].rooms[y].roomUsed = 0;
+                 stock = d->stages[i].randomNumberRooms[y];
+
+            }else{
+                
+                if(d->stages[i].randomNumberRooms[y] != 0){
+
+                    d->stages[i].rooms[y].roomUsed = 0;
+                    d->stages[i].rooms[y].id = d->stages[i].randomNumberRooms[y];
+
+                }else{
+
+                    printf("%d",stock);
+                    d->stages[i].rooms[y].id = stock;
+                }
+
+            }
+
+            printf("ID de la salle %d: %d\n", y,d->stages[i].rooms[y].id);
+
+        }
 
         free(randomNumberRooms);
         
         printf("\n");    
-
         // On boucle sur le nombre de rooms en X et Y pour gérer les étages
 
         for (int v = 0; v < NumberOfRoomsInt + 1; v++) {
@@ -75,7 +101,7 @@ void InitialisationGame(Donjon * d) {
                         int NumberOfDoors = NumberOfDoorsByRoom(d->stages[i].rooms[u].room, d->stages[i].rooms[u].height, d->stages[i].rooms[u].width);
                            
                             int * array = malloc(sizeof(int *) * NumberOfDoors);
-                            array = RandomBetweenRange( NumberOfDoors);
+                            array = RandomBetweenRange( NumberOfDoors, 0);
                             
                                 // for(int x = 0; x < NumberOfDoors; x++) {
                                     
@@ -86,14 +112,14 @@ void InitialisationGame(Donjon * d) {
                                
                                 // Porte aléatoire
 
-                               int * randomNumberDoors = RandomBetweenRange(NumberOfDoors);
+                               int * randomNumberDoors = RandomBetweenRange(NumberOfDoors, 0);
 
                                for(int j = 0; j < NumberOfDoors; j++) {
 
                                     int random = randomNumberDoors[j];
                                     char s = d->stages[i].rooms[u].Doors[random];
 
-                                    // printf("%c ", s);
+                                    printf("%c ", s);
 
                                     if(strcmp(&s, "N") == 0) {
                                         
@@ -113,7 +139,7 @@ void InitialisationGame(Donjon * d) {
                                 }
 
 
-                            // printf(" <--- PORTES [%d] / Nombre de portes : %d \n", u+1, NumberOfDoors);
+                            printf(" <--- PORTES [%d] / Nombre de portes : %d \n", u+1, NumberOfDoors);
                             // printf("%d\n", d->stages[i].rooms[u].id = d->stages[i].randomNumberRooms[u]);
                                
                                 // for(int x = 0; x < NumberOfDoors; x++) {
@@ -137,15 +163,157 @@ void InitialisationGame(Donjon * d) {
         }
 
         printf("\n");
+
+
+            for (int v = 0; v < NumberOfRoomsInt + 1; v++) {
+
+                for (int y = 0; y < NumberOfRoomsInt + 1; y++) {
+
+                    // Permet de se placer au centre
+                   
+                    if(d->stages[i].stage[v][y] == 'P') {
+
+                            int * arraySecond = malloc(sizeof(int *) * 100);
+                            arraySecond = RandomBetweenRange(100, 0);
+
+                            int blockA = 0;
+                            int blockB = 0;
+                            int blockC = 0;
+                            int blockD = 0;
+                             int iteration = 0;
+                             int addToVar = 0;
+                             
+                            for (int y = 0; y < NumberOfRoomsInt; y++) {
+
+                                d->stages[i].rooms[y].roomUsed = 0;
+
+                            }
+
+                            printf("Room Panel :");
+                            for(int t = 0; t < NumberOfRoomsInt; t++) {
+
+                                printf("%d",d->stages[i].rooms[t].roomUsed);                
+
+                            }
+
+                            printf("\n");
+
+                            for(int t = 0; t < NumberOfRoomsInt; t++) {
+
+                                printf("ID : %d / ",d->stages[i].rooms[t].id);                
+
+                            }
+
+
+                            printf("\n");
+                            printf("\n");
+
+                            for(int t = 0; t < NumberOfRoomsInt; t++) {
+
+                                printf("ROOM UTILISES [%d] : %d\n",t,d->stages[i].rooms[t].roomUsed);                
+
+                            }
+
+                                printf("\n");
+                                   printf("\n");
+
+
+                            // Left to player Zone
+                            for(int j = 0; j+addToVar < 4; j++) {
+
+                                if(j == 4 && iteration == 2){
+                                    addToVar++;
+                                    continue;
+                                }
+
+                                int numbe;
+                                
+                               if(arraySecond[j] < 25 && arraySecond[j] > 0 && blockA == 0 && iteration < 3){
+
+                                    numbe = PickRoomNotUsed(d, NumberOfRoomsInt);
+                                    printf("ID OF ROOM : %d\n", numbe);
+
+                                        d->stages[i].stage[v][y-1] = 'R';
+                                        blockA = 1;
+                                        iteration++;
+                                    
+
+                               }
+
+                               if(arraySecond[j] < 50 && arraySecond[j] > 25 && blockB == 0 && iteration < 3){
+
+                                    numbe = PickRoomNotUsed(d, NumberOfRoomsInt);
+                                    printf("ID OF ROOM : %d\n", numbe);
+
+                                        d->stages[i].stage[v][y+1] = 'R';
+                                        blockB = 1;
+                                        iteration++;
+
+
+                               }
+
+                               if(arraySecond[j] < 75 && arraySecond[j] > 50 && blockC == 0 && iteration < 3){
+
+                                    numbe = PickRoomNotUsed(d, NumberOfRoomsInt);
+                                    printf("ID OF ROOM : %d\n", numbe);
+                                        
+                                        d->stages[i].stage[v-1][y] = 'R';
+                                        blockC = 1;
+                                        iteration++;
+                                    
+
+    
+                               }
+
+                               if(arraySecond[j] < 100 && arraySecond[j] > 75 && blockD == 0 && iteration < 3){
+
+                                    numbe = PickRoomNotUsed(d, NumberOfRoomsInt);
+                                    printf("ID OF ROOM : %d\n", numbe);
+
+                                        d->stages[i].stage[v+1][y] = 'R';
+                                        blockD = 1;
+                                        iteration++;
+                                    
         
-            // for (int v = 0; v < NumberOfRoomsInt + 1; v++) {
-            //     for (int y = 0; y < NumberOfRoomsInt + 1; y++) {
-            //         printf("%c ", d->stages[i].stage[v][y]);
-            //     }
-            //     printf("\n");
-            // }
+                               }
+
+                               printf("\n");
+                               
+                            }
+                        
+                            // Left to left player Zone
+                            
+
+                        
+                        for(int t = 0; t < NumberOfRoomsInt; t++) {
+
+                            printf("ROOM UTILISES [%d] : %d\n",t,d->stages[i].rooms[t].roomUsed);                
+
+                        }
+
+                        printf("\n");
+
+                        printf("Iteration : %d",iteration);
+                        
+                    }
+
+        
+
+                }
+            }
+
+            for (int v = 0; v < NumberOfRoomsInt + 1; v++) {
+                for (int y = 0; y < NumberOfRoomsInt + 1; y++) {
+
+                    printf("%c ", d->stages[i].stage[v][y]);
+
+                }
+                printf("\n");
+            }
 
         }
+
+      
 
 }
 
@@ -156,10 +324,45 @@ void InitialisationGame(Donjon * d) {
  * @return int* 
  */
 
-int * RandomBetweenRange(int number){
+int PickRoomNotUsed(struct Donjon * d, int NumberOfRoomsInt) {
+
+    // int random = rand() % NumberOfRoomsInt + 1;
+        
+        while(1){
+
+            // printf("ID de la salle %d: %d\n", i,d->stages[0].rooms[i].id);
+
+                int random = rand() % NumberOfRoomsInt + 1;
+
+                if(d->stages[0].rooms[random].roomUsed == 0 ){
+                    printf("ICI CA PRINT\n");
+                    d->stages[0].rooms[random].roomUsed = 1;
+                    return d->stages[random].rooms[random].id;
+                    
+                }
+
+                
+        }
+
+
+    return 0;
+
+}
+
+int NowRoomIsUsed(struct Donjon *d, int NumberOfRoomsInt, int id) {
+
+    (void)d; (void)NumberOfRoomsInt; (void)id;
+
+    return 0;
+
+}
+
+int * RandomBetweenRange(int number, int zero){
     
 
-     int * tab = malloc(sizeof(int)* 4);
+    (void)zero;
+
+     int * tab = malloc(sizeof(int)* number);
         int newNumber = 0;
         int iteration = 0;
 

@@ -42,7 +42,7 @@ struct Donjon{
             int doorLeft;
             int doorRight;
             int numberOfRoomsReturned;
-            int roomPlaced;
+            int roomUsed;
 
         }rooms[NUMBER_ROOM_MAX];
 
