@@ -224,7 +224,7 @@ void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms){
     int * tab = 0;
     int iteration = 0;
 
-    fp = fopen("/home/dorian/Bureau/Projet/BindingOfIsaac/resources/room.rtbob", "r");
+    fp = fopen("../resources/room.rtbob", "r");
     if (fp == NULL){
         printf("errot for reading file");
         exit(EXIT_FAILURE);
@@ -365,7 +365,7 @@ char ** RoomByNumber(int height, int length, int number) {
 
     char ** lines = malloc(sizeof(char * ) * height);
 
-    fp = fopen("/home/dorian/Bureau/Projet/BindingOfIsaac/resources/room.rtbob", "r");
+    fp = fopen("../resources/room.rtbob", "r");
     if (fp == NULL)
         exit(EXIT_FAILURE);
 
@@ -457,7 +457,7 @@ int numberOfRooms() {
     int iteration = 0;
     char * line = NULL;
 
-    fp = fopen("/home/dorian/Bureau/Projet/BindingOfIsaac/resources/room.rtbob", "r");
+    fp = fopen("../resources/room.rtbob", "r");
     if (fp == NULL)
         exit(EXIT_FAILURE);
 

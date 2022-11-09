@@ -49,7 +49,7 @@ switch (c) {
 
 							while(d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] == ' '){
 							
-							d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] = '*';
+								d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] = '*';
 							
 							// mettre du delai
 
