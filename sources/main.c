@@ -92,7 +92,7 @@ int main(int argc, char * argv[]) {
 
 	
 
-	while (condition ) {
+	while (condition) {
 
 		SDL_Delay(25);
 		// float i=0.1;
