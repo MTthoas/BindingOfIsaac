@@ -25,7 +25,7 @@ int menuCrudMonster(void){
         printf("Press 2 to delete a monster\n");
         printf("Press 3 to modify a monster\n");
         scanf("%d", &choix);
-        return;
+        return choix;
 
 }
 void menuCreateMonster(void){
