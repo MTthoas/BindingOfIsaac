@@ -146,6 +146,13 @@
      */
     void rangerListeObjets(ListeObjets*);
 
+    /**
+     * @brief Retourne le nombre d'éléments d'une liste d'objets
+     * 
+     * @return int 
+     */
+    int getTailleListeObjets(ListeObjets*);
+
 
 
 #endif //OBJETS_H

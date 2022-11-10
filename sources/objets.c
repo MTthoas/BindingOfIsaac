@@ -15,6 +15,21 @@
 #include "include/objets.h"
 #include "include/mystring.h"
 
+int getTailleListeObjets(ListeObjets* l) {
+    Objet* courant = l->premier;
+    if(courant == NULL) {
+        return 0;
+    }
+
+    int count = 0;
+    while(courant != NULL) {
+        count += 1;
+        courant = courant->suivant;
+    }
+
+    return count;
+}
+
 void* displayObjet(Objet* objet) {
     if(objet == NULL) {
         printf("Pas d'objet\n");

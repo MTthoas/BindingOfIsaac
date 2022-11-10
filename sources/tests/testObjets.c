@@ -19,6 +19,8 @@ void test_rangerListeObjets(); //ok
 void test_removeObjet(); // ok
 void test_modifyObjet(); //ok
 
+void test_getTailleListe();
+
 
 int main(void) {
     //test_displayObjet();
@@ -33,8 +35,52 @@ int main(void) {
     //test_rangerListeObjets();
     // test_removeObjet();
     //test_modifyObjet();
-    
+    test_getTailleListe();
+
     return 0;
+}
+
+void test_getTailleListe() {
+    printf("[TEST] getTailleListe() \n\n");
+
+    //initialisation
+    ListeObjets* l = createListeObjets();
+    Objet* o = createObjet("Epee", 0, 0, 0, 0, 1, 0);
+    Objet* o2 = createObjet("Epee2", 0, 0, 0, 0, 1, 0);
+    Objet* o3 = createObjet("Epee3", 0, 0, 0, 0, 1, 0);
+    addObjet(l, o);
+    addObjet(l, o2);
+    addObjet(l, o3);
+
+    // tests
+    int res = getTailleListeObjets(l);
+    printf("Attendu : 3\nRésultat : %d\n\n", res);
+
+    removeObjet(l, 2);
+    res = getTailleListeObjets(l);
+    printf("Attendu : 2\nRésultat : %d\n\n", res);
+
+    removeObjet(l, 1);
+    removeObjet(l, 1);
+    res = getTailleListeObjets(l);
+    printf("Attendu : 0\nRésultat : %d\n\n", res);
+
+    free(l);
+}
+
+int getTailleListeObjets(ListeObjets* l) {
+    Objet* courant = l->premier;
+    if(courant == NULL) {
+        return 0;
+    }
+
+    int count = 0;
+    while(courant != NULL) {
+        count += 1;
+        courant = courant->suivant;
+    }
+
+    return count;
 }
 
 void test_modifyObjet() {
@@ -42,9 +88,9 @@ void test_modifyObjet() {
 
     //initialisation
     ListeObjets* l = createListeObjets();
-    Objet* o = createObjet(1, "Epee", 0, 0, 0, 0, 1, 0);
-    Objet* o2 = createObjet(9, "Epee2", 0, 0, 0, 0, 1, 0);
-    Objet* o3 = createObjet(9, "Epee3", 0, 0, 0, 0, 1, 0);
+    Objet* o = createObjet("Epee", 0, 0, 0, 0, 1, 0);
+    Objet* o2 = createObjet("Epee2", 0, 0, 0, 0, 1, 0);
+    Objet* o3 = createObjet("Epee3", 0, 0, 0, 0, 1, 0);
     addObjet(l, o);
     addObjet(l, o2);
     addObjet(l, o3);
@@ -54,21 +100,21 @@ void test_modifyObjet() {
     displayListeObjets(l);
 
     printf("TEST 1 - Modification du 1e objet de la liste :\n\n");
-    Objet* newObjet = createObjet(89, "LanceFlamme", 0, 0, 0, 0, 1, 0);
+    Objet* newObjet = createObjet("LanceFlamme", 0, 0, 0, 0, 1, 0);
     modifyObjet(l, 1, newObjet);
     printf("Attendu : Epee devient LanceFlamme\n");
     printf("Résultat : ");
     displayListeObjets(l);
 
     printf("TEST 2 - Modification d'un objet en plein dans la liste :\n\n");
-    newObjet = createObjet(89, "Bombe", 0, 0, 7, 0, 1, 0);
+    newObjet = createObjet("Bombe", 0, 0, 7, 0, 1, 0);
     modifyObjet(l, 2, newObjet);
     printf("Attendu : Epee2 devient Bombe, damage = 7\n");
     printf("Résultat : ");
     displayListeObjets(l);
 
     printf("TEST 3 - Modification d'un objet pas dans la liste :\n\n");
-    newObjet = createObjet(89, "Bombe", 0, 0, 7, 0, 1, 0);
+    newObjet = createObjet("Bombe", 0, 0, 7, 0, 1, 0);
     modifyObjet(l, 78, newObjet);
     printf("Attendu : Aucun changement\n");
     printf("Résultat : ");
@@ -158,9 +204,9 @@ void test_removeObjet() {
     printf("[TEST] removeObjet() :\n\n");
     
     ListeObjets* l = createListeObjets();
-    Objet* o = createObjet(1, "Epee", 0, 0, 0, 0, 1, 0);
-    Objet* o2 = createObjet(9, "Epee2", 0, 0, 0, 0, 1, 0);
-    Objet* o3 = createObjet(9, "Epee3", 0, 0, 0, 0, 1, 0);
+    Objet* o = createObjet("Epee", 0, 0, 0, 0, 1, 0);
+    Objet* o2 = createObjet("Epee2", 0, 0, 0, 0, 1, 0);
+    Objet* o3 = createObjet("Epee3", 0, 0, 0, 0, 1, 0);
     addObjet(l, o);
     addObjet(l, o2);
     addObjet(l, o3);
@@ -175,7 +221,7 @@ void test_removeObjet() {
     displayListeObjets(l);
 
     printf("TEST 2 - Suppression du premier élément de la liste.\n");
-    o2 = createObjet(9, "Epee2", 0, 0, 0, 0, 1, 0);
+    o2 = createObjet("Epee2", 0, 0, 0, 0, 1, 0);
     addObjet(l,o2);
     removeObjet(l, 1);
     printf("Attendu : liste sans 'epee' ET identifiants de 1 à 2.\n");
@@ -183,7 +229,7 @@ void test_removeObjet() {
     displayListeObjets(l);
 
     printf("TEST 3 - Suppression du dernier élément de la liste.\n");
-    o3 = createObjet(9, "Epee3", 0, 0, 0, 0, 1, 0);
+    o3 = createObjet("Epee3", 0, 0, 0, 0, 1, 0);
     addObjet(l,o3);
     removeObjet(l, 3);
     printf("Attendu : liste sans 'epee3' ET identifiants de 1 à 2.\n");
@@ -191,7 +237,7 @@ void test_removeObjet() {
     displayListeObjets(l);
 
     printf("TEST 4 - Suppression d'un élément dont l'id n'est pas dans la liste.\n");
-    o2 = createObjet(9, "Epee2", 0, 0, 0, 0, 1, 0);
+    o2 = createObjet("Epee2", 0, 0, 0, 0, 1, 0);
     addObjet(l,o2);
     removeObjet(l, 1000);
     printf("Attendu : liste avec 3 objets, id de 1 à 3\n");
@@ -229,8 +275,8 @@ void test_getObjetById() {
     printf("[TEST] getObjetById() :\n\n");
 
     ListeObjets* l = createListeObjets();
-    Objet* o = createObjet(1, "Epee", 0, 0, 0, 0, 1, 0);
-    Objet* o2 = createObjet(9, "Epee2", 0, 0, 0, 0, 1, 0);
+    Objet* o = createObjet("Epee", 0, 0, 0, 0, 1, 0);
+    Objet* o2 = createObjet("Epee2", 0, 0, 0, 0, 1, 0);
     addObjet(l, o);
     addObjet(l, o2);
 
@@ -269,8 +315,8 @@ void test_freeListeObjet() {
     printf("[TEST] freeListeObjet() :\n\n");
 
     ListeObjets* l = createListeObjets();
-    Objet* o = createObjet(1, "Epee", 0, 0, 0, 0, 1, 0);
-    Objet* o2 = createObjet(9, "Epee2", 0, 0, 0, 0, 1, 0);
+    Objet* o = createObjet("Epee", 0, 0, 0, 0, 1, 0);
+    Objet* o2 = createObjet("Epee2", 0, 0, 0, 0, 1, 0);
     addObjet(l, o);
     addObjet(l, o2);
 
@@ -309,7 +355,7 @@ void test_createListeObjets() {
     displayListeObjets(l);
 
     printf("Ajout d'un objet dans la liste\n");
-    Objet* o = createObjet(1, "Epee", 0, 0, 0, 0, 1, 0);
+    Objet* o = createObjet("Epee", 0, 0, 0, 0, 1, 0);
     addObjet(l, o);
     printf("Attendu : Affichage d'un objet\n");
     printf("Résultat : ");
@@ -330,7 +376,7 @@ ListeObjets* createListeObjets() {
 void test_freeObjet() {
     printf("[TEST] freeObjet() :\n\n");
 
-    Objet* o = createObjet(1, "mon objet", 10, 0, 0, 0, 0, 0);
+    Objet* o = createObjet("mon objet", 10, 0, 0, 0, 0, 0);
     printf("Affichage de l'objet : \n");
     displayObjet(o);
 
@@ -348,24 +394,24 @@ void freeObjet(Objet* objet) {
 void test_createObjet() {
     printf("[TEST] createObjet() :\n\n");
 
-    Objet* o1 = createObjet(0, "<3", 1, 0, 0, 0, 0, 0);
+    Objet* o1 = createObjet("<3", 1, 0, 0, 0, 0, 0);
     printf("Attendu : 'nom' : '<3', 'hpMax' : '1'. Le reste à 0.\n");
     printf("Résultat :\n");
     displayObjet(o1);
 
-    Objet* o2 = createObjet(0, "yo", 0, 2.1, 0, -2, 0, -1);
+    Objet* o2 = createObjet("yo", 0, 2.1, 0, -2, 0, -1);
     printf("Attendu : 'name' : 'yo', 'shield' : '2.1', 'piercingShot : '1', 'flight' : '1'. Le reste à 0.\n");
     printf("Résultat :\n");
     displayObjet(o2);
 
-    Objet* o3 = createObjet(0, "", 0, 0, 0, 0, 0, 0);
+    Objet* o3 = createObjet("", 0, 0, 0, 0, 0, 0);
     printf("Attendu : 'nom' : 'objet'.\n");
     printf("Résultat :\n");
     displayObjet(o3);
 
 }
 
-Objet* createObjet(int id, char* name, float hpMax, float shield, float damage, int piercingShot, int spectralShot, int flight) {
+Objet* createObjet(char* name, float hpMax, float shield, float damage, int piercingShot, int spectralShot, int flight) {
     Objet* o = malloc(sizeof(Objet) * 1);
     
     // verification des entrees
@@ -377,7 +423,7 @@ Objet* createObjet(int id, char* name, float hpMax, float shield, float damage, 
     flight = (flight == 0) ? 0 : 1;
 
     // allocation 
-    o->id = id;
+    o->id = 1;
     o->name = duplicateString(name);
     o->hpMax = hpMax;
     o->shield = shield;

@@ -21,14 +21,14 @@
 void test_extensionType(); //ok
 void test_getNbLignesFichier(); //ok
 void test_fichierToListeObjets(); //ok
-
-void test_listeToFichierObjets();
+void test_listeToFichierObjets(); //ok
 
 int main(void) {
-    test_listeToFichierObjets();
+    //test_listeToFichierObjets();
     //test_fichierToListeObjets();
     //test_extensionType();
     //test_getNbLignesFichier();
+
     return 0;
 }
 
@@ -36,6 +36,89 @@ void test_listeToFichierObjets() {
     printf("\033[1;32m");
     printf("[TEST] fichierObjetsToListeObjets() :\n\n");
     printf("\033[0m"); 
+
+    // initialisation
+    ListeObjets* l = createListeObjets();
+    Objet* epee = createObjet("Epee\n", 0, 0, 0.3, 0, 0, 0);
+    Objet* ailes = createObjet("Ailes\n", 0.1, 0, 0, 0, 0, 1);
+    Objet* poison = createObjet("Poison\n", -0.1, 0, 0, 0, 0, 0);
+    addObjet(l, epee);
+    addObjet(l, ailes);
+    addObjet(l, poison);
+
+    // test
+    printf("Affichage de la liste :\n");
+    displayListeObjets(l);
+
+    printf("\nAffichage du fichier généré : \n");
+    listeToFichierObjets(l);
+    FILE* fichier = fopen("./test.itbob", "r");
+    if(fichier == NULL) {
+        printf("Impossible d'ouvrir le fichier\n");
+        return;
+    }
+    afficherFichier(fichier);
+
+    freeListeObjets(l);
+}
+
+void listeToFichierObjets(ListeObjets* listeObjets) {
+    char* filepath = "./test.itbob"; // CHEMIN_FICHIER_OBJETS
+    FILE* fichier = fopen(filepath, "w+"); // ouverture fichier
+    if(fichier == NULL) { 
+        printf("Problème d'ouverture du fichier des objets.\n");
+        return;
+    }
+
+    char* buffer_out = malloc(sizeof(char) * 256);
+
+    // ecriture de l'indicateur du nombre d'objets :
+    int listSize = getTailleListeObjets(listeObjets);
+    if(listSize == 0) { // fin si pas d'objets dans la liste
+        return;
+    }
+    sprintf(buffer_out, "{%d}\n", listSize);
+    fwrite(buffer_out, sizeof(char), strlen(buffer_out), fichier);
+
+    // ecriture des objets :
+    Objet* courant = listeObjets->premier;
+    while(courant != NULL) {
+        buffer_out = duplicateString("---\n");
+        fwrite(buffer_out, sizeof(char), strlen(buffer_out), fichier);
+
+        sprintf(buffer_out, "name=%s", duplicateString(courant->name)); // nom
+        fwrite(buffer_out, sizeof(char), strlen(buffer_out), fichier);
+
+        if(courant->hpMax != 0) {
+            sprintf(buffer_out, "hpMax=%.1f\n", courant->hpMax); 
+            fwrite(buffer_out, sizeof(char), strlen(buffer_out), fichier);
+        } 
+        if(courant->shield != 0) {
+            sprintf(buffer_out, "shield=%.1f\n", courant->shield); 
+            fwrite(buffer_out, sizeof(char), strlen(buffer_out), fichier);
+        }
+        if(courant->damage != 0) {
+            sprintf(buffer_out, "damage=%.1f\n", courant->damage); 
+            fwrite(buffer_out, sizeof(char), strlen(buffer_out), fichier);
+        }
+        if(courant->piercingShot != 0) {
+            sprintf(buffer_out, "ps=true\n"); 
+            fwrite(buffer_out, sizeof(char), strlen(buffer_out), fichier);
+        }
+        if(courant->spectralShot != 0) {
+            sprintf(buffer_out, "ss=true\n"); 
+            fwrite(buffer_out, sizeof(char), strlen(buffer_out), fichier);
+        }
+        if(courant->flight != 0) {
+            sprintf(buffer_out, "flight=true\n"); 
+            fwrite(buffer_out, sizeof(char), strlen(buffer_out), fichier);
+        }
+
+        courant = courant->suivant;
+    }
+
+    fclose(fichier);
+    free(buffer_out);
 }
 
 void test_getNbLignesFichier() {
@@ -80,15 +163,13 @@ void test_fichierToListeObjets() {
 }
 
 ListeObjets* fichierObjetsToListeObjets() {
-
-    FILE* fichier = fopen(CHEMIN_FICHIER_OBJETS, "r"); // ouverture fichier
+    char* filepath = "../../resources/items.itbob"; // CHEMIN_FICHIER_OBJETS
+    FILE* fichier = fopen(filepath, "r"); // ouverture fichier
     if(fichier == NULL) { 
-        fichier = fopen("../../resources/items.itbob", "r");
-        if(fichier == NULL) {
-            printf("Problème d'ouverture du fichier\n");
-            return NULL;
-        }
+        printf("Problème d'ouverture du fichier des objets.\n");
+        return NULL;
     }
+
     rewind(fichier);
    
     ListeObjets* liste = createListeObjets(); // variables
