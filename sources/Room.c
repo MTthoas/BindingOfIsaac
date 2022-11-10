@@ -306,7 +306,7 @@ void InitialisationGame(Donjon * d) {
             printf("\nCalcul : %d\n", calcul);
             int iterationByRoom = iteration;
 
-            for(int t = 0; t <= NumberOfRoomsInt-iteration + 1; t++) {
+            for(int t = 1; t <= NumberOfRoomsInt-iteration + 1; t++) {
                 
                 int iterationRoom = 0;
 
