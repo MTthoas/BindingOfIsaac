@@ -26,8 +26,8 @@ struct Donjon{
         struct Room{
             int id;
             char** room;
-            int positionX;
-            int positionY;
+            int AxeX;
+            int AxeY;
             int number;
             int width;
             int height;

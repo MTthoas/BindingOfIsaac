@@ -172,5 +172,6 @@ int main(int argc, char * argv[]) {
 	// frame++;
 	// }
 
+	free(d);
 
 }
