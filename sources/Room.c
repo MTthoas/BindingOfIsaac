@@ -304,28 +304,46 @@ void InitialisationGame(Donjon * d) {
 
             int calcul = (NumberOfRoomsInt-1) / iteration;
             printf("\nCalcul : %d\n", calcul);
-            int iterationByRoom = 0;
+            int iterationByRoom = iteration;
 
-            for(int t = 0; t < NumberOfRoomsInt; t++) {
+            for(int t = 0; t <= NumberOfRoomsInt-iteration + 1; t++) {
                 
                 int iterationRoom = 0;
 
-                while(iterationRoom == 0){
+                while(iterationRoom == 0 && iterationByRoom <= NumberOfRoomsInt + 1) {
                 
                     int select = rand() % 3;
 
                     int randomHeight;
                     int randomLength;
 
-                    if(iterationRoom > 3){
+                    if(t < 2){
 
-                        randomHeight = (rand() % (((NumberOfRoomsInt/2)+1) - NumberOfRoomsInt-1/2 + 1)) + NumberOfRoomsInt/2 - 1;
-                        randomLength = (rand() % (((NumberOfRoomsInt/2)+1) - NumberOfRoomsInt-1/2 + 1)) + NumberOfRoomsInt/2;
+                        randomHeight = (rand() % (((NumberOfRoomsInt/2)+2) - (NumberOfRoomsInt/2) + 1)) + NumberOfRoomsInt/2 - 1;
+                        randomLength = (rand() % (((NumberOfRoomsInt/2)+1) - (NumberOfRoomsInt/2) + 1)) + NumberOfRoomsInt/2;
 
                     }else{
 
+                        if(t == NumberOfRoomsInt-iteration + 1 ){
+
+                        printf("BOOS ROOM\n");
+                         randomHeight = (rand() % (((NumberOfRoomsInt/2)) - (NumberOfRoomsInt/2) + 1)) + NumberOfRoomsInt/2 - 1;
+                         randomLength = (rand() % (((NumberOfRoomsInt/2)) - (NumberOfRoomsInt/2) + 1)) + NumberOfRoomsInt/2 - 1;
+
+                        }else{
+
+                         if(t == NumberOfRoomsInt-iteration){
+
+                            randomHeight = NumberOfRoomsInt/2 + rand() % (NumberOfRoomsInt+1 - NumberOfRoomsInt/2  - NumberOfRoomsInt/2);
+                            randomLength = NumberOfRoomsInt/2 + rand() % (NumberOfRoomsInt+1 - NumberOfRoomsInt/2 - NumberOfRoomsInt/2);
+
+                         }
                          randomHeight = rand() % NumberOfRoomsInt;
                          randomLength = rand() % NumberOfRoomsInt;
+
+                        }
+
+                         
 
                     }
 
@@ -337,7 +355,7 @@ void InitialisationGame(Donjon * d) {
 
                     }
 
-                    printf("Random H  : %d / Random Length  : %d\n", randomHeight, randomLength);
+
 
                     switch(select){
                         
@@ -346,7 +364,15 @@ void InitialisationGame(Donjon * d) {
                             // printf("Random H : %d / Random Length : %d\n", randomHeight, randomLength);
                             if(d->stages[i].stage[randomHeight][randomLength+1] == ' '){
                                 if(d->stages[i].stage[randomHeight][randomLength+2] == ' ' && d->stages[i].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength+1] == ' ' ){
-                                    d->stages[i].stage[randomHeight][randomLength+1] = 'R';
+                                    if(t == NumberOfRoomsInt-iteration ){
+                                        d->stages[i].stage[randomHeight][randomLength+1] = 'I';
+                                    }else{
+                                        if(t == NumberOfRoomsInt-iteration + 1 ){
+                                            d->stages[i].stage[randomHeight][randomLength+1] = 'B';
+                                        }else{
+                                        d->stages[i].stage[randomHeight][randomLength+1] = 'R';
+                                        }
+                                    }
                                         iterationRoom++;
                                         iterationByRoom++;
                                     break;
@@ -359,7 +385,16 @@ void InitialisationGame(Donjon * d) {
 
                             if(d->stages[i].stage[randomHeight][randomLength+1] == ' '){
                                 if(d->stages[i].stage[randomHeight][randomLength+2] == ' ' && d->stages[i].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength+1] == ' ' ){
-                                    d->stages[i].stage[randomHeight][randomLength+1] = 'R';
+                                    if(t == NumberOfRoomsInt-iteration){
+                                        d->stages[i].stage[randomHeight][randomLength+1] = 'I';
+                                    }else{
+                                        if(t == NumberOfRoomsInt-iteration + 1  ){
+                                            d->stages[i].stage[randomHeight][randomLength+1] = 'B';
+                                        }else{
+                                            d->stages[i].stage[randomHeight][randomLength+1] = 'R';
+                                        }
+                                        
+                                    }
                                         iterationRoom++;
                                         iterationByRoom++;
                                     break;
@@ -372,7 +407,15 @@ void InitialisationGame(Donjon * d) {
 
                             if(d->stages[i].stage[randomHeight+1][randomLength] == ' '){
                                     if(d->stages[i].stage[randomHeight+2][randomLength] == ' ' && d->stages[i].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight+1][randomLength-1] == ' ' ){
-                                        d->stages[i].stage[randomHeight+1][randomLength] = 'R';
+                                        if(t == NumberOfRoomsInt-iteration){
+                                            d->stages[i].stage[randomHeight+1][randomLength] = 'I';
+                                        }else{
+                                            if(t == NumberOfRoomsInt-iteration + 1 ){
+                                                d->stages[i].stage[randomHeight+1][randomLength] = 'B';
+                                            }else{ 
+                                                d->stages[i].stage[randomHeight+1][randomLength] = 'R';
+                                            }
+                                        }
                                             iterationRoom++;
                                             iterationByRoom++;
                                         break;
@@ -385,7 +428,16 @@ void InitialisationGame(Donjon * d) {
 
                             if(d->stages[i].stage[randomHeight-1][randomLength] == ' '){
                                 if(d->stages[i].stage[randomHeight-2][randomLength] == ' ' && d->stages[i].stage[randomHeight-1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength-1] == ' ' ){
-                                    d->stages[i].stage[randomHeight-1][randomLength] = 'R';
+                                   if(t == NumberOfRoomsInt-iteration ){
+                                        d->stages[i].stage[randomHeight+1][randomLength] = 'I';
+                                    }else{
+                                        if(t == NumberOfRoomsInt-iteration + 1){
+                                            d->stages[i].stage[randomHeight+1][randomLength] = 'B';
+                                        }else{
+                                            d->stages[i].stage[randomHeight+1][randomLength] = 'R';
+                                        }
+                                    }
+                                   
                                         iterationRoom++;
                                         iterationByRoom++;
                                     break;
@@ -402,6 +454,36 @@ void InitialisationGame(Donjon * d) {
              
 
             }
+
+            // Retourner la position de du char R le plus près de P
+
+
+
+           
+
+
+          
+          
+
+            
+
+
+    
+            // while(exit){
+
+            //     iterationForItemRoom++;
+            //     AddOneToVar = (NumberOfRoomsInt/2)+iterationForItemRoom;
+
+
+            //     // if(d->stages[i].stage[(NumberOfRoomsInt/2)][AddOneToVar] != 'R'){
+            //     //      if(d->stages[i].stage[randomHeight][randomLength+2] == ' ' && d->stages[i].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength+1] == ' ' ){
+            //     // }
+
+            //     // if(d->stages[i].stage[(NumberOfRoomsInt/2)+iterationForItemRoom][(NumberOfRoomsInt/2)] != 'R'){
+
+            //     // }
+
+            // }
 
             printf("Iteration by room : %d\n", iterationByRoom);
 
