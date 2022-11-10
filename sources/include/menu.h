@@ -2,10 +2,6 @@
 #define H_MENU
 
 void menu_init(void);
-void menuCrudMonster(void);
-void menuCreateMonster(void);
-void menuModifyMonster(void);
-void menuDeleteMonster(void);
 
 void menuCrudItem(void);
 void menuCreateItem(void);
@@ -19,6 +15,6 @@ void menuDeleteRoom(void);
 
 void optionError(void);
 
-void menuCommand(void);
+void menuControl(void);
 
 #endif

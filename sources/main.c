@@ -18,8 +18,10 @@
 
 int main(int argc, char * argv[]) {
 	//Menu
-	bool condition = true;
-	int c;
+	bool condition = true, etape = true;
+	int c,c2;
+	menu_init();
+
 
 	while (condition) {
 
@@ -27,7 +29,7 @@ int main(int argc, char * argv[]) {
 
 		c = 'p';
 
-		if (kbhit()) {
+		if (etape == true && kbhit()) {
 			c = getchar();
 		}
 
@@ -35,121 +37,103 @@ int main(int argc, char * argv[]) {
 			condition = false;
 		}
 
-		if (c != 'e') {
-			menu_init();
-			switch (c) {
-				case 1:
-					(void) argc;
-					(void) argv;
+		switch (c) {
+			case 'g':
+				(void) argc;
+				(void) argv;
 
-					Donjon * d = malloc(sizeof(Donjon));
+				Donjon * d = malloc(sizeof(Donjon));
 
-					InitialisationGame(d);
+				InitialisationGame(d);
 
-					// Room * room = newRoom(1);
+				// Room * room = newRoom(1);
 
-					// printf("\n");
+				// printf("\n");
 
-					Player * player = malloc(sizeof(Player));
-					player->positionX = 1;
-					player->positionY = 1;
-					player->directionView = 'D';
+				Player * player = malloc(sizeof(Player));
+				player->positionX = 1;
+				player->positionY = 1;
+				player->directionView = 'D';
 
-					for (int i = 0; i < d -> stages[0].rooms[0].height; i++) {
-						for (int y = 0; y < d -> stages[0].rooms[0].width; y++) {
-							if(i == d -> stages[0].rooms[0].height/2 && y == d -> stages[0].rooms[0].width/2){
-								if(y % 2 == 0){
-									d -> stages[0].rooms[0].room[i][y] = 'P';
-								}else{
-									d -> stages[0].rooms[0].room[i][y+1] = 'P';
-								}
-							}
-
-						}
-					}
-
-
-					for (int i = 0; i < d -> stages[0].rooms[0].height; i++) {
-						for (int y = 0; y < d -> stages[0].rooms[0].width; y++) {
-							if (y % 2 == 0) {
-								if(d-> stages[0].rooms[0].room[i][y] == 'P'){
-									printf("%s", KRED);
-									printf("%c ", d-> stages[0].rooms[0].room[i][y]);
-    				        		printf("%s", KNRM);
-								}else{
-									printf("%c ", d-> stages[0].rooms[0].room[i][y]);
-								}
-								if (d-> stages[0].rooms[0].room[i][y] == 'P') {
-									player->positionX = y;
-									player->positionY = i;
-								}
+				for (int i = 0; i < d -> stages[0].rooms[0].height; i++) {
+					for (int y = 0; y < d -> stages[0].rooms[0].width; y++) {
+						if(i == d -> stages[0].rooms[0].height/2 && y == d -> stages[0].rooms[0].width/2){
+							if(y % 2 == 0){
+								d -> stages[0].rooms[0].room[i][y] = 'P';
+							}else{
+								d -> stages[0].rooms[0].room[i][y+1] = 'P';
 							}
 						}
-						printf("\n");
-					}
 
-						gestionPositionPlayer(d, player);
-					break;
-				case 2:
-					menuCrudMonster();
-					if (kbhit()) {
-						c = getchar();
 					}
-					switch (c){
-						case 1:
-							menuCreateMonster();
-							break;
-						case 2:
-							menuDeleteMonster();
-							break;
-						case 3:
-							menuModifyMonster();
-							break;
-						// case (!= 1 || != 2 || != 3):
-							//optionError();
-						// break;						
-					}
-					break;
+				}
 
-				case 3:
-					menuCrudItem();
-					if (kbhit()) {
-						c = getchar();
-					}
-					switch (c){
-						case 1:
-							menuCreateItem();
-							break;
-						case 2:
-							menuDeleteItem();
-							break;
-						case 3:
-							menuModifyItem();
-							break;
-					}
-					break;
 
-				case 4:
-					menuCrudRoom();
-					if (kbhit()) {
-						c = getchar();
+				for (int i = 0; i < d -> stages[0].rooms[0].height; i++) {
+					for (int y = 0; y < d -> stages[0].rooms[0].width; y++) {
+						if (y % 2 == 0) {
+							if(d-> stages[0].rooms[0].room[i][y] == 'P'){
+								printf("%s", KRED);
+								printf("%c ", d-> stages[0].rooms[0].room[i][y]);
+    			        		printf("%s", KNRM);
+							}else{
+								printf("%c ", d-> stages[0].rooms[0].room[i][y]);
+							}
+							if (d-> stages[0].rooms[0].room[i][y] == 'P') {
+								player->positionX = y;
+								player->positionY = i;
+							}
+						}
 					}
-					switch (c){
-						case 1:
-							menuCreateRoom();
-							break;
-						case 2:
-							menuDeleteRoom();
-							break;
-						case 3:
-							menuModifyRoom();
-							break;
-					}
-					break;
+					printf("\n");
+				}
 
-				case 5:
-					menuCommand();
-			}
+					gestionPositionPlayer(d, player);
+					menu_init();
+				break;
+			
+			case 'i':
+				etape = false;
+				c2 = 'p';
+				menuCrudItem();
+				if (kbhit()) {
+					c2 = getchar();
+				}
+				switch (c2){
+					case 'a':
+						menuCreateItem();
+						break;
+					case 'd':
+						menuDeleteItem();
+						break;
+					case 'm':
+						menuModifyItem();
+						break;
+				}
+				break;
+
+			case 'r':
+				etape = false;
+				c2 = 'p';
+				menuCrudRoom();
+				if (kbhit()) {
+					c2 = getchar();
+				}
+				switch (c2){
+					case 'a':
+						menuCreateRoom();
+						break;
+					case 'd':
+						menuDeleteRoom();
+						break;
+					case 'm':
+						menuModifyRoom();
+						break;
+				}
+				break;
+
+			case 'c':
+				menuControl();
 		}	
 	}
 }

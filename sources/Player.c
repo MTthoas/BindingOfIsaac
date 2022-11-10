@@ -143,7 +143,7 @@ void gestionPositionPlayer(struct Donjon *d,struct Player *player){
 			
 			bangishard(d, player);
 
-			printf("Player position : %d, %d / Player direction : %c / Iteration : %d", player->positionX, player->positionY, player->directionView, iteration);
+			printf("Player position : %d, %d / Player direction : %c / Iteration : %d\n", player->positionX, player->positionY, player->directionView, iteration);
 			continue;
 
 
