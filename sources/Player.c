@@ -52,7 +52,7 @@ void gestionPositionPlayer(struct Donjon *d,struct Player *player){
 		SDL_Delay(25);
 		// float i=0.1;
 		// 	while(i<5000){
-		// 		if(i == 5000){
+		// 		if(i%10 == 5000){
 		// 			printf("test");
 		// 		}
 		// 		i= i + 0.1;

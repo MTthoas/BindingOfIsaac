@@ -18,7 +18,7 @@
 
 int main(int argc, char * argv[]) {
 	//Menu
-	bool condition = true, etape = true;
+	bool condition = true, condition2 = true, etape = true;
 	int c,c2;
 	menu_init();
 
@@ -93,7 +93,9 @@ int main(int argc, char * argv[]) {
 				break;
 			
 			case 'i':
-				etape = false;
+			while (condition2)
+			{
+			etape = false;
 				c2 = 'p';
 				menuCrudItem();
 				if (kbhit()) {
@@ -102,17 +104,27 @@ int main(int argc, char * argv[]) {
 				switch (c2){
 					case 'a':
 						menuCreateItem();
+						condition2 = false;
 						break;
 					case 'd':
 						menuDeleteItem();
+						condition2 = false;
+
 						break;
 					case 'm':
 						menuModifyItem();
+						condition2 = false;
+
 						break;
+
 				}
-				break;
+			}
+			break;
+				
 
 			case 'r':
+			 while (condition2)
+			 {
 				etape = false;
 				c2 = 'p';
 				menuCrudRoom();
@@ -122,14 +134,18 @@ int main(int argc, char * argv[]) {
 				switch (c2){
 					case 'a':
 						menuCreateRoom();
+						condition2 = false;
 						break;
 					case 'd':
 						menuDeleteRoom();
+						condition2 = false;
 						break;
 					case 'm':
 						menuModifyRoom();
+						condition2 = false;
 						break;
 				}
+			 }
 				break;
 
 			case 'c':
