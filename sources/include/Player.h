@@ -11,10 +11,8 @@ struct Player{
 };
 
 typedef struct Player  Player;
-// typedef struct Room Room;
 
 void gestionPositionPlayer(Donjon *d, Player *player);
 int kbhit(void);
-// void gestionPosition(Player * player, Room * room, int KeyboardEntry);
 
 #endif

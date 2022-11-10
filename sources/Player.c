@@ -150,6 +150,8 @@ void gestionPositionPlayer(struct Donjon *d,struct Player *player){
 		}
 		
 	 frame++;
+	 free(d);
+	 free(player);
 	}
 
 }

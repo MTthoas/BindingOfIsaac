@@ -2,30 +2,33 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "Player.h"
 #include "menu.h"
-int choix;
 
-int menu_init(void){
-   printf("------------ Binding Of Briatte --------------\n");
+void menu_init(void){
+    system("clear");
+    printf("------------ Binding Of Briatte --------------\n");
     printf("Press 1 to start the game\n");
     printf("Press 2 for the monster's CRUD\n");
     printf("Press 3 for the item's CRUD\n");
     printf("Press 4 for the room's CRUD\n");
+    printf("Press 5 for the command's info\n");
     printf("-----------Dorian-Alexandre-Matthias----------\n");
-
-    scanf("%d", &choix);
-    return choix;
 }
 
-int menuCrudMonster(void){
+void menuCrudMonster(void){
     system("clear");
 		printf("------------ Binding Of Briatte --------------\n");
         printf("-------- You chose the monster's CRUD --------\n");
         printf("Press 1 to create a monster\n");
         printf("Press 2 to delete a monster\n");
         printf("Press 3 to modify a monster\n");
-        scanf("%d", &choix);
-        return choix;
+        //scanf("%d", &choix);
+        // if (choix != 1 || choix != 2 || choix != 3){
+        //     printf("------ Please enter a valid option  ------\n");
+        //     scanf("%d", &choix);
+        // }
+        // return choix;
 
 }
 void menuCreateMonster(void){
@@ -41,7 +44,7 @@ void menuDeleteMonster(void){
     system("clear");
 			printf("------------ Binding Of Briatte --------------\n");
             printf("------- You chose to delete a monster  -------\n");
-			printf("Choose the name of the monster to create :\n");
+			printf("Choose the name of the monster to delete :\n");
             //deleteMonster();
 }
 void menuModifyMonster(void){
@@ -52,15 +55,13 @@ void menuModifyMonster(void){
 }
 
 
-int menuCrudItem(void){
+void menuCrudItem(void){
     system("clear");
         printf("------------ Binding Of Briatte --------------\n");
         printf("-------- You chose the item's CRUD  --------\n");
         printf("Press 1 to create an item\n");
         printf("Press 2 to delete an item\n");
         printf("Press 3 to modify an item\n");
-        scanf("%d", &choix);
-        return choix;
 }
 void menuCreateItem(void){
     system("clear");
@@ -82,15 +83,13 @@ void menuModifyItem(void){
 }
 
 
-int menuCrudRoom(void){
+void menuCrudRoom(void){
     system("clear");
         printf("------------ Binding Of Briatte --------------\n");
         printf("-------- You chose the room's CRUD  --------\n");
         printf("Press 1 to create a room\n");
         printf("Press 2 to delete a room\n");
         printf("Press 3 to modify a room\n");
-        scanf("%d", &choix);
-        return choix;
 }
 void menuCreateRoom(void){
     system("clear");
@@ -111,9 +110,12 @@ void menuModifyRoom(void){
             //modifyRoom();
 }
 
-
-void optionError(void){
+void menuCommand(void){
     system("clear");
             printf("------------ Binding Of Briatte --------------\n");
-            printf("------ You didn't choose a valid option ------\n");
+            printf("--------------- Info Command  ----------------\n");
+            printf("Use z,q,s,d to move\n");
+            printf("Use 8,4,2,6 to attack\n");
+            printf("Use c to go to the last page\n");
+            printf("Use x to quit the game\n");            
 }

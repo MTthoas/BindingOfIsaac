@@ -17,104 +17,139 @@
 
 
 int main(int argc, char * argv[]) {
+	//Menu
+	bool condition = true;
+	int c;
 
-	int choix;
+	while (condition) {
 
-	choix = menu_init();
+		SDL_Delay(25);
 
-	if (choix == 1){
-        
-	(void) argc;
-	(void) argv;
+		c = 'p';
 
-	Donjon * d = malloc(sizeof(Donjon));
+		if (kbhit()) {
+			c = getchar();
+		}
 
-	InitialisationGame(d);
+		if (c == 'x') {
+			condition = false;
+		}
 
-	// Room * room = newRoom(1);
+		if (c != 'e') {
+			menu_init();
+			switch (c) {
+				case 1:
+					(void) argc;
+					(void) argv;
 
-	// printf("\n");
+					Donjon * d = malloc(sizeof(Donjon));
 
-	Player * player = malloc(sizeof(Player));
-	player->positionX = 1;
-	player->positionY = 1;
-	player->directionView = 'D';
+					InitialisationGame(d);
 
-	for (int i = 0; i < d -> stages[0].rooms[0].height; i++) {
-		for (int y = 0; y < d -> stages[0].rooms[0].width; y++) {
-			if(i == d -> stages[0].rooms[0].height/2 && y == d -> stages[0].rooms[0].width/2){
-				if(y % 2 == 0){
-					d -> stages[0].rooms[0].room[i][y] = 'P';
-				}else{
-					d -> stages[0].rooms[0].room[i][y+1] = 'P';
-				}
+					// Room * room = newRoom(1);
+
+					// printf("\n");
+
+					Player * player = malloc(sizeof(Player));
+					player->positionX = 1;
+					player->positionY = 1;
+					player->directionView = 'D';
+
+					for (int i = 0; i < d -> stages[0].rooms[0].height; i++) {
+						for (int y = 0; y < d -> stages[0].rooms[0].width; y++) {
+							if(i == d -> stages[0].rooms[0].height/2 && y == d -> stages[0].rooms[0].width/2){
+								if(y % 2 == 0){
+									d -> stages[0].rooms[0].room[i][y] = 'P';
+								}else{
+									d -> stages[0].rooms[0].room[i][y+1] = 'P';
+								}
+							}
+
+						}
+					}
+
+
+					for (int i = 0; i < d -> stages[0].rooms[0].height; i++) {
+						for (int y = 0; y < d -> stages[0].rooms[0].width; y++) {
+							if (y % 2 == 0) {
+								if(d-> stages[0].rooms[0].room[i][y] == 'P'){
+									printf("%s", KRED);
+									printf("%c ", d-> stages[0].rooms[0].room[i][y]);
+    				        		printf("%s", KNRM);
+								}else{
+									printf("%c ", d-> stages[0].rooms[0].room[i][y]);
+								}
+								if (d-> stages[0].rooms[0].room[i][y] == 'P') {
+									player->positionX = y;
+									player->positionY = i;
+								}
+							}
+						}
+						printf("\n");
+					}
+
+						gestionPositionPlayer(d, player);
+					break;
+				case 2:
+					menuCrudMonster();
+					if (kbhit()) {
+						c = getchar();
+					}
+					switch (c){
+						case 1:
+							menuCreateMonster();
+							break;
+						case 2:
+							menuDeleteMonster();
+							break;
+						case 3:
+							menuModifyMonster();
+							break;
+						// case (!= 1 || != 2 || != 3):
+							//optionError();
+						// break;						
+					}
+					break;
+
+				case 3:
+					menuCrudItem();
+					if (kbhit()) {
+						c = getchar();
+					}
+					switch (c){
+						case 1:
+							menuCreateItem();
+							break;
+						case 2:
+							menuDeleteItem();
+							break;
+						case 3:
+							menuModifyItem();
+							break;
+					}
+					break;
+
+				case 4:
+					menuCrudRoom();
+					if (kbhit()) {
+						c = getchar();
+					}
+					switch (c){
+						case 1:
+							menuCreateRoom();
+							break;
+						case 2:
+							menuDeleteRoom();
+							break;
+						case 3:
+							menuModifyRoom();
+							break;
+					}
+					break;
+
+				case 5:
+					menuCommand();
 			}
-			
-		}
-	}
-
-
-	for (int i = 0; i < d -> stages[0].rooms[0].height; i++) {
-		for (int y = 0; y < d -> stages[0].rooms[0].width; y++) {
-			if (y % 2 == 0) {
-				if(d-> stages[0].rooms[0].room[i][y] == 'P'){
-					printf("%s", KRED);
-					printf("%c ", d-> stages[0].rooms[0].room[i][y]);
-            		printf("%s", KNRM);
-				}else{
-					printf("%c ", d-> stages[0].rooms[0].room[i][y]);
-				}
-				if (d-> stages[0].rooms[0].room[i][y] == 'P') {
-					player->positionX = y;
-					player->positionY = i;
-				}
-			}
-		}
-		printf("\n");
-	}
-	
-gestionPositionPlayer(d, player);
-
-	
-	 }
-
-
-	 if (choix == 2) {
-		choix = menuCrudMonster();
-        if (choix == 1) {
-			menuCreateMonster();
-        } else if (choix == 2) {
-			menuDeleteMonster();
-        } else if (choix == 3) {
-			menuModifyMonster();
-        } else {
-			optionError();
-        }        
-	}
-
-	if(choix == 3){
-		choix = menuCrudItem();
-		if (choix == 1) {
-			menuCreateItem();
-		} else if (choix == 2) {
-			menuDeleteItem();
-		} else if (choix == 3) {
-			menuModifyItem();
-		} else {
-			optionError();
-		}		
-	}
-
-	if(choix == 4){
-		choix = menuCrudRoom();
-		if (choix == 1) {
-			menuCreateRoom();
-		} else if (choix == 2) {
-			menuDeleteRoom();
-		} else if (choix == 3) {
-			menuModifyRoom();
-		} else {
-			optionError();
-		}
+		}	
 	}
 }
