@@ -1,0 +1,71 @@
+{20}
+---
+name=<3
+hpMax=1
+---
+name=Snack
+hpMax=1
+---
+name=Launch
+hpMax=1
+---
+name=Black Lotus
+hpMax=1
+shield=1
+---
+name=Bucket of Lard
+hpMax=2
+dmg=-0.1
+---
+name=Champion Belt
+dmg=2
+---
+name=Blood of the Martyr
+dmg=1
+---
+name=Cat-O-Nine-Tails
+dmg=1
+---
+name=Ceremonial Robes
+shield=3
+dmg=1
+---
+name=Cupid's Arrow
+ps=true
+---
+name=Dead Dove
+ss=true
+flight=true
+---
+name=Dead Onion
+ps=true
+ss=true
+---
+name=Growth Hormones
+dmg=1
+---
+name=Holy Grail
+hpMax=1
+flight=true
+---
+name=Magic Mushroom
+hpMax=1
+shield=1
+dmg=1
+---
+name=Meat!
+hpMax=1
+dmg=1
+---
+name=Ouija Board
+ss=true
+---
+name=Pentagram
+dmg=2
+---
+name=Raw Liver
+hpMax=2
+---
+name=Spirit of the Night
+ss=true
+flight=true
