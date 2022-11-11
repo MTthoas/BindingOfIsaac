@@ -9,7 +9,7 @@ struct Shoot {
     int positionY;
     char directionView;
 };
-typedef struct Shoot  Shoot;
+typedef struct Shoot Shoot;
 
 void bangishard(Donjon *d,Player* player);
 
