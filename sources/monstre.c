@@ -1,13 +1,3 @@
-/**
- * @file monstres.c
- * @author Nairod36
- * @brief Structures et fonctions relatives aux monstres
- * @version 0.1
- * @date 2022-10-31
- * 
- * @copyright Copyright (c) 2022
- * 
- */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
