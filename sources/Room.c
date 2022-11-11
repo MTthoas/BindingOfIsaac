@@ -39,7 +39,7 @@ void InitialisationGame(Donjon * d) {
         printf("Nombre de salles : %d\n\n", NumberOfRoomsInt);
 
 
-        newStageByNumber(d, i, NumberOfRoomsInt+1);
+        newStageByNumber(d, i, NumberOfRoomsInt+3);
         InitialiseRoom(d, i, NumberOfRoomsInt);
 
         int * randomNumberRooms = RandomBetweenRange(NumberOfRoomsInt, 1);
@@ -305,21 +305,24 @@ void InitialisationGame(Donjon * d) {
             int calcul = (NumberOfRoomsInt-1) / iteration;
             printf("\nCalcul : %d\n", calcul);
             int iterationByRoom = iteration;
+            int itemRoom = 0;
+            int bossRoom = 0;
 
-            for(int t = 1; t <= NumberOfRoomsInt-iteration + 1; t++) {
+            for(int t = 1; t <= NumberOfRoomsInt-iteration + 2; t++) {
                 
                 int iterationRoom = 0;
 
-                while(iterationRoom == 0 && iterationByRoom <= NumberOfRoomsInt + 1) {
+                while(iterationRoom == 0 && iterationByRoom <= NumberOfRoomsInt + 2 && bossRoom == 0) {
                 
-                    int select = rand() % 3;
+                    int select = 0 + rand() % (4 - 0);
+                    printf("Select : %d\n", select);
 
                     int randomHeight;
                     int randomLength;
 
                     if(t < 2){
 
-                        randomHeight = (rand() % (((NumberOfRoomsInt/2)+2) - (NumberOfRoomsInt/2) + 1)) + NumberOfRoomsInt/2 - 1;
+                        randomHeight = rand() % (NumberOfRoomsInt+1);
                         randomLength = (rand() % (((NumberOfRoomsInt/2)+1) - (NumberOfRoomsInt/2) + 1)) + NumberOfRoomsInt/2;
 
                     }else{
@@ -327,15 +330,15 @@ void InitialisationGame(Donjon * d) {
                         if(t == NumberOfRoomsInt-iteration + 1 ){
 
                         printf("BOOS ROOM\n");
-                         randomHeight = (rand() % (((NumberOfRoomsInt/2)) - (NumberOfRoomsInt/2) + 1)) + NumberOfRoomsInt/2 - 1;
-                         randomLength = (rand() % (((NumberOfRoomsInt/2)) - (NumberOfRoomsInt/2) + 1)) + NumberOfRoomsInt/2 - 1;
+                        randomHeight = rand() % NumberOfRoomsInt;
+                         randomLength = rand() % NumberOfRoomsInt;
 
                         }else{
 
                          if(t == NumberOfRoomsInt-iteration){
 
-                            randomHeight = NumberOfRoomsInt/2 + rand() % (NumberOfRoomsInt+1 - NumberOfRoomsInt/2  - NumberOfRoomsInt/2);
-                            randomLength = NumberOfRoomsInt/2 + rand() % (NumberOfRoomsInt+1 - NumberOfRoomsInt/2 - NumberOfRoomsInt/2);
+                            randomHeight =  rand() % (NumberOfRoomsInt+1  );
+                            randomLength =  rand() % (NumberOfRoomsInt+1  );
 
                          }
                          randomHeight = rand() % NumberOfRoomsInt;
@@ -348,7 +351,7 @@ void InitialisationGame(Donjon * d) {
                     }
 
 
-                    while(d->stages[i].stage[randomHeight][randomLength] != 'R') {
+                    while(d->stages[i].stage[randomHeight][randomLength] != 'R' && d->stages[i].stage[randomHeight][randomLength] != 'I') {
 
                         randomHeight = rand() % NumberOfRoomsInt;
                         randomLength = rand() % NumberOfRoomsInt;
@@ -362,20 +365,53 @@ void InitialisationGame(Donjon * d) {
                         case 0:
 
                             // printf("Random H : %d / Random Length : %d\n", randomHeight, randomLength);
-                            if(d->stages[i].stage[randomHeight][randomLength+1] == ' '){
+                            if(d->stages[i].stage[randomHeight][randomLength+1] == ' ' && itemRoom == 0 ){
                                 if(d->stages[i].stage[randomHeight][randomLength+2] == ' ' && d->stages[i].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength+1] == ' ' ){
                                     if(t == NumberOfRoomsInt-iteration ){
                                         d->stages[i].stage[randomHeight][randomLength+1] = 'I';
+                                         itemRoom = 1;
+                                         printf("Item ROOM : %d\n", t);
                                     }else{
-                                        if(t == NumberOfRoomsInt-iteration + 1 ){
-                                            d->stages[i].stage[randomHeight][randomLength+1] = 'B';
-                                        }else{
+                                        
                                         d->stages[i].stage[randomHeight][randomLength+1] = 'R';
-                                        }
+                                                 printf("Print a room : %d\n", iterationByRoom+1);
+                                        
                                     }
                                         iterationRoom++;
                                         iterationByRoom++;
                                     break;
+                                }
+                            }else{
+
+                                if(d->stages[i].stage[randomHeight][randomLength+2] == ' ' && d->stages[i].stage[randomHeight][randomLength-1] != 'I' && d->stages[i].stage[randomHeight][randomLength+1] == ' '   &&  d->stages[i].stage[randomHeight][randomLength] != 'I'){
+                                    if(d->stages[i].stage[randomHeight][randomLength+2] == ' ' && d->stages[i].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength+1] == ' '
+                                    && d->stages[i].stage[randomHeight+2][randomLength+2] == ' ' && d->stages[i].stage[randomHeight-2][randomLength+2] == ' ' ){
+                                        if(t == NumberOfRoomsInt-iteration + 1 ){
+                                            d->stages[i].stage[randomHeight][randomLength+1] = 'B';
+                                            iterationRoom++;
+                                            iterationByRoom++;
+                                            bossRoom = 1;
+
+                                            printf("left boss item");
+
+                                            // int Height = randomHeight;
+                                            // int Length = randomLength+1;
+
+                                            //  int selectBoss = rand() % 2;
+
+                                            //     switch(selectBoss){
+                                            //         case 0:
+                                            //             d->stages[i].stage[Height][Length+1] = 'I';
+                                            //         break;
+                                            //         case 1:
+                                            //             d->stages[i].stage[Height+1][Length] = 'I';
+                                            //         break;
+                                            //         case 2:
+                                            //             d->stages[i].stage[Height-1][Length] = 'I';
+                                            //         break;
+                                            //     }
+                                        }
+                                    }
                                 }
                             }
            
@@ -383,65 +419,145 @@ void InitialisationGame(Donjon * d) {
 
                         case 1:
 
-                            if(d->stages[i].stage[randomHeight][randomLength+1] == ' '){
-                                if(d->stages[i].stage[randomHeight][randomLength+2] == ' ' && d->stages[i].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength+1] == ' ' ){
+                            if(d->stages[i].stage[randomHeight][randomLength-1] == ' ' && itemRoom == 0 ){
+                                if(d->stages[i].stage[randomHeight][randomLength-2] == ' ' && d->stages[i].stage[randomHeight+1][randomLength-1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength-1] == ' ' ){
                                     if(t == NumberOfRoomsInt-iteration){
-                                        d->stages[i].stage[randomHeight][randomLength+1] = 'I';
+                                        d->stages[i].stage[randomHeight][randomLength-1] = 'I';
+                                        printf("Item ROOM : %d\n", t);
+                                         itemRoom = 1;
                                     }else{
-                                        if(t == NumberOfRoomsInt-iteration + 1  ){
-                                            d->stages[i].stage[randomHeight][randomLength+1] = 'B';
-                                        }else{
-                                            d->stages[i].stage[randomHeight][randomLength+1] = 'R';
-                                        }
                                         
+                                        d->stages[i].stage[randomHeight][randomLength-1] = 'R';
+                                                 printf("Print a room : %d\n", iterationByRoom+1);
+        
                                     }
                                         iterationRoom++;
                                         iterationByRoom++;
                                     break;
                                 }
+                            }else{
+                                if(d->stages[i].stage[randomHeight][randomLength-1] == ' ' && d->stages[i].stage[randomHeight][randomLength-2] == ' ' &&  d->stages[i].stage[randomHeight][randomLength-1] != 'I'  &&  d->stages[i].stage[randomHeight][randomLength] != 'I'){
+                                    if(d->stages[i].stage[randomHeight][randomLength-2] == ' ' && d->stages[i].stage[randomHeight+1][randomLength-1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength-1] == ' '
+                                     && d->stages[i].stage[randomHeight+2][randomLength-2] == ' ' && d->stages[i].stage[randomHeight-2][randomLength-2] == ' ' ){
+                                         if(t == NumberOfRoomsInt-iteration + 1  ){
+                                            d->stages[i].stage[randomHeight][randomLength-1] = 'B';
+                                             iterationRoom++;
+                                            iterationByRoom++;
+                                            bossRoom = 1;
+                                            printf("case1");
+
+                                            
+                                             
+                                        }
+                                    }
+                                }
+                            
                             }
 
                         break;
 
                         case 2:
 
-                            if(d->stages[i].stage[randomHeight+1][randomLength] == ' '){
+                            if(d->stages[i].stage[randomHeight+1][randomLength] == ' ' && itemRoom == 0 ){
                                     if(d->stages[i].stage[randomHeight+2][randomLength] == ' ' && d->stages[i].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight+1][randomLength-1] == ' ' ){
                                         if(t == NumberOfRoomsInt-iteration){
                                             d->stages[i].stage[randomHeight+1][randomLength] = 'I';
+                                             printf("Item ROOM : %d\n", t);
+                                            itemRoom = 1;
                                         }else{
-                                            if(t == NumberOfRoomsInt-iteration + 1 ){
-                                                d->stages[i].stage[randomHeight+1][randomLength] = 'B';
-                                            }else{ 
-                                                d->stages[i].stage[randomHeight+1][randomLength] = 'R';
-                                            }
+                                            
+                                            d->stages[i].stage[randomHeight+1][randomLength] = 'R';
+                                                     printf("Print a room : %d\n", iterationByRoom+1);
+                                            
                                         }
                                             iterationRoom++;
                                             iterationByRoom++;
                                         break;
                                 }
+                            }else{
+                                if(d->stages[i].stage[randomHeight+1][randomLength] == ' ' && d->stages[i].stage[randomHeight+2][randomLength] == ' ' && d->stages[i].stage[randomHeight+1][randomLength] != 'I' && d->stages[i].stage[randomHeight][randomLength] != 'I'){
+                                    if(d->stages[i].stage[randomHeight+2][randomLength] == ' ' && d->stages[i].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight+1][randomLength-1] == ' ' 
+                                    && d->stages[i].stage[randomHeight+2][randomLength+2] == ' ' && d->stages[i].stage[randomHeight+2][randomLength-2] == ' ' ){
+                                        if(t == NumberOfRoomsInt-iteration + 1 ){
+                                            d->stages[i].stage[randomHeight+1][randomLength] = 'B';
+                                                iterationRoom++;
+                                                iterationByRoom++;
+                                                bossRoom = 1;
+
+                                                // int Height = randomHeight;
+                                                // int Length = randomLength+1;
+
+                                                // int selectBoss = rand() % 2;
+
+                                                // switch(selectBoss){
+                                                //     case 0:
+                                                //         d->stages[i].stage[Height][Length+1] = 'I';
+                                                //     break;
+                                                //     case 1:
+                                                //         d->stages[i].stage[Height+1][Length] = 'I';
+                                                //     break;
+                                                //     case 2:
+                                                //         d->stages[i].stage[Height][Length-1] = 'I';
+                                                //     break;
+                                                // }
+                                        }
+                                    }
+                                }
+
                             }
 
                         break;
 
                         case 3:
 
-                            if(d->stages[i].stage[randomHeight-1][randomLength] == ' '){
+                            if(d->stages[i].stage[randomHeight-1][randomLength] == ' ' && itemRoom == 0 ){
                                 if(d->stages[i].stage[randomHeight-2][randomLength] == ' ' && d->stages[i].stage[randomHeight-1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength-1] == ' ' ){
+                                          printf("CASE 3 BEFORE : %d\n", iterationByRoom+1);
                                    if(t == NumberOfRoomsInt-iteration ){
-                                        d->stages[i].stage[randomHeight+1][randomLength] = 'I';
+                                        d->stages[i].stage[randomHeight-1][randomLength] = 'I';
+                                        printf("Item ROOM : %d\n", t);
+                                         itemRoom = 1;
+                                         
                                     }else{
-                                        if(t == NumberOfRoomsInt-iteration + 1){
-                                            d->stages[i].stage[randomHeight+1][randomLength] = 'B';
-                                        }else{
-                                            d->stages[i].stage[randomHeight+1][randomLength] = 'R';
-                                        }
+                                        
+                                        d->stages[i].stage[randomHeight-1][randomLength] = 'R';
+                                        printf("CASE 3 : %d\n", iterationByRoom+1);
+                                        
                                     }
-                                   
                                         iterationRoom++;
                                         iterationByRoom++;
                                     break;
                                 }
+                            }else{
+                                if(d->stages[i].stage[randomHeight-1][randomLength] == ' ' && d->stages[i].stage[randomHeight-2][randomLength] == ' ' && d->stages[i].stage[randomHeight-1][randomLength] != 'I' && d->stages[i].stage[randomHeight][randomLength] != 'I'){
+                                    if(d->stages[i].stage[randomHeight-2][randomLength] == ' ' && d->stages[i].stage[randomHeight-1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength-1] == ' ' 
+                                    &&  d->stages[i].stage[randomHeight-2][randomLength+2] == ' ' && d->stages[i].stage[randomHeight-2][randomLength-2] == ' ' ){
+                                        if(t == NumberOfRoomsInt-iteration + 1){
+                                            d->stages[i].stage[randomHeight-1][randomLength] = 'B';
+                                                iterationRoom++;
+                                                iterationByRoom++;
+                                                bossRoom = 1;
+
+                                                //  int Height = randomHeight+1;
+                                                // int Length = randomLength;
+
+                                                // int selectBoss = rand() % 2;
+
+                                                // switch(selectBoss){
+                                                //     case 0:
+                                                //         d->stages[i].stage[Height][Length+1] = 'I';
+                                                //     break;
+                                                //     case 1:
+                                                //         d->stages[i].stage[Height-1][Length] = 'I';
+                                                //     break;
+                                                //     case 2:
+                                                //         d->stages[i].stage[Height][Length-1] = 'I';
+                                                //     break;
+                                                // }
+                                        }
+                                    }
+                                }
+
                             }
 
                         break;
@@ -455,13 +571,117 @@ void InitialisationGame(Donjon * d) {
 
             }
 
-            // Retourner la position de du char R le plus près de P
+            (void)itemRoom;
+
+            for(int t = 0; t < 1; t++) {
+
+                int RoomPlaced = 0;
+
+                    while(1){
+
+                        if(RoomPlaced == 1){
+                            break;
+                        }
+                        
+                    int select = rand() % 3;
+
+                    int randomHeight;
+                    int randomLength;
+
+                    randomHeight = rand() % NumberOfRoomsInt;
+                    randomLength = rand() % NumberOfRoomsInt;
+
+                    while(d->stages[i].stage[randomHeight][randomLength] != 'B') {
+
+                        randomHeight = rand() % NumberOfRoomsInt;
+                        randomLength = rand() % NumberOfRoomsInt;
+
+                    }
+
+                    printf("Random H : %d / Random Length : %d\n", randomHeight, randomLength);
+
+                         for (int v = 0; v < NumberOfRoomsInt + 2; v++) {
+                            for (int y = 0; y < NumberOfRoomsInt + 2; y++) {
+
+                                printf("%c ", d->stages[i].stage[v][y]);
+
+                            }
+                            printf("\n");
+                        }
+                     
+
+                        switch(select){
+                            
+                            case 0:
+
+                                // printf("Random H : %d / Random Length : %d\n", randomHeight, randomLength);
+                                if(d->stages[i].stage[randomHeight][randomLength-1] == ' '){
+                                    if(d->stages[i].stage[randomHeight][randomLength-2] == ' ' && d->stages[i].stage[randomHeight+1][randomLength-1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength-1] == ' ' ){
+                                
+                                        d->stages[i].stage[randomHeight][randomLength-1] = 'V';
+                                            printf("BOSS ITEM ROOM\n");      
+                                        RoomPlaced = 1;
+                                    }
+                                }
+            
+                            break;
+
+                            case 1:
+
+                                if(d->stages[i].stage[randomHeight][randomLength+1] == ' '){
+                                    if(d->stages[i].stage[randomHeight][randomLength+2] == ' ' && d->stages[i].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength+1] == ' ' ){
+                                    
+                                        d->stages[i].stage[randomHeight][randomLength+1] = 'V';
+                                        printf("Boos item room bottom\n");
+                                            RoomPlaced = 1;
+                                        
+                                    }
+                                }
+
+                            break;
+
+                            case 2:
+
+                                if(d->stages[i].stage[randomHeight+1][randomLength] == ' '){
+                                        if(d->stages[i].stage[randomHeight+2][randomLength] == ' ' && d->stages[i].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight+1][randomLength-1] == ' ' ){
+                                            
+                                                d->stages[i].stage[randomHeight+1][randomLength] = 'V';
+                                                    printf("BOSS ITEM ROOM\n");
+                                                    RoomPlaced = 1;
+                                        
+                                    }
+                                }
+
+                            break;
+
+                            case 3:
+
+                                if(d->stages[i].stage[randomHeight-1][randomLength] == ' '){
+                                    if(d->stages[i].stage[randomHeight-2][randomLength] == ' ' && d->stages[i].stage[randomHeight-1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength-1] == ' ' ){
+                                    
+                                            d->stages[i].stage[randomHeight+1][randomLength] = 'V';
+                                                printf("BOSS ITEM ROOM\n");
+                                                RoomPlaced = 1;
+                            
+                                    }
+                                }
+
+                            break;
+
+
+                        }
+
+                                            
+                    }
+                        
+                    
+                }
+             
 
 
 
-           
 
-
+    
           
           
 
