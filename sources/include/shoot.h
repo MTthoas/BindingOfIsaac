@@ -11,6 +11,14 @@ struct Shoot {
 };
 typedef struct Shoot Shoot;
 
-void bangishard(Donjon *d,Player* player);
+struct ShootParams {
+    Donjon *d;
+    Player *player;
+    int reload;
+};
+typedef struct ShootParams ShootParams;
+
+
+void* bangishard(void *ShootParams);
 
 #endif

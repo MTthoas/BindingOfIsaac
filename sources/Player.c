@@ -7,9 +7,11 @@
 #include <sys/select.h>
 #include <stdbool.h>
 #include <fcntl.h>
+#include <pthread.h>
 
 #include "Player.h"
 #include "shoot.h"
+#include "menu.h"
 
 
 #define KRED  "\x1B[31m"
@@ -141,7 +143,17 @@ void gestionPositionPlayer(struct Donjon *d,struct Player *player){
 				
 			}
 			
-			bangishard(d, player);
+			ShootParams *shootParams = malloc(sizeof(struct ShootParams));
+			shootParams->reload = 1;
+			shootParams->player = player;
+			shootParams->d = d;
+
+			if (shootParams->reload == 1){
+				shootParams->reload = 0;
+				pthread_t t1;
+  				pthread_create(&t1, NULL, bangishard, shootParams);
+			}
+			
 
 			printf("Player position : %d, %d / Player direction : %c / Iteration : %d\n", player->positionX, player->positionY, player->directionView, iteration);
 			continue;
@@ -153,5 +165,4 @@ void gestionPositionPlayer(struct Donjon *d,struct Player *player){
 	 free(d);
 	 free(player);
 	}
-
 }

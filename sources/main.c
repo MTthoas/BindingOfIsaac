@@ -8,8 +8,8 @@
 #include <stdbool.h>
 #include <fcntl.h>
 
-#include "include/Room.h"
-#include "include/Player.h"
+#include "Room.h"
+#include "Player.h"
 #include "menu.h"
 
 #define KRED  "\x1B[31m"
@@ -88,6 +88,7 @@ int main(int argc, char * argv[]) {
 					printf("\n");
 				}
 
+					
 					gestionPositionPlayer(d, player);
 					menu_init();
 				break;
@@ -150,6 +151,6 @@ int main(int argc, char * argv[]) {
 
 			case 'c':
 				menuControl();
-		}	
+		}
 	}
 }
