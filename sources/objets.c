@@ -1,9 +1,39 @@
+/**
+ * @file objets.c
+ * @author TheGreat-Chain
+ * @brief Structures et fonctions relatives aux objets de personnage
+ * @version 0.1
+ * @date 2022-10-24
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "include/objets.h"
 #include "include/mystring.h"
+
+
+
+int getTailleListeObjets(ListeObjets* l) {
+    Objet* courant = l->premier;
+    if(courant == NULL) {
+        return 0;
+    }
+
+    int count = 0;
+    while(courant != NULL) {
+        count += 1;
+        courant = courant->suivant;
+    }
+
+    return count;
+}
 
 void* displayObjet(Objet* objet) {
     if(objet == NULL) {
@@ -11,8 +41,6 @@ void* displayObjet(Objet* objet) {
         return NULL;
     }
 
-    //printf("[WARN] Utilisation de displayObjet(). \nSi les champs ne sont pas remplis, erreur de segmentation possible.\n");
-    
     printf("\n");
     printf("id : %d\n", objet->id);
     printf("name : %s\n", duplicateString(objet->name));
@@ -203,3 +231,4 @@ ListeObjets* createListeObjets() {
 void freeObjet(Objet* objet) {
     free(objet);
 }
+

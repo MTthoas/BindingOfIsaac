@@ -1,3 +1,14 @@
+/**
+ * @file fichierObjets.h
+ * @author TheGreat-Chain
+ * @brief Structures et fonctions relatives aux objets de personnage
+ * @version 0.1
+ * @date 2022-10-10
+ * 
+ * @copyright Copyright (c) 2022
+ */
+
+
 #ifndef OBJETS_H
 #define OBJETS_H
 
@@ -135,6 +146,15 @@
      * A utiliser par exemple après une suppression.
      */
     void rangerListeObjets(ListeObjets*);
+
+
+    /**
+     * @brief Retourne le nombre d'éléments d'une liste d'objets
+     * 
+     * @return int 
+     */
+    int getTailleListeObjets(ListeObjets*);
+
 
 
 
