@@ -23,9 +23,16 @@ int main(int argc, char * argv[]) {
 	(void) argc;
 	(void) argv;
 
-	Donjon * d = malloc(sizeof(Donjon));
 
+	Donjon * d = malloc(sizeof(Donjon));
 	InitialisationGame(d);
+	free(d);
+
+	// system("clear");
+
+	// d = malloc(sizeof(Donjon));
+	// InitialisationGame(d);
+
 
 	// Room * room = newRoom(1);
 
@@ -172,6 +179,5 @@ int main(int argc, char * argv[]) {
 	// frame++;
 	// }
 
-	free(d);
-
+	// free(d);
 }
