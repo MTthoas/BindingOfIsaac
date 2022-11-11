@@ -76,6 +76,6 @@ void menuControl(void){
             printf("------------ Binding Of Briatte --------------\n");
             printf("--------------- Info control  ----------------\n");
             printf("Use z,q,s,d to move\n");
-            printf("Use 8,4,2,6 to attack\n");
+            printf("Use 8,4,5,6 to attack\n");
             printf("Use x to quit the game\n");            
 }
