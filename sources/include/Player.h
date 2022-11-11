@@ -7,12 +7,12 @@ struct Player{
     int positionX;
     int positionY;
     char directionView;
+    float hpMax;
 };
 
 typedef struct Player  Player;
-// typedef struct Room Room;
 
+void gestionPositionPlayer(Donjon *d, Player *player);
 int kbhit(void);
-// void gestionPosition(Player * player, Room * room, int KeyboardEntry);
 
 #endif
