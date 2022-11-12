@@ -22,10 +22,13 @@ int main(int argc, char * argv[]) {
 	int c,c2;
 	menu_init();
 
+	Donjon * d = malloc(sizeof(Donjon));
+	InitialisationGame(d);
+
 
 	while (condition) {
 
-		SDL_Delay(25);
+		SDL_Delay(10);
 
 		c = 'p';
 
@@ -42,9 +45,7 @@ int main(int argc, char * argv[]) {
 				(void) argc;
 				(void) argv;
 
-				Donjon * d = malloc(sizeof(Donjon));
-
-				InitialisationGame(d);
+				InitialisationGameByStagesOptions(d);
 
 				// Room * room = newRoom(1);
 

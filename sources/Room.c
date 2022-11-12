@@ -292,14 +292,6 @@ void InitialisationGame(Donjon * d) {
                 }
             }
 
-            // for (int v = 0; v < NumberOfRoomsInt + 1; v++) {
-
-            //     for (int y = 0; y < NumberOfRoomsInt + 1; y++) {
-
-
-            //     }
-            // }
-
 
       
             int iterationByRoom = iteration;
@@ -671,22 +663,6 @@ void InitialisationGame(Donjon * d) {
                 }
              
 
-    
-            // while(exit){
-
-            //     iterationForItemRoom++;
-            //     AddOneToVar = (NumberOfRoomsInt/2)+iterationForItemRoom;
-
-
-            //     // if(d->stages[i].stage[(NumberOfRoomsInt/2)][AddOneToVar] != 'R'){
-            //     //      if(d->stages[i].stage[randomHeight][randomLength+2] == ' ' && d->stages[i].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength+1] == ' ' ){
-            //     // }
-
-            //     // if(d->stages[i].stage[(NumberOfRoomsInt/2)+iterationForItemRoom][(NumberOfRoomsInt/2)] != 'R'){
-
-            //     // }
-
-            // }
 
 
             for (int v = 0; v < NumberOfRoomsInt + 2; v++) {
@@ -710,6 +686,10 @@ void InitialisationGame(Donjon * d) {
  * @param number = max inclus
  * @return int* 
  */
+
+void InitialisationGameByStagesOptions(Donjon *d){
+    
+}
 
 int PickRoomNotUsed(struct Donjon * d, int NumberOfRoomsInt) {
 
