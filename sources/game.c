@@ -76,10 +76,9 @@ void gestionGame(Donjon * d) {
     }
 
     iterationTest++;   
-
 	while (condition) {
 
-        SDL_Delay(35);
+        SDL_Delay(80);
 
         c = 'p';
 		iteration++;
@@ -119,17 +118,14 @@ void gestionGame(Donjon * d) {
 
             printf("Player position : %d, %d / Player direction : %c / Iteration : %d / IterationTest : %d\n", player->positionX, player->positionY, player->directionView, iteration, iterationTest);
                 
-                printf("reload : %d\n",shootParams->reload);
-                if (shootParams->reload == 1){
-                	//do{
-                		SDL_Delay(35);
-                        
-                		shootParams->reload = 0;
-                		pthread_t t1;
-                		pthread_create(&t1, NULL, bangishard, shootParams);
-                	//}while(shootParams->reload == 1);
-                }
-                continue;
+            printf("reload : %d\n",shootParams->reload);
+            if (shootParams->reload == 1){
+            	//do{
+            	SDL_Delay(80);
+            	pthread_t t1;
+            	pthread_create(&t1, NULL, bangishard, shootParams);
+            }
+            continue;
 
             free(d);
             free(player);
