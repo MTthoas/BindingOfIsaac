@@ -44,7 +44,7 @@ int kbhit(void) {
 }
 
 void gestionPositionPlayer(struct Donjon *d,struct Player *player){
-	bool condition = true;	
+	bool condition = true;
 	int frame = 0;
 	int c, iteration = 0;
 
@@ -142,16 +142,17 @@ void gestionPositionPlayer(struct Donjon *d,struct Player *player){
 				printf("\n");
 				
 			}
-			
 			ShootParams *shootParams = malloc(sizeof(struct ShootParams));
 			shootParams->reload = 1;
 			shootParams->player = player;
 			shootParams->d = d;
 
 			if (shootParams->reload == 1){
-				shootParams->reload = 0;
-				pthread_t t1;
-  				pthread_create(&t1, NULL, bangishard, shootParams);
+				//do{
+					shootParams->reload = 0;
+					pthread_t t1;
+  					pthread_create(&t1, NULL, bangishard, shootParams);
+				//}while(shootParams->reload == 1);
 			}
 			
 
