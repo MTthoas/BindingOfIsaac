@@ -18,6 +18,7 @@ char ** RoomByNumber(int height, int length, int number);
 int NumberOfDoorsByRoom(char ** s, int height, int width);
 int * RandomBetweenRange(int number, int zero);
 int NowRoomIsUsed(struct Donjon *d, int NumberOfRoomsInt, int id);
+void InitialisationGameByStagesOptions(Donjon * d);
 
 /**
  * @brief Ininitialise le jeu
@@ -688,7 +689,16 @@ void InitialisationGame(Donjon * d) {
  */
 
 void InitialisationGameByStagesOptions(Donjon *d){
-    
+
+    for (int i = 0; i < d -> stages[0].rooms[0].height; i++) {
+		for (int y = 0; y < d -> stages[0].rooms[0].width; y++) {
+
+
+        }
+    }
+
+    (void)d;
+
 }
 
 int PickRoomNotUsed(struct Donjon * d, int NumberOfRoomsInt) {

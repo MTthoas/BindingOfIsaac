@@ -11,6 +11,7 @@
 #include "Room.h"
 #include "Player.h"
 #include "menu.h"
+#include "game.h"
 
 #define KRED  "\x1B[31m"
 #define KNRM  "\x1B[0m"
@@ -24,40 +25,12 @@ int main(int argc, char * argv[]) {
 	Donjon * d = malloc(sizeof(Donjon));
 	
 	InitialisationGame(d);
+	InitialisationGameByStagesOptions(d);
 	
 	Player * player = malloc(sizeof(Player));
 	player->positionX = 1;
 	player->positionY = 1;
 	player->directionView = 'D';
-
-	for (int i = 0; i < d -> stages[0].rooms[0].height; i++) {
-		for (int y = 0; y < d -> stages[0].rooms[0].width; y++) {
-			if(i == d -> stages[0].rooms[0].height/2 && y == d -> stages[0].rooms[0].width/2){
-				if(y % 2 == 0){
-					d -> stages[0].rooms[0].room[i][y] = 'P';
-				}else{
-					d -> stages[0].rooms[0].room[i][y+1] = 'P';
-				}
-			}
-
-		}
-	}
-
-	for (int i = 0; i < d -> stages[0].rooms[0].height; i++) {
-		for (int y = 0; y < d -> stages[0].rooms[0].width; y++) {
-			if (y % 2 == 0) {
-				if(d-> stages[0].rooms[0].room[i][y] == 'P'){
-					printf("%s", KRED);
-					printf("%c ", d-> stages[0].rooms[0].room[i][y]);
-				}
-				if (d-> stages[0].rooms[0].room[i][y] == 'P') {
-					player->positionX = y;
-					player->positionY = i;
-				}
-			}
-		}
-		printf("\n");
-	}
 	
 	menu_init();
 
@@ -72,60 +45,15 @@ int main(int argc, char * argv[]) {
 		}
 
 		switch (c) {
+
 			case 'g':
 				(void) argc;
 				(void) argv;
+							
+				gestionGame(d, player);
+				menu_init();
 
-				Donjon * d = malloc(sizeof(Donjon));
-
-				InitialisationGame(d);
-
-				// Room * room = newRoom(1);
-
-				// printf("\n");
-
-				Player * player = malloc(sizeof(Player));
-				player->positionX = 1;
-				player->positionY = 1;
-				player->directionView = 'D';
-
-				for (int i = 0; i < d -> stages[0].rooms[0].height; i++) {
-					for (int y = 0; y < d -> stages[0].rooms[0].width; y++) {
-						if(i == d -> stages[0].rooms[0].height/2 && y == d -> stages[0].rooms[0].width/2){
-							if(y % 2 == 0){
-								d -> stages[0].rooms[0].room[i][y] = 'P';
-							}else{
-								d -> stages[0].rooms[0].room[i][y+1] = 'P';
-							}
-						}
-
-					}
-				}
-
-
-				for (int i = 0; i < d -> stages[0].rooms[0].height; i++) {
-					for (int y = 0; y < d -> stages[0].rooms[0].width; y++) {
-						if (y % 2 == 0) {
-							if(d-> stages[0].rooms[0].room[i][y] == 'P'){
-								printf("%s", KRED);
-								printf("%c ", d-> stages[0].rooms[0].room[i][y]);
-    			        		printf("%s", KNRM);
-							}else{
-								printf("%c ", d-> stages[0].rooms[0].room[i][y]);
-							}
-							if (d-> stages[0].rooms[0].room[i][y] == 'P') {
-								player->positionX = y;
-								player->positionY = i;
-							}
-						}
-					}
-					printf("\n");
-				}
-
-					
-					gestionPositionPlayer(d, player);
-					menu_init();
-				break;
+			break;
 			
 			case 'i':
 			while (condition2)

@@ -61,6 +61,7 @@ typedef struct Donjon Donjon;
 // void printRoom(Room room);
 // void printRooms(Room room);
 void InitialisationGame(Donjon * d);
+void InitialisationGameByStagesOptions(Donjon * d);
 // int NumberOfDoorsByRoom(Room * s);
 // void numberOfRooms(Room *s);
 // void freeRoom(Room *s);

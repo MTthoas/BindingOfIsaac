@@ -43,53 +43,7 @@ int kbhit(void) {
 	return 0;
 }
 
-void gestionPositionPlayer(struct Donjon *d,struct Player *player){
-	bool condition = true;
-	int c, iteration = 0;
-
-	while (condition) {
-		
-
-		SDL_Delay(35);
-		// float i=0.1;
-		// 	while(i<5000){
-		// 		if(i%10 == 5000){
-		// 			printf("test");
-		// 		}
-		// 		i= i + 0.1;
-		// 		printf("%.2f \n",i);
-		// 	}
-						
-		c = 'p';
-		iteration++;
-
-		if (kbhit()) {
-			c = getchar();
-		}
-
-
-		if (c == ' ') {
-			
-			if (player->directionView == 'd') {
-
-				
-			}
-
-			if (player->directionView == 'q') {
-				
-			}
-
-		}
-
-
-		// Touche pour cancel le jeu
-
-		if (c == 'x') {
-			condition = false;
-		}
-
-		if (c != 'e') {
-			system("clear");
+void gestionPositionPlayer(struct Donjon *d,struct Player *player, int c){
 
 			switch (c) {
 				case 'z':
@@ -125,45 +79,5 @@ void gestionPositionPlayer(struct Donjon *d,struct Player *player){
 					}
 			}
 
-			printf("\n");
-			for (int i = 0; i < d->stages[0].rooms[0].height; i++) {
-				for (int y = 0; y < d->stages[0].rooms[0].width - 1; y++) {
-					if (y % 2 == 0) {
-						if(d-> stages[0].rooms[0].room[i][y] == 'P'){
-							printf("%s", KRED);
-							printf("%c ", d-> stages[0].rooms[0].room[i][y]);
-							printf("%s", KNRM);
-						}else{
-							printf("%c ", d-> stages[0].rooms[0].room[i][y]);
-						}
-					}
-				}
-				printf("\n");
-				
-			}
-			
-
-			printf("Player position : %d, %d / Player direction : %c / Iteration : %d\n", player->positionX, player->positionY, player->directionView, iteration);
-			
-			ShootParams *shootParams = malloc(sizeof(struct ShootParams));
-			shootParams->reload = 0;
-			shootParams->player = player;
-			shootParams->d = d;
-			printf("reload : %d\n",shootParams->reload);
-			if (shootParams->reload == 1){
-				//do{
-					SDL_Delay(35);
-					
-					shootParams->reload = 0;
-					pthread_t t1;
-  					pthread_create(&t1, NULL, bangishard, shootParams);
-				//}while(shootParams->reload == 1);
-			}
-			continue;
-
-
-		}
-	 free(d);
-	 free(player);
-	}
+	
 }
