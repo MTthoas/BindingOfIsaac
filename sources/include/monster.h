@@ -1,12 +1,12 @@
-#ifndef MONSTRE_H
-#define MONSTRE_H
+#ifndef MONSTER_H
+#define MONSTER_H
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "Player.h"
 
 
-struct Monstre {
+struct Monster {
     int id;
     char* name;
     float hpMax;
@@ -16,7 +16,7 @@ struct Monstre {
     int positionX;
     int positionY;
     };   
-typedef struct Monstre Monstre;
+typedef struct Monster Monster;
 
-void monsterAttack(Monstre* monster, Player* player);
-#endif //MONSTRE_H
+void monsterAttack(Monster* monster, Player* player);
+#endif //MONSTER_H

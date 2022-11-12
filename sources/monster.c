@@ -9,7 +9,7 @@
 
 
 //TODO
-void monsterAttack(Monstre* monster, Player* player) {
+void monsterAttack(Monster* monster, Player* player) {
     if(monster == NULL || player == NULL) {
         return;
     }
