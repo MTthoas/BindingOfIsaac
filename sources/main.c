@@ -25,7 +25,7 @@ int main(int argc, char * argv[]) {
 
 	while (condition) {
 
-		SDL_Delay(25);
+		// SDL_Delay(25);
 
 		c = 'p';
 

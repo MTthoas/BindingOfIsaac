@@ -23,7 +23,6 @@
 #endif 
 
 void* bangishard(void *shootParams){
-
     Shoot * shoot = malloc(sizeof(Shoot));
 
 	//((ShootParams*)shootParams)->player->positionX;
