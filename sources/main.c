@@ -27,10 +27,6 @@ int main(int argc, char * argv[]) {
 	InitialisationGame(d);
 	InitialisationGameByStagesOptions(d);
 	
-	Player * player = malloc(sizeof(Player));
-	player->positionX = 1;
-	player->positionY = 1;
-	player->directionView = 'D';
 	
 	menu_init();
 
@@ -50,7 +46,7 @@ int main(int argc, char * argv[]) {
 				(void) argc;
 				(void) argv;
 							
-				gestionGame(d, player);
+				gestionGame(d);
 				menu_init();
 
 			break;

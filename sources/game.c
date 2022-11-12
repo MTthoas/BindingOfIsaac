@@ -19,12 +19,13 @@
 #include "Player.h"
 #include "menu.h"
 #include "game.h"
+#include "shoot.h"
 
-void gestionGame(Donjon * d, Player * player);
+void gestionGame(Donjon * d);
 
-void gestionGame(Donjon * d, Player * player) {
+void gestionGame(Donjon * d) {
     (void) d;
-    (void) player;
+    
 
     int iteration = 0;
     int iterationTest = 0;
@@ -32,6 +33,16 @@ void gestionGame(Donjon * d, Player * player) {
     bool condition = true;
     int c;
 
+    Player * player = malloc(sizeof(Player));
+	player->positionX = 1;
+	player->positionY = 1;
+	player->directionView = 'D';
+
+    ShootParams *shootParams = malloc(sizeof(struct ShootParams));
+    shootParams->reload = 1;
+    shootParams->player = player;
+    shootParams->d = d;
+	
     // Initialise P at the start, start one time
 
     for (int i = 0; i < d -> stages[0].rooms[0].height; i++) {
@@ -108,20 +119,16 @@ void gestionGame(Donjon * d, Player * player) {
 
             printf("Player position : %d, %d / Player direction : %c / Iteration : %d / IterationTest : %d\n", player->positionX, player->positionY, player->directionView, iteration, iterationTest);
                 
-                // ShootParams *shootParams = malloc(sizeof(struct ShootParams));
-                // shootParams->reload = 0;
-                // shootParams->player = player;
-                // shootParams->d = d;
-                // printf("reload : %d\n",shootParams->reload);
-                // if (shootParams->reload == 1){
-                // 	//do{
-                // 		SDL_Delay(35);
+                printf("reload : %d\n",shootParams->reload);
+                if (shootParams->reload == 1){
+                	//do{
+                		SDL_Delay(35);
                         
-                // 		shootParams->reload = 0;
-                // 		pthread_t t1;
-                // 		pthread_create(&t1, NULL, bangishard, shootParams);
-                // 	//}while(shootParams->reload == 1);
-                // }
+                		shootParams->reload = 0;
+                		pthread_t t1;
+                		pthread_create(&t1, NULL, bangishard, shootParams);
+                	//}while(shootParams->reload == 1);
+                }
                 continue;
 
             free(d);
