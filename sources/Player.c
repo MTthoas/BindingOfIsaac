@@ -44,14 +44,13 @@ int kbhit(void) {
 }
 
 void gestionPositionPlayer(struct Donjon *d,struct Player *player){
-	bool condition = true;	
-	int frame = 0;
+	bool condition = true;
 	int c, iteration = 0;
 
 	while (condition) {
 		
 
-		SDL_Delay(25);
+		SDL_Delay(35);
 		// float i=0.1;
 		// 	while(i<5000){
 		// 		if(i%10 == 5000){
@@ -143,25 +142,27 @@ void gestionPositionPlayer(struct Donjon *d,struct Player *player){
 				
 			}
 			
-			ShootParams *shootParams = malloc(sizeof(struct ShootParams));
-			shootParams->reload = 1;
-			shootParams->player = player;
-			shootParams->d = d;
-
-			if (shootParams->reload == 1){
-				shootParams->reload = 0;
-				pthread_t t1;
-  				pthread_create(&t1, NULL, bangishard, shootParams);
-			}
-			
 
 			printf("Player position : %d, %d / Player direction : %c / Iteration : %d\n", player->positionX, player->positionY, player->directionView, iteration);
+			
+			ShootParams *shootParams = malloc(sizeof(struct ShootParams));
+			shootParams->reload = 0;
+			shootParams->player = player;
+			shootParams->d = d;
+			printf("reload : %d\n",shootParams->reload);
+			if (shootParams->reload == 1){
+				//do{
+					SDL_Delay(35);
+					
+					shootParams->reload = 0;
+					pthread_t t1;
+  					pthread_create(&t1, NULL, bangishard, shootParams);
+				//}while(shootParams->reload == 1);
+			}
 			continue;
 
 
 		}
-		
-	 frame++;
 	 free(d);
 	 free(player);
 	}

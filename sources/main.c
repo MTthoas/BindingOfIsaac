@@ -20,22 +20,53 @@ int main(int argc, char * argv[]) {
 	//Menu
 	bool condition = true, condition2 = true, etape = true;
 	int c,c2;
+	
+	Donjon * d = malloc(sizeof(Donjon));
+	
+	InitialisationGame(d);
+	
+	Player * player = malloc(sizeof(Player));
+	player->positionX = 1;
+	player->positionY = 1;
+	player->directionView = 'D';
+
+	for (int i = 0; i < d -> stages[0].rooms[0].height; i++) {
+		for (int y = 0; y < d -> stages[0].rooms[0].width; y++) {
+			if(i == d -> stages[0].rooms[0].height/2 && y == d -> stages[0].rooms[0].width/2){
+				if(y % 2 == 0){
+					d -> stages[0].rooms[0].room[i][y] = 'P';
+				}else{
+					d -> stages[0].rooms[0].room[i][y+1] = 'P';
+				}
+			}
+
+		}
+	}
+
+	for (int i = 0; i < d -> stages[0].rooms[0].height; i++) {
+		for (int y = 0; y < d -> stages[0].rooms[0].width; y++) {
+			if (y % 2 == 0) {
+				if(d-> stages[0].rooms[0].room[i][y] == 'P'){
+					printf("%s", KRED);
+					printf("%c ", d-> stages[0].rooms[0].room[i][y]);
+				}
+				if (d-> stages[0].rooms[0].room[i][y] == 'P') {
+					player->positionX = y;
+					player->positionY = i;
+				}
+			}
+		}
+		printf("\n");
+	}
+	
 	menu_init();
 
-	Donjon * d = malloc(sizeof(Donjon));
-	InitialisationGame(d);
-
-
 	while (condition) {
-
-		SDL_Delay(10);
-
 		c = 'p';
 
 		if (etape == true && kbhit()) {
 			c = getchar();
 		}
-
 		if (c == 'x') {
 			condition = false;
 		}
@@ -45,7 +76,9 @@ int main(int argc, char * argv[]) {
 				(void) argc;
 				(void) argv;
 
-				InitialisationGameByStagesOptions(d);
+				Donjon * d = malloc(sizeof(Donjon));
+
+				InitialisationGame(d);
 
 				// Room * room = newRoom(1);
 
