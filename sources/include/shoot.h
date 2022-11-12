@@ -14,7 +14,7 @@ typedef struct Shoot Shoot;
 struct ShootParams {
     Donjon *d;
     Player *player;
-    int reload;
+    int reload ;
 };
 typedef struct ShootParams ShootParams;
 

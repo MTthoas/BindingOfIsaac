@@ -146,9 +146,10 @@ void gestionPositionPlayer(struct Donjon *d,struct Player *player){
 			printf("Player position : %d, %d / Player direction : %c / Iteration : %d\n", player->positionX, player->positionY, player->directionView, iteration);
 			
 			ShootParams *shootParams = malloc(sizeof(struct ShootParams));
-			shootParams->reload = 1;
+			shootParams->reload = 0;
 			shootParams->player = player;
 			shootParams->d = d;
+			printf("reload : %d\n",shootParams->reload);
 			if (shootParams->reload == 1){
 				//do{
 					SDL_Delay(35);
