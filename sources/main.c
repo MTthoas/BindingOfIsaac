@@ -1,3 +1,13 @@
+/**
+ * @file main.c
+ * @author MTthoas & Nairod36
+ * @brief Gestion du programme
+ * @version 1.5
+ * @date 2022-11-11
+ * 
+ * @copyright Copyright (c) 2022
+ */
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include<stdio.h>

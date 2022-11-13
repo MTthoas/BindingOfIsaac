@@ -1,3 +1,12 @@
+/**
+ * @file room.c
+ * @author MTthoas
+ * @brief Gestion et fonctions Rooms,Donjons et stages
+ * @version 0.5
+ * @date 2022-11-12
+ * 
+ * @copyright Copyright (c) 2022
+ */
 #define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>

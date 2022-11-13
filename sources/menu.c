@@ -1,3 +1,13 @@
+/**
+ * @file menu.c
+ * @author  Nairod36
+ * @brief Fonctions du menu
+ * @version 0.1
+ * @date 2022-11-5
+ * 
+ * @copyright Copyright (c) 2022
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

@@ -1,3 +1,13 @@
+/**
+ * @file shoot.h
+ * @author  Nairod36
+ * @brief Declarations fonctions et structures du shoot joueur
+ * @version 0.3
+ * @date 2022-11-13
+ * 
+ * @copyright Copyright (c) 2022
+ */
+
 #ifndef H_SHOOT
 #define H_SHOOT
 

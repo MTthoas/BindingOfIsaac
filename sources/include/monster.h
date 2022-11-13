@@ -1,3 +1,12 @@
+/**
+ * @file monster.h
+ * @author  Nairod36
+ * @brief Declaration fonctions des mobs et structures
+ * @version 0.1
+ * @date 2022-11-11
+ * 
+ * @copyright Copyright (c) 2022
+ */
 #ifndef MONSTER_H
 #define MONSTER_H
 

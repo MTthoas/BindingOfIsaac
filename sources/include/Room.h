@@ -1,3 +1,12 @@
+/**
+ * @file room.h
+ * @author MTthoas
+ * @brief Declaration fonctions et structures des Rooms,Donjons et stages
+ * @version 0.5
+ * @date 2022-11-12
+ * 
+ * @copyright Copyright (c) 2022
+ */
 #ifndef H_ROOM
 #define H_ROOM
 

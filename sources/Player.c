@@ -1,3 +1,13 @@
+/**
+ * @file Player.c
+ * @author MTthoas 
+ * @brief Gestion du deplacement joueurs
+ * @version 0.1
+ * @date 2022-11-11
+ * 
+ * @copyright Copyright (c) 2022
+ */
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include<stdio.h>

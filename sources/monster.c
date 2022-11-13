@@ -1,3 +1,13 @@
+/**
+ * @file monster.c
+ * @author  Nairod36
+ * @brief Fonctions des mobs
+ * @version 0.2
+ * @date 2022-11-11
+ * 
+ * @copyright Copyright (c) 2022
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

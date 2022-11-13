@@ -1,3 +1,13 @@
+/**
+ * @file game.c
+ * @author MTthoas & Nairod36
+ * @brief Gestion du jeu
+ * @version 0.1
+ * @date 2022-11-11
+ * 
+ * @copyright Copyright (c) 2022
+ */
+
 #define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
