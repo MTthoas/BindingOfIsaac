@@ -33,9 +33,15 @@
 #endif 
 
 void* bangishard(void *shootParams){
+
+	// #ifdef _WIN32 
+	// Sleep(25); 
+	// #else 
+	// usleep(25000); 
+	// #endif 
+
     Shoot * shoot = malloc(sizeof(Shoot));
 
-	//((ShootParams*)shootParams)->player->positionX;
 	int c;
 
     c = 'p';

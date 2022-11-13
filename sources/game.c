@@ -89,7 +89,11 @@ void gestionGame(Donjon * d) {
     iterationTest++;   
 	while (condition) {
 
-        SDL_Delay(50);
+        #ifdef _WIN32 
+		Sleep(25); 
+		#else 
+		usleep(25000); 
+		#endif 
 
         c = 'p';
 		iteration++;
@@ -131,8 +135,6 @@ void gestionGame(Donjon * d) {
                 
             printf("reload : %d\n",shootParams->reload);
             if (shootParams->reload == 1){
-            	//do{
-            	SDL_Delay(70);
             	pthread_t t1;
             	pthread_create(&t1, NULL, bangishard, shootParams);
             }

@@ -30,8 +30,8 @@
 
 void firstMenu(struct Donjon *d) {
 	//Menu
-	bool condition = true, condition2 = true, etape = true;
-	int c,c2;
+	bool condition = true, condition2, etape = true;
+	int c,c2,c3,c4;
 
 	while (condition) {
 		c = 'p';
@@ -52,63 +52,90 @@ void firstMenu(struct Donjon *d) {
 			break;
 			
 			case 'i':
-			while (condition2)
-			{
-			etape = false;
-				c2 = 'p';
-				menuCrudItem();
-				if (kbhit()) {
-					c2 = getchar();
-				}
-				switch (c2){
-					case 'a':
-						menuCreateItem();
-						condition2 = false;
-						break;
-					case 'd':
-						menuDeleteItem();
-						condition2 = false;
-
-						break;
-					case 'm':
-						menuModifyItem();
-						condition2 = false;
-
-						break;
-
-				}
-			}
+                system("clear");
+                menuCrudItem();
+                condition2 = true;
+			    while (condition2)
+			    {
+			    etape = false;
+			    	c2 = 'p';
+			    	if (kbhit()) {
+			    		c2 = getchar();
+			    	}
+			    	switch (c2){
+			    		case 'a':
+			    			menuCreateItem();
+			    			condition2 = false;
+			    			break;
+			    		case 'd':
+			    			menuDeleteItem();
+			    			condition2 = false;
+    
+			    			break;
+			    		case 'm':
+			    			menuModifyItem();
+			    			condition2 = false;
+    
+			    			break;
+                        case 'b':
+                            menu_init();
+                            condition2 = false;
+                            break;
+    
+			    	}
+                    etape = true;
+			    }
 			break;
 				
 
 			case 'r':
-			 while (condition2)
-			 {
-				etape = false;
-				c2 = 'p';
-				menuCrudRoom();
-				if (kbhit()) {
-					c2 = getchar();
-				}
-				switch (c2){
-					case 'a':
-						menuCreateRoom();
-						condition2 = false;
-						break;
-					case 'd':
-						menuDeleteRoom();
-						condition2 = false;
-						break;
-					case 'm':
-						menuModifyRoom();
-						condition2 = false;
-						break;
-				}
-			 }
-				break;
+                system("clear");
+                menuCrudRoom();
+                condition2 = true;
+			    while (condition2)
+			    {
+			    	etape = false;
+			    	c3 = 'p';
+			    	if (kbhit()) {
+			    		c3 = getchar();
+			    	}
+			    	switch (c3){
+			    		case 'a':
+			    			menuCreateRoom();
+			    			condition2 = false;
+			    			break;
+			    		case 'd':
+			    			menuDeleteRoom();
+			    			condition2 = false;
+			    			break;
+			    		case 'm':
+			    			menuModifyRoom();
+			    			condition2 = false;
+			    			break;
+                        case 'b':
+                            menu_init();
+                            condition2 = false;
+                            break;
+			    	}
+			        etape = true;
+                }
+                
+		    break;
 
 			case 'c':
 				menuControl();
+                condition2 = true;
+                while (condition2){
+			        if (kbhit()) {
+                        c4 = 'p';
+			    		c4 = getchar();
+                        if(c4 == 'b'){
+                            menu_init();
+			    		    condition2 = false;
+			            }
+			    	}
+                }
+            break;    
 		}
 	}
 }
