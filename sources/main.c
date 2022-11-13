@@ -22,11 +22,6 @@ int main(int argc, char * argv[]) {
 	bool condition = true, condition2 = true, etape = true;
 	int c,c2;
 	
-	Donjon * d = malloc(sizeof(Donjon));
-	
-	InitialisationGame(d);
-	InitialisationGameByStagesOptions(d);
-	
 	
 	menu_init();
 
@@ -45,9 +40,13 @@ int main(int argc, char * argv[]) {
 			case 'g':
 				(void) argc;
 				(void) argv;
-							
-				gestionGame(d);
-				menu_init();
+				int stage = 0;
+
+				Donjon * d = malloc(sizeof(Donjon));
+	
+				InitialisationGame(d);					
+				gestionGame(d,stage);
+				// menu_init();
 
 			break;
 			

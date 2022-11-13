@@ -18,7 +18,8 @@ char ** RoomByNumber(int height, int length, int number);
 int NumberOfDoorsByRoom(char ** s, int height, int width);
 int * RandomBetweenRange(int number, int zero);
 int NowRoomIsUsed(struct Donjon *d, int NumberOfRoomsInt, int id);
-void InitialisationGameByStagesOptions(Donjon * d);
+void InitialisationGameByStagesOptionsForArms(Donjon * d);
+void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms);
 
 /**
  * @brief Ininitialise le jeu
@@ -36,8 +37,8 @@ void InitialisationGame(Donjon * d) {
         int NumberOfRoomsInt = numberOfRooms();
         // NumberOfRoomsInt = NumberOfRoomsInt + 1;
 
-        printf("Stage : %d\n", i+1);
-        printf("Nombre de salles : %d\n\n", NumberOfRoomsInt);
+        // printf("Stage : %d\n", i+1);
+        // printf("Nombre de salles : %d\n\n", NumberOfRoomsInt);
 
 
         newStageByNumber(d, i, NumberOfRoomsInt+1);
@@ -52,7 +53,7 @@ void InitialisationGame(Donjon * d) {
 
         }
 
-        printf("\n");	
+        // printf("\n");	
 
         for (int y = 0; y < NumberOfRoomsInt; y++) {
 
@@ -221,6 +222,11 @@ void InitialisationGame(Donjon * d) {
                                         d->stages[i].stage[v][y-1] = 'R';
                                         blockA = 1;
                                         iteration++;
+                                        d->stages[i].rooms[numbe].AxeY = 0;
+                                        d->stages[i].rooms[numbe].AxeX = -1;
+
+                                        printf("Axe Y : %d / Axe X : %d\n", d->stages[i].rooms[numbe].AxeY, d->stages[i].rooms[numbe].AxeX);
+
                                     
 
                                }
@@ -233,6 +239,10 @@ void InitialisationGame(Donjon * d) {
                                         d->stages[i].stage[v][y+1] = 'R';
                                         blockB = 1;
                                         iteration++;
+                                         d->stages[i].rooms[numbe].AxeY = 0;
+                                         d->stages[i].rooms[numbe].AxeX = 1;
+
+                                         printf("Axe Y : %d / Axe X : %d\n", d->stages[i].rooms[numbe].AxeY, d->stages[i].rooms[numbe].AxeX);
 
 
                                }
@@ -245,6 +255,11 @@ void InitialisationGame(Donjon * d) {
                                         d->stages[i].stage[v-1][y] = 'R';
                                         blockC = 1;
                                         iteration++;
+                                         d->stages[i].rooms[numbe].AxeY = -1;
+                                         d->stages[i].rooms[numbe].AxeX = 0;
+
+                                         printf("Axe Y : %d / Axe X : %d\n", d->stages[i].rooms[numbe].AxeY, d->stages[i].rooms[numbe].AxeX);
+
                                     
 
     
@@ -258,6 +273,11 @@ void InitialisationGame(Donjon * d) {
                                         d->stages[i].stage[v+1][y] = 'R';
                                         blockD = 1;
                                         iteration++;
+                                        d->stages[i].rooms[numbe].AxeY = 1;
+                                        d->stages[i].rooms[numbe].AxeX = 0;
+
+                                        printf("Axe Y : %d / Axe X : %d\n", d->stages[i].rooms[numbe].AxeY, d->stages[i].rooms[numbe].AxeX);
+
                                     
         
                                }
@@ -269,11 +289,11 @@ void InitialisationGame(Donjon * d) {
                             }
                         
                   
-                        for(int t = 0; t < NumberOfRoomsInt; t++) {
+                        // for(int t = 0; t < NumberOfRoomsInt; t++) {
 
-                            printf("ROOM UTILISES [%d] : %d\n",t,d->stages[i].rooms[t].roomUsed);                
+                        //     printf("ROOM UTILISES [%d] : %d\n",t,d->stages[i].rooms[t].roomUsed);                
 
-                        }
+                        // }
 
                         // Put room in the stage, left to R rooms
 
@@ -688,7 +708,59 @@ void InitialisationGame(Donjon * d) {
  * @return int* 
  */
 
-void InitialisationGameByStagesOptions(Donjon *d){
+void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms){
+
+    int iteration = 1;
+    int numbe = 0;
+
+    int varA = 0;
+    int varB = 0;
+
+       for(int i = 0; i < numberOfRooms+2; i++){
+        for (int v = 0; v < numberOfRooms+2; v++) {
+            if(d->stages[stage].stage[i][v] == 'P'){
+                varA = i;
+                varB = v;
+                printf("Position of player : %d / %d\n", varA, varB);
+            }
+        }
+    }
+
+
+
+    for(int i = 0; i < numberOfRooms+2; i++){
+        for (int v = 0; v < numberOfRooms+2; v++) {
+            
+            if(d -> stages[stage].stage[i][v] == 'R' && d -> stages[stage].stage[i+1][v] != 'P' && d -> stages[stage].stage[i-1][v] != 'P' && d -> stages[stage].stage[i][v+1] != 'P' && d -> stages[stage].stage[i][v-1] != 'P'){
+                printf("Iteration : %d\n", iteration++);
+
+                numbe = PickRoomNotUsed(d, numberOfRooms);
+
+                   d->stages[stage].rooms[numbe].AxeY = i - varA;
+                   d->stages[stage].rooms[numbe].AxeX = v - varB;
+
+                   printf("Axe Y : %d / Axe X : %d\n", d->stages[stage].rooms[numbe].AxeY, d->stages[stage].rooms[numbe].AxeX);
+                
+                // d->stages[stage].rooms[numbe].AxeY = varA -
+
+                (void)numbe;
+                (void)varA;
+                (void)varB;
+            }
+              
+        }
+
+    }
+
+    // for(int t = 0; t < numberOfRooms; t++) {
+
+    //     printf("ROOM UTILISES [%d] : %d\n",t,d->stages[stage].rooms[t].roomUsed);                
+
+    // }
+
+}
+
+void InitialisationGameByStagesOptionsForArms(Donjon *d){
 
     for (int i = 0; i < d -> stages[0].rooms[0].height; i++) {
 		for (int y = 0; y < d -> stages[0].rooms[0].width; y++) {
@@ -715,9 +787,10 @@ int PickRoomNotUsed(struct Donjon * d, int NumberOfRoomsInt) {
                 
 
                 if(d->stages[0].rooms[random].roomUsed == 0 ){
-                    printf("ICI CA PRINT Random : %d \n", random);
+                    // printf("ICI CA PRINT Random : %d \n", random);
                     d->stages[0].rooms[random].roomUsed = 1;
-                    return d->stages[0].rooms[random].id;
+                    
+                    return random;
                     
                 }
 
@@ -839,7 +912,7 @@ void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms){
             // Initialisation dans la mémoire de la salle, puis applcation dans la structure de différents paramètre pour la room en question.
 
             d-> stages[stage].rooms[iteration].room = malloc(sizeof(char) * height);
-            free(d-> stages[stage].rooms[iteration].room = malloc(sizeof(char) * height));
+            free(d-> stages[stage].rooms[iteration].room );
             d-> stages[stage].rooms[iteration].room = malloc(sizeof(char) * height);
 
         
@@ -859,11 +932,6 @@ void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms){
             d-> stages[stage].rooms[iteration].height = height;
             d-> stages[stage].rooms[iteration].numberOfDoors = iterationDoorsReturned;
 
-                // for (int i = 0; i < height; i++) {
-                //     for (int j = 0; j < width; j++) {
-                //         printf("%c", d-> stages[stage].rooms[iteration].room[i][j]);
-                //     }
-                // }
 
             d-> stages[stage].rooms[iteration].Doors = malloc(sizeof(char) * iterationDoorsReturned);
                  

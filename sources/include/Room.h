@@ -57,14 +57,17 @@ typedef struct Donjon Donjon;
 
 // void newRooms(Room * s, RoomInSpace * v);
 
-
-// void printRoom(Room room);
-// void printRooms(Room room);
 void InitialisationGame(Donjon * d);
-void InitialisationGameByStagesOptions(Donjon * d);
-// int NumberOfDoorsByRoom(Room * s);
-// void numberOfRooms(Room *s);
-// void freeRoom(Room *s);
+int numberOfRooms();
+int PickRoomNotUsed(struct Donjon * d, int NumberOfRoomsInt);
+void newStageByNumber(struct Donjon * d, int stage, int numberOfRooms);
+void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms);
+char ** RoomByNumber(int height, int length, int number);
+int NumberOfDoorsByRoom(char ** s, int height, int width);
+int * RandomBetweenRange(int number, int zero);
+int NowRoomIsUsed(struct Donjon *d, int NumberOfRoomsInt, int id);
+void InitialisationGameByStagesOptionsForArms(Donjon * d);
+void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms);
 
 
 #endif
