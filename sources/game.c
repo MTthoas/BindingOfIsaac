@@ -13,6 +13,7 @@
 
 #define KRED "\x1B[31m"
 #define KNRM "\x1B[0m"
+#define KCYN  "\x1B[36m"
 
 #include <time.h>
 #include "Room.h"
@@ -62,7 +63,7 @@ void gestionGame(Donjon * d) {
         for (int y = 0; y < d -> stages[0].rooms[0].width; y++) {
             if (y % 2 == 0) {
                 if (d -> stages[0].rooms[0].room[i][y] == 'P') {
-                    printf("%s", KRED);
+                    printf("%s", KCYN);
                     printf("%c ", d -> stages[0].rooms[0].room[i][y]);
                     printf("%s", KNRM);
                 }
@@ -78,7 +79,7 @@ void gestionGame(Donjon * d) {
     iterationTest++;   
 	while (condition) {
 
-        SDL_Delay(60);
+        SDL_Delay(50);
 
         c = 'p';
 		iteration++;
@@ -104,7 +105,7 @@ void gestionGame(Donjon * d) {
 				for (int y = 0; y < d->stages[0].rooms[0].width - 1; y++) {
 					if (y % 2 == 0) {
 						if(d-> stages[0].rooms[0].room[i][y] == 'P'){
-							printf("%s", KRED);
+							printf("%s", KCYN);
 							printf("%c ", d-> stages[0].rooms[0].room[i][y]);
 							printf("%s", KNRM);
 						}else{

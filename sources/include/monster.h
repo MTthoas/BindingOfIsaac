@@ -7,16 +7,18 @@
 
 
 struct Monster {
-    int id;
+    char idLetter;
     char* name;
     float hpMax;
+    int idMonster;
     int shoot;
     int flight;
     int ss;
     int positionX;
     int positionY;
-    };   
+    };    
 typedef struct Monster Monster;
 
 void monsterAttack(Monster* monster, Player* player);
+void spawnMonster(Donjon* d, char);
 #endif //MONSTER_H
