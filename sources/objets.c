@@ -42,14 +42,14 @@ void* displayObjet(Objet* objet) {
     }
 
     printf("\n");
-    printf("id : %d\n", objet->id);
-    printf("name : %s\n", duplicateString(objet->name));
-    printf("hpMax : %f\n", objet->hpMax);
-    printf("shield : %f\n", objet->shield);
-    printf("damage : %f\n", objet->damage);
-    printf("piercingShot : %d\n", objet->piercingShot);
-    printf("spectralShot : %d\n", objet->spectralShot);
-    printf("flight : %d\n", objet->flight);
+    printf("ID : %d\n", objet->id);
+    printf("1. Name : %s\n", duplicateString(objet->name));
+    printf("2. HP MAX : %f\n", objet->hpMax);
+    printf("3. SHIELD : %f\n", objet->shield);
+    printf("4. DAMAGE : %f\n", objet->damage);
+    printf("5. PIERCING SHOT : %d\n", objet->piercingShot);
+    printf("6. SPECTRAL SHOT : %d\n", objet->spectralShot);
+    printf("7. FLIGHT : %d\n", objet->flight);
     printf("\n");
 
     return NULL;

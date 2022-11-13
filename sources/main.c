@@ -38,7 +38,8 @@ int main(int argc, char * argv[]) {
 		}
 
 		switch (c) {
-			case 'g':
+
+			case 'g': // start game
 				(void) argc;
 				(void) argv;
 
@@ -92,60 +93,64 @@ int main(int argc, char * argv[]) {
 					menu_init();
 				break;
 			
-			case 'i':
-			while (condition2)
-			{
-			etape = false;
-				c2 = 'p';
-				menuCrudItem();
-				if (kbhit()) {
-					c2 = getchar();
+			case 'i': // item's menu
+				while (condition2)
+				{
+					etape = false;
+					c2 = 'p';
+					menuCrudItem();
+					if (kbhit()) {
+						c2 = getchar();
+					}
+
+					switch (c2) {
+						case 's' :
+							menuSeeItems();
+							condition2 = false;
+							break;
+
+						case 'a':
+							menuCreateItem();
+							condition2 = false;
+							break;
+
+						case 'd':
+							menuDeleteItem();
+							condition2 = false;
+							break;
+
+						case 'm':
+							menuModifyItem();
+							condition2 = false;
+							break;
+					}
 				}
-				switch (c2){
-					case 'a':
-						menuCreateItem();
-						condition2 = false;
-						break;
-					case 'd':
-						menuDeleteItem();
-						condition2 = false;
-
-						break;
-					case 'm':
-						menuModifyItem();
-						condition2 = false;
-
-						break;
-
-				}
-			}
-			break;
+				break;
 				
-
-			case 'r':
-			 while (condition2)
-			 {
-				etape = false;
-				c2 = 'p';
-				menuCrudRoom();
-				if (kbhit()) {
-					c2 = getchar();
+			case 'r': // rooms menu
+				while (condition2)
+				{
+					etape = false;
+					c2 = 'p';
+					menuCrudRoom();
+					if (kbhit()) {
+						c2 = getchar();
+					}
+					switch (c2){
+						case 'a':
+							menuCreateRoom();
+							condition2 = false;
+							break;
+						case 'd':
+							menuDeleteRoom();
+							condition2 = false;
+							break;
+						case 'm':
+							menuModifyRoom();
+							condition2 = false;
+							break;
+					}
 				}
-				switch (c2){
-					case 'a':
-						menuCreateRoom();
-						condition2 = false;
-						break;
-					case 'd':
-						menuDeleteRoom();
-						condition2 = false;
-						break;
-					case 'm':
-						menuModifyRoom();
-						condition2 = false;
-						break;
-				}
-			 }
 				break;
 
 			case 'c':
