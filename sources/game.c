@@ -73,18 +73,36 @@ void gestionGame(Donjon * d) {
         for (int y = 0; y < d -> stages[0].rooms[0].width; y++) {
             if (y % 2 == 0) {
                 if (d -> stages[0].rooms[0].room[i][y] == 'P') {
-                    printf("%s", KCYN);
-                    printf("%c ", d -> stages[0].rooms[0].room[i][y]);
-                    printf("%s", KNRM);
-                }
-                if (d -> stages[0].rooms[0].room[i][y] == 'P') {
                     player -> positionX = y;
                     player -> positionY = i;
                 }
             }
         }
-        printf("\n");
     }
+
+    printf("\n");
+
+    for (int i = 0; i < d->stages[0].rooms[0].height; i++) {
+                for (int y = 0; y < d->stages[0].rooms[0].width - 1; y++) {
+                    if (y % 2 == 0) {
+
+                        if(d -> stages[0].rooms[0].room[i][y] == 'M'){
+                            printf("%s", KRED);
+                            printf("%c ", d -> stages[0].rooms[0].room[i][y]);
+                            printf("%s", KNRM);
+                        }else if(d-> stages[0].rooms[0].room[i][y] == 'P'){
+                            printf("%s", KCYN);
+                            printf("%c ", d-> stages[0].rooms[0].room[i][y]);
+                            printf("%s", KNRM);
+                        }else{
+                            printf("%c ", d-> stages[0].rooms[0].room[i][y]);
+                        }
+
+                    }
+                }
+                printf("\n");
+
+            }
 
     iterationTest++;   
 	while (condition) {
