@@ -46,7 +46,7 @@ void InitialisationGame(Donjon * d) {
         // NumberOfRoomsInt = NumberOfRoomsInt + 1;
 
         printf("Stage : %d\n", i+1);
-        printf("Nombre de salles : %d\n\n", NumberOfRoomsInt);
+        printf("Nomber de salles : %d\n\n", NumberOfRoomsInt);
 
 
         newStageByNumber(d, i, NumberOfRoomsInt+1);
@@ -145,7 +145,7 @@ void InitialisationGame(Donjon * d) {
                                 }
 
 
-                            // printf(" <--- PORTES [%d] / Nombre de portes : %d \n", u+1, NumberOfDoors);
+                            // printf(" <--- PORTES [%d] / Nomber de portes : %d \n", u+1, NumberOfDoors);
                             // printf("%d\n", d->stages[i].rooms[u].id = d->stages[i].randomNumberRooms[u]);
                                
                                 // for(int x = 0; x < NumberOfDoors; x++) {
@@ -803,7 +803,7 @@ int * RandomBetweenRange(int number, int zero){
  * 
  * @param d Structure générale
  * @param stage Etage précis
- * @param numberOfRooms Nombre de rooms
+ * @param numberOfRooms Nomber de rooms
  */
 
 void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms){

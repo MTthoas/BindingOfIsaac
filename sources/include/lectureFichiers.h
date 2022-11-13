@@ -40,7 +40,7 @@
      * @param fichierObjects fichier des objects (.itbob)
      * @return int nombre d'objects bonus
      */
-    int getNombreObjects(FILE* fichierObjects);
+    int getNomberObjects(FILE* fichierObjects);
 
     /**
      * @brief Permet d'afficher le contenu du fichier dans le terminal

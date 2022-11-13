@@ -14,7 +14,7 @@
 
 #include <string.h>
 
-int getNombreObjects(FILE* fichierObjects){
+int getNomberObjects(FILE* fichierObjects){
     char token[256];
     int index = 0;
     char c = fgetc(fichierObjects);
