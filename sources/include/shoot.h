@@ -1,3 +1,13 @@
+/**
+ * @file shoot.h
+ * @author  Nairod36
+ * @brief Declarations fonctions et structures du shoot joueur
+ * @version 0.3
+ * @date 2022-11-13
+ * 
+ * @copyright Copyright (c) 2022
+ */
+
 #ifndef H_SHOOT
 #define H_SHOOT
 
@@ -11,6 +21,14 @@ struct Shoot {
 };
 typedef struct Shoot Shoot;
 
-void bangishard(Donjon *d,Player* player);
+struct ShootParams {
+    Donjon *d;
+    Player *player;
+    int reload ;
+};
+typedef struct ShootParams ShootParams;
+
+
+void* bangishard(void *ShootParams);
 
 #endif

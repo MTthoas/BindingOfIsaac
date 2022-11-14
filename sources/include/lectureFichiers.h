@@ -1,7 +1,7 @@
 /**
  * @file lectureFichiers.h
- * @author TheGreat-Chain
- * @brief Fontions relatives à la lecture des fichiers des monstres, objets et pièces.
+ * @author TheGreat-Chain & Nairod36
+ * @brief Fontions relatives à la lecture des fichiers des monstres, objects et pièces.
  * @version 0.1
  * @date 2022-10-10
  * 
@@ -15,32 +15,32 @@
     #include "cheminsFichiers.h"
     #include <stdlib.h>
     #include <stdio.h>
-    #include "objets.h"
+    #include "objects.h"
 
     /**
-     * @brief Transforme le fichier des objets bonus en structure de type ListeObjets et retourne
-     * l'adresse de l'espace mémoire alloué à la liste d'objets. 
+     * @brief Transforme le fichier des objects bonus en structure de type ListeObjects et retourne
+     * l'adresse de l'espace mémoire alloué à la liste d'objects. 
      * 
      * retourne NULL si erreur dans le traitement du fichier. 
      * 
-     * @return ListeObjets* 
+     * @return ListeObjects* 
      */
-    ListeObjets* fichierObjetsToListeObjets();
+    ListeObjects* fichierObjectsToListeObjects();
 
     /**
-     * @brief Réécrit le fichier en fonction de la structure ListeObjets 
+     * @brief Réécrit le fichier en fonction de la structure ListeObjects 
      * 
-     * @param listeObjets 
+     * @param listeObjects 
      */
-    void listeToFichierObjets(ListeObjets* listeObjets);
+    void listeToFichierObjects(ListeObjects* listeObjects);
 
     /**
-     * @brief Retourne le nombre d'objets du fichier, lu à la première ligne entre les accolades.
+     * @brief Retourne le nombre d'objects du fichier, lu à la première ligne entre les accolades.
      * 
-     * @param fichierObjets fichier des objets (.itbob)
-     * @return int nombre d'objets bonus
+     * @param fichierObjects fichier des objects (.itbob)
+     * @return int nombre d'objects bonus
      */
-    int getNombreObjets(FILE* fichierObjets);
+    int getNomberObjects(FILE* fichierObjects);
 
     /**
      * @brief Permet d'afficher le contenu du fichier dans le terminal
@@ -48,7 +48,7 @@
      */
     void afficherFichier(FILE* fichier);
 
-    #define EXTENSION_FICHIER_OBJET 1
+    #define EXTENSION_FICHIER_OBJECT 1
     #define EXTENSION_FICHIER_MONSTRES 2
     #define EXTENSION_FICHIER_SALLES 3
     #define EXTENSION_INVALIDE 0
@@ -56,7 +56,7 @@
     /**
      * @brief Renvoie l'extension du fichier sous forme d'un entier tel quel :
      * 0 : fichier invalide,
-     * 1 : fichier objets,
+     * 1 : fichier objects,
      * 2 : fichier monstres,
      * 3 : fichier salles
      * 
@@ -66,8 +66,8 @@
     int extensionType(char* filename);
 
     /**
-     * @brief Ajoute "---" à la toute fin du fichier pour permettre à fichierObjetsToListeObjets() 
-     * de parser le dernier objet. 
+     * @brief Ajoute "---" à la toute fin du fichier pour permettre à fichierObjectsToListeObjects() 
+     * de parser le dernier object. 
      * Ne fait rien si le fichier en paramètre est le fichier des salles
      */
     void correctFile(char* cheminFichier);

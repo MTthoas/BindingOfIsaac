@@ -1,3 +1,13 @@
+/**
+ * @file Player.c
+ * @author MTthoas 
+ * @brief Gestion du deplacement joueurs
+ * @version 0.1
+ * @date 2022-11-11
+ * 
+ * @copyright Copyright (c) 2022
+ */
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include<stdio.h>
@@ -7,9 +17,11 @@
 #include <sys/select.h>
 #include <stdbool.h>
 #include <fcntl.h>
+#include <pthread.h>
 
 #include "Player.h"
 #include "shoot.h"
+#include "menu.h"
 
 
 #define KRED  "\x1B[31m"
@@ -41,54 +53,7 @@ int kbhit(void) {
 	return 0;
 }
 
-void gestionPositionPlayer(struct Donjon *d,struct Player *player){
-	bool condition = true;	
-	int frame = 0;
-	int c, iteration = 0;
-
-	while (condition) {
-		
-
-		SDL_Delay(25);
-		// float i=0.1;
-		// 	while(i<5000){
-		// 		if(i%10 == 5000){
-		// 			printf("test");
-		// 		}
-		// 		i= i + 0.1;
-		// 		printf("%.2f \n",i);
-		// 	}
-						
-		c = 'p';
-		iteration++;
-
-		if (kbhit()) {
-			c = getchar();
-		}
-
-
-		if (c == ' ') {
-			
-			if (player->directionView == 'd') {
-
-				
-			}
-
-			if (player->directionView == 'q') {
-				
-			}
-
-		}
-
-
-		// Touche pour cancel le jeu
-
-		if (c == 'x') {
-			condition = false;
-		}
-
-		if (c != 'e') {
-			system("clear");
+void gestionPositionPlayer(struct Donjon *d,struct Player *player, int c){
 
 			switch (c) {
 				case 'z':
@@ -124,6 +89,7 @@ void gestionPositionPlayer(struct Donjon *d,struct Player *player){
 					}
 			}
 
+
 			printf("\n");
 			for (int i = 0; i < d->stages[0].rooms[0].height; i++) {
 				for (int y = 0; y < d->stages[0].rooms[0].width - 1; y++) {
@@ -153,5 +119,4 @@ void gestionPositionPlayer(struct Donjon *d,struct Player *player){
 	 free(d);
 	 free(player);
 	}
-
 }

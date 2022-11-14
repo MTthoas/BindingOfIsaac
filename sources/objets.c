@@ -1,6 +1,6 @@
 /**
- * @file objets.c
- * @author TheGreat-Chain
+ * @file zs.c
+ * @author TheGreat-Chain - Nairod36
  * @brief Structures et fonctions relatives aux objets de personnage
  * @version 0.1
  * @date 2022-10-24
@@ -20,8 +20,8 @@
 
 
 
-int getTailleListeObjets(ListeObjets* l) {
-    Objet* courant = l->premier;
+int getTailleListeobjets(Listeobjets* l) {
+    objet* courant = l->premier;
     if(courant == NULL) {
         return 0;
     }
@@ -35,74 +35,74 @@ int getTailleListeObjets(ListeObjets* l) {
     return count;
 }
 
-void* displayObjet(Objet* objet) {
+void* displayobjet(objet* objet) {
     if(objet == NULL) {
         printf("Pas d'objet\n");
         return NULL;
     }
 
     printf("\n");
-    printf("ID : %d\n", objet->id);
-    printf("1. Name : %s\n", duplicateString(objet->name));
-    printf("2. HP MAX : %f\n", objet->hpMax);
-    printf("3. SHIELD : %f\n", objet->shield);
-    printf("4. DAMAGE : %f\n", objet->damage);
-    printf("5. PIERCING SHOT : %d\n", objet->piercingShot);
-    printf("6. SPECTRAL SHOT : %d\n", objet->spectralShot);
-    printf("7. FLIGHT : %d\n", objet->flight);
+    printf("id : %d\n", objet->id);
+    printf("name : %s\n", duplicateString(objet->name));
+    printf("hpMax : %f\n", objet->hpMax);
+    printf("shield : %f\n", objet->shield);
+    printf("damage : %f\n", objet->damage);
+    printf("piercingShot : %d\n", objet->piercingShot);
+    printf("spectralShot : %d\n", objet->spectralShot);
+    printf("flight : %d\n", objet->flight);
     printf("\n");
 
     return NULL;
 }
 
-void* displayListeObjets(ListeObjets* listeObjets) {
-    if(listeObjets == NULL) {
+void* displayListeobjets(Listeobjets* listeobjets) {
+    if(listeobjets == NULL) {
         printf("Pas de liste.\n");
         return NULL;
     }
 
-    Objet* courant = listeObjets->premier;
+    objet* courant = listeobjets->premier;
     while(courant != NULL) { // tant qu'on n'est pas à la fin de la liste 
-        displayObjet(courant);
+        displayobjet(courant);
         courant = courant->suivant;
     }
     return NULL;
 }
 
-Objet* duplicateObjet(Objet* objet) {
+objet* duplicateobjet(objet* objet) {
     if(objet == NULL) {
         return NULL;
     }
 
-    Objet* newObjet = malloc(sizeof(Objet)* 1);
-    newObjet->id = objet->id;
-    newObjet->name = duplicateString(objet->name);
-    newObjet->hpMax = objet->hpMax;
-    newObjet->shield = objet->shield;
-    newObjet->damage = objet->damage;
-    newObjet->piercingShot = objet->piercingShot;
-    newObjet->spectralShot = objet->spectralShot;
-    newObjet->flight = objet->flight;
-    newObjet->suivant = objet->suivant;
+    objet* newobjet = malloc(sizeof(objet)* 1);
+    newobjet->id = objet->id;
+    newobjet->name = duplicateString(objet->name);
+    newobjet->hpMax = objet->hpMax;
+    newobjet->shield = objet->shield;
+    newobjet->damage = objet->damage;
+    newobjet->piercingShot = objet->piercingShot;
+    newobjet->spectralShot = objet->spectralShot;
+    newobjet->flight = objet->flight;
+    newobjet->suivant = objet->suivant;
     
-    return newObjet;
+    return newobjet;
 }
 
-int addObjet(ListeObjets* listeObjets, Objet* newObjet) {
-    Objet* courant = listeObjets->premier;
+int addobjet(Listeobjets* listeobjets, objet* newobjet) {
+    objet* courant = listeobjets->premier;
     int index = 1; //formera l'id du nouvel objet
 
     if(courant == NULL) { // liste vide
-        newObjet->id = index;
-        listeObjets->premier = duplicateObjet(newObjet);
+        newobjet->id = index;
+        listeobjets->premier = duplicateobjet(newobjet);
         return index;
     }
 
     while(courant != NULL) { // ajout a la fin de liste
         index += 1;
         if(courant->suivant == NULL) {
-            newObjet->id = index;
-            courant->suivant = duplicateObjet(newObjet);
+            newobjet->id = index;
+            courant->suivant = duplicateobjet(newobjet);
             return index;
         }
         courant = courant->suivant;
@@ -111,8 +111,8 @@ int addObjet(ListeObjets* listeObjets, Objet* newObjet) {
     return 0;
 }
 
-Objet* createObjet(char* name, float hpMax, float shield, float damage, int piercingShot, int spectralShot, int flight) {
-    Objet* o = malloc(sizeof(Objet) * 1);
+objet* createobjet(char* name, float hpMax, float shield, float damage, int piercingShot, int spectralShot, int flight) {
+    objet* o = malloc(sizeof(objet) * 1);
     
     // verification des entrees
     if(strcmp("", name) == 0) { //nom par défaut
@@ -136,26 +136,26 @@ Objet* createObjet(char* name, float hpMax, float shield, float damage, int pier
     return o;
 }
 
-void modifyObjet(ListeObjets* liste, int id, Objet* newObjet) {
-    Objet* toDelete;
+void modifyobjet(Listeobjets* liste, int id, objet* newobjet) {
+    objet* toDelete;
     if(liste->premier != NULL && liste->premier->id == id) { // modifier premier element
         toDelete = liste->premier;
-        newObjet->suivant = liste->premier->suivant;
-        liste->premier = newObjet;
-        freeObjet(toDelete);
-        rangerListeObjets(liste);
+        newobjet->suivant = liste->premier->suivant;
+        liste->premier = newobjet;
+        freeobjet(toDelete);
+        rangerListeobjets(liste);
         return;
     }
 
-    Objet* courant = liste->premier;
+    objet* courant = liste->premier;
     while(courant != NULL ) {
 
         if(courant->suivant != NULL && courant->suivant->id == id) { // modifier
             toDelete = courant->suivant;
-            newObjet->suivant = courant->suivant->suivant;
-            courant->suivant = newObjet;
-            freeObjet(toDelete);
-            rangerListeObjets(liste);
+            newobjet->suivant = courant->suivant->suivant;
+            courant->suivant = newobjet;
+            freeobjet(toDelete);
+            rangerListeobjets(liste);
             return;
         }
         
@@ -163,9 +163,9 @@ void modifyObjet(ListeObjets* liste, int id, Objet* newObjet) {
     }
 }
 
-void rangerListeObjets(ListeObjets* liste) {
+void rangerListeobjets(Listeobjets* liste) {
     int count = 1;
-    Objet* courant = liste->premier;
+    objet* courant = liste->premier;
     while(courant != NULL) {
         courant->id = count;
         count += 1;
@@ -173,24 +173,24 @@ void rangerListeObjets(ListeObjets* liste) {
     }
 }
 
-void removeObjet(ListeObjets* liste, int id) {
-    Objet* toDelete;
+void removeobjet(Listeobjets* liste, int id) {
+    objet* toDelete;
     if(liste->premier != NULL && liste->premier->id == id) { // supprimer premier element
         toDelete = liste->premier;
         liste->premier = liste->premier->suivant;
-        freeObjet(toDelete);
-        rangerListeObjets(liste);
+        freeobjet(toDelete);
+        rangerListeobjets(liste);
         return;
     }
 
-    Objet* courant = liste->premier;
+    objet* courant = liste->premier;
     while(courant != NULL ) {
 
         if(courant->suivant != NULL && courant->suivant->id == id) { // suppression
             toDelete = courant->suivant;
             courant->suivant = courant->suivant->suivant;
-            freeObjet(toDelete);
-            rangerListeObjets(liste);
+            freeobjet(toDelete);
+            rangerListeobjets(liste);
             return;
         }
         
@@ -199,8 +199,8 @@ void removeObjet(ListeObjets* liste, int id) {
 
 }
 
-Objet* getObjetById(ListeObjets* liste, int id) {
-    Objet* result = liste->premier;
+objet* getobjetById(Listeobjets* liste, int id) {
+    objet* result = liste->premier;
 
     while(result != NULL) {
         if(result->id == id) {
@@ -212,9 +212,9 @@ Objet* getObjetById(ListeObjets* liste, int id) {
     return NULL;
 }
 
-void freeListeObjets(ListeObjets* liste) {
-    Objet* courant = liste->premier;
-    Objet* suivant;
+void freeListeobjets(Listeobjets* liste) {
+    objet* courant = liste->premier;
+    objet* suivant;
 
     while(courant != NULL) {
         suivant = courant->suivant;
@@ -223,12 +223,12 @@ void freeListeObjets(ListeObjets* liste) {
     }
 }
 
-ListeObjets* createListeObjets() {
-    ListeObjets* liste = malloc(sizeof(ListeObjets) * 1);
+Listeobjets* createListeobjets() {
+    Listeobjets* liste = malloc(sizeof(Listeobjets) * 1);
     return liste;   
 }
 
-void freeObjet(Objet* objet) {
+void freeobjet(objet* objet) {
     free(objet);
 }
 

@@ -1,70 +1,141 @@
+/**
+ * @file shoot.c
+ * @author  Nairod36
+ * @brief Fonctions shoot joueur
+ * @version 0.3
+ * @date 2022-11-13
+ * 
+ * @copyright Copyright (c) 2022
+ */
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include<stdio.h>
 #include <termios.h>          
-#include <unistd.h>     
+   
 #include <stdlib.h>
 #include <sys/select.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <termios.h>
-#include <unistd.h>
+
 #include <fcntl.h>
 
 #include "shoot.h"
+#include "mystring.h"
 #include "Room.h"
 #include "Player.h"
 
-void bangishard(struct Donjon *d,struct Player *player){
+#ifdef _WIN32 
+#include <Windows.h>  
+#else
+#include <unistd.h>
+#endif 
+
+void* bangishard(void *shootParams){
+
+	// #ifdef _WIN32 
+	// Sleep(25); 
+	// #else 
+	// usleep(25000); 
+	// #endif 
 
     Shoot * shoot = malloc(sizeof(Shoot));
 
 	int c;
-    int iteration = 1;
 
     c = 'p';
-		iteration++;
 
-		if (kbhit()) {
-			c = getchar();
-		}
+	if (kbhit()) {
+		c = getchar();
+	}
 
-
-if (kbhit()) {
-			c = getchar();
-		}
-
-
-switch (c) {
-				case '8': //shoot
-					if(d->stages[0].rooms[0].room[player->positionY-1][player->positionX] == ' '){
-                        shoot->positionX = player->positionX;
-                        shoot->positionY = player->positionY;
-						if(d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] == ' '){
-							d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] = '*';
-							shoot->positionY = shoot->positionY - 1;
-							// mettre du delai
-							
-							// d->stages[0].rooms[0].room[player->positionY - 1][player->positionX] = ' ';
-
-							while(d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] == ' '){
-							
-								d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] = '*';
-							
-							// mettre du delai
-
-							// d->stages[0].rooms[0].room[player->positionY - 1][player->positionX] = ' ';
-							shoot->positionY = shoot->positionY - 1;
- 							iteration++;
-							}
-							
-							
-                           
-						}
+	switch (c) {
+			case '8': //shootUp
+				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY-1][((ShootParams*)shootParams)->player->positionX] == ' '){
+	                shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
+	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
+					((ShootParams*)shootParams)->reload = 0; 
+					while(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] == ' '){
 						
-			}
-
-
-}
-
+						((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] = '*';
+						#ifdef _WIN32 
+						Sleep(90); 
+						#else 
+						usleep(90000); 
+						#endif
+						((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] = ' ';
+						shoot->positionY = shoot->positionY - 1;
+							
+					}
+					shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
+	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
+				}((ShootParams*)shootParams)->reload = 1; 
+				break;
+			case '5': //shootBottom
+				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY+1][((ShootParams*)shootParams)->player->positionX] == ' '){
+	                shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
+	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
+					((ShootParams*)shootParams)->reload = 0;
+					while(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY + 1][shoot->positionX] == ' '){
+						
+						((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY + 1][shoot->positionX] = '*';
+						#ifdef _WIN32 
+						Sleep(90); 
+						#else 
+						usleep(90000); 
+						#endif
+						((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY + 1][shoot->positionX] = ' ';
+						shoot->positionY = shoot->positionY + 1;
+							
+					}
+					shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
+	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
+				}((ShootParams*)shootParams)->reload = 1;
+				break;
+			case '4': //shootLeft
+				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY][((ShootParams*)shootParams)->player->positionX-2] == ' '){
+	                shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
+	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
+					((ShootParams*)shootParams)->reload = 0;
+					while(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY][shoot->positionX - 2] == ' '){
+						
+						((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY][shoot->positionX - 2] = '*';
+						#ifdef _WIN32 
+						Sleep(90); 
+						#else 
+						usleep(90000); 
+						#endif
+						((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY][shoot->positionX - 2] = ' ';
+						shoot->positionX = shoot->positionX - 2;
+							
+					}
+					shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
+	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
+				}((ShootParams*)shootParams)->reload = 1;
+				break;
+			case '6': //shootRight
+				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY][((ShootParams*)shootParams)->player->positionX+2] == ' '){
+	                shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
+	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
+					((ShootParams*)shootParams)->reload = 0;
+					while(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY][shoot->positionX + 2] == ' '){
+						
+						((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY][shoot->positionX + 2] = '*';
+						#ifdef _WIN32 
+						Sleep(90); 
+						#else 
+						usleep(90000); 
+						#endif
+						((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY][shoot->positionX + 2] = ' ';
+						shoot->positionX = shoot->positionX + 2;
+							
+					}
+					shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
+	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
+				}((ShootParams*)shootParams)->reload = 1;
+				break;
+	}
+	free(shoot);
+	return 0;
 }

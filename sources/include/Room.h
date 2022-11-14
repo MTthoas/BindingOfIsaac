@@ -1,3 +1,12 @@
+/**
+ * @file room.h
+ * @author MTthoas
+ * @brief Declaration fonctions et structures des Rooms,Donjons et stages
+ * @version 0.5
+ * @date 2022-11-12
+ * 
+ * @copyright Copyright (c) 2022
+ */
 #ifndef H_ROOM
 #define H_ROOM
 
@@ -26,8 +35,8 @@ struct Donjon{
         struct Room{
             int id;
             char** room;
-            int positionX;
-            int positionY;
+            int AxeX;
+            int AxeY;
             int number;
             int width;
             int height;
@@ -42,7 +51,7 @@ struct Donjon{
             int doorLeft;
             int doorRight;
             int numberOfRoomsReturned;
-            int roomPlaced;
+            int roomUsed;
 
         }rooms[NUMBER_ROOM_MAX];
 
@@ -61,6 +70,7 @@ typedef struct Donjon Donjon;
 // void printRoom(Room room);
 // void printRooms(Room room);
 void InitialisationGame(Donjon * d);
+void InitialisationGameByStagesOptions(Donjon * d);
 // int NumberOfDoorsByRoom(Room * s);
 // void numberOfRooms(Room *s);
 // void freeRoom(Room *s);

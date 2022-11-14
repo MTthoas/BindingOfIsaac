@@ -1,3 +1,13 @@
+/**
+ * @file menu.c
+ * @author  Nairod36
+ * @brief Fonctions du menu
+ * @version 0.1
+ * @date 2022-11-5
+ * 
+ * @copyright Copyright (c) 2022
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,7 +26,7 @@ void printGameBanner() {
     printf("=================================================\n");
 }
 
-void menu_init(void){
+void menu_init(void) {
     system("clear");
     printGameBanner();
     printf("Press G to start the game\n");
@@ -27,20 +37,20 @@ void menu_init(void){
 }
 
 
-void menuCrudItem(void){
+void menuCrudItem(void) {
     system("clear");
         printGameBanner();
         printf("-------- ITEMS MENU  --------\n");
-        printf("Press S to see your current items\n");
-        printf("Press A to add an item\n");
-        printf("Press D to delete an item\n");
-        printf("Press M to modify an item\n");
+        printf("Press s to see your current items\n");
+        printf("Press a to add an item\n");
+        printf("Press d to delete an item\n");
+        printf("Press m to modify an item\n");
 }
 
 void menuSeeItems(void) {
     system("clear");
     printGameBanner();
-    printf("-------- Your items --------\n");
+    printf("-------- YOUR ITEMS --------\n");
 
     FILE* fichier = fopen(CHEMIN_FICHIER_OBJETS, "r");
     afficherFichier(fichier);
@@ -52,6 +62,7 @@ void menuSeeItems(void) {
 }
 
 void menuCreateItem(void){
+<<<<<<< HEAD
     system("clear");
     printGameBanner();
     printf("-------- Creating item  --------\n");
@@ -109,7 +120,7 @@ void menuCreateItem(void){
     getchar();
 }
 
-void menuDeleteItem(void){
+void menuDeleteItem(void) {
     system("clear");
     printGameBanner();
     printf("-------- Deleting item  --------\n");
@@ -250,22 +261,29 @@ void menuCrudRoom(void){
         printf("Press a to add a room\n");
         printf("Press d to delete a room\n");
         printf("Press m to modify a room\n");
+        printf("Press b to go back\n");
+
 }
 void menuCreateRoom(void){
+
     system("clear");
             printGameBanner();
-            printf("-------- You chose to create a room  --------\n");
-            //createRoom();
 }
+
 void menuDeleteRoom(void){
+
     system("clear");
             printGameBanner();
+            printf("------------ Binding Of Briatte --------------\n");
             printf("-------- You chose to delete a room  --------\n");
             //deleteRoom();
 }
+
+
 void menuModifyRoom(void){
     system("clear");
             printGameBanner();
+            printf("------------ Binding Of Briatte --------------\n");
             printf("-------- You chose to modify a room  --------\n");
             //modifyRoom();
 }
