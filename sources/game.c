@@ -31,6 +31,7 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
     int DoorRight = 0;
     int DoorTop = 0;
     int DoorBottom = 0;
+    int width = 0;
 
     for(int i = 0; i < numberOfRooms; i++){
         for(int y = 0; y < numberOfRooms; y++){
@@ -40,22 +41,22 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
 
                     if(d->stages[stage].stage[i][w] == 'P'){
                         
-                        if(d->stages[stage].stage[i][w+1+axeX] != ' '){
+                        if(d->stages[stage].stage[i + axeY][w + axeX + 1] != ' '){
                             DoorRight = 1;
                             // printf("DoorRight");
                         }
 
-                        if(d->stages[stage].stage[i][w-1+axeX] !=' '){
+                        if(d->stages[stage].stage[i + axeY][w + axeX - 1] !=' '){
                             DoorLeft = 1;
                             // printf("DoorLeft");
                         }
 
-                        if(d->stages[stage].stage[i-1+axeY][w]!=' '){
+                        if(d->stages[stage].stage[i + axeY - 1 ][w + axeX]!=' '){
                             DoorTop = 1;
                             // printf("DoorTop");
                         }
 
-                        if(d->stages[stage].stage[i+1+axeY][w]!=' '){
+                        if(d->stages[stage].stage[i + axeY + 1][w + axeX]!=' '){
                             DoorBottom = 1;
                             // printf("DoorBottom");
                         }
@@ -67,14 +68,13 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
     }
 
     for(int i = 0; i < d->stages[stage].rooms[t].height; i++){
-        for(int y = 0; y < d->stages[stage].rooms[t].width+1; y++){
+        for(int y = 0; y < d->stages[stage].rooms[t].width; y++){
             if(d->stages[stage].rooms[t].room[i][y] == 'D'){
                 d->stages[stage].rooms[t].room[i][y] = 'W';
             }
         }
     }
 
-    int width = 0;
 
     for(int i = 0; i < d->stages[stage].rooms[t].height-1; i++){
         for(int y = 0; y < d->stages[stage].rooms[t].width; y++){
@@ -127,10 +127,11 @@ int gestionRoom(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY){
 
 
                         if(d->stages[stage].rooms[t].AxeX == axeX && d->stages[stage].rooms[t].AxeY == axeY){
-                            printf("ROOM FOUND\n");
+                            // printf("ROOM FOUND\n");
+                            printf("AXE X : %d, Y : %d\n", d->stages[stage].rooms[t].AxeX, d->stages[stage].rooms[t].AxeY);
 
-                            for (int i = 0; i < d->stages[stage].rooms[t].height-1; i++) {
-                                for (int y = 0; y < d->stages[stage].rooms[t].width - 1; y++) {
+                            for (int i = 0; i < d->stages[stage].rooms[t].height; i++) {
+                                for (int y = 0; y < d->stages[stage].rooms[t].width; y++) {
                                     if (y % 2 == 0) {
                                         printf("%c ", d-> stages[stage].rooms[t].room[i][y]);
                                     }
@@ -203,7 +204,7 @@ void gestionGame(Donjon * d, int stage) {
     shootParams->player = player;
     shootParams->d = d;
     
-    OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
+    OptimiseDoors(d, stage, axeX, axeY, 0, NumberOfRoomsInt );
 
     // void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int numberOfRooms)
 	
@@ -234,7 +235,7 @@ void gestionGame(Donjon * d, int stage) {
     }
 
     for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
-				for (int y = 0; y < d->stages[stage].rooms[id].width - 1; y++) {
+				for (int y = 0; y < d->stages[stage].rooms[id].width; y++) {
 					if (y % 2 == 0) {
 						if(d-> stages[stage].rooms[id].room[i][y] == 'P'){
 							printf("%s", KRED);
@@ -252,10 +253,10 @@ void gestionGame(Donjon * d, int stage) {
     iterationTest++;   
 
     printf("ID RESULT : %d\n", gestionRoom(d, NumberOfRoomsInt, stage, 1, 0));
-     printf("ID RESULT : %d\n", gestionRoom(d, NumberOfRoomsInt, stage, 0, 1));
-     printf("ID RESULT : %d\n", gestionRoom(d, NumberOfRoomsInt, stage, -2, 0));
+    printf("ID RESULT : %d\n", gestionRoom(d, NumberOfRoomsInt, stage, 0, 1));
+    printf("ID RESULT : %d\n", gestionRoom(d, NumberOfRoomsInt, stage, -2, 0));
 
-
+    (void)pId;
 
 	while (condition) {
 
@@ -278,6 +279,7 @@ void gestionGame(Donjon * d, int stage) {
 
             switch (c) {
 				case 'z':
+
 					if (d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] != 'W') {
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
 						player->positionY--;
@@ -286,14 +288,14 @@ void gestionGame(Donjon * d, int stage) {
 
                         if(d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] == 'D'){
                                 axeY--;
-                                *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);
-                                OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
                                 
                                 player->positionY = d->stages[stage].rooms[id].height - 3;
                         }
 					}
 					break;
+
 				case 's':
+
 					if (d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] != 'W') {
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
 						player->positionY++;
@@ -302,40 +304,36 @@ void gestionGame(Donjon * d, int stage) {
 
                         if(d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] == 'D'){
                                 axeY++;
-                                *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);
-                                OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
+                               
                                 
                                 player->positionY = 2;
-                                
-
                         }
 					}
 					break;
+
 				case 'q':
+
 					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] != 'W') {
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
 						player->positionX -= 2;
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = 'P';
 						player->directionView = 'q';
 
-                           if(d->stages[stage].rooms[id].room[player->positionY][player->positionX + 1] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] == 'D' ){                                                                
+                           if(d->stages[stage].rooms[id].room[player->positionY][player->positionX - 1] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] == 'D' ){                                                                
                                 axeX--;
-                                *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);
-                                 OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
+                           
                            
                                 if((d->stages[stage].rooms[id].width - 3) % 2 == 0){
                                     player->positionX = d->stages[stage].rooms[id].width - 5;
                                 }else{
                                     player->positionX = d->stages[stage].rooms[id].width - 4;
                                 }
-
-                    
-
-
                             }
 					}
 					break;
+                    
 				case 'd':
+
 					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] != 'W') {
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
 						player->positionX += 2;
@@ -344,8 +342,7 @@ void gestionGame(Donjon * d, int stage) {
 
                            if(d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX + 1] == 'D'){
                                 axeX++;
-                                *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);
-                                OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
+                           
                               
                                 player->positionX = 2;
 
@@ -353,7 +350,13 @@ void gestionGame(Donjon * d, int stage) {
 
                         
 					}
+                break;
 			}
+
+            *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);
+            OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
+
+            printf("ID RESULT : %d\n", *pId);
 
             for (int v = 0; v < NumberOfRoomsInt + 2; v++) {
                 for (int y = 0; y < NumberOfRoomsInt + 2; y++) {
