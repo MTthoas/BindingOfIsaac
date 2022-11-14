@@ -1,71 +1,90 @@
-{20}
+{21}
 ---
 name=<3
-hpMax=1
+
+hpMax=1.0
 ---
-name=Snack
-hpMax=1
+name=SNACK
+
+hpMax=1.0
 ---
-name=Launch
-hpMax=1
+name=LAUNCH
+
+hpMax=1.0
 ---
-name=Black Lotus
-hpMax=1
-shield=1
+name=BLACK LOTUS
+
+hpMax=1.0
+shield=1.0
 ---
-name=Bucket of Lard
-hpMax=2
-dmg=-0.1
+name=BUCKET OF LARD
+
+hpMax=2.0
 ---
-name=Champion Belt
-dmg=2
+name=CHAMPION BELT
+
 ---
-name=Blood of the Martyr
-dmg=1
+name=BLOOD OF THE MARTYR
+
 ---
-name=Cat-O-Nine-Tails
-dmg=1
+name=CAT-O-NINE-TAILS
+
 ---
-name=Ceremonial Robes
-shield=3
-dmg=1
+name=CEREMONIAL ROBES
+
+shield=3.0
 ---
-name=Cupid's Arrow
+name=CUPID'S ARROW
+
 ps=true
 ---
-name=Dead Dove
+name=DEAD DOVE
+
 ss=true
 flight=true
 ---
-name=Dead Onion
+name=DEAD ONION
+
 ps=true
 ss=true
 ---
-name=Growth Hormones
-dmg=1
+name=GROWTH HORMONES
+
 ---
-name=Holy Grail
-hpMax=1
+name=HOLY GRAIL
+
+hpMax=1.0
 flight=true
 ---
-name=Magic Mushroom
-hpMax=1
-shield=1
-dmg=1
+name=MAGIC MUSHROOM
+
+hpMax=1.0
+shield=1.0
 ---
-name=Meat!
-hpMax=1
-dmg=1
+name=MEAT!
+
+hpMax=1.0
 ---
-name=Ouija Board
+name=OUIJA BOARD
+
 ss=true
 ---
-name=Pentagram
-dmg=2
+name=PENTAGRAM
+
+hpMax=1.2
+flight=true
 ---
-name=Raw Liver
-hpMax=2
+name=RAW LIVER
+
+hpMax=2.0
 ---
-name=Spirit of the Night
+name=SPIRIT OF THE NIGHT
+
 ss=true
+flight=true
+---
+name=POPPERS
+
+hpMax=2.0
+shield=1.0
 flight=true

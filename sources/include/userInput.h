@@ -92,4 +92,9 @@ void askSpectralShot(int* ss);
  */
 void askFlight(int* flight);
 
+/**
+ * @brief Used to clear stdin
+ */
+void clearSTDIN();
+
 #endif // USER_INPUT_H

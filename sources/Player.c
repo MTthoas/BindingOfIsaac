@@ -149,7 +149,7 @@ void gestionPositionPlayer(struct Donjon *d,struct Player *player){
 
 		}
 		
-	 frame++;
+	 frame+=1;
 	 free(d);
 	 free(player);
 	}

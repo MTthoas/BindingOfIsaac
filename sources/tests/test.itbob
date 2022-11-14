@@ -1,11 +1,14 @@
 {3}
 ---
 name=Epee
+
 damage=0.3
 ---
 name=Ailes
+
 hpMax=0.1
 flight=true
 ---
 name=Poison
+
 hpMax=-0.1

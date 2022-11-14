@@ -10,9 +10,15 @@
 #include "./include/mystring.h"
 #include "./include/userInput.h"
 
+void printGameBanner() {
+    printf("=================================================\n");
+    printf("=========== THE BINDING OF BRIATTE ==============\n");
+    printf("=================================================\n");
+}
+
 void menu_init(void){
     system("clear");
-    printf("------------ Binding Of Briatte --------------\n");
+    printGameBanner();
     printf("Press G to start the game\n");
     printf("Press I for the ITEMS menu\n");
     printf("Press R for the ROOMS menu\n");
@@ -23,7 +29,7 @@ void menu_init(void){
 
 void menuCrudItem(void){
     system("clear");
-        printf("------------ Binding Of Briatte --------------\n");
+        printGameBanner();
         printf("-------- ITEMS MENU  --------\n");
         printf("Press S to see your current items\n");
         printf("Press A to add an item\n");
@@ -33,21 +39,21 @@ void menuCrudItem(void){
 
 void menuSeeItems(void) {
     system("clear");
-    printf("------------ Binding Of Briatte --------------\n");
+    printGameBanner();
     printf("-------- Your items --------\n");
 
     FILE* fichier = fopen(CHEMIN_FICHIER_OBJETS, "r");
     afficherFichier(fichier);
     fclose(fichier);
     
-    printf("\nPress ENTER to continue\n");
+    printf("\nPress ENTER to continue ...\n");
     getchar();
-    return;   
+    return;
 }
 
 void menuCreateItem(void){
     system("clear");
-    printf("------------ Binding Of Briatte --------------\n");
+    printGameBanner();
     printf("-------- Creating item  --------\n");
 
     ListeObjets* items = fichierObjetsToListeObjets();
@@ -84,23 +90,28 @@ void menuCreateItem(void){
     int res = addObjet(items, newItem);
     if(res == 0) {
         printf("Could not add the item.\n");
+        freeListeObjets(items);
+        freeObjet(newItem);
         printf("Press ENTER to continue\n");
         getchar();
-        return;
     }
-    printf("Item created : ");
-    displayObjet(newItem);
 
-    listeToFichierObjets(items);
+    printf("New item : ");
+    displayObjet(newItem);
+    printf("Do you want to add it ?\n");
+    int success = confirmation();
+    if(success) {
+        listeToFichierObjets(items);
+        printf("New item added.\n");
+    }     
 
     printf("\nPress ENTER to continue\n");
     getchar();
-    return;
 }
 
 void menuDeleteItem(void){
     system("clear");
-    printf("------------ Binding Of Briatte --------------\n");
+    printGameBanner();
     printf("-------- Deleting item  --------\n");
     
     ListeObjets* items = fichierObjetsToListeObjets();
@@ -108,7 +119,7 @@ void menuDeleteItem(void){
         printf("Couldn't open %s\n.", CHEMIN_FICHIER_OBJETS);
         printf("Press ENTER to continue\n");
         getchar();
-        return;
+        menuCrudItem();
     }
 
     int id;
@@ -124,11 +135,15 @@ void menuDeleteItem(void){
     removeObjet(items, id);
     listeToFichierObjets(items);
     freeListeObjets(items);
+
+    printf("Item deleted.\n");
+    printf("\nPress ENTER to continue\n");
+    getchar();
 }
 
 void menuModifyItem(void){
     system("clear");
-    printf("------------ Binding Of Briatte --------------\n");
+    printGameBanner();
     printf("-------- You chose to modify an item  --------\n");
 
     ListeObjets* items = fichierObjetsToListeObjets();
@@ -142,8 +157,8 @@ void menuModifyItem(void){
     int id;
     int success = 0;
     displayListeObjets(items);
-    printf("Enter the id of the item you want to update (see above) : \n");
     do {
+        printf("Enter the id of the item you want to update (see above) : \n");
         id = readInt();
         printf("You selected the id %d. Is it correct ? (y/n) \n", id);
         success = confirmation();
@@ -159,7 +174,7 @@ void menuModifyItem(void){
 
     success = 0;
     
-    printf("Current item's name : %s.\nDo you want to modify the item's name (y/n) \n?", item->name);
+    printf("Current item's name : %s.\nDo you want to modify the item's name (y/n) ?\n", item->name);
     success = confirmation();
     if(success) {
         char name[20];
@@ -167,7 +182,7 @@ void menuModifyItem(void){
         item->name = duplicateString(name);
     }
     
-    printf("Current item's HP MAX : %f.\nDo you want to modify the item's HP MAX (y/n) \n?", item->hpMax);
+    printf("Current item's HP MAX : %f.\nDo you want to modify the item's HP MAX (y/n) ?\n", item->hpMax);
     success = confirmation();
     if(success) {
         float hpMax;
@@ -175,7 +190,7 @@ void menuModifyItem(void){
         item->hpMax = hpMax;
     }
 
-    printf("Current item's SHIELD: %f.\nDo you want to modify the item's SHIELD (y/n) \n?", item->shield);
+    printf("Current item's SHIELD: %f.\nDo you want to modify the item's SHIELD (y/n) ?\n", item->shield);
     success = confirmation();
     if(success) {
         float shield;
@@ -183,7 +198,7 @@ void menuModifyItem(void){
         item->shield = shield;
     }
 
-    printf("Current item's DAMAGE: %f.\nDo you want to modify the item's DAMAGE (y/n) \n?", item->damage);
+    printf("Current item's DAMAGE: %f.\nDo you want to modify the item's DAMAGE (y/n) ?\n", item->damage);
     success = confirmation();
     if(success) {
         float damage;
@@ -191,7 +206,7 @@ void menuModifyItem(void){
         item->damage = damage;
     }
 
-    printf("Current item's PIERCING SHOT : %s.\nDo you want to modify the item's PIERCING SHOT (y/n) \n?", 
+    printf("Current item's PIERCING SHOT : %s.\nDo you want to modify the item's PIERCING SHOT (y/n) ?\n", 
         (item->piercingShot) ? "true" : "false");
     success = confirmation();
     if(success) {
@@ -200,7 +215,7 @@ void menuModifyItem(void){
         item->piercingShot = ps;
     }
 
-    printf("Current item's SPECTRAL SHOT : %s.\nDo you want to modify the item's SPECTRAL SHOT (y/n) \n?", 
+    printf("Current item's SPECTRAL SHOT : %s.\nDo you want to modify the item's SPECTRAL SHOT (y/n) ?\n", 
         (item->spectralShot) ? "true" : "false");
     success = confirmation();
     if(success) {
@@ -209,7 +224,7 @@ void menuModifyItem(void){
         item->spectralShot= ss;
     }
 
-    printf("Current item's FLIGHT : %s.\nDo you want to modify the item's FLIGHT (y/n) \n?", 
+    printf("Current item's FLIGHT : %s.\nDo you want to modify the item's FLIGHT (y/n) ?\n", 
         (item->flight) ? "true" : "false");
     success = confirmation();
     if(success) {
@@ -223,12 +238,14 @@ void menuModifyItem(void){
 
     listeToFichierObjets(items);
     freeListeObjets(items);
+    printf("\nPress ENTER to continue\n");
+    getchar();
 }
 
 
 void menuCrudRoom(void){
     system("clear");
-        printf("------------ Binding Of Briatte --------------\n");
+        printGameBanner();
         printf("-------- You chose the room's CRUD  --------\n");
         printf("Press a to add a room\n");
         printf("Press d to delete a room\n");
@@ -236,26 +253,26 @@ void menuCrudRoom(void){
 }
 void menuCreateRoom(void){
     system("clear");
-            printf("------------ Binding Of Briatte --------------\n");
+            printGameBanner();
             printf("-------- You chose to create a room  --------\n");
             //createRoom();
 }
 void menuDeleteRoom(void){
     system("clear");
-            printf("------------ Binding Of Briatte --------------\n");
+            printGameBanner();
             printf("-------- You chose to delete a room  --------\n");
             //deleteRoom();
 }
 void menuModifyRoom(void){
     system("clear");
-            printf("------------ Binding Of Briatte --------------\n");
+            printGameBanner();
             printf("-------- You chose to modify a room  --------\n");
             //modifyRoom();
 }
 
 void menuControl(void){
     system("clear");
-            printf("------------ Binding Of Briatte --------------\n");
+            printGameBanner();
             printf("--------------- Info control  ----------------\n");
             printf("Use z,q,s,d to move\n");
             printf("Use 8,4,5,6 to attack\n");

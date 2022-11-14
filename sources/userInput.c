@@ -22,17 +22,17 @@ int readInput(char* string, int size) {
         if (startingPos != NULL) { // replace '\n' with '\0' because fgets always adds '\n' to the created string
             *startingPos = '\0'; 
         } else {
-            clearBuffer(); // if strlen(string) > size, we have to clean the buffer
+            clearSTDIN(); // if strlen(string) > size, we have to clean the buffer
         }
         
         return 1; // good
     }
-    clearBuffer();
+    clearSTDIN();
     return 0; // error
 
 }
 
-void clearBuffer() {
+void clearSTDIN() {
     int c = 0;
     while (c != '\n' && c != EOF)
     {
@@ -96,9 +96,9 @@ void askHpMax(float* hpMax) {
 void askShield(float* shield) {
     int success = 0;
     do {
-        printf("How much bonus / penalty on HP-MAX stat ?\n");
+        printf("How much bonus / penalty on SHIELD stat ?\n");
         *shield = readFloat();
-        printf("HP MAX = %f. Is it correct ? (y/n) \n", *shield);
+        printf("SHIELD = %f. Is it correct ? (y/n) \n", *shield);
         success = confirmation();
     } while(success != 1);
 }
@@ -108,7 +108,7 @@ void askDamage(float* damage) {
      do {
         printf("How much bonus / penalty on DAMAGE stat ?\n");
         *damage = readFloat();
-        printf("DAMAGE = %f. Is it correct ? (y/n) \n", damage);
+        printf("DAMAGE = %f. Is it correct ? (y/n) \n", *damage);
         success = confirmation();
     } while(success != 1);
 }
@@ -137,7 +137,7 @@ void askFlight(int* flight) {
     int success = 0;
     do {
         printf("Does the item provide FLIGHT ability (y/n) ?\n");
-        flight = confirmation();
+        *flight = confirmation();
         printf("FLIGHT = %s. Is it correct ? (y/n) \n", (flight) ? "true" : "false");
         success = confirmation();
     } while(success != 1);

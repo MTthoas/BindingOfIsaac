@@ -68,7 +68,7 @@ void listeToFichierObjets(ListeObjets* listeObjets) {
         buffer_out = duplicateString("---\n");
         fwrite(buffer_out, sizeof(char), strlen(buffer_out), fichier);
 
-        sprintf(buffer_out, "name=%s", duplicateString(courant->name)); // nom
+        sprintf(buffer_out, "name=%s\n", duplicateString(courant->name)); // nom
         fwrite(buffer_out, sizeof(char), strlen(buffer_out), fichier);
 
         if(courant->hpMax != 0) {
