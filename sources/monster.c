@@ -20,9 +20,10 @@
 
 
 
-void spawnMonster(Donjon* d, char idMonster){
+Monster *  spawnMonster(Donjon* d, char* name, float hpMax, int idMonster, int shoot, int flight, int ss){
     srand(time(NULL));
     int randomPositionX,randomPositionY;
+    //  TODO : IL FAUT FREE LE MONSTER 
     Monster * monster1 = malloc(sizeof(Monster));
     int heightRoom = d->stages[0].rooms[0].height - 1;
     int widthRoom = d->stages[0].rooms[0].width -2;
@@ -32,16 +33,20 @@ void spawnMonster(Donjon* d, char idMonster){
         if (randomPositionX % 2 == 0 && d->stages[0].rooms[0].room[randomPositionY][randomPositionX] == ' ' && d->stages[0].rooms[0].room[randomPositionY][randomPositionX - 2] != 'P' && d->stages[0].rooms[0].room[randomPositionY][randomPositionX + 2] != 'P' && d->stages[0].rooms[0].room[randomPositionY - 1][randomPositionX] != 'P' && d->stages[0].rooms[0].room[randomPositionY + 1][randomPositionX] != 'P' ){
             monster1->positionX = randomPositionX;
             monster1->positionY = randomPositionY;
-            monster1->idLetter = idMonster;
+            monster1->idMonster = idMonster;
+            monster1->name = name;
+            monster1->hpMax = hpMax;
+            monster1->shoot = shoot;
+            monster1->flight = flight;
+            monster1->ss = ss;
+
             break;
         }   
     } 
-    printf("positionX : %d\n", monster1->positionX);
-    printf("positionY : %d\n", monster1->positionY);
     d->stages[0].rooms[0].room[monster1->positionY][monster1->positionX] = 'M'; 
-    free(monster1);   
+    return monster1;
+       
 }
-
 
 
 //TODO
@@ -49,11 +54,74 @@ void monsterAttack(Monster* monster, Player* player) {
     if(monster == NULL || player == NULL) {
         return;
     }
+}
 
-    float damage = monster->shoot;
-    if(monster->flight == 1) {
-        damage *= 1.5;
+int getTailleListeMonster(ListeMonster* l) {
+    Monster* courant = l->premier;
+    if(courant == NULL) {
+        return 0;
     }
 
-    player->hpMax -= damage;
+    int count = 0;
+    while(courant != NULL) {
+        count += 1;
+        courant = courant->suivant;
+    }
+
+    return count;
+}
+
+ListeMonster* createListeMonster() {
+    ListeMonster* liste = malloc(sizeof(ListeMonster) * 1);
+    return liste;   
+}
+
+void freeMonster(Monster* monster) {
+    free(monster);
+}
+
+void freeListeMonster(ListeMonster* liste) {
+    Monster* courant = liste->premier;
+    while(courant != NULL) {
+        Monster* tmp = courant;
+        courant = courant->suivant;
+        freeMonster(tmp);
+    }
+    free(liste);
+}
+
+// int addMonster(ListeMonster* listeMonster, Monster* newMonster) {
+//     Monster* courant = listeMonster->premier;
+//     int index = 1; //formera l'id du nouveau monster
+
+//     if(courant == NULL) { // liste vide
+//         newMonster->idMonster = index;
+//         listeMonster->premier = duplicateMonster(newMonster);
+//         return index;
+//     }
+
+//     while(courant != NULL) { // ajout a la fin de liste
+//         index += 1;
+//         if(courant->suivant == NULL) {
+//             newMonster->idMonster = index;
+//             courant->suivant = duplicateMonster(newMonster);
+//             return index;
+//         }
+//         courant = courant->suivant;
+//     }
+
+//     return 0;
+// }
+
+Monster* getMonsterById(ListeMonster* liste, int id) {
+    Monster* result = liste->premier;
+
+    while(result != NULL) {
+        if(result->idMonster == id) {
+            return result;
+        }
+        result = result->suivant;
+    }
+
+    return NULL;
 }

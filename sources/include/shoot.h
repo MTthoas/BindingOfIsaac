@@ -12,6 +12,7 @@
 #define H_SHOOT
 
 #include "Room.h"
+#include "monster.h"
 #include "Player.h"
 
 struct Shoot {
@@ -24,6 +25,7 @@ typedef struct Shoot Shoot;
 struct ShootParams {
     Donjon *d;
     Player *player;
+    Monster *monster;
     int reload ;
 };
 typedef struct ShootParams ShootParams;

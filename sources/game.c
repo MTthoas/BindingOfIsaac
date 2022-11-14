@@ -27,6 +27,7 @@
 
 #include <time.h>
 #include "Room.h"
+#include "monster.h"
 #include "Player.h"
 #include "menu.h"
 #include "game.h"
@@ -119,8 +120,12 @@ void gestionGame(Donjon * d) {
 		if (kbhit()) {
 			c = getchar();
 		}
-
-
+        //Faire spawn un Mooter (mob)
+        if (c == 'm') {
+			char* name="Mooter"; float hpMax=5,idMonster=1,shoot=1,flight=0,ss=1;
+            Monster * Mooter = spawnMonster(d, name, hpMax, idMonster, shoot, flight, ss);
+            shootParams->monster = Mooter;
+		}
         
 		if (c == 'x') {
 			condition = false;

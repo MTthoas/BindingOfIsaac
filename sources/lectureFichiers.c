@@ -33,6 +33,25 @@ int getNomberObjects(FILE* fichierObjects){
     return 0; 
 }
 
+int getNomberMonster(FILE* fichierMonster){
+    char token[256];
+    int index = 0;
+    char c = fgetc(fichierMonster);
+    while(c != EOF) { // parcours du fichier
+        if(c == '{') { //récupération du nb d'objects
+            while(c != '}') {
+                c = fgetc(fichierMonster);
+                token[index] = c;
+                index += 1;
+            }
+        token[index+1] = '\n'; // transformation en string
+        return atoi(token);    
+        c = fgetc(fichierMonster); 
+        }    
+    }
+    return 0; 
+}
+
 void afficherFichier(FILE* fichier) {
     rewind(fichier); 
     char c = fgetc(fichier);
