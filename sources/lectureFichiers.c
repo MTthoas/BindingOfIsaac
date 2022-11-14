@@ -11,6 +11,7 @@
 #include "include/lectureFichiers.h"
 #include "include/array.h"
 #include "include/mystring.h"
+#include "include/monster.h"
 
 #include <string.h>
 
@@ -243,6 +244,85 @@ ListeObjects* fichierObjectsToListeObjects() {
         if(strcmp(name, "") != 0) {
             o = createObject(name, hpMax, shield, damage, piercingShot, spectralShot, flight);
             addObject(liste, o);
+        }
+    } // ajout du dernier object
+    
+    fclose(fichier);
+    return liste;
+}
+
+ListeMonster* fichierMonsterToListeMonster() {
+    char* filepath = CHEMIN_FICHIER_OBJECTS;
+    FILE* fichier = fopen(filepath, "r"); // ouverture fichier
+    if(fichier == NULL) { 
+        printf("Problème d'ouverture du fichier des monsters.\n");
+        return NULL;
+    }
+
+    rewind(fichier);
+   
+    ListeMonster* liste = createListeMonster(); // variables
+    Monster* m;
+    char* name = "";
+    float hpMax = 0;
+    int shoot;
+    int ss = 0;
+    int flight = 0;
+    int activated = 0;
+
+    char buffer[255];
+    char* stat = malloc(sizeof(char) * 255); 
+    char* value = malloc(sizeof(char) * 255);
+    int creatingMonster = 1;
+    char firstLetter;
+
+    while(fgets(buffer, 255, fichier)) { // lecture fichier ligne par ligne
+        firstLetter = buffer[0];
+        //printf("%s", buffer);
+
+        if(firstLetter == 'n' || firstLetter == '-' || firstLetter == 'h' || firstLetter == 's' || firstLetter == 's' || firstLetter == 'f' || firstLetter == EOF) {
+            if(firstLetter == '-') { 
+                creatingMonster = (creatingMonster) ? 0 : 1;
+
+            } else { // construction object
+                stat = strtok(buffer, "="); //ex : hpMax (depuis "hpMax=1")
+                value = strtok(NULL, "="); //ex : 1 (depuis "hpMax=1")
+                uppercase(stat);
+                uppercase(value);
+
+                if(strcmp(stat, "NAME") == 0) {
+                    name = duplicateString(value);
+                } else if((strcmp(stat, "HPMAX") == 0)) {
+                    hpMax = atof(value);
+                }  else if((strcmp(stat, "SHOOT") == 0)) {
+                    activated = (strcmp(value, "TRUE\n") == 0);
+                    shoot = activated;
+                } else if((strcmp(stat, "SS") == 0)) {
+                    activated = (strcmp(value, "TRUE\n") == 0);
+                    ss = activated;
+                } else if((strcmp(stat, "FLIGHT") == 0)) {
+                    activated = (strcmp(value, "TRUE\n") == 0);
+                    flight = activated;
+                }
+            }
+
+            if(firstLetter == '-' && creatingMonster == 1) { // ajout object
+                m = createMonster(name, hpMax, shoot, ss, flight);
+                addMonster(liste, m);
+                name = "";
+                hpMax = 0;
+                ss = 0;
+                flight = 0;
+
+                creatingMonster = (creatingMonster) ? 0 : 1;
+            }   
+        }
+    }
+
+    if(feof(fichier)) { 
+        if(strcmp(name, "") != 0) {
+            m = createMonster(name, hpMax, shoot, ss, flight);
+            addMonster(liste, m);
         }
     } // ajout du dernier object
     

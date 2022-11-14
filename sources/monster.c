@@ -90,29 +90,6 @@ void freeListeMonster(ListeMonster* liste) {
     free(liste);
 }
 
-// int addMonster(ListeMonster* listeMonster, Monster* newMonster) {
-//     Monster* courant = listeMonster->premier;
-//     int index = 1; //formera l'id du nouveau monster
-
-//     if(courant == NULL) { // liste vide
-//         newMonster->idMonster = index;
-//         listeMonster->premier = duplicateMonster(newMonster);
-//         return index;
-//     }
-
-//     while(courant != NULL) { // ajout a la fin de liste
-//         index += 1;
-//         if(courant->suivant == NULL) {
-//             newMonster->idMonster = index;
-//             courant->suivant = duplicateMonster(newMonster);
-//             return index;
-//         }
-//         courant = courant->suivant;
-//     }
-
-//     return 0;
-// }
-
 Monster* getMonsterById(ListeMonster* liste, int id) {
     Monster* result = liste->premier;
 
@@ -124,4 +101,66 @@ Monster* getMonsterById(ListeMonster* liste, int id) {
     }
 
     return NULL;
+}
+
+Monster* createMonster(char* name, float hpMax, int shoot, int flight, int ss) {
+    Monster* o = malloc(sizeof(Monster) * 1);
+    
+    // verification des entrees
+    if(strcmp("", name) == 0) { //nom par défaut
+        name = duplicateString("monster");
+    }
+    ss = (ss == 0) ? 0 : 1;
+    flight = (flight == 0) ? 0 : 1;
+
+    // allocation 
+    o->idMonster = 1;
+    o->name = duplicateString(name);
+    o->hpMax = hpMax;
+    o->shoot = shoot;
+    o->flight = flight;
+    o->ss = ss;
+    o->suivant = NULL;
+
+    return o;
+}
+
+int addMonster(ListeMonster* listeMonster, Monster* newMonster){
+    Monster* courant = listeMonster->premier;
+    int index = 1; //formera l'id du nouvel monster
+
+    if(courant == NULL) { // liste vide
+        newMonster->idMonster = index;
+        listeMonster->premier = duplicateMonster(newMonster);
+        return index;
+    }
+
+    while(courant != NULL) { // ajout a la fin de liste
+        index += 1;
+        if(courant->suivant == NULL) {
+            newMonster->idMonster = index;
+            courant->suivant = duplicateMonster(newMonster);
+            return index;
+        }
+        courant = courant->suivant;
+    }
+
+    return 0;
+}
+
+Monster* duplicateMonster(Monster* monster) {
+    if(monster == NULL) {
+        return NULL;
+    }
+
+    Monster* newMonster = malloc(sizeof(Monster)* 1);
+    newMonster->idMonster = monster->idMonster;
+    newMonster->name = duplicateString(monster->name);
+    newMonster->hpMax = monster->hpMax;
+    newMonster->shoot = monster->shoot;
+    newMonster->flight = monster->flight;
+    newMonster->ss = monster->ss;
+    newMonster->suivant = monster->suivant;
+    
+    return newMonster;
 }

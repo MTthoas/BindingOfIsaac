@@ -126,6 +126,7 @@ void gestionGame(Donjon * d) {
             Monster * Mooter = spawnMonster(d, name, hpMax, idMonster, shoot, flight, ss);
             shootParams->monster = Mooter;
 		}
+
         
 		if (c == 'x') {
 			condition = false;
