@@ -62,7 +62,12 @@ void firstMenu(struct Donjon *d) {
 			    	if (kbhit()) {
 			    		c2 = getchar();
 			    	}
-			    	switch (c2){
+			    	switch (c2) {
+						case 's':
+			    			menuSeeItems();
+			    			condition2 = false;
+			    			break;
+
 			    		case 'a':
 			    			menuCreateItem();
 			    			condition2 = false;

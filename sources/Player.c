@@ -89,34 +89,5 @@ void gestionPositionPlayer(struct Donjon *d,struct Player *player, int c){
 					}
 			}
 
-
-			printf("\n");
-			for (int i = 0; i < d->stages[0].rooms[0].height; i++) {
-				for (int y = 0; y < d->stages[0].rooms[0].width - 1; y++) {
-					if (y % 2 == 0) {
-						if(d-> stages[0].rooms[0].room[i][y] == 'P'){
-							printf("%s", KRED);
-							printf("%c ", d-> stages[0].rooms[0].room[i][y]);
-							printf("%s", KNRM);
-						}else{
-							printf("%c ", d-> stages[0].rooms[0].room[i][y]);
-						}
-					}
-				}
-				printf("\n");
-				
-			}
-			
-			bangishard(d, player);
-
-			printf("Player position : %d, %d / Player direction : %c / Iteration : %d\n", player->positionX, player->positionY, player->directionView, iteration);
-			continue;
-
-
-		}
-		
-	 frame+=1;
-	 free(d);
-	 free(player);
-	}
+	
 }

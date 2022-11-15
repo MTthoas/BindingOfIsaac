@@ -29,10 +29,10 @@ void printGameBanner() {
 void menu_init(void) {
     system("clear");
     printGameBanner();
-    printf("Press G to start the game\n");
-    printf("Press I for the ITEMS menu\n");
-    printf("Press R for the ROOMS menu\n");
-    printf("Press C for the controls information\n");
+    printf("Press 'g' to start the game\n");
+    printf("Press 'i' for the ITEMS menu\n");
+    printf("Press 'r' for the ROOMS menu\n");
+    printf("Press 'c' for the controls information\n");
     printf("----------- Dorian-Alexandre-Matthias ----------\n");
 }
 
@@ -62,7 +62,6 @@ void menuSeeItems(void) {
 }
 
 void menuCreateItem(void){
-<<<<<<< HEAD
     system("clear");
     printGameBanner();
     printf("-------- Creating item  --------\n");

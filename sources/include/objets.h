@@ -1,6 +1,6 @@
 /**
- * @file fichierobjets.h
- * @author TheGreat-Chain & Nairod36
+ * @file fichierObjets.h
+ * @author TheGreat-Chain
  * @brief Structures et fonctions relatives aux objets de personnage
  * @version 0.1
  * @date 2022-10-10
@@ -8,16 +8,15 @@
  * @copyright Copyright (c) 2022
  */
 
-
-#ifndef objetS_H
-#define objetS_H
+#ifndef OBJETS_H
+#define OBJETS_H
 
     /**
-     * @brief objets apportant des bonus de statistique au personnage.
-     * Element de la liste chaînée Listeobjets. Pointe sur l'objet suivant.
+     * @brief Objets apportant des bonus de statistique au personnage.
+     * Element de la liste chaînée ListeObjets. Pointe sur l'objet suivant.
      */
-    typedef struct objet objet;
-    struct objet {
+    typedef struct Objet Objet;
+    struct Objet {
         int id;
         char* name;
         float hpMax;
@@ -27,24 +26,24 @@
         int spectralShot; //tirs passent à travers les rochers mais pas les ennemis
         int flight; //passer au dessus de trous rochers et pic
 
-        objet* suivant;
+        Objet* suivant;
     };
 
     /**
      * @brief Liste de tous les objets du jeu. 
      * Pointe vers le premier objet de la liste chainée.
      */
-    typedef struct Listeobjets {
-        objet* premier;
-    } Listeobjets;
+    typedef struct ListeObjets {
+        Objet* premier;
+    } ListeObjets;
 
     /**
      * @brief Alloue un espace mémoire pour une liste d'objet et renvoie son adresse. 
-     * Pour ajouter des objets dans la liste, utiliser addobjet().
+     * Pour ajouter des Objets dans la liste, utiliser addObjet().
      * 
-     * @return Listeobjet* 
+     * @return ListeObjet* 
      */
-    Listeobjets* createListeobjets();
+    ListeObjets* createListeObjets();
 
     /**
      * @brief Constructeur d'objets
@@ -57,18 +56,18 @@
      * @param spectralShot 
      * @param flight 
      * 
-     * @return objet* adresse de l'objet suivant (NULL par défaut)
+     * @return Objet* adresse de l'objet suivant (NULL par défaut)
      */
-    objet* createobjet(char* name, float hpMax, float shield, float damage, int piercingShot, int spectralShot, int flight);
+    Objet* createObjet(char* name, float hpMax, float shield, float damage, int piercingShot, int spectralShot, int flight);
 
     /**
      * @brief Afficher le contenu de la liste des objets.
      * 
      * READ du CRUD
      * 
-     * @param listeobjets 
+     * @param listeObjets 
      */
-    void* displayListeobjets(Listeobjets* listeobjets);
+    void* displayListeObjets(ListeObjets* listeObjets);
 
     /**
      * @brief Affiche l'objet et ses attributs dans le terminal.
@@ -76,7 +75,7 @@
      * 
      * @param objet objet à afficher
      */
-    void* displayobjet(objet* objet);
+    void* displayObjet(Objet* objet);
 
     /**
      * @brief Ajouter un objet dans la liste des objets.
@@ -84,78 +83,76 @@
      * 
      * CREATE du CRUD
      * 
-     * @param listeobjets 
-     * @param newobjet 
+     * @param listeObjets 
+     * @param newObjet 
      */
-    int addobjet(Listeobjets* listeobjets, objet* newobjet);
+    int addObjet(ListeObjets* listeObjets, Objet* newObjet);
 
     /**
      * @brief Retire un objet de la structure de la liste des objets
      * 
      * REMOVE du CRUD
      * 
-     * @param listeobjets 
-     * @param idobjet 
+     * @param listeObjets 
+     * @param idObjet 
      */
-    void removeobjet(Listeobjets* listeobjets, int idobjet);
+    void removeObjet(ListeObjets* listeObjets, int idObjet);
 
     /**
      * @brief Modifie un objet spécifié par un nouvel objet passé en paramètre.
-     * TODO : free l'objet ayant l'id correspondant et pointer vers newobjet
+     * TODO : free l'objet ayant l'id correspondant et pointer vers newObjet
      * UPDATE du CRUD
      * 
-     * @param Listeobjets 
-     * @param idobjetToReplace 
-     * @param newobjet 
+     * @param ListeObjets 
+     * @param idObjetToReplace 
+     * @param newObjet 
      */
-    void modifyobjet(Listeobjets* listeobjets, int idobjetToReplace, objet* newobjet);
+    void modifyObjet(ListeObjets* listeObjets, int idObjetToReplace, Objet* newObjet);
 
     /**
      * @brief Retourne l'adresse de l'objet de la liste ayant l'id correspondant.
      * Retourne NULL si l'id demandé n'existe pas.
      * 
-     * @param Listeobjets 
+     * @param ListeObjets 
      * @param id 
-     * @return objet* 
+     * @return Objet* 
      */
-    objet* getobjetById(Listeobjets* , int );
+    Objet* getObjetById(ListeObjets* , int );
 
     /**
      * @brief Retourne l'adresse d'un nouvel espace mémoire alloué à un objet dont la valeur des champs est identique
      * à ceux de l'objet en paramètre.
      * 
      * @param objet objet à copier
-     * @return objet* 
+     * @return Objet* 
      */
-    objet* duplicateobjet(objet* objet);
+    Objet* duplicateObjet(Objet* objet);
 
     /**
      * @brief Désalloue la mémoire allouée à un objet
      * 
      */
-    void freeobjet(objet*);
+    void freeObjet(Objet*);
     
     /**
      * @brief Désalloue la mémoire allouée à une liste d'objets.
      * 
      */
-    void freeListeobjets(Listeobjets*);
+    void freeListeObjets(ListeObjets*);
 
     /**
      * @brief Remet les identifiants des objets dans l'ordre.
      * A utiliser par exemple après une suppression.
      */
-    void rangerListeobjets(Listeobjets*);
-
+    void rangerListeObjets(ListeObjets*);
 
     /**
      * @brief Retourne le nombre d'éléments d'une liste d'objets
      * 
      * @return int 
      */
-    int getTailleListeobjets(Listeobjets*);
+    int getTailleListeObjets(ListeObjets*);
 
 
 
-
-#endif //objetS_H
+#endif //OBJETS_H

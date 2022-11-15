@@ -860,7 +860,7 @@ void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms){
 
             // printf("\nSTAGE %d / Room %d \n", stage, iteration+1);
 
-            int iterationDoorsReturned = NumberOfDoorsByRoom( d-> stages[stage].rooms[iteration].room, height, width);
+            int iterationDoorsReturned = NumberOfDoorsByRoom(d-> stages[stage].rooms[iteration].room, height, width);
 
             d-> stages[stage].rooms[iteration].room = RoomByNumber(height, width, iteration+1);
             d-> stages[stage].rooms[iteration].number = iteration;

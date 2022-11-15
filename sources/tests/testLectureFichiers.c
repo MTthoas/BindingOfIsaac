@@ -15,43 +15,55 @@
 #include<stdlib.h>
 
 #include "../include/mystring.h"
-#include "../include/objects.h"
+#include "../include/objets.h"
 #include "../include/lectureFichiers.h"
+#include "../include/array.h"
+#include "../include/roomsForCRUD.h"
 
 void test_extensionType(); //ok
 void test_getNbLignesFichier(); //ok
-void test_fichierToListeObjects(); //ok
-void test_listeToFichierObjects(); //ok
+void test_fichierToListeObjets(); //ok
+void test_listeToFichierObjets(); //ok
+
+void test_parseListFromRoomsFile();
+void test_listToRoomsFile();
 
 int main(void) {
-    test_listeToFichierObjects();
-    //test_fichierToListeObjects();
+    test_parseListFromRoomsFile();
+
+    //test_listeToFichierObjets();
+    //test_fichierToListeObjets();
     //test_extensionType();
     //test_getNbLignesFichier();
 
     return 0;
 }
 
-void test_listeToFichierObjects() {
+void test_parseListFromRoomsFile() {
+    printf("[TEST] parseListFromRoomsFile() :\n\n");
+    RoomsList* rooms = parseListFromRoomsFile();
+}
+
+void test_listeToFichierObjets() {
     printf("\033[1;32m");
-    printf("[TEST] fichierObjectsToListeObjects() :\n\n");
+    printf("[TEST] fichierObjetsToListeObjets() :\n\n");
     printf("\033[0m"); 
 
     // initialisation
-    ListeObjects* l = createListeObjects();
-    Object* epee = createObject("Epee\n", 0, 0, 0.3, 0, 0, 0);
-    Object* ailes = createObject("Ailes\n", 0.1, 0, 0, 0, 0, 1);
-    Object* poison = createObject("Poison\n", -0.1, 0, 0, 0, 0, 0);
-    addObject(l, epee);
-    addObject(l, ailes);
-    addObject(l, poison);
+    ListeObjets* l = createListeObjets();
+    Objet* epee = createObjet("Epee\n", 0, 0, 0.3, 0, 0, 0);
+    Objet* ailes = createObjet("Ailes\n", 0.1, 0, 0, 0, 0, 1);
+    Objet* poison = createObjet("Poison\n", -0.1, 0, 0, 0, 0, 0);
+    addObjet(l, epee);
+    addObjet(l, ailes);
+    addObjet(l, poison);
 
     // test
     printf("Affichage de la liste :\n");
-    displayListeObjects(l);
+    displayListeObjets(l);
 
     printf("\nAffichage du fichier généré : \n");
-    listeToFichierObjects(l);
+    listeToFichierObjets(l);
     FILE* fichier = fopen("./test.itbob", "r");
     if(fichier == NULL) {
         printf("Impossible d'ouvrir le fichier\n");
@@ -59,7 +71,7 @@ void test_listeToFichierObjects() {
     }
     afficherFichier(fichier);
 
-    freeListeObjects(l);
+    freeListeObjets(l);
 }
 
 void test_getNbLignesFichier() {
@@ -70,8 +82,8 @@ void test_getNbLignesFichier() {
 
 }
 
-void test_fichierToListeObjects() {
-    printf("[TEST] fichierObjectsToListeObjects() :\n\n");
+void test_fichierToListeObjets() {
+    printf("[TEST] fichierObjetsToListeObjets() :\n\n");
 
     FILE* fichier = fopen("../../resources/items.itbob", "r");
 
@@ -80,9 +92,9 @@ void test_fichierToListeObjects() {
     fclose(fichier);
 
     printf("\nAffichage de la liste : \n");
-    ListeObjects* l = fichierObjectsToListeObjects();
-    displayListeObjects(l);
-    freeListeObjects(l);
+    ListeObjets* l = fichierObjetsToListeObjets();
+    displayListeObjets(l);
+    freeListeObjets(l);
 }
 
 
@@ -120,18 +132,18 @@ int getNbLignesFichier(char* chemin_fichier) {
     return nbLignes;
 }
 
-ListeObjects* fichierObjectsToListeObjects() {
+ListeObjets* fichierObjetsToListeObjets() {
     char* filepath = "../../resources/items.itbob"; // CHEMIN_FICHIER_OBJETS
     FILE* fichier = fopen(filepath, "r"); // ouverture fichier
     if(fichier == NULL) { 
-        printf("Problème d'ouverture du fichier des objects.\n");
+        printf("Problème d'ouverture du fichier des objets.\n");
         return NULL;
     }
 
     rewind(fichier);
    
-    ListeObjects* liste = createListeObjects(); // variables
-    Object* o;
+    ListeObjets* liste = createListeObjets(); // variables
+    Objet* o;
     char* name = "";
     float hpMax = 0;
     float shield = 0;
@@ -144,7 +156,7 @@ ListeObjects* fichierObjectsToListeObjects() {
     char buffer[255];
     char* stat = malloc(sizeof(char) * 255); 
     char* value = malloc(sizeof(char) * 255);
-    int creatingObject = 1;
+    int creatingObjet = 1;
     char firstLetter;
 
     while(fgets(buffer, 255, fichier)) { // lecture fichier ligne par ligne
@@ -153,9 +165,9 @@ ListeObjects* fichierObjectsToListeObjects() {
 
         if(firstLetter == 'n' || firstLetter == '-' || firstLetter == 'h' || firstLetter == 'd' || firstLetter == 's' || firstLetter == 'p' || firstLetter == 'f' || firstLetter == EOF) {
             if(firstLetter == '-') { 
-                creatingObject = (creatingObject) ? 0 : 1;
+                creatingObjet = (creatingObjet) ? 0 : 1;
 
-            } else { // construction object
+            } else { // construction objet
                 stat = strtok(buffer, "="); //ex : hpMax (depuis "hpMax=1")
                 value = strtok(NULL, "="); //ex : 1 (depuis "hpMax=1")
                 uppercase(stat);
@@ -181,9 +193,9 @@ ListeObjects* fichierObjectsToListeObjects() {
                 }
             }
 
-            if(firstLetter == '-' && creatingObject == 1) { // ajout object
-                o = createObject(name, hpMax, shield, damage, piercingShot, spectralShot, flight);
-                addObject(liste, o);
+            if(firstLetter == '-' && creatingObjet == 1) { // ajout objet
+                o = createObjet(name, hpMax, shield, damage, piercingShot, spectralShot, flight);
+                addObjet(liste, o);
                 name = "";
                 hpMax = 0;
                 shield = 0;
@@ -192,17 +204,17 @@ ListeObjects* fichierObjectsToListeObjects() {
                 spectralShot = 0;
                 flight = 0;
 
-                creatingObject = (creatingObject) ? 0 : 1;
+                creatingObjet = (creatingObjet) ? 0 : 1;
             }   
         }
     }
 
     if(feof(fichier)) { 
         if(strcmp(name, "") != 0) {
-            o = createObject(name, hpMax, shield, damage, piercingShot, spectralShot, flight);
-            addObject(liste, o);
+            o = createObjet(name, hpMax, shield, damage, piercingShot, spectralShot, flight);
+            addObjet(liste, o);
         }
-    } // ajout du dernier object
+    } // ajout du dernier objet
     
     fclose(fichier);
     return liste;
@@ -230,26 +242,26 @@ int extensionType(char* filename) {
     return EXTENSION_INVALIDE;
 }
 
-void listeToFichierObjects(ListeObjects* listeObjects) {
+void listeToFichierObjets(ListeObjets* listeObjets) {
     char* filepath = "./test.itbob"; // CHEMIN_FICHIER_OBJETS
     FILE* fichier = fopen(filepath, "w+"); // ouverture fichier
     if(fichier == NULL) { 
-        printf("Problème d'ouverture du fichier des objects.\n");
+        printf("Problème d'ouverture du fichier des objets.\n");
         return;
     }
 
     char* buffer_out = malloc(sizeof(char) * 256);
 
-    // ecriture de l'indicateur du nombre d'objects :
-    int listSize = getTailleListeObjects(listeObjects);
-    if(listSize == 0) { // fin si pas d'objects dans la liste
+    // ecriture de l'indicateur du nombre d'objets :
+    int listSize = getTailleListeObjets(listeObjets);
+    if(listSize == 0) { // fin si pas d'objets dans la liste
         return;
     }
     sprintf(buffer_out, "{%d}\n", listSize);
     fwrite(buffer_out, sizeof(char), strlen(buffer_out), fichier);
 
-    // ecriture des objects :
-    Object* courant = listeObjects->premier;
+    // ecriture des objets :
+    Objet* courant = listeObjets->premier;
     while(courant != NULL) {
         buffer_out = duplicateString("---\n");
         fwrite(buffer_out, sizeof(char), strlen(buffer_out), fichier);
