@@ -13,6 +13,7 @@
     #define LECTURE_FICHIERS_H
 
     #include "cheminsFichiers.h"
+    #include "monster.h"
     #include <stdlib.h>
     #include <stdio.h>
     #include "objects.h"
@@ -26,7 +27,7 @@
      * @return ListeObjects* 
      */
     ListeObjects* fichierObjectsToListeObjects();
-
+    ListeMonster* fichierMonsterToListeMonster();
     /**
      * @brief Réécrit le fichier en fonction de la structure ListeObjects 
      * 
@@ -41,7 +42,7 @@
      * @return int nombre d'objects bonus
      */
     int getNomberObjects(FILE* fichierObjects);
-
+    int getNomberMonster(FILE* fichierMonster);
     /**
      * @brief Permet d'afficher le contenu du fichier dans le terminal
      * 

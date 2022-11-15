@@ -20,32 +20,23 @@
 
 
 
-Monster *  spawnMonster(Donjon* d, char* name, float hpMax, int idMonster, int shoot, int flight, int ss){
+void spawnMonster(Donjon* d, Monster * monster){
     srand(time(NULL));
     int randomPositionX,randomPositionY;
-    //  TODO : IL FAUT FREE LE MONSTER 
-    Monster * monster1 = malloc(sizeof(Monster));
     int heightRoom = d->stages[0].rooms[0].height - 1;
     int widthRoom = d->stages[0].rooms[0].width -2;
     while (1){
         randomPositionY = 1 + rand() % (heightRoom - 1);
         randomPositionX = 2 + rand() % (widthRoom - 2);
         if (randomPositionX % 2 == 0 && d->stages[0].rooms[0].room[randomPositionY][randomPositionX] == ' ' && d->stages[0].rooms[0].room[randomPositionY][randomPositionX - 2] != 'P' && d->stages[0].rooms[0].room[randomPositionY][randomPositionX + 2] != 'P' && d->stages[0].rooms[0].room[randomPositionY - 1][randomPositionX] != 'P' && d->stages[0].rooms[0].room[randomPositionY + 1][randomPositionX] != 'P' ){
-            monster1->positionX = randomPositionX;
-            monster1->positionY = randomPositionY;
-            monster1->idMonster = idMonster;
-            monster1->name = name;
-            monster1->hpMax = hpMax;
-            monster1->shoot = shoot;
-            monster1->flight = flight;
-            monster1->ss = ss;
-
+            monster->positionX = randomPositionX;
+            monster->positionY = randomPositionY;
             break;
         }   
-    } 
-    d->stages[0].rooms[0].room[monster1->positionY][monster1->positionX] = 'M'; 
-    return monster1;
-       
+    } // TODO la lettre doit correspondre au monstre 
+    char letterForMonster = monster->name[0];
+    uppercaseSingle(letterForMonster);
+    d->stages[0].rooms[0].room[monster->positionY][monster->positionX] = letterForMonster;        
 }
 
 
@@ -103,7 +94,7 @@ Monster* getMonsterById(ListeMonster* liste, int id) {
     return NULL;
 }
 
-Monster* createMonster(char* name, float hpMax, int shoot, int flight, int ss) {
+Monster* createMonster(int idMonster, char* name, float hpMax, int shoot, int flight, int ss) {
     Monster* o = malloc(sizeof(Monster) * 1);
     
     // verification des entrees
@@ -114,7 +105,7 @@ Monster* createMonster(char* name, float hpMax, int shoot, int flight, int ss) {
     flight = (flight == 0) ? 0 : 1;
 
     // allocation 
-    o->idMonster = 1;
+    o->idMonster = idMonster;
     o->name = duplicateString(name);
     o->hpMax = hpMax;
     o->shoot = shoot;

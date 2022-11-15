@@ -48,7 +48,7 @@ ListeMonster* createListeMonster();
 
 void monsterAttack(Monster* monster, Player* player);
 
-Monster * spawnMonster(Donjon* d, char* name, float hpMax, int idMonster, int shoot, int flight, int ss);
+void spawnMonster(Donjon* d,Monster* monster );
 
     /**
      * @brief Constructeur d'monsters
@@ -62,7 +62,7 @@ Monster * spawnMonster(Donjon* d, char* name, float hpMax, int idMonster, int sh
      * 
      * @return Monster* adresse de l'monster suivant (NULL par défaut)
      */
-    Monster* createMonster(char* name, float hpMax, int shoot, int flight, int ss);
+    Monster* createMonster(int idMonster, char* name, float hpMax, int shoot, int flight, int ss);
 
     /**
      * @brief Ajouter un monster dans la liste des monsters.
@@ -87,6 +87,7 @@ Monster * spawnMonster(Donjon* d, char* name, float hpMax, int idMonster, int sh
     void freeListeMonster(ListeMonster* liste);
     void freeMonster(Monster* monster);
     int addMonster(ListeMonster* listeMonster, Monster* newMonster);
+    Monster* getMonsterById(ListeMonster* liste, int id);
 
     /**
      * @brief Retourne l'adresse d'un nouvel espace mémoire alloué à un monster dont la valeur des champs est identique

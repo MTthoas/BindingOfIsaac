@@ -46,9 +46,12 @@ void* bangishard(void *shootParams){
 
     c = 'p';
 
+	
 	if (kbhit()) {
 		c = getchar();
 	}
+	
+		
 
 	switch (c) {
 			case '8': //shootUp

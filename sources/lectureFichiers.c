@@ -252,7 +252,7 @@ ListeObjects* fichierObjectsToListeObjects() {
 }
 
 ListeMonster* fichierMonsterToListeMonster() {
-    char* filepath = CHEMIN_FICHIER_OBJECTS;
+    char* filepath = CHEMIN_FICHIER_MONSTRES;
     FILE* fichier = fopen(filepath, "r"); // ouverture fichier
     if(fichier == NULL) { 
         printf("Problème d'ouverture du fichier des monsters.\n");
@@ -263,6 +263,7 @@ ListeMonster* fichierMonsterToListeMonster() {
    
     ListeMonster* liste = createListeMonster(); // variables
     Monster* m;
+    int idMonster = 0;
     char* name = "";
     float hpMax = 0;
     int shoot;
@@ -282,6 +283,7 @@ ListeMonster* fichierMonsterToListeMonster() {
 
         if(firstLetter == 'n' || firstLetter == '-' || firstLetter == 'h' || firstLetter == 's' || firstLetter == 's' || firstLetter == 'f' || firstLetter == EOF) {
             if(firstLetter == '-') { 
+                idMonster += 1;
                 creatingMonster = (creatingMonster) ? 0 : 1;
 
             } else { // construction object
@@ -307,7 +309,7 @@ ListeMonster* fichierMonsterToListeMonster() {
             }
 
             if(firstLetter == '-' && creatingMonster == 1) { // ajout object
-                m = createMonster(name, hpMax, shoot, ss, flight);
+                m = createMonster(idMonster, name, hpMax, shoot, flight, ss);
                 addMonster(liste, m);
                 name = "";
                 hpMax = 0;
@@ -321,7 +323,7 @@ ListeMonster* fichierMonsterToListeMonster() {
 
     if(feof(fichier)) { 
         if(strcmp(name, "") != 0) {
-            m = createMonster(name, hpMax, shoot, ss, flight);
+            m = createMonster(idMonster, name, hpMax, shoot, flight, ss);
             addMonster(liste, m);
         }
     } // ajout du dernier object

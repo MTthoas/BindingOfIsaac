@@ -32,6 +32,8 @@
 #include "menu.h"
 #include "game.h"
 #include "shoot.h"
+#include "lectureFichiers.h"
+
 
 void gestionGame(Donjon * d);
 
@@ -122,9 +124,9 @@ void gestionGame(Donjon * d) {
 		}
         //Faire spawn un Mooter (mob)
         if (c == 'm') {
-			char* name="Mooter"; float hpMax=5,idMonster=1,shoot=1,flight=0,ss=1;
-            Monster * Mooter = spawnMonster(d, name, hpMax, idMonster, shoot, flight, ss);
-            shootParams->monster = Mooter;
+            ListeMonster * listMonster = fichierMonsterToListeMonster();
+            Monster * monster = getMonsterById(listMonster, 9);
+            spawnMonster(d, monster);
 		}
 
         

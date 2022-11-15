@@ -26,3 +26,14 @@ void uppercase(char string[255]) {
         i += 1;
     }
 }
+
+void uppercaseSingle(char string) {
+    char c = string;
+    char ecart = 'a' - 'A';
+
+        if(c >= 'a' && c <= 'z') {
+            string = c - ecart;
+        }
+        
+    
+}
