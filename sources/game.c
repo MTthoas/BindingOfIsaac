@@ -122,17 +122,18 @@ void gestionGame(Donjon * d) {
 		if (kbhit()) {
 			c = getchar();
 		}
+        
         //Faire spawn un Mooter (mob)
         if (c == 'm') {
             ListeMonster * listMonster = fichierMonsterToListeMonster();
             Monster * monster = getMonsterById(listMonster, 9);
             spawnMonster(d, monster);
-		}
+        }
 
-        
 		if (c == 'x') {
 			condition = false;
 		}
+        
 
 		if (c != 'e') {
 

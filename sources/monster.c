@@ -33,7 +33,7 @@ void spawnMonster(Donjon* d, Monster * monster){
             monster->positionY = randomPositionY;
             break;
         }   
-    } // TODO la lettre doit correspondre au monstre 
+    } // la lettre doit correspondre au monstre 
     char letterForMonster = monster->name[0];
     uppercaseSingle(letterForMonster);
     d->stages[0].rooms[0].room[monster->positionY][monster->positionX] = letterForMonster;        
