@@ -156,3 +156,30 @@ void askNumberOfRooms(int* nRooms, int max) {
         success = confirmation();
     } while(success != 1);
 }
+
+void askRoomDimensions(int* lines, int* columns) {
+    int success = 0;
+    do {
+        printf("What the HEIGHT of your new room (min 3) ?\n");
+        *lines = readInt();
+        if(*lines < 3) {
+            printf("Please make a bigger room.\n");
+            continue;
+        }
+        printf("Your room will have a height of = %d. Is it correct ? (y/n) \n", *lines);
+        success = confirmation();
+    } while(success != 1);
+
+    success = 0;
+
+    do {
+        printf("What the WIDTH of your new room (min 3) ?\n");
+        *columns = readInt();
+        if(*columns < 3) {
+            printf("Please make a bigger room.\n");
+            continue;
+        }
+        printf("Your room will have a width of = %d. Is it correct ? (y/n) \n", *columns);
+        success = confirmation();
+    } while(success != 1);
+}

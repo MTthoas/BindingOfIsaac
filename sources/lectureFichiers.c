@@ -252,7 +252,7 @@ int getNbLignesFichier(char* chemin_fichier) {
 }
 
 ListeObjets* fichierObjetsToListeObjets() {
-    char* filepath = CHEMIN_FICHIER_OBJETS;
+    char* filepath = "../../resources/items.itbob"; //CHEMIN_FICHIER_OBJETS;
     FILE* fichier = fopen(filepath, "r"); // ouverture fichier
     if(fichier == NULL) { 
         printf("Problème d'ouverture du fichier des objets.\n");

@@ -67,11 +67,12 @@ void menuCreateItem(void){
     printGameBanner();
     printf("-------- CREATE ITEM  --------\n");
 
-    ListeObjets* items = fichierObjetsToListeObjets();
+    //ListeObjets* items = createListeObjets(); ok
+    ListeObjets* items = fichierObjetsToListeObjets(); // segfault wtf ???
+
     if(items == NULL) {
         printf("Couldn't open %s\n.", CHEMIN_FICHIER_OBJETS);
-        printf("Press ENTER to continue\n");
-        getchar();
+        printf("Press 'r' to go back.\n");
         return;
     }
     
@@ -103,8 +104,8 @@ void menuCreateItem(void){
         printf("Could not add the item.\n");
         freeListeObjets(items);
         freeObjet(newItem);
-        printf("Press ENTER to continue\n");
-        getchar();
+        printf("\nPress 'r' to go back\n");
+        return;
     }
 
     printf("New item : ");
@@ -116,14 +117,12 @@ void menuCreateItem(void){
         printf("New item added.\n");
     }     
 
-    printf("\nPress ENTER to continue\n");
-    getchar();
 }
 
 void menuDeleteItem(void) {
     system("clear");
     printGameBanner();
-    printf("-------- Deleting item  --------\n");
+    printf("-------- DELETE ITEM  --------\n");
     
     ListeObjets* items = fichierObjetsToListeObjets();
     if(items == NULL) {
@@ -155,7 +154,7 @@ void menuDeleteItem(void) {
 void menuModifyItem(void){
     system("clear");
     printGameBanner();
-    printf("-------- You chose to modify an item  --------\n");
+    printf("-------- UPDATE ITEM  --------\n");
 
     ListeObjets* items = fichierObjetsToListeObjets();
     if(items == NULL) {
@@ -257,17 +256,59 @@ void menuModifyItem(void){
 void menuCrudRoom(void){
     system("clear");
         printGameBanner();
-        printf("-------- You chose the room's CRUD  --------\n");
-        printf("Press a to add a room\n");
-        printf("Press d to delete a room\n");
-        printf("Press m to modify a room\n");
-        printf("Press b to go back\n");
+        printf("-------- ITEMS MENU  --------\n");
+        printf("Press 's' to see your rooms\n");
+        printf("Press 'a' to add a room\n");
+        printf("Press 'd' to delete a room\n");
+        printf("Press 'm' to modify a room\n");
 
+        printf("\nPress 'b' to go back\n");
 }
-void menuCreateRoom(void){
 
+void menuSeeRooms(void){
     system("clear");
-            printGameBanner();
+    printGameBanner();
+    printf("-------- YOUR ROOMS --------\n");
+
+    FILE* fichier = fopen(CHEMIN_FICHIER_PIECES, "r");
+    afficherFichier(fichier);
+    fclose(fichier);
+
+    printf("\nPress 'r' to go back\n");
+}
+
+void menuCreateRoom(void) {
+    system("clear");
+    printGameBanner();
+    printf("-------- CREATE ITEM  --------\n");
+
+    RoomsList* rooms = roomsFileToRoomsList(); 
+    if(rooms == NULL) {
+        printf("Couldn't open %s\n.", CHEMIN_FICHIER_PIECES);
+        printf("Press 'r' to go back.\n");
+        return;
+    }
+
+    int lines;
+    int columns;
+    askRoomDimensions(&lines, &columns);
+    columns *= 2; // for spaces
+
+    CRUD_Room* newRoom = createEmptyCRUD_Room(lines, columns);
+
+    int res = addCRUD_Room(rooms, newRoom);
+    if(res == 0) {
+        printf("Could not add the item.\n");
+        freeRoomsList(rooms);
+        freeCRUD_Room(newRoom);
+        printf("\nPress 'r' to go back\n");
+        return;
+    }
+    listToRoomsFile(rooms);
+
+    printf("New room created and added : \n");
+    displayCRUD_Room(newRoom);
+
 }
 
 void menuDeleteRoom(void){

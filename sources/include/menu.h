@@ -29,6 +29,6 @@ void optionError(void);
 
 void menuControl(void);
 
-void printGameBanner();
+void printGameBanner(void);
 
 #endif

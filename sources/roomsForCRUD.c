@@ -41,7 +41,11 @@ CRUD_Room* createEmptyCRUD_Room(int lines, int columns) {
     for(int i=0 ; i < lines ; i += 1) {
         for(int j=0 ; j < columns ; j += 1) {
             if(i == 0 || i == lines-1) { // top and bottom
-                map[i][j] = 'W';
+                if(j%2 == 1) {
+                    map[i][j] = ' ';
+                } else {
+                    map[i][j] = 'W';
+                }
             }
 
             else if(j == 0 || j == columns-1) { // left and right
@@ -52,7 +56,8 @@ CRUD_Room* createEmptyCRUD_Room(int lines, int columns) {
                 map[i][j] = ' ';
             }
         }
-    }
+    }   
+    
 
     room->id = 1;
     room->lines = lines;

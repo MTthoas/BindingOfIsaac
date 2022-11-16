@@ -105,6 +105,10 @@ void firstMenu(struct Donjon *d) {
 			    		c3 = getchar();
 			    	}
 			    	switch (c3){
+						case 's':
+			    			menuSeeRooms();
+			    			condition2 = false;
+			    			break;
 			    		case 'a':
 			    			menuCreateRoom();
 			    			condition2 = false;

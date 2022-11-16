@@ -22,7 +22,7 @@ void test_getRoomsListSize(); //ok
 
 
 int main(void) {
-    //test_createEmptyCRUD_Room();
+    test_createEmptyCRUD_Room();
     //test_createCRUD_Room();
     //test_displayCRUD_Room();
     //test_addCRUD_Room();
@@ -292,7 +292,7 @@ void test_createEmptyCRUD_Room() {
     printf("height = %d\n", room->lines);
     printf("width = %d\n", room->columns);
     printf("map = \n");
-    displayCharArray2D(room->map, room->lines, room->columns); 
+    displayCRUD_Room(room); 
 
-    freeCharArray2D(emptyMap, lines, columns);
+    freeCRUD_Room(room);
 }

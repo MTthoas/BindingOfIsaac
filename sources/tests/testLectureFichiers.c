@@ -31,7 +31,7 @@ int main(void) {
     //test_listToRoomsFile();
     //test_roomsFileToRoomsList();
     //test_listeToFichierObjets();
-    //test_fichierToListeObjets();
+    test_fichierToListeObjets();
     //test_extensionType();
     //test_getNbLignesFichier();
 
