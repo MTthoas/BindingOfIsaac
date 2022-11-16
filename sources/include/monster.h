@@ -66,27 +66,14 @@ void spawnMonster(Donjon* d,Monster* monster );
 
     /**
      * @brief Ajouter un monster dans la liste des monsters.
-     * Retourne l'id du nouveau monster, 0 si le monster n'a pas pu être ajouté.
-     * 
-     * CREATE du CRUD
      * 
      * @param listeMonster 
      * @param newMonster 
      */
-    int addMonster(ListeMonster* listeMonster, Monster* newMonster);
-
-    /**
-     * @brief Ajouter un monster dans la liste des monsters.
-     * Retourne l'id du nouvel monster, 0 si l'monster n'a pas pu être ajouté.
-     * 
-     * @param listeMonster 
-     * @param newMonster 
-     */
-    int addMonster(ListeMonster* listeMonster, Monster* newMonster);
+    void addMonster(ListeMonster* listeMonster, Monster* newMonster);
 
     void freeListeMonster(ListeMonster* liste);
     void freeMonster(Monster* monster);
-    int addMonster(ListeMonster* listeMonster, Monster* newMonster);
     Monster* getMonsterById(ListeMonster* liste, int id);
 
     /**

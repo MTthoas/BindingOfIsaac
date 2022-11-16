@@ -19,11 +19,4 @@ char* duplicateString(char*  );
  */
 void uppercase(char string[255]);
 
-/**
- * @brief Met le caractère en majuscule
- * 
- * @param string 
- */
-void uppercaseSingle(char string);
-
 #endif

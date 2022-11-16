@@ -262,14 +262,13 @@ ListeMonster* fichierMonsterToListeMonster() {
     rewind(fichier);
    
     ListeMonster* liste = createListeMonster(); // variables
-    Monster* m;
+    Monster* m = malloc(sizeof(Monster));
     int idMonster = 0;
     char* name = "";
     float hpMax = 0;
-    int shoot;
+    int shoot = 0;
     int ss = 0;
     int flight = 0;
-    int activated = 0;
 
     char buffer[255];
     char* stat = malloc(sizeof(char) * 255); 
@@ -283,7 +282,7 @@ ListeMonster* fichierMonsterToListeMonster() {
 
         if(firstLetter == 'n' || firstLetter == '-' || firstLetter == 'h' || firstLetter == 's' || firstLetter == 's' || firstLetter == 'f' || firstLetter == EOF) {
             if(firstLetter == '-') { 
-                idMonster += 1;
+                idMonster ++;
                 creatingMonster = (creatingMonster) ? 0 : 1;
 
             } else { // construction object
@@ -297,25 +296,23 @@ ListeMonster* fichierMonsterToListeMonster() {
                 } else if((strcmp(stat, "HPMAX") == 0)) {
                     hpMax = atof(value);
                 }  else if((strcmp(stat, "SHOOT") == 0)) {
-                    activated = (strcmp(value, "TRUE\n") == 0);
-                    shoot = activated;
+                    if ((strcmp(value, "TRUE\n") == 0)){   
+                    shoot = 1;
+                    }  
                 } else if((strcmp(stat, "SS") == 0)) {
-                    activated = (strcmp(value, "TRUE\n") == 0);
-                    ss = activated;
+                    if((strcmp(value, "TRUE\n") == 0)){
+                    ss = 1;
+                    }
                 } else if((strcmp(stat, "FLIGHT") == 0)) {
-                    activated = (strcmp(value, "TRUE\n") == 0);
-                    flight = activated;
+                    if((strcmp(value, "TRUE\n") == 0)){
+                    flight = 1;
+                    }
                 }
             }
 
             if(firstLetter == '-' && creatingMonster == 1) { // ajout object
                 m = createMonster(idMonster, name, hpMax, shoot, flight, ss);
                 addMonster(liste, m);
-                name = "";
-                hpMax = 0;
-                ss = 0;
-                flight = 0;
-
                 creatingMonster = (creatingMonster) ? 0 : 1;
             }   
         }

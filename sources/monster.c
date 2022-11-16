@@ -9,9 +9,12 @@
  */
 
 #include <stdio.h>
+#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>     
+
 
 #include "include/monster.h"
 #include "include/mystring.h"
@@ -19,6 +22,20 @@
 #include "Player.h"
 
 
+int getTailleListeMonster(ListeMonster* l) {
+    Monster* courant = l->premier;
+    if(courant == NULL) {
+        return 0;
+    }
+
+    int count = 0;
+    while(courant != NULL) {
+        count += 1;
+        courant = courant->suivant;
+    }
+
+    return count;
+}
 
 void spawnMonster(Donjon* d, Monster * monster){
     srand(time(NULL));
@@ -35,7 +52,7 @@ void spawnMonster(Donjon* d, Monster * monster){
         }   
     } // la lettre doit correspondre au monstre 
     char letterForMonster = monster->name[0];
-    uppercaseSingle(letterForMonster);
+    letterForMonster = toupper(letterForMonster);
     d->stages[0].rooms[0].room[monster->positionY][monster->positionX] = letterForMonster;        
 }
 
@@ -45,21 +62,6 @@ void monsterAttack(Monster* monster, Player* player) {
     if(monster == NULL || player == NULL) {
         return;
     }
-}
-
-int getTailleListeMonster(ListeMonster* l) {
-    Monster* courant = l->premier;
-    if(courant == NULL) {
-        return 0;
-    }
-
-    int count = 0;
-    while(courant != NULL) {
-        count += 1;
-        courant = courant->suivant;
-    }
-
-    return count;
 }
 
 ListeMonster* createListeMonster() {
@@ -101,9 +103,6 @@ Monster* createMonster(int idMonster, char* name, float hpMax, int shoot, int fl
     if(strcmp("", name) == 0) { //nom par défaut
         name = duplicateString("monster");
     }
-    ss = (ss == 0) ? 0 : 1;
-    flight = (flight == 0) ? 0 : 1;
-
     // allocation 
     o->idMonster = idMonster;
     o->name = duplicateString(name);
@@ -116,27 +115,17 @@ Monster* createMonster(int idMonster, char* name, float hpMax, int shoot, int fl
     return o;
 }
 
-int addMonster(ListeMonster* listeMonster, Monster* newMonster){
+void addMonster(struct ListeMonster *listeMonster,Monster* newMonster){
     Monster* courant = listeMonster->premier;
-    int index = 1; //formera l'id du nouvel monster
 
     if(courant == NULL) { // liste vide
-        newMonster->idMonster = index;
-        listeMonster->premier = duplicateMonster(newMonster);
-        return index;
+       listeMonster->premier = duplicateMonster(newMonster);
     }
-
-    while(courant != NULL) { // ajout a la fin de liste
-        index += 1;
+// ??? TODO pourquoi retour vide
+        // ajout a la fin de liste
         if(courant->suivant == NULL) {
-            newMonster->idMonster = index;
             courant->suivant = duplicateMonster(newMonster);
-            return index;
-        }
-        courant = courant->suivant;
-    }
-
-    return 0;
+        }   
 }
 
 Monster* duplicateMonster(Monster* monster) {

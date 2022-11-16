@@ -24,6 +24,7 @@
 #define KRED "\x1B[31m"
 #define KNRM "\x1B[0m"
 #define KCYN  "\x1B[36m"
+#include "include/mystring.h"
 
 #include <time.h>
 #include "Room.h"
@@ -82,31 +83,6 @@ void gestionGame(Donjon * d) {
             }
         }
     }
-
-    printf("\n");
-
-    for (int i = 0; i < d->stages[0].rooms[0].height; i++) {
-                for (int y = 0; y < d->stages[0].rooms[0].width - 1; y++) {
-                    if (y % 2 == 0) {
-
-                        if(d -> stages[0].rooms[0].room[i][y] == 'M'){
-                            printf("%s", KRED);
-                            printf("%c ", d -> stages[0].rooms[0].room[i][y]);
-                            printf("%s", KNRM);
-                        }else if(d-> stages[0].rooms[0].room[i][y] == 'P'){
-                            printf("%s", KCYN);
-                            printf("%c ", d-> stages[0].rooms[0].room[i][y]);
-                            printf("%s", KNRM);
-                        }else{
-                            printf("%c ", d-> stages[0].rooms[0].room[i][y]);
-                        }
-
-                    }
-                }
-                printf("\n");
-
-            }
-
     iterationTest++;   
 	while (condition) {
 
@@ -122,11 +98,58 @@ void gestionGame(Donjon * d) {
 		if (kbhit()) {
 			c = getchar();
 		}
-        
+
         //Faire spawn un Mooter (mob)
         if (c == 'm') {
             ListeMonster * listMonster = fichierMonsterToListeMonster();
-            Monster * monster = getMonsterById(listMonster, 9);
+            Monster * monster1 = getMonsterById(listMonster, 9);
+            //---------------------------------------- 
+            Monster* courant = listMonster->premier;
+            
+            if(listMonster == NULL) {
+                printf("Pas de liste.\n");
+                                 sleep(3);
+
+            }
+
+            
+            while(courant != NULL) { // tant qu'on n'est pas à la fin de la liste 
+               if(courant == NULL) {
+                printf("Pas d'monster\n");
+                 sleep(3);
+            }
+
+                printf("\n");
+                printf("id : %d\n", courant->idMonster);
+                printf("name : %s\n", duplicateString(courant->name));
+                printf("hpMax : %f\n", courant->hpMax);
+                printf("shoot : %d\n", courant->shoot);
+                printf("ss : %d\n", courant->ss);
+                printf("flight : %d\n", courant->flight);
+                printf("\n");
+                courant = courant->suivant;
+                                 sleep(3);
+
+            }
+
+
+             //-------------------------------------
+            Monster* result = listMonster->premier;
+            // printf("%d\n", result->idMonster);
+
+                 sleep(3);
+            (void) result;
+            (void) monster1;
+
+            Monster * o = malloc(sizeof(Monster));
+            o->idMonster = 10;
+            o->name = "test";
+            o->hpMax = 5;
+            o->shoot = 0;
+            o->flight = 0;
+            o->ss = 0;
+            Monster * monster = o;
+
             spawnMonster(d, monster);
         }
 
