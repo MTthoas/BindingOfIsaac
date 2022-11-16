@@ -39,6 +39,7 @@ void firstMenu(struct Donjon *d) {
 		if (etape == true && kbhit()) {
 			c = getchar();
 		}
+
 		if (c == 'x') {
 			condition = false;
 		}
@@ -48,7 +49,6 @@ void firstMenu(struct Donjon *d) {
 			case 'g':							
 				gestionGame(d);
 				menu_init();
-
 			break;
 			
 			case 'i':
@@ -72,21 +72,21 @@ void firstMenu(struct Donjon *d) {
 			    			menuCreateItem();
 			    			condition2 = false;
 			    			break;
+
 			    		case 'd':
 			    			menuDeleteItem();
 			    			condition2 = false;
-    
 			    			break;
+
 			    		case 'm':
 			    			menuModifyItem();
 			    			condition2 = false;
-    
 			    			break;
+
                         case 'b':
                             menu_init();
                             condition2 = false;
                             break;
-    
 			    	}
                     etape = true;
 			    }

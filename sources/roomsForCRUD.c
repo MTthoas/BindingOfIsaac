@@ -21,7 +21,7 @@ CRUD_Room* createCRUD_Room(int lines, int columns, char** map){
 
     room->id = 1;
     room->lines = lines;
-    room->columns = columns;
+    room->columns = columns; //because of spaces
     room->map = map;
     room->next = NULL;
 
@@ -91,8 +91,13 @@ void displayCRUD_Room(CRUD_Room* room) {
         return;
     }
 
-    printf("[%d][%d]%d\n", room->lines, room->columns, room->id);
-    displayCharArray2D(room->map, room->lines, room->columns);
+    printf("[%d|%d]%d\n", room->lines, room->columns/2, room->id); // columns / 2 because of spaces
+
+    for(int i = 0 ; i < room->lines ; i += 1) {
+        for(int j = 0 ; j < room->columns ; j += 1) {
+            printf("%c",room->map[i][j]);
+        }
+    }
 }
 
 void displayRoomsList(RoomsList* rooms) {

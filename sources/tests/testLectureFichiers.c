@@ -24,13 +24,12 @@ void test_extensionType(); //ok
 void test_getNbLignesFichier(); //ok
 void test_fichierToListeObjets(); //ok
 void test_listeToFichierObjets(); //ok
-
-void test_parseListFromRoomsFile();
-void test_listToRoomsFile();
+void test_roomsFileToRoomsList(); //ok
+void test_listToRoomsFile(); //ok
 
 int main(void) {
-    test_parseListFromRoomsFile();
-
+    //test_listToRoomsFile();
+    //test_roomsFileToRoomsList();
     //test_listeToFichierObjets();
     //test_fichierToListeObjets();
     //test_extensionType();
@@ -39,9 +38,17 @@ int main(void) {
     return 0;
 }
 
-void test_parseListFromRoomsFile() {
-    printf("[TEST] parseListFromRoomsFile() :\n\n");
-    RoomsList* rooms = parseListFromRoomsFile();
+void test_listToRoomsFile() {
+    printf("[TEST] listToRoomsFile() :\n\n");
+    RoomsList* rooms = roomsFileToRoomsList();
+    listToRoomsFile(rooms);
+    printf("Check the test.rtbob file ;)\n");
+}
+
+void test_roomsFileToRoomsList() {
+    printf("[TEST] roomsFileToRoomsList() :\n\n");
+    RoomsList* rooms = roomsFileToRoomsList();
+    displayRoomsList(rooms);
 }
 
 void test_listeToFichierObjets() {

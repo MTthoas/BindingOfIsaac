@@ -83,9 +83,9 @@
 
     /**
      * @brief Parses the .rtbob file and returns a pointer to RoomsList, handlable with functions written in roomsForCRUD.h
-     * @return RoomsList 
+     * @return RoomsList pointer, NULL if failure (eg : file corrupted)
      */
-    RoomsList* parseListFromRoomsFile();
+    RoomsList* roomsFileToRoomsList();
 
     /**
      * @brief Writes into the .rtbob file thanks to the given RoomsList pointer parameter
@@ -93,5 +93,15 @@
      * @return 0 if problem encountered, 1 otherwise
      */
     int listToRoomsFile(RoomsList*);
+
+    /**
+     * @brief Get the number of lines and columns from a buffer that contains this information.
+     * 
+     * @param buffer 
+     * @param ptr_lines 
+     * @param ptr_columns 
+     * @return int 1 if success, 0 otherwise
+     */
+    int parseRoomInfo(char* buffer, int* ptr_lines, int* ptr_columns);
 
 #endif //LECTURE_FICHIERS_H

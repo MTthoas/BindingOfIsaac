@@ -97,4 +97,9 @@ void askFlight(int* flight);
  */
 void clearSTDIN();
 
+/**
+ * @brief Asks the user how many rooms does he want to load during the game
+ */
+void askNumberOfRooms(int* nRooms, int max);
+
 #endif // USER_INPUT_H

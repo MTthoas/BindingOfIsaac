@@ -45,6 +45,8 @@ void menuCrudItem(void) {
         printf("Press a to add an item\n");
         printf("Press d to delete an item\n");
         printf("Press m to modify an item\n");
+
+        printf("\nPress 'r' to go back\n");
 }
 
 void menuSeeItems(void) {
@@ -55,16 +57,15 @@ void menuSeeItems(void) {
     FILE* fichier = fopen(CHEMIN_FICHIER_OBJETS, "r");
     afficherFichier(fichier);
     fclose(fichier);
-    
-    printf("\nPress ENTER to continue ...\n");
-    getchar();
-    return;
+
+    printf("\nPress 'r' to go back\n");
+
 }
 
 void menuCreateItem(void){
     system("clear");
     printGameBanner();
-    printf("-------- Creating item  --------\n");
+    printf("-------- CREATE ITEM  --------\n");
 
     ListeObjets* items = fichierObjetsToListeObjets();
     if(items == NULL) {
@@ -73,7 +74,7 @@ void menuCreateItem(void){
         getchar();
         return;
     }
-
+    
     char name[20];
     askName(name);
 

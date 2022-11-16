@@ -44,12 +44,12 @@
     /**
      * @brief Create a CRUD_Room object with the given elements
      * 
-     * @param height 
-     * @param width 
+     * @param lines 
+     * @param columns should be x2 because of spaces
      * @param roomElements 
      * @return CRUD_Room* 
      */
-    CRUD_Room* createCRUD_Room(int height, int width, char** roomElements);
+    CRUD_Room* createCRUD_Room(int lines, int columns, char** roomElements);
 
     /**
      * @brief Create a CRUD_Room with only doors and walls

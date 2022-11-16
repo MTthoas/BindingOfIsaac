@@ -11,14 +11,55 @@
 #include "include/lectureFichiers.h"
 #include "include/array.h"
 #include "include/mystring.h"
+#include "include/userInput.h"
 
+#include <ctype.h>
 #include <string.h>
 
-RoomsList* parseListFromRoomsFile() {
-    char* filepath = "../../resources/room.rtbob"; //CHEMIN_FICHIER_OBJETS;
+int listToRoomsFile(RoomsList* rooms) {
+    char* filepath = CHEMIN_FICHIER_PIECES;
+    FILE* file = fopen(filepath, "w+"); 
+    if(file == NULL) { 
+        printf("Unable to open room.rtbob. Path : %s\n", filepath);
+        return 0;
+    }
+
+    char* buffer_out = malloc(sizeof(char) * 256);
+    
+    int numRooms;
+    int listSize = getRoomsListSize(rooms);
+    if(listSize == 0) {
+        return 0; // no rooms
+    }
+    askNumberOfRooms(&numRooms, listSize);
+    sprintf(buffer_out, "{%d}\n", numRooms);
+    fwrite(buffer_out, sizeof(char), strlen(buffer_out), file);
+
+    CRUD_Room* current = rooms->firstRoom;
+    while(current != NULL) {
+        for(int i = 0 ; i < current->lines ; i += 1) {
+            if(i==0) {
+                sprintf(buffer_out, "[%d|%d]%d\n", current->lines, current->columns, current->id);
+                fwrite(buffer_out, sizeof(char), strlen(buffer_out), file);
+            }
+            
+            sprintf(buffer_out, "%s", current->map[i]);
+            fwrite(buffer_out, sizeof(char), strlen(buffer_out), file);
+        }
+        current = current->next;
+    }
+
+    fclose(file);
+    free(buffer_out);
+    freeRoomsList(rooms);
+    return 1;
+}
+
+RoomsList* roomsFileToRoomsList() {
+    char* filepath = CHEMIN_FICHIER_PIECES;
     FILE* file = fopen(filepath, "r"); 
     if(file == NULL) { 
-        printf("Unable to open rooms.rtbob. Path : %s\n", filepath);
+        printf("Unable to open room.rtbob. Path : %s\n", filepath);
         return NULL;
     }
 
@@ -26,20 +67,60 @@ RoomsList* parseListFromRoomsFile() {
 
     // to create rooms
     RoomsList* rooms = createRoomsList();
-    CRUD_Room r;
+    CRUD_Room* r;
     int lines = 0;
     int columns = 0;
-    char** map = createCharArray2D(lines, columns);
+    char** map;
+    char firstLetter;
 
     // to parse file
     char buffer[255];
-
     while(fgets(buffer, 255, file)) {
-        printf("%s", buffer);
-    }
+        firstLetter = toupper(buffer[0]);
+        
+        if(firstLetter == '[') { // new room
+            parseRoomInfo(buffer, &lines, &columns);
+            columns *= 2; // because of spaces
+                map = createCharArray2D(lines, columns);
+            fgets(buffer, 255, file); // skip [9|15]1 line
 
-    return NULL;
+            for(int i = 0 ; i < lines ; i += 1) { // fill map
+                for(int j = 0 ; j < columns ; j +=1) {
+                    //printf("%c", buffer[j]);
+                    map[i][j] = buffer[j];
+                }
+                fgets(buffer, 255, file);
+            }          
+
+            r = createCRUD_Room(lines, columns, map);
+            addCRUD_Room(rooms, r);
+            fseek(file, -strlen(buffer), SEEK_CUR); // go back one line
+        } // if
+        
+    } // while
+
+    fclose(file);
+    return rooms;
 }
+
+int parseRoomInfo(char* buffer, int* ptr_lines, int* ptr_columns) {
+    char* original;
+    char* token;
+    char* theRest;
+
+    original = strdup(buffer);
+    theRest = original;
+    token = strtok_r(theRest, "|", &theRest);
+
+    char* lines = token + 1;
+    *ptr_lines = atoi(lines);
+
+    token = strtok_r(theRest, "]", &theRest);
+    *ptr_columns = atoi(token);
+    
+    return 0;
+}
+
 
 int getNombreObjets(FILE* fichierObjets){
     char token[256];

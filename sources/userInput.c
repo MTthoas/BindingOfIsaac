@@ -142,3 +142,17 @@ void askFlight(int* flight) {
         success = confirmation();
     } while(success != 1);
 }
+
+void askNumberOfRooms(int* nRooms, int max) {
+    int success = 0;
+     do {
+        printf("How many rooms do you want to load during the game (max %d)?\n", max);
+        *nRooms = readInt();
+        if(*nRooms > max) {
+            printf("You only created %d rooms.\n", max);
+            continue;
+        }
+        printf("%d rooms. Is that correct (y/n) ? \n", *nRooms);
+        success = confirmation();
+    } while(success != 1);
+}
