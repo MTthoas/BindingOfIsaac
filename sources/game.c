@@ -302,6 +302,25 @@ void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id )
 
 }
 
+void InitialiseBossRoom(Donjon * d, int stage, int id){
+
+    for(int i = 0; i < d->stages[stage].rooms[id].height; i++){
+        for(int y = 0; y < d->stages[stage].rooms[id].width; y++){
+            if (y % 2 == 0) {
+                if(i == d->stages[stage].rooms[id].height / 2 && y == d->stages[stage].rooms[id].width / 2){
+                    d->stages[stage].rooms[id].room[i][y] = 'B';
+                }
+            }
+
+        }
+            
+    }
+
+
+   
+
+}
+
 void gestionGame(Donjon * d, int stage, int * change) {
     
     int NumberOfRoomsInt;
@@ -311,6 +330,8 @@ void gestionGame(Donjon * d, int stage, int * change) {
     int *pId = &id;
     int hp = 100;
     int *pHp = &hp;
+    int changeOfRoom = 1;
+    int chargeBoss = 0;
 
     int iteration = 0;
     bool condition = true;
@@ -342,6 +363,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
 
 
 
+
 	while (condition) {
 
         SDL_Delay(35);
@@ -358,96 +380,111 @@ void gestionGame(Donjon * d, int stage, int * change) {
 		}
 
 		if (c != 'e') {
-
+ 
 			system("clear");
 
             switch (c) {
 				case 'z':
 
-					if (d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] == ' ' || d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] == 'N' ) {
-						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
-						player->positionY--;
-                       if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N'){
-                            * change = 1;
-                            break;
-                        }
-                        d->stages[stage].rooms[id].room[player->positionY][player->positionX] = 'P';
-						player->directionView = 'z';
+                    if(d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] != 'W' ){
 
-                        if(d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] == 'D'){
-                                axeY--;
+                        d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
+                        player->positionY--;
 
-                                    for(int i = 0; i < d->stages[stage].rooms[id].height; i++){
-                                        for(int y = 0; y < d->stages[stage].rooms[id].width; y++){
-                                            if(d->stages[stage].rooms[id].room[i][y] == 'P'){
-                                                d->stages[stage].rooms[id].room[i][y] = ' ';
-                                            }
-                                        }
-                                    }
-                                
-                                player->positionY = d->stages[stage].rooms[id].height - 2;
-
-                    
-
-					}
-                    }
-					break;
-
-				case 's':
-
-					if (d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] == ' ' || d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] == 'N' ) {
-						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
-						player->positionY++;
                         if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N'){
                             * change = 1;
                             break;
                         }
-						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = 'P';
-						player->directionView = 's';
+                        
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B'){
+                            axeY--;
 
-                        if(d->stages[stage].rooms[id].room[player->positionY+1][player->positionX] == 'D'){
-                                axeY++;
-
-                                    for(int i = 0; i < d->stages[stage].rooms[id].height; i++){
+                             for(int i = 0; i < d->stages[stage].rooms[id].height; i++){
                                         for(int y = 0; y < d->stages[stage].rooms[id].width; y++){
                                             if(d->stages[stage].rooms[id].room[i][y] == 'P'){
                                                 d->stages[stage].rooms[id].room[i][y] = ' ';
                                             }
                                         }
                                     }
-                                   
-                                player->positionY = 1;
+
+                            player->positionY = d->stages[stage].rooms[id].height - 2;
+                            changeOfRoom = 1;
+
+                          
+                           
+                         
+                        }else{
+
+                             d->stages[stage].rooms[id].room[player->positionY][player->positionX] = 'P';
+						    player->directionView = 'd';
+
                         }
 
-                  
+                    }
+
+					break;
+
+				case 's':
+
+					if (d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] != 'W') {
+
+						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
+						player->positionY++;
                         
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N'){
+                            * change = 1;
+                            break;
+                        }
+
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B'){
+                                axeY++;
+
+                                 for(int i = 0; i < d->stages[stage].rooms[id].height; i++){
+                                        for(int y = 0; y < d->stages[stage].rooms[id].width; y++){
+                                            if(d->stages[stage].rooms[id].room[i][y] == 'P'){
+                                                d->stages[stage].rooms[id].room[i][y] = ' ';
+                                            }
+                                        }
+                                    }
+
+                                 player->positionY = 1;
+                                 changeOfRoom = 1;
+
+                              
+                           
+                               
+                       }else{
+
+                             d->stages[stage].rooms[id].room[player->positionY][player->positionX] = 'P';
+						    player->directionView = 's';
+
+                        }
 
 					}
 					break;
 
 				case 'q':
 
-					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] == ' ' || d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] == 'N') {
+					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] != 'W') {
+
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
 						player->positionX -= 2;
+
                         if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N'){
                             * change = 1;
                             break;
                         }
-						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = 'P';
-						player->directionView = 'q';
-
-                           if(d->stages[stage].rooms[id].room[player->positionY][player->positionX - 1] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] == 'D' ){                                                                
+					
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX ] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B'){                                                                
                                 axeX--;
 
-                                for(int i = 0; i < d->stages[stage].rooms[id].height; i++){
-                                    for(int y = 0; y < d->stages[stage].rooms[id].width; y++){
-                                        if(d->stages[stage].rooms[id].room[i][y] == 'P'){
-                                            d->stages[stage].rooms[id].room[i][y] = ' ';
+                                 for(int i = 0; i < d->stages[stage].rooms[id].height; i++){
+                                        for(int y = 0; y < d->stages[stage].rooms[id].width; y++){
+                                            if(d->stages[stage].rooms[id].room[i][y] == 'P'){
+                                                d->stages[stage].rooms[id].room[i][y] = ' ';
+                                            }
                                         }
                                     }
-                                }
-                           
                            
                                 if((d->stages[stage].rooms[id].width - 3) % 2 == 0){
                                     player->positionX = d->stages[stage].rooms[id].width - 5;
@@ -455,40 +492,58 @@ void gestionGame(Donjon * d, int stage, int * change) {
                                     player->positionX = d->stages[stage].rooms[id].width - 4;
                                 }
 
+                                changeOfRoom = 1;
+                           
 
-                            }
+                        }else{
+
+                             d->stages[stage].rooms[id].room[player->positionY][player->positionX] = 'P';
+						    player->directionView = 'q';
+
+                        }
+
 					}
-					break;
+				
+                break;
                     
 				case 'd':
 
-					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] == ' ' || d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] == 'N') {
+					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] != 'W') {
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
 						player->positionX += 2;
                         if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N'){
                             * change = 1;
                             break;
                         }
-						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = 'P';
-						player->directionView = 'd';
-
-                           if(d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX + 1] == 'D'){
+				
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B'){
                                 axeX++;
 
-                                    for(int i = 0; i < d->stages[stage].rooms[id].height; i++){
+                                 for(int i = 0; i < d->stages[stage].rooms[id].height; i++){
                                         for(int y = 0; y < d->stages[stage].rooms[id].width; y++){
                                             if(d->stages[stage].rooms[id].room[i][y] == 'P'){
                                                 d->stages[stage].rooms[id].room[i][y] = ' ';
                                             }
                                         }
                                     }
+                                
                            
                                 player->positionX = 2;
+                                changeOfRoom = 1;
 
-                            }
+                             
+
+                        }else{
+
+                             d->stages[stage].rooms[id].room[player->positionY][player->positionX] = 'P';
+						    player->directionView = 'd';
+
+                        }
+
 
                         
 					}
+                
                 break;
 			}
 
@@ -501,11 +556,22 @@ void gestionGame(Donjon * d, int stage, int * change) {
                 printf("\n");
             }
            
-
-            checkName(d, NumberOfRoomsInt, stage, axeX, axeY, id);
-            *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);                  
-            OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
-            (void)*pHp;
+            if(changeOfRoom == 1){
+                *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);                  
+                OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
+                checkName(d, NumberOfRoomsInt, stage, axeX, axeY, id);
+                (void)*pHp;
+                
+                changeOfRoom = 0;
+            }
+            
+            if(d->stages[stage].rooms[id].name == 'B'){
+                if(chargeBoss == 0){
+                    InitialiseBossRoom(d, stage, id);      
+                    chargeBoss = 1;
+                }
+                    
+            }
     
 
             printf("Axe Position X : %d / and Position Y : %d\n", axeX, axeY);
@@ -538,10 +604,28 @@ void gestionGame(Donjon * d, int stage, int * change) {
                 condition = false;
             }
 
+            printf("reload : %d\n",shootParams->reload);
+            if (shootParams->reload == 1){
+            	pthread_t t1;
+            	pthread_create(&t1, NULL, bangishard, shootParams);
+            }
+
             continue;
         }
 
     }
+
+
+    // (void)condition;
+    // (void)c;
+    // (void)iteration;
+    // (void)chargeBoss;
+    // (void)changeOfRoom;
+    // (void)pHp;
+    // (void)pId;
+    // (void)axeX;
+    // (void)axeY;
+    // (void)change;
 
     free(player);
     free(shootParams);

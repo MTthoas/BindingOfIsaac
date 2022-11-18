@@ -42,10 +42,12 @@ void InitialisationGame(Donjon * d, int stageNum) {
         //  if(stageNum == 0){
         InitialiseRoom(d, stageNum, NumberOfRoomsInt);
 
-        int * randomNumberRooms = RandomBetweenRange(NumberOfRoomsInt, 1);
+        int * randomNumberRooms = RandomArrayForAttribution(NumberOfRoomsInt);
         d->stages[stageNum].randomNumberRooms = malloc(sizeof(int) * NumberOfRoomsInt);
 
         for (int y = 0; y < NumberOfRoomsInt; y++) {
+            
+            printf("Salle %d : %d\n", y, randomNumberRooms[y]);
 
             d->stages[stageNum].randomNumberRooms[y] = randomNumberRooms[y];	
 
@@ -68,9 +70,6 @@ void InitialisationGame(Donjon * d, int stageNum) {
                     d->stages[stageNum].rooms[y].roomUsed = 0;
                     d->stages[stageNum].rooms[y].id = d->stages[stageNum].randomNumberRooms[y];
 
-                }else{
-
-                    d->stages[stageNum].rooms[y].id = d->stages[stageNum].randomNumberRooms[0];;
                 }
 
             }
@@ -807,6 +806,47 @@ int NowRoomIsUsed(struct Donjon *d, int NumberOfRoomsInt, int id) {
 
     return 0;
 
+}
+
+int * RandomArrayForAttribution(int number){
+
+    int * tab = malloc(sizeof(int)* number);
+    int newNumber = 0;
+    int iteration = 1;
+
+    if(number == 1) {
+        tab[0] = 0;
+        return tab;
+    }
+
+    tab[0] = 0;
+
+    while(1) {
+            
+        int AlreadyInTab = 0;
+        newNumber = rand() % number+1;
+
+           // Tant que le nombre est dans tab, on re-génère la variable random.
+
+            for(int i = 0; i < number; i++) {
+                if(tab[i] == newNumber) {
+                    AlreadyInTab++;
+                }
+            }
+
+            if(AlreadyInTab == 0) {
+                tab[iteration] = newNumber;
+                iteration++;
+            }else{
+                continue;
+            }
+
+            if(iteration == number) {
+                break;
+            }
+        }
+
+    return tab;
 }
 
 int * RandomBetweenRange(int number, int zero){

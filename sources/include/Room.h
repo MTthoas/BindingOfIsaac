@@ -54,6 +54,7 @@ typedef struct Donjon Donjon;
 
 // void newRooms(Room * s, RoomInSpace * v);
 
+int * RandomArrayForAttribution(int number);
 void InitialisationGame(Donjon * d, int stageNum);
 void gestionGame(Donjon * d, int stage, int * change);
 int numberOfRooms();
