@@ -43,38 +43,38 @@ int kbhit(void) {
 	return 0;
 }
 
-void gestionPositionPlayer(struct Donjon *d,struct Player *player, int c){
+void gestionPositionPlayer(struct Donjon *d,struct Player *player, int stage, int c){
 
 			switch (c) {
 				case 'z':
-					if (d->stages[0].rooms[0].room[player->positionY - 1][player->positionX] != 'W' && d->stages[0].rooms[0].room[player->positionY - 1][player->positionX] != 'D') {
-						d->stages[0].rooms[0].room[player->positionY][player->positionX] = ' ';
+					if (d->stages[stage].rooms[0].room[player->positionY - 1][player->positionX] != 'W' && d->stages[stage].rooms[0].room[player->positionY - 1][player->positionX] != 'D') {
+						d->stages[stage].rooms[0].room[player->positionY][player->positionX] = ' ';
 						player->positionY--;
-						d->stages[0].rooms[0].room[player->positionY][player->positionX] = 'P';
+						d->stages[stage].rooms[0].room[player->positionY][player->positionX] = 'P';
 						player->directionView = 'z';
 					}
 					break;
 				case 's':
-					if (d->stages[0].rooms[0].room[player->positionY + 1][player->positionX] != 'W' && d->stages[0].rooms[0].room[player->positionY + 1][player->positionX] != 'D') {
-						d->stages[0].rooms[0].room[player->positionY][player->positionX] = ' ';
+					if (d->stages[stage].rooms[0].room[player->positionY + 1][player->positionX] != 'W' && d->stages[stage].rooms[0].room[player->positionY + 1][player->positionX] != 'D') {
+						d->stages[stage].rooms[0].room[player->positionY][player->positionX] = ' ';
 						player->positionY++;
-						d->stages[0].rooms[0].room[player->positionY][player->positionX] = 'P';
+						d->stages[stage].rooms[0].room[player->positionY][player->positionX] = 'P';
 						player->directionView = 's';
 					}
 					break;
 				case 'q':
-					if (d->stages[0].rooms[0].room[player->positionY][player->positionX - 2] != 'W' && d->stages[0].rooms[0].room[player->positionY][player->positionX - 2] != 'D') {
-						d->stages[0].rooms[0].room[player->positionY][player->positionX] = ' ';
+					if (d->stages[stage].rooms[0].room[player->positionY][player->positionX - 2] != 'W' && d->stages[stage].rooms[0].room[player->positionY][player->positionX - 2] != 'D') {
+						d->stages[stage].rooms[0].room[player->positionY][player->positionX] = ' ';
 						player->positionX -= 2;
-						d->stages[0].rooms[0].room[player->positionY][player->positionX] = 'P';
+						d->stages[stage].rooms[0].room[player->positionY][player->positionX] = 'P';
 						player->directionView = 'q';
 					}
 					break;
 				case 'd':
-					if (d->stages[0].rooms[0].room[player->positionY][player->positionX + 2] != 'W' && d->stages[0].rooms[0].room[player->positionY][player->positionX + 2] != 'D') {
-						d->stages[0].rooms[0].room[player->positionY][player->positionX] = ' ';
+					if (d->stages[stage].rooms[0].room[player->positionY][player->positionX + 2] != 'W' && d->stages[stage].rooms[0].room[player->positionY][player->positionX + 2] != 'D') {
+						d->stages[stage].rooms[0].room[player->positionY][player->positionX] = ' ';
 						player->positionX += 2;
-						d->stages[0].rooms[0].room[player->positionY][player->positionX] = 'P';
+						d->stages[stage].rooms[0].room[player->positionY][player->positionX] = 'P';
 						player->directionView = 'd';
 					}
 			}

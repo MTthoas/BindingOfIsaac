@@ -2,7 +2,7 @@
 #define H_ROOM
 
 #define NUMBER_ROOM_MAX 30
-#define NUMBER_STAGES_MAX 1
+#define NUMBER_STAGES_MAX 10
 
 // Structure Donjon
 struct Donjon{
@@ -24,6 +24,7 @@ struct Donjon{
 
         // Structure Salles
         struct Room{
+            char name;
             int id;
             char** room;
             int AxeX;
@@ -31,11 +32,7 @@ struct Donjon{
             int number;
             int width;
             int height;
-            int VoisinRight;
-            int VoisinLeft;
             char * Doors;
-            int VoisinBottom;
-            int VoisinTop;
             int numberOfDoors;
             int doorTop;
             int doorBottom; 
@@ -57,16 +54,17 @@ typedef struct Donjon Donjon;
 
 // void newRooms(Room * s, RoomInSpace * v);
 
-void InitialisationGame(Donjon * d);
+void InitialisationGame(Donjon * d, int stageNum);
+void gestionGame(Donjon * d, int stage, int * change);
 int numberOfRooms();
-int PickRoomNotUsed(struct Donjon * d, int NumberOfRoomsInt);
+int PickRoomNotUsed(struct Donjon * d, int NumberOfRoomsInt, int stage);
 void newStageByNumber(struct Donjon * d, int stage, int numberOfRooms);
 void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms);
 char ** RoomByNumber(int height, int length, int number);
 int NumberOfDoorsByRoom(char ** s, int height, int width);
 int * RandomBetweenRange(int number, int zero);
 int NowRoomIsUsed(struct Donjon *d, int NumberOfRoomsInt, int id);
-void InitialisationGameByStagesOptionsForArms(Donjon * d);
+void InitialisationGameByStagesOptionsForArms(Donjon * d, int stage);
 void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms);
 
 

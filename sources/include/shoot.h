@@ -19,6 +19,6 @@ struct ShootParams {
 typedef struct ShootParams ShootParams;
 
 
-void* bangishard(void *ShootParams);
+void* bangishard(void *ShootParams, int stage);
 
 #endif

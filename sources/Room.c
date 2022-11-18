@@ -11,14 +11,14 @@
 /* Prototypes */
 
 int numberOfRooms();
-int PickRoomNotUsed(struct Donjon * d, int NumberOfRoomsInt);
+int PickRoomNotUsed(struct Donjon * d, int NumberOfRoomsInt, int stage);
 void newStageByNumber(struct Donjon * d, int stage, int numberOfRooms);
 void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms);
 char ** RoomByNumber(int height, int length, int number);
 int NumberOfDoorsByRoom(char ** s, int height, int width);
 int * RandomBetweenRange(int number, int zero);
 int NowRoomIsUsed(struct Donjon *d, int NumberOfRoomsInt, int id);
-void InitialisationGameByStagesOptionsForArms(Donjon * d);
+void InitialisationGameByStagesOptionsForArms(Donjon * d, int stage);
 void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms);
 
 /**
@@ -26,56 +26,56 @@ void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms);
  * 
  */
 
-void InitialisationGame(Donjon * d) {
+void InitialisationGame(Donjon * d, int stageNum) {
 
     srand(time(NULL));
-
-    // On boucle sur le nombre d'étage
-
-    for (int i = 0; i < NUMBER_STAGES_MAX; i++) {
 
         int NumberOfRoomsInt = numberOfRooms();
         // NumberOfRoomsInt = NumberOfRoomsInt + 1;
 
         // printf("Stage : %d\n", i+1);
-        // printf("Nombre de salles : %d\n\n", NumberOfRoomsInt);
+        printf("Nombre de salles : %d\n\n", NumberOfRoomsInt);
 
+        newStageByNumber(d, stageNum, NumberOfRoomsInt+1);
+    
 
-        newStageByNumber(d, i, NumberOfRoomsInt+1);
-        InitialiseRoom(d, i, NumberOfRoomsInt);
+        //  if(stageNum == 0){
+        InitialiseRoom(d, stageNum, NumberOfRoomsInt);
 
         int * randomNumberRooms = RandomBetweenRange(NumberOfRoomsInt, 1);
-        d->stages[i].randomNumberRooms = malloc(sizeof(int) * NumberOfRoomsInt);
+        d->stages[stageNum].randomNumberRooms = malloc(sizeof(int) * NumberOfRoomsInt);
 
         for (int y = 0; y < NumberOfRoomsInt; y++) {
 
-            d->stages[i].randomNumberRooms[y] = randomNumberRooms[y];	
+            d->stages[stageNum].randomNumberRooms[y] = randomNumberRooms[y];	
 
         }
 
         // printf("\n");	
 
+        
+
         for (int y = 0; y < NumberOfRoomsInt; y++) {
 
             if(y == 0 ){
-                 d->stages[i].rooms[y].id = 0;
-                 d->stages[i].rooms[y].roomUsed = 0;
+                 d->stages[stageNum].rooms[y].id = 0;
+                 d->stages[stageNum].rooms[y].roomUsed = 1;
 
             }else{
                 
-                if(d->stages[i].randomNumberRooms[y] != 0){
+                if(d->stages[stageNum].randomNumberRooms[y] != 0){
 
-                    d->stages[i].rooms[y].roomUsed = 0;
-                    d->stages[i].rooms[y].id = d->stages[i].randomNumberRooms[y];
+                    d->stages[stageNum].rooms[y].roomUsed = 0;
+                    d->stages[stageNum].rooms[y].id = d->stages[stageNum].randomNumberRooms[y];
 
                 }else{
 
-                    d->stages[i].rooms[y].id = d->stages[i].randomNumberRooms[0];;
+                    d->stages[stageNum].rooms[y].id = d->stages[stageNum].randomNumberRooms[0];;
                 }
 
             }
 
-            //  printf("ID de la salle %d: %d\n", y,d->stages[i].rooms[y].id);
+            //  printf("ID de la salle %d: %d\n", y,d->stages[stageNum].rooms[y].id);
 
         }
 
@@ -91,12 +91,12 @@ void InitialisationGame(Donjon * d) {
                 // Si on est à la moitié de la boucle, on créer un P, la salle principale.
 
                 if(v == NumberOfRoomsInt / 2 && y == NumberOfRoomsInt / 2) {
-                    d->stages[i].stage[v][y] = 'P';     
-                    d->stages[i].id = 1;     
+                    d->stages[stageNum].stage[v][y] = 'P';     
+                    d->stages[stageNum].id = 1;     
 
                     for(int u = 0; u < NumberOfRoomsInt; u++) {
 
-                        int NumberOfDoors = NumberOfDoorsByRoom(d->stages[i].rooms[u].room, d->stages[i].rooms[u].height, d->stages[i].rooms[u].width);
+                        int NumberOfDoors = NumberOfDoorsByRoom(d->stages[stageNum].rooms[u].room, d->stages[stageNum].rooms[u].height, d->stages[stageNum].rooms[u].width);
                            
                             int * array = malloc(sizeof(int *) * NumberOfDoors);
                             array = RandomBetweenRange( NumberOfDoors, 0);
@@ -115,7 +115,7 @@ void InitialisationGame(Donjon * d) {
                                for(int j = 0; j < NumberOfDoors; j++) {
 
                                     int random = randomNumberDoors[j];
-                                    char s = d->stages[i].rooms[u].Doors[random];
+                                    char s = d->stages[stageNum].rooms[u].Doors[random];
 
                                     printf("%c ", s);
 
@@ -123,22 +123,22 @@ void InitialisationGame(Donjon * d) {
                                         
                                        for(int v = 0; v < NumberOfRoomsInt; v++) {
                                            
-                                        //    if(d->stages[i].randomNumberRooms[v])
+                                        //    if(d->stages[stageNum].randomNumberRooms[v])
                                        }
 
                                     } else if(strcmp(&s, "S") == 0) {
-                                        d->stages[i].rooms[u].Doors[random] = 'N';
+                                        d->stages[stageNum].rooms[u].Doors[random] = 'N';
                                     } else if(strcmp(&s, "E") == 0) {
-                                        d->stages[i].rooms[u].Doors[random] = 'W';
+                                        d->stages[stageNum].rooms[u].Doors[random] = 'W';
                                     } else if(strcmp(&s, "W") == 0) {
-                                        d->stages[i].rooms[u].Doors[random] = 'E';
+                                        d->stages[stageNum].rooms[u].Doors[random] = 'E';
                                     }
                                     
                                 }
 
 
                             // printf(" <--- PORTES [%d] / Nombre de portes : %d \n", u+1, NumberOfDoors);
-                            // printf("%d\n", d->stages[i].rooms[u].id = d->stages[i].randomNumberRooms[u]);
+                            // printf("%d\n", d->stages[stageNum].rooms[u].id = d->stages[stageNum].randomNumberRooms[u]);
                                
                                 // for(int x = 0; x < NumberOfDoors; x++) {
                                     
@@ -170,7 +170,7 @@ void InitialisationGame(Donjon * d) {
 
                     // Permet de se placer au centre
                    
-                    if(d->stages[i].stage[v][y] == 'P') {
+                    if(d->stages[stageNum].stage[v][y] == 'P') {
 
                             int * arraySecond = malloc(sizeof(int *) * 100);
                             arraySecond = RandomBetweenRange(100, 0);
@@ -185,7 +185,7 @@ void InitialisationGame(Donjon * d) {
                              
                             for (int y = 0; y < NumberOfRoomsInt; y++) {
 
-                                d->stages[i].rooms[y].roomUsed = 0;
+                                d->stages[stageNum].rooms[y].roomUsed = 0;
 
                             }
 
@@ -194,7 +194,7 @@ void InitialisationGame(Donjon * d) {
 
                             // for(int t = 0; t < NumberOfRoomsInt+1; t++) {
 
-                            //     printf("ID : %d / ",d->stages[i].rooms[t].id);                
+                            //     printf("ID : %d / ",d->stages[stageNum].rooms[t].id);                
 
                             // }
 
@@ -216,16 +216,16 @@ void InitialisationGame(Donjon * d) {
                                 
                                if(arraySecond[j] < 25 && arraySecond[j] > 0 && blockA == 0 && iteration < 3){
 
-                                    numbe = PickRoomNotUsed(d, NumberOfRoomsInt);
+                                    numbe = PickRoomNotUsed(d, NumberOfRoomsInt, stageNum);
                                     // printf("ID OF ROOM : %d\n", numbe);
 
-                                        d->stages[i].stage[v][y-1] = 'R';
+                                        d->stages[stageNum].stage[v][y-1] = 'R';
                                         blockA = 1;
                                         iteration++;
-                                        d->stages[i].rooms[numbe].AxeY = 0;
-                                        d->stages[i].rooms[numbe].AxeX = -1;
+                                        d->stages[stageNum].rooms[numbe].AxeY = 0;
+                                        d->stages[stageNum].rooms[numbe].AxeX = -1;
 
-                                        printf("Axe Y : %d / Axe X : %d\n", d->stages[i].rooms[numbe].AxeY, d->stages[i].rooms[numbe].AxeX);
+                                        printf("Axe Y : %d / Axe X : %d\n", d->stages[stageNum].rooms[numbe].AxeY, d->stages[stageNum].rooms[numbe].AxeX);
 
                                     
 
@@ -233,32 +233,32 @@ void InitialisationGame(Donjon * d) {
 
                                if(arraySecond[j] < 50 && arraySecond[j] > 25 && blockB == 0 && iteration < 3){
 
-                                    numbe = PickRoomNotUsed(d, NumberOfRoomsInt);
+                                    numbe = PickRoomNotUsed(d, NumberOfRoomsInt, stageNum);
                                     // printf("ID OF ROOM : %d\n", numbe);
 
-                                        d->stages[i].stage[v][y+1] = 'R';
+                                        d->stages[stageNum].stage[v][y+1] = 'R';
                                         blockB = 1;
                                         iteration++;
-                                         d->stages[i].rooms[numbe].AxeY = 0;
-                                         d->stages[i].rooms[numbe].AxeX = 1;
+                                         d->stages[stageNum].rooms[numbe].AxeY = 0;
+                                         d->stages[stageNum].rooms[numbe].AxeX = 1;
 
-                                         printf("Axe Y : %d / Axe X : %d\n", d->stages[i].rooms[numbe].AxeY, d->stages[i].rooms[numbe].AxeX);
+                                         printf("Axe Y : %d / Axe X : %d\n", d->stages[stageNum].rooms[numbe].AxeY, d->stages[stageNum].rooms[numbe].AxeX);
 
 
                                }
 
                                if(arraySecond[j] < 75 && arraySecond[j] > 50 && blockC == 0 && iteration < 3){
 
-                                    numbe = PickRoomNotUsed(d, NumberOfRoomsInt);
+                                   numbe = PickRoomNotUsed(d, NumberOfRoomsInt, stageNum);
                                     // printf("ID OF ROOM : %d\n", numbe);
                                         
-                                        d->stages[i].stage[v-1][y] = 'R';
+                                        d->stages[stageNum].stage[v-1][y] = 'R';
                                         blockC = 1;
                                         iteration++;
-                                         d->stages[i].rooms[numbe].AxeY = -1;
-                                         d->stages[i].rooms[numbe].AxeX = 0;
+                                         d->stages[stageNum].rooms[numbe].AxeY = -1;
+                                         d->stages[stageNum].rooms[numbe].AxeX = 0;
 
-                                         printf("Axe Y : %d / Axe X : %d\n", d->stages[i].rooms[numbe].AxeY, d->stages[i].rooms[numbe].AxeX);
+                                         printf("Axe Y : %d / Axe X : %d\n", d->stages[stageNum].rooms[numbe].AxeY, d->stages[stageNum].rooms[numbe].AxeX);
 
                                     
 
@@ -267,16 +267,16 @@ void InitialisationGame(Donjon * d) {
 
                                if(arraySecond[j] < 100 && arraySecond[j] > 75 && blockD == 0 && iteration < 3){
 
-                                    numbe = PickRoomNotUsed(d, NumberOfRoomsInt);
+                                  numbe = PickRoomNotUsed(d, NumberOfRoomsInt, stageNum);
                                     // printf("ID OF ROOM : %d\n", numbe);
 
-                                        d->stages[i].stage[v+1][y] = 'R';
+                                        d->stages[stageNum].stage[v+1][y] = 'R';
                                         blockD = 1;
                                         iteration++;
-                                        d->stages[i].rooms[numbe].AxeY = 1;
-                                        d->stages[i].rooms[numbe].AxeX = 0;
+                                        d->stages[stageNum].rooms[numbe].AxeY = 1;
+                                        d->stages[stageNum].rooms[numbe].AxeX = 0;
 
-                                        printf("Axe Y : %d / Axe X : %d\n", d->stages[i].rooms[numbe].AxeY, d->stages[i].rooms[numbe].AxeX);
+                                        printf("Axe Y : %d / Axe X : %d\n", d->stages[stageNum].rooms[numbe].AxeY, d->stages[stageNum].rooms[numbe].AxeX);
 
                                     
         
@@ -291,7 +291,7 @@ void InitialisationGame(Donjon * d) {
                   
                         // for(int t = 0; t < NumberOfRoomsInt; t++) {
 
-                        //     printf("ROOM UTILISES [%d] : %d\n",t,d->stages[i].rooms[t].roomUsed);                
+                        //     printf("ROOM UTILISES [%d] : %d\n",t,d->stages[stageNum].rooms[t].roomUsed);                
 
                         // }
 
@@ -319,7 +319,7 @@ void InitialisationGame(Donjon * d) {
             int itemRoom = 0;
             int bossRoom = 0;
 
-            for(int t = 1; t <= NumberOfRoomsInt-iteration + 2; t++) {
+            for(int t = 2; t <= NumberOfRoomsInt-iteration + 2; t++) {
                 
                 int iterationRoom = 0;
 
@@ -359,7 +359,7 @@ void InitialisationGame(Donjon * d) {
                     }
 
 
-                    while(d->stages[i].stage[randomHeight][randomLength] != 'R' && d->stages[i].stage[randomHeight][randomLength] != 'I') {
+                    while(d->stages[stageNum].stage[randomHeight][randomLength] != 'R' && d->stages[stageNum].stage[randomHeight][randomLength] != 'I') {
 
                         randomHeight = rand() % NumberOfRoomsInt;
                         randomLength = rand() % NumberOfRoomsInt;
@@ -373,15 +373,15 @@ void InitialisationGame(Donjon * d) {
                         case 0:
 
                             // printf("Random H : %d / Random Length : %d\n", randomHeight, randomLength);
-                            if(d->stages[i].stage[randomHeight][randomLength+1] == ' ' && itemRoom == 0 ){
-                                if(d->stages[i].stage[randomHeight][randomLength+2] == ' ' && d->stages[i].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength+1] == ' ' ){
+                            if(d->stages[stageNum].stage[randomHeight][randomLength+1] == ' ' && itemRoom == 0 ){
+                                if(d->stages[stageNum].stage[randomHeight][randomLength+2] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength+1] == ' ' ){
                                     if(t == NumberOfRoomsInt-iteration ){
-                                        d->stages[i].stage[randomHeight][randomLength+1] = 'I';
+                                        d->stages[stageNum].stage[randomHeight][randomLength+1] = 'I';
                                          itemRoom = 1;
                                        
                                     }else{
                                         
-                                        d->stages[i].stage[randomHeight][randomLength+1] = 'R';
+                                        d->stages[stageNum].stage[randomHeight][randomLength+1] = 'R';
                                       
                                         
                                     }
@@ -391,11 +391,11 @@ void InitialisationGame(Donjon * d) {
                                 }
                             }else{
 
-                                if(d->stages[i].stage[randomHeight][randomLength+2] == ' ' && d->stages[i].stage[randomHeight][randomLength-1] != 'I' && d->stages[i].stage[randomHeight][randomLength+1] == ' '   &&  d->stages[i].stage[randomHeight][randomLength] != 'I'){
-                                    if(d->stages[i].stage[randomHeight][randomLength+2] == ' ' && d->stages[i].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength+1] == ' '
-                                    && d->stages[i].stage[randomHeight+2][randomLength+2] == ' ' && d->stages[i].stage[randomHeight-2][randomLength+2] == ' ' ){
+                                if(d->stages[stageNum].stage[randomHeight][randomLength+2] == ' ' && d->stages[stageNum].stage[randomHeight][randomLength-1] != 'I' && d->stages[stageNum].stage[randomHeight][randomLength+1] == ' '   &&  d->stages[stageNum].stage[randomHeight][randomLength] != 'I'){
+                                    if(d->stages[stageNum].stage[randomHeight][randomLength+2] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength+1] == ' '
+                                    && d->stages[stageNum].stage[randomHeight+2][randomLength+2] == ' ' && d->stages[stageNum].stage[randomHeight-2][randomLength+2] == ' ' ){
                                         if(t == NumberOfRoomsInt-iteration + 1 ){
-                                            d->stages[i].stage[randomHeight][randomLength+1] = 'B';
+                                            d->stages[stageNum].stage[randomHeight][randomLength+1] = 'B';
                                             iterationRoom++;
                                             iterationByRoom++;
                                             bossRoom = 1;
@@ -409,13 +409,13 @@ void InitialisationGame(Donjon * d) {
 
                                             //     switch(selectBoss){
                                             //         case 0:
-                                            //             d->stages[i].stage[Height][Length+1] = 'I';
+                                            //             d->stages[stageNum].stage[Height][Length+1] = 'I';
                                             //         break;
                                             //         case 1:
-                                            //             d->stages[i].stage[Height+1][Length] = 'I';
+                                            //             d->stages[stageNum].stage[Height+1][Length] = 'I';
                                             //         break;
                                             //         case 2:
-                                            //             d->stages[i].stage[Height-1][Length] = 'I';
+                                            //             d->stages[stageNum].stage[Height-1][Length] = 'I';
                                             //         break;
                                             //     }
                                         }
@@ -427,15 +427,15 @@ void InitialisationGame(Donjon * d) {
 
                         case 1:
 
-                            if(d->stages[i].stage[randomHeight][randomLength-1] == ' ' && itemRoom == 0 && d->stages[i].stage[randomHeight][randomLength-1]){
-                                if(d->stages[i].stage[randomHeight][randomLength-2] == ' ' && d->stages[i].stage[randomHeight+1][randomLength-1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength-1] == ' ' ){
+                            if(d->stages[stageNum].stage[randomHeight][randomLength-1] == ' ' && itemRoom == 0 && d->stages[stageNum].stage[randomHeight][randomLength-1]){
+                                if(d->stages[stageNum].stage[randomHeight][randomLength-2] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength-1] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength-1] == ' ' ){
                                     if(t == NumberOfRoomsInt-iteration){
-                                        d->stages[i].stage[randomHeight][randomLength-1] = 'I';
+                                        d->stages[stageNum].stage[randomHeight][randomLength-1] = 'I';
                                        
                                          itemRoom = 1;
                                     }else{
                                         
-                                        d->stages[i].stage[randomHeight][randomLength-1] = 'R';
+                                        d->stages[stageNum].stage[randomHeight][randomLength-1] = 'R';
                                       
         
                                     }
@@ -444,11 +444,11 @@ void InitialisationGame(Donjon * d) {
                                     break;
                                 }
                             }else{
-                                if(d->stages[i].stage[randomHeight][randomLength-1] == ' ' && d->stages[i].stage[randomHeight][randomLength-2] == ' ' &&  d->stages[i].stage[randomHeight][randomLength-1] != 'I'  &&  d->stages[i].stage[randomHeight][randomLength] != 'I'){
-                                    if(d->stages[i].stage[randomHeight][randomLength-2] == ' ' && d->stages[i].stage[randomHeight+1][randomLength-1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength-1] == ' '
-                                     && d->stages[i].stage[randomHeight+2][randomLength-2] == ' ' && d->stages[i].stage[randomHeight-2][randomLength-2] == ' ' ){
+                                if(d->stages[stageNum].stage[randomHeight][randomLength-1] == ' ' && d->stages[stageNum].stage[randomHeight][randomLength-2] == ' ' &&  d->stages[stageNum].stage[randomHeight][randomLength-1] != 'I'  &&  d->stages[stageNum].stage[randomHeight][randomLength] != 'I'){
+                                    if(d->stages[stageNum].stage[randomHeight][randomLength-2] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength-1] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength-1] == ' '
+                                     && d->stages[stageNum].stage[randomHeight+2][randomLength-2] == ' ' && d->stages[stageNum].stage[randomHeight-2][randomLength-2] == ' ' ){
                                          if(t == NumberOfRoomsInt-iteration + 1  ){
-                                            d->stages[i].stage[randomHeight][randomLength-1] = 'B';
+                                            d->stages[stageNum].stage[randomHeight][randomLength-1] = 'B';
                                              iterationRoom++;
                                             iterationByRoom++;
                                             bossRoom = 1;
@@ -466,15 +466,15 @@ void InitialisationGame(Donjon * d) {
 
                         case 2:
 
-                            if(d->stages[i].stage[randomHeight+1][randomLength] == ' ' && itemRoom == 0 ){
-                                    if(d->stages[i].stage[randomHeight+2][randomLength] == ' ' && d->stages[i].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight+1][randomLength-1] == ' ' ){
+                            if(d->stages[stageNum].stage[randomHeight+1][randomLength] == ' ' && itemRoom == 0 ){
+                                    if(d->stages[stageNum].stage[randomHeight+2][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength-1] == ' ' ){
                                         if(t == NumberOfRoomsInt-iteration){
-                                            d->stages[i].stage[randomHeight+1][randomLength] = 'I';
+                                            d->stages[stageNum].stage[randomHeight+1][randomLength] = 'I';
                                           
                                             itemRoom = 1;
                                         }else{
                                             
-                                            d->stages[i].stage[randomHeight+1][randomLength] = 'R';
+                                            d->stages[stageNum].stage[randomHeight+1][randomLength] = 'R';
                                                    
                                             
                                         }
@@ -483,11 +483,11 @@ void InitialisationGame(Donjon * d) {
                                         break;
                                 }
                             }else{
-                                if(d->stages[i].stage[randomHeight+1][randomLength] == ' ' && d->stages[i].stage[randomHeight+2][randomLength] == ' ' && d->stages[i].stage[randomHeight+1][randomLength] != 'I' && d->stages[i].stage[randomHeight][randomLength] != 'I'){
-                                    if(d->stages[i].stage[randomHeight+2][randomLength] == ' ' && d->stages[i].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight+1][randomLength-1] == ' ' 
-                                    && d->stages[i].stage[randomHeight+2][randomLength+2] == ' ' && d->stages[i].stage[randomHeight+2][randomLength-2] == ' ' ){
+                                if(d->stages[stageNum].stage[randomHeight+1][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight+2][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength] != 'I' && d->stages[stageNum].stage[randomHeight][randomLength] != 'I'){
+                                    if(d->stages[stageNum].stage[randomHeight+2][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength-1] == ' ' 
+                                    && d->stages[stageNum].stage[randomHeight+2][randomLength+2] == ' ' && d->stages[stageNum].stage[randomHeight+2][randomLength-2] == ' ' ){
                                         if(t == NumberOfRoomsInt-iteration + 1 ){
-                                            d->stages[i].stage[randomHeight+1][randomLength] = 'B';
+                                            d->stages[stageNum].stage[randomHeight+1][randomLength] = 'B';
                                                 iterationRoom++;
                                                 iterationByRoom++;
                                                 bossRoom = 1;
@@ -499,13 +499,13 @@ void InitialisationGame(Donjon * d) {
 
                                                 // switch(selectBoss){
                                                 //     case 0:
-                                                //         d->stages[i].stage[Height][Length+1] = 'I';
+                                                //         d->stages[stageNum].stage[Height][Length+1] = 'I';
                                                 //     break;
                                                 //     case 1:
-                                                //         d->stages[i].stage[Height+1][Length] = 'I';
+                                                //         d->stages[stageNum].stage[Height+1][Length] = 'I';
                                                 //     break;
                                                 //     case 2:
-                                                //         d->stages[i].stage[Height][Length-1] = 'I';
+                                                //         d->stages[stageNum].stage[Height][Length-1] = 'I';
                                                 //     break;
                                                 // }
                                         }
@@ -518,16 +518,15 @@ void InitialisationGame(Donjon * d) {
 
                         case 3:
 
-                            if(d->stages[i].stage[randomHeight-1][randomLength] == ' ' && itemRoom == 0 ){
-                                if(d->stages[i].stage[randomHeight-2][randomLength] == ' ' && d->stages[i].stage[randomHeight-1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength-1] == ' ' ){
+                            if(d->stages[stageNum].stage[randomHeight-1][randomLength] == ' ' && itemRoom == 0 ){
+                                if(d->stages[stageNum].stage[randomHeight-2][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength+1] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength-1] == ' ' ){
                                    if(t == NumberOfRoomsInt-iteration ){
-                                        d->stages[i].stage[randomHeight-1][randomLength] = 'I';
-                                       
+                                        d->stages[stageNum].stage[randomHeight-1][randomLength] = 'I';
                                          itemRoom = 1;
                                          
                                     }else{
                                         
-                                        d->stages[i].stage[randomHeight-1][randomLength] = 'R';
+                                        d->stages[stageNum].stage[randomHeight-1][randomLength] = 'R';
                                         
                                         
                                     }
@@ -536,11 +535,11 @@ void InitialisationGame(Donjon * d) {
                                     break;
                                 }
                             }else{
-                                if(d->stages[i].stage[randomHeight-1][randomLength] == ' ' && d->stages[i].stage[randomHeight-2][randomLength] == ' ' && d->stages[i].stage[randomHeight-1][randomLength] != 'I' && d->stages[i].stage[randomHeight][randomLength] != 'I'){
-                                    if(d->stages[i].stage[randomHeight-2][randomLength] == ' ' && d->stages[i].stage[randomHeight-1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength-1] == ' ' 
-                                    &&  d->stages[i].stage[randomHeight-2][randomLength+2] == ' ' && d->stages[i].stage[randomHeight-2][randomLength-2] == ' ' ){
+                                if(d->stages[stageNum].stage[randomHeight-1][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight-2][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength] != 'I' && d->stages[stageNum].stage[randomHeight][randomLength] != 'I'){
+                                    if(d->stages[stageNum].stage[randomHeight-2][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength+1] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength-1] == ' ' 
+                                    &&  d->stages[stageNum].stage[randomHeight-2][randomLength+2] == ' ' && d->stages[stageNum].stage[randomHeight-2][randomLength-2] == ' ' ){
                                         if(t == NumberOfRoomsInt-iteration + 1){
-                                            d->stages[i].stage[randomHeight-1][randomLength] = 'B';
+                                            d->stages[stageNum].stage[randomHeight-1][randomLength] = 'B';
                                                 iterationRoom++;
                                                 iterationByRoom++;
                                                 bossRoom = 1;
@@ -552,13 +551,13 @@ void InitialisationGame(Donjon * d) {
 
                                                 // switch(selectBoss){
                                                 //     case 0:
-                                                //         d->stages[i].stage[Height][Length+1] = 'I';
+                                                //         d->stages[stageNum].stage[Height][Length+1] = 'I';
                                                 //     break;
                                                 //     case 1:
-                                                //         d->stages[i].stage[Height-1][Length] = 'I';
+                                                //         d->stages[stageNum].stage[Height-1][Length] = 'I';
                                                 //     break;
                                                 //     case 2:
-                                                //         d->stages[i].stage[Height][Length-1] = 'I';
+                                                //         d->stages[stageNum].stage[Height][Length-1] = 'I';
                                                 //     break;
                                                 // }
                                         }
@@ -599,7 +598,7 @@ void InitialisationGame(Donjon * d) {
                     randomHeight = rand() % NumberOfRoomsInt;
                     randomLength = rand() % NumberOfRoomsInt;
 
-                    while(d->stages[i].stage[randomHeight][randomLength] != 'B') {
+                    while(d->stages[stageNum].stage[randomHeight][randomLength] != 'B') {
 
                         randomHeight = rand() % NumberOfRoomsInt;
                         randomLength = rand() % NumberOfRoomsInt;
@@ -609,7 +608,7 @@ void InitialisationGame(Donjon * d) {
                         //  for (int v = 0; v < NumberOfRoomsInt + 2; v++) {
                         //     for (int y = 0; y < NumberOfRoomsInt + 2; y++) {
 
-                        //         printf("%c ", d->stages[i].stage[v][y]);
+                        //         printf("%c ", d->stages[stageNum].stage[v][y]);
 
                         //     }
                         //     printf("\n");
@@ -621,10 +620,10 @@ void InitialisationGame(Donjon * d) {
                             case 0:
 
                                 // printf("Random H : %d / Random Length : %d\n", randomHeight, randomLength);
-                                if(d->stages[i].stage[randomHeight][randomLength-1] == ' '){
-                                    if(d->stages[i].stage[randomHeight][randomLength-2] == ' ' && d->stages[i].stage[randomHeight+1][randomLength-1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength-1] == ' ' ){
+                                if(d->stages[stageNum].stage[randomHeight][randomLength-1] == ' '){
+                                    if(d->stages[stageNum].stage[randomHeight][randomLength-2] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength-1] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength-1] == ' ' ){
                                 
-                                        d->stages[i].stage[randomHeight][randomLength-1] = 'V';
+                                        d->stages[stageNum].stage[randomHeight][randomLength-1] = 'V';
                                               
                                         RoomPlaced = 1;
                                     }
@@ -634,10 +633,10 @@ void InitialisationGame(Donjon * d) {
 
                             case 1:
 
-                                if(d->stages[i].stage[randomHeight][randomLength+1] == ' '){
-                                    if(d->stages[i].stage[randomHeight][randomLength+2] == ' ' && d->stages[i].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength+1] == ' ' ){
+                                if(d->stages[stageNum].stage[randomHeight][randomLength+1] == ' '){
+                                    if(d->stages[stageNum].stage[randomHeight][randomLength+2] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength+1] == ' ' ){
                                     
-                                        d->stages[i].stage[randomHeight][randomLength+1] = 'V';
+                                        d->stages[stageNum].stage[randomHeight][randomLength+1] = 'V';
                                        
                                             RoomPlaced = 1;
                                         
@@ -648,10 +647,10 @@ void InitialisationGame(Donjon * d) {
 
                             case 2:
 
-                                if(d->stages[i].stage[randomHeight+1][randomLength] == ' '){
-                                        if(d->stages[i].stage[randomHeight+2][randomLength] == ' ' && d->stages[i].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight+1][randomLength-1] == ' ' ){
+                                if(d->stages[stageNum].stage[randomHeight+1][randomLength] == ' '){
+                                        if(d->stages[stageNum].stage[randomHeight+2][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength-1] == ' ' ){
                                             
-                                                d->stages[i].stage[randomHeight+1][randomLength] = 'V';
+                                                d->stages[stageNum].stage[randomHeight+1][randomLength] = 'V';
                                                   
                                                     RoomPlaced = 1;
                                         
@@ -662,10 +661,10 @@ void InitialisationGame(Donjon * d) {
 
                             case 3:
 
-                                if(d->stages[i].stage[randomHeight-1][randomLength] == ' '){
-                                    if(d->stages[i].stage[randomHeight-2][randomLength] == ' ' && d->stages[i].stage[randomHeight-1][randomLength+1] == ' ' && d->stages[i].stage[randomHeight-1][randomLength-1] == ' ' ){
+                                if(d->stages[stageNum].stage[randomHeight-1][randomLength] == ' '){
+                                    if(d->stages[stageNum].stage[randomHeight-2][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength+1] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength-1] == ' ' ){
                                     
-                                            d->stages[i].stage[randomHeight+1][randomLength] = 'V';
+                                            d->stages[stageNum].stage[randomHeight+1][randomLength] = 'V';
                                                
                                                 RoomPlaced = 1;
                             
@@ -689,14 +688,14 @@ void InitialisationGame(Donjon * d) {
             for (int v = 0; v < NumberOfRoomsInt + 2; v++) {
                 for (int y = 0; y < NumberOfRoomsInt + 2; y++) {
 
-                    printf("%c ", d->stages[i].stage[v][y]);
+                    printf("%c ", d->stages[stageNum].stage[v][y]);
 
                 }
                 printf("\n");
             }
 
-        }
-
+        
+        
       
 
 }
@@ -734,7 +733,7 @@ void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms){
             if(d -> stages[stage].stage[i][v] == 'R' && d -> stages[stage].stage[i+1][v] != 'P' && d -> stages[stage].stage[i-1][v] != 'P' && d -> stages[stage].stage[i][v+1] != 'P' && d -> stages[stage].stage[i][v-1] != 'P'){
                 printf("Iteration : %d\n", iteration++);
 
-                numbe = PickRoomNotUsed(d, numberOfRooms);
+                numbe = PickRoomNotUsed(d, numberOfRooms, stage);
 
                    d->stages[stage].rooms[numbe].AxeY = i - varA;
                    d->stages[stage].rooms[numbe].AxeX = v - varB;
@@ -760,10 +759,10 @@ void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms){
 
 }
 
-void InitialisationGameByStagesOptionsForArms(Donjon *d){
+void InitialisationGameByStagesOptionsForArms(Donjon *d, int stage){
 
-    for (int i = 0; i < d -> stages[0].rooms[0].height; i++) {
-		for (int y = 0; y < d -> stages[0].rooms[0].width; y++) {
+    for (int i = 0; i < d -> stages[stage].rooms[0].height; i++) {
+		for (int y = 0; y < d -> stages[stage].rooms[0].width; y++) {
 
 
         }
@@ -773,7 +772,7 @@ void InitialisationGameByStagesOptionsForArms(Donjon *d){
 
 }
 
-int PickRoomNotUsed(struct Donjon * d, int NumberOfRoomsInt) {
+int PickRoomNotUsed(struct Donjon * d, int NumberOfRoomsInt, int stage) {
 
     // int random = rand() % NumberOfRoomsInt + 1;
         
@@ -783,12 +782,12 @@ int PickRoomNotUsed(struct Donjon * d, int NumberOfRoomsInt) {
                 if(random == NumberOfRoomsInt + 1){
                     continue;
                 }
-            // printf("ID de la salle %d: %d\n", i,d->stages[0].rooms[i].id);
+            // printf("ID de la salle %d: %d\n", i,d->stages[stage].rooms[i].id);
                 
 
-                if(d->stages[0].rooms[random].roomUsed == 0 ){
+                if(d->stages[stage].rooms[random].roomUsed == 0 ){
                     // printf("ICI CA PRINT Random : %d \n", random);
-                    d->stages[0].rooms[random].roomUsed = 1;
+                    d->stages[stage].rooms[random].roomUsed = 1;
                     
                     return random;
                     
@@ -1147,7 +1146,6 @@ int NumberOfDoorsByRoom(char ** s, int height, int width){
 
     return iteration;
 }
-
 
 
 

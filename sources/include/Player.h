@@ -12,7 +12,7 @@ struct Player{
 
 typedef struct Player  Player;
 
-void gestionPositionPlayer(Donjon *d, Player *player, int c);
+void gestionPositionPlayer(struct Donjon *d,struct Player *player, int stage, int c);
 int kbhit(void);
 
 #endif

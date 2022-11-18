@@ -21,9 +21,6 @@
 #include "game.h"
 #include "shoot.h"
 
-void gestionGame(Donjon * d, int stage);
-
-
 void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int numberOfRooms){
 
     int t = id;
@@ -32,6 +29,12 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
     int DoorTop = 0;
     int DoorBottom = 0;
     int width = 0;
+    int Ir = 0, Vr = 0, Br = 0;
+    int Il = 0, Vl = 0, Bl = 0;
+    int It = 0, Vt = 0, Bt = 0;
+    int Ib = 0, Vb = 0, Bb = 0;
+
+
 
     for(int i = 0; i < numberOfRooms; i++){
         for(int y = 0; y < numberOfRooms; y++){
@@ -43,21 +46,59 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
                         
                         if(d->stages[stage].stage[i + axeY][w + axeX + 1] != ' '){
                             DoorRight = 1;
+                            if(d->stages[stage].stage[i + axeY][w + axeX + 1] == 'V'){
+                                Vr = 1;
+                            }
+                            if(d->stages[stage].stage[i + axeY][w + axeX + 1] == 'I'){
+                                Ir = 1;
+                            }
+                            if(d->stages[stage].stage[i + axeY][w + axeX + 1] == 'B'){
+                                Br = 1;
+                            }
                             // printf("DoorRight");
                         }
 
                         if(d->stages[stage].stage[i + axeY][w + axeX - 1] !=' '){
                             DoorLeft = 1;
+                            if(d->stages[stage].stage[i + axeY][w + axeX - 1] == 'V'){
+                                Vl = 1;
+                            }
+                            if(d->stages[stage].stage[i + axeY][w + axeX - 1] == 'I'){
+                                Il = 1;
+                            }
+                            if(d->stages[stage].stage[i + axeY][w + axeX - 1] == 'B'){
+                                Bl = 1;
+                            }
+
                             // printf("DoorLeft");
                         }
 
                         if(d->stages[stage].stage[i + axeY - 1 ][w + axeX]!=' '){
                             DoorTop = 1;
+                            if(d->stages[stage].stage[i + axeY - 1][w + axeX] == 'V'){
+                                Vt = 1;
+                            }
+                            if(d->stages[stage].stage[i + axeY - 1][w + axeX] == 'I'){
+                                It = 1;
+                            }
+                            if(d->stages[stage].stage[i + axeY - 1][w + axeX] == 'B'){
+                                Bt = 1;
+                            }
                             // printf("DoorTop");
                         }
 
                         if(d->stages[stage].stage[i + axeY + 1][w + axeX]!=' '){
                             DoorBottom = 1;
+                            if(d->stages[stage].stage[i + axeY + 1][w + axeX] == 'V'){
+                                Vb = 1;
+                            }
+                            if(d->stages[stage].stage[i + axeY + 1][w + axeX] == 'I'){
+                                Ib = 1;
+                            }
+                            if(d->stages[stage].stage[i + axeY + 1][w + axeX] == 'B'){
+                                Bb = 1;
+                            }
+
                             // printf("DoorBottom");
                         }
                          
@@ -81,13 +122,34 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
 
             // DoorLeft
             if( y < d->stages[stage].rooms[t].width/2 && d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] == 'W' && DoorLeft == 1){
-                d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = 'D';
+                
+
+                if(Vl == 1){
+                    d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = 'V';
+                }else  if(Il == 1){
+                    d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = 'I';
+                }else if(Bl == 1){
+                    d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = 'B';
+                }else{
+                    d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = 'D';
+                }
+
                 
             }
 
             // DoorRight
             if(y > d->stages[stage].rooms[t].width/2 && d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] == 'W' && DoorRight == 1){
-                d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = 'D';
+     
+                if(Vr == 1){
+                    d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = 'V';
+                }else if(Ir == 1){
+                    d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = 'I';
+                }else if(Br == 1){
+                    d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = 'B';
+                }else{
+                    d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = 'D';
+                }
+
             }
 
             // DoorTop
@@ -99,12 +161,33 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
             }
 
             if(d->stages[stage].rooms[t].room[0][width] == 'W' && DoorTop == 1){
-                d->stages[stage].rooms[t].room[0][width] = 'D';                                                                                          
+
+                if(Vt == 1){
+                    d->stages[stage].rooms[t].room[0][width] = 'V';
+                }else if(It == 1){
+                    d->stages[stage].rooms[t].room[0][width] = 'I';
+                }else if(Bt == 1){
+                    d->stages[stage].rooms[t].room[0][width] = 'B';
+                }else{
+                    d->stages[stage].rooms[t].room[0][width] = 'D';
+                }
+                                                                                       
             }
 
             // DoorBottom
              if(d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height-1][width] == 'W' && DoorBottom == 1){
-                d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height-1][width] = 'D';                                                                                         
+
+                if(Vb == 1){
+                    d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height-1][width] = 'V';
+                }else if(Ib == 1){
+                    d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height-1][width] = 'I';
+                }else if(Bb == 1){
+                    d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height-1][width] = 'B';
+                }else{
+                    d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height-1][width] = 'D';
+                }
+                
+                                                                                                     
             }
 
 
@@ -114,55 +197,57 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
 
 }
 
+void checkName(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY, int t){
+
+    for(int i = 0; i < numberOfRooms+2; i++){
+        for(int y = 0; y < numberOfRooms+2; y++){
+            if(d->stages[stage].stage[i][y] == 'P'){
+                
+                if( d->stages[stage].stage[i + axeY][y + axeX] == 'R'){
+                    d->stages[stage].rooms[t].name = 'R';
+                }
+
+                if( d->stages[stage].stage[i + axeY][y + axeX] == 'I'){
+                    d->stages[stage].rooms[t].name = 'I';
+                }
+
+                if( d->stages[stage].stage[i + axeY][y + axeX] == 'B'){
+                    d->stages[stage].rooms[t].name = 'B';
+                }
+
+                if( d->stages[stage].stage[i + axeY][y + axeX] == 'V'){
+                    d->stages[stage].rooms[t].name = 'V';
+                }
+
+            }
+        }
+    }
+}
+
 int gestionRoom(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY){
+
+    int t = 0;
+
+    if(axeX != 0 && axeY != 0){
+        t++;
+    }
     
-    for(int i = 0; i < numberOfRooms; i++){
-        for(int y = 0; y < numberOfRooms; y++){
+    for(int i = 0; i < numberOfRooms+2; i++){
+        for(int y = 0; y < numberOfRooms+2; y++){
             if(d->stages[stage].stage[i][y] == 'P'){
 
                 for(int t = 0; t < numberOfRooms; t++) {
 
                     if(d->stages[stage].rooms[t].roomUsed == 1){
-                        // printf("ITERATION OF T : %d /AXE X : %d, Y : %d\n", t, d->stages[stage].rooms[t].AxeX, d->stages[stage].rooms[t].AxeY);
-
 
                         if(d->stages[stage].rooms[t].AxeX == axeX && d->stages[stage].rooms[t].AxeY == axeY){
-                            // printf("ROOM FOUND\n");
-                            printf("AXE X : %d, Y : %d\n", d->stages[stage].rooms[t].AxeX, d->stages[stage].rooms[t].AxeY);
-
-                            for (int i = 0; i < d->stages[stage].rooms[t].height; i++) {
-                                for (int y = 0; y < d->stages[stage].rooms[t].width; y++) {
-                                    if (y % 2 == 0) {
-                                        printf("%c ", d-> stages[stage].rooms[t].room[i][y]);
-                                    }
-                                }
-                                printf("\n");
-                                
-                            }
 
                             return t;
                         }
 
-                    }
+                    }             
 
-                    // print d-> stages[stage].rooms[iteration].room                 
-
-                }
-
-                // printf("\n");
-                //  printf("\n");
-
-
-                // for(int t = 0; t < numberOfRooms; t++) {
-
-                //     printf("ROOM UTILISES [%d] USED : %d / and AXEX %d and AXEY %d\n",t,d->stages[stage].rooms[t].roomUsed,d->stages[stage].rooms[t].AxeX,d->stages[stage].rooms[t].AxeY );            
-
-                // }
-
-
-
-
-                
+                }            
             }
         }
     }
@@ -173,46 +258,11 @@ int gestionRoom(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY){
     return 0;
 }
 
-void gestionGame(Donjon * d, int stage) {
-    (void) d;
-    
-    int iterationTest = 0;
-    int NumberOfRoomsInt;
-    int axeX = 0;
-    int axeY = 0;
-
-    int id = 0;
-    int *pId = &id;
-    
-
-        int iteration = 0;
-        bool condition = true;
-        int c;
-
-        NumberOfRoomsInt = numberOfRooms();
-        printf("Number of rooms : %d\n", NumberOfRoomsInt);
-
-    InitialiseOtherRoomsFromArms(d,stage, NumberOfRoomsInt);
-
-    Player * player = malloc(sizeof(Player));
-	player->positionX = 1;
-	player->positionY = 1;
-	player->directionView = 'D';
-
-    ShootParams *shootParams = malloc(sizeof(struct ShootParams));
-    shootParams->reload = 1;
-    shootParams->player = player;
-    shootParams->d = d;
-    
-    OptimiseDoors(d, stage, axeX, axeY, 0, NumberOfRoomsInt );
-
-    // void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int numberOfRooms)
-	
-    // Initialise P at the start, start one time
+void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id ){
 
     for (int i = 0; i < d -> stages[stage].rooms[id].height; i++) {
         for (int y = 0; y < d -> stages[stage].rooms[id].width; y++) {
-            if (i == d -> stages[stage].rooms[id].height / 2 && y == d -> stages[0].rooms[0].width / 2) {
+            if (i == d -> stages[stage].rooms[id].height / 2 && y == d -> stages[stage].rooms[0].width / 2) {
                 if (y % 2 == 0) {
                     d -> stages[stage].rooms[id].room[i][y] = 'P';
                 } else {
@@ -250,13 +300,47 @@ void gestionGame(Donjon * d, int stage) {
 				
 			}
 
-    iterationTest++;   
+}
 
-    printf("ID RESULT : %d\n", gestionRoom(d, NumberOfRoomsInt, stage, 1, 0));
-    printf("ID RESULT : %d\n", gestionRoom(d, NumberOfRoomsInt, stage, 0, 1));
-    printf("ID RESULT : %d\n", gestionRoom(d, NumberOfRoomsInt, stage, -2, 0));
+void gestionGame(Donjon * d, int stage, int * change) {
+    
+    int NumberOfRoomsInt;
+    int axeX = 0;
+    int axeY = 0;
+    int id = 0;
+    int *pId = &id;
+    int hp = 100;
+    int *pHp = &hp;
 
-    (void)pId;
+    int iteration = 0;
+    bool condition = true;
+    int c;
+
+    Player * player = malloc(sizeof(Player));
+	player->positionX = 1;
+	player->positionY = 1;
+	player->directionView = 'D';
+
+    ShootParams *shootParams = malloc(sizeof(struct ShootParams));
+    shootParams->reload = 1;
+    shootParams->player = player;
+    shootParams->d = d;
+
+    NumberOfRoomsInt = numberOfRooms();
+    InitialiseOtherRoomsFromArms(d,stage, NumberOfRoomsInt);
+    SetColorAndPositionForPlayer(d, player, stage, id);
+
+    for (int i = 0; i < NumberOfRoomsInt; i++) {
+        printf("ID : %d\n", d-> stages[stage].rooms[i].id);
+        
+        for(int y = 0; y < d-> stages[stage].rooms[i].height; y++) {
+            for(int v = 0; v < d-> stages[stage].rooms[i].width; v++) {
+                printf("%c", d-> stages[stage].rooms[i].room[y][v]);
+            }
+        }
+    }
+
+
 
 	while (condition) {
 
@@ -280,47 +364,89 @@ void gestionGame(Donjon * d, int stage) {
             switch (c) {
 				case 'z':
 
-					if (d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] != 'W') {
+					if (d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] == ' ' || d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] == 'N' ) {
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
 						player->positionY--;
+                       if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N'){
+                            * change = 1;
+                            break;
+                        }
                         d->stages[stage].rooms[id].room[player->positionY][player->positionX] = 'P';
 						player->directionView = 'z';
 
                         if(d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] == 'D'){
                                 axeY--;
+
+                                    for(int i = 0; i < d->stages[stage].rooms[id].height; i++){
+                                        for(int y = 0; y < d->stages[stage].rooms[id].width; y++){
+                                            if(d->stages[stage].rooms[id].room[i][y] == 'P'){
+                                                d->stages[stage].rooms[id].room[i][y] = ' ';
+                                            }
+                                        }
+                                    }
                                 
-                                player->positionY = d->stages[stage].rooms[id].height - 3;
-                        }
+                                player->positionY = d->stages[stage].rooms[id].height - 2;
+
+                    
+
 					}
+                    }
 					break;
 
 				case 's':
 
-					if (d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] != 'W') {
+					if (d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] == ' ' || d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] == 'N' ) {
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
 						player->positionY++;
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N'){
+                            * change = 1;
+                            break;
+                        }
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = 'P';
 						player->directionView = 's';
 
-                        if(d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] == 'D'){
+                        if(d->stages[stage].rooms[id].room[player->positionY+1][player->positionX] == 'D'){
                                 axeY++;
-                               
-                                
-                                player->positionY = 2;
+
+                                    for(int i = 0; i < d->stages[stage].rooms[id].height; i++){
+                                        for(int y = 0; y < d->stages[stage].rooms[id].width; y++){
+                                            if(d->stages[stage].rooms[id].room[i][y] == 'P'){
+                                                d->stages[stage].rooms[id].room[i][y] = ' ';
+                                            }
+                                        }
+                                    }
+                                   
+                                player->positionY = 1;
                         }
+
+                  
+                        
+
 					}
 					break;
 
 				case 'q':
 
-					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] != 'W') {
+					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] == ' ' || d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] == 'N') {
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
 						player->positionX -= 2;
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N'){
+                            * change = 1;
+                            break;
+                        }
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = 'P';
 						player->directionView = 'q';
 
                            if(d->stages[stage].rooms[id].room[player->positionY][player->positionX - 1] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] == 'D' ){                                                                
                                 axeX--;
+
+                                for(int i = 0; i < d->stages[stage].rooms[id].height; i++){
+                                    for(int y = 0; y < d->stages[stage].rooms[id].width; y++){
+                                        if(d->stages[stage].rooms[id].room[i][y] == 'P'){
+                                            d->stages[stage].rooms[id].room[i][y] = ' ';
+                                        }
+                                    }
+                                }
                            
                            
                                 if((d->stages[stage].rooms[id].width - 3) % 2 == 0){
@@ -328,22 +454,35 @@ void gestionGame(Donjon * d, int stage) {
                                 }else{
                                     player->positionX = d->stages[stage].rooms[id].width - 4;
                                 }
+
+
                             }
 					}
 					break;
                     
 				case 'd':
 
-					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] != 'W') {
+					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] == ' ' || d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] == 'N') {
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
 						player->positionX += 2;
-						d->stages[0].rooms[id].room[player->positionY][player->positionX] = 'P';
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N'){
+                            * change = 1;
+                            break;
+                        }
+						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = 'P';
 						player->directionView = 'd';
 
                            if(d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX + 1] == 'D'){
                                 axeX++;
+
+                                    for(int i = 0; i < d->stages[stage].rooms[id].height; i++){
+                                        for(int y = 0; y < d->stages[stage].rooms[id].width; y++){
+                                            if(d->stages[stage].rooms[id].room[i][y] == 'P'){
+                                                d->stages[stage].rooms[id].room[i][y] = ' ';
+                                            }
+                                        }
+                                    }
                            
-                              
                                 player->positionX = 2;
 
                             }
@@ -353,11 +492,6 @@ void gestionGame(Donjon * d, int stage) {
                 break;
 			}
 
-            *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);
-            OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
-
-            printf("ID RESULT : %d\n", *pId);
-
             for (int v = 0; v < NumberOfRoomsInt + 2; v++) {
                 for (int y = 0; y < NumberOfRoomsInt + 2; y++) {
 
@@ -366,11 +500,21 @@ void gestionGame(Donjon * d, int stage) {
                 }
                 printf("\n");
             }
+           
+
+            checkName(d, NumberOfRoomsInt, stage, axeX, axeY, id);
+            *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);                  
+            OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
+            (void)*pHp;
+    
 
             printf("Axe Position X : %d / and Position Y : %d\n", axeX, axeY);
+            printf("ETAGE : %d\n", stage);
+            printf("Name : %c\n",d->stages[stage].rooms[id].name);
             printf("ID : %d\n", id);
-
             printf("\n");
+            printf("HP : %d\n", hp);
+
 			for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
 				for (int y = 0; y < d->stages[stage].rooms[id].width - 1; y++) {
 					if (y % 2 == 0) {
@@ -388,25 +532,18 @@ void gestionGame(Donjon * d, int stage) {
 			}
 
 
-            printf("Player position : %d, %d / Player direction : %c / Iteration : %d / IterationTest : %d\n", player->positionX, player->positionY, player->directionView, iteration, iterationTest);
+            printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, iteration);
                 
-            //     printf("reload : %d\n",shootParams->reload);
-            //     if (shootParams->reload == 1){
-            //     	//do{
-            //     		SDL_Delay(35);
-                        
-            //     		shootParams->reload = 0;
-            //     		pthread_t t1;
-            //     		pthread_create(&t1, NULL, bangishard, shootParams);
-            //     	//}while(shootParams->reload == 1);
-            //     }
-                continue;
+            if( * change == 1){
+                condition = false;
+            }
 
-            free(d);
-            free(player);
-            // free(shootParams);
+            continue;
         }
 
     }
+
+    free(player);
+    free(shootParams);
 
 }

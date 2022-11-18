@@ -16,11 +16,24 @@
 #define KRED  "\x1B[31m"
 #define KNRM  "\x1B[0m"
 
+#define PBSTR "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+#define PBWIDTH 60
+
+void printProgress(double percentage) {
+
+    int val = (int) (percentage * 100);
+    int lpad = (int) (percentage * PBWIDTH);
+    int rpad = PBWIDTH - lpad;
+    printf("\r%3d%% [%.*s%*s]", val, lpad, PBSTR, rpad, "");
+    fflush(stdout);
+}
+
 
 int main(int argc, char * argv[]) {
 	//Menu
 	bool condition = true, condition2 = true, etape = true;
 	int c,c2;
+	
 	
 	
 	menu_init();
@@ -40,15 +53,49 @@ int main(int argc, char * argv[]) {
 			case 'g':
 				(void) argc;
 				(void) argv;
+
 				int stage = 0;
+				int change = 0;
 
-				Donjon * d = malloc(sizeof(Donjon));
-	
-				InitialisationGame(d);					
-				gestionGame(d,stage);
+				for(int i = 0; i < 10; i++){
+
+
+					Donjon * d = malloc(sizeof(Donjon));
+		
+					
+					InitialisationGame(d, stage);			
+					gestionGame(d,stage, &change);
+					
+
+					// free(d);
+
+					stage++;
+					// printf("CHANGE : %d", change);
+					change = 0;
+
+					system("clear");
+					printf("\n\n\n\n\n\n\n\n\n");
+					printf("		Changement d'étages ..\n\n");
+
+
+					for(int i = 0; i < 20; i++){
+						printProgress(i/20.0);
+						#ifdef _WIN32 
+						Sleep(100); 
+						#else 
+						usleep(100000); 
+						#endif 
+					}
+					
+
+
+
+
+				}
+									
+				condition = false;
+				break;
 				// menu_init();
-
-			break;
 			
 			case 'i':
 			while (condition2)
