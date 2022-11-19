@@ -32,6 +32,10 @@ struct ShootParams {
 typedef struct ShootParams ShootParams;
 
 
-void* bangishard(void *shootParams);
+void* shootUp(void *shootParams);
+void* shootDown(void *shootParams);
+void* shootLeft(void *shootParams);
+void* shootRight(void *shootParams);
+
 
 #endif

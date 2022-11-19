@@ -32,65 +32,52 @@
 #include <unistd.h>
 #endif 
 
-void* bangishard(void *shootParams){
-
-	// #ifdef _WIN32 
-	// Sleep(25); 
-	// #else 
-	// usleep(25000); 
-	// #endif 
-
-    Shoot * shoot = malloc(sizeof(Shoot));
-
-	int c;
-
-    c = 'p';
-
 	
-	if (kbhit()) {
-		c = getchar();
-	}
-	
+void * shootUp(void *shootParams){
+	    Shoot * shoot = malloc(sizeof(Shoot));
+
+	if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY-1][((ShootParams*)shootParams)->player->positionX] == ' '){
+        shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
+        shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
+		((ShootParams*)shootParams)->reload = 0; 
+		while(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] == ' '){
+			
+			((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] = '*';
+			#ifdef _WIN32 
+			Sleep(90); 
+			#else 
+			usleep(90000); 
+			#endif
+			((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] = ' ';
+			shoot->positionY = shoot->positionY - 1;
+				
+		}
+		if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] == ((ShootParams*)shootParams)->monster->firstLetter){
+			((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
+			if(((ShootParams*)shootParams)->monster->hpMax <= 0){
+				((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] = ' ';
+			}
+		}
+		((ShootParams*)shootParams)->reload = 1;
+		shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
+        shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
+	}((ShootParams*)shootParams)->reload = 1; 
+	if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY-1][((ShootParams*)shootParams)->player->positionX] == ((ShootParams*)shootParams)->monster->firstLetter){
 		
+		// Le monstre prends des dégats équivalent aux dmg du Player
+		((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
+		if(((ShootParams*)shootParams)->monster->hpMax <= 0){
+			((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->monster->positionY][((ShootParams*)shootParams)->monster->positionX] = ' ';
+		}
+	}
+	free(shoot);
+	return 0;
+}
+				
+				
+void* shootDown(void *shootParams){
+	    Shoot * shoot = malloc(sizeof(Shoot));
 
-	switch (c) {
-			case '8': //shootUp
-				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY-1][((ShootParams*)shootParams)->player->positionX] == ' '){
-	                shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
-	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
-					((ShootParams*)shootParams)->reload = 0; 
-					while(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] == ' '){
-						
-						((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] = '*';
-						#ifdef _WIN32 
-						Sleep(90); 
-						#else 
-						usleep(90000); 
-						#endif
-						((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] = ' ';
-						shoot->positionY = shoot->positionY - 1;
-							
-					}
-					if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] == ((ShootParams*)shootParams)->monster->firstLetter){
-						((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
-						if(((ShootParams*)shootParams)->monster->hpMax <= 0){
-							((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] = ' ';
-						}
-					}
-					((ShootParams*)shootParams)->reload = 1;
-					shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
-	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
-				}((ShootParams*)shootParams)->reload = 1; 
-				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY-1][((ShootParams*)shootParams)->player->positionX] == ((ShootParams*)shootParams)->monster->firstLetter){
-					
-					// Le monstre prends des dégats équivalent aux dmg du Player
-					((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
-					if(((ShootParams*)shootParams)->monster->hpMax <= 0){
-						((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->monster->positionY][((ShootParams*)shootParams)->monster->positionX] = ' ';
-					}
-				}
-				break;
-			case '5': //shootBottom
 				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY+1][((ShootParams*)shootParams)->player->positionX] == ' '){
 	                shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
 	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
@@ -125,8 +112,13 @@ void* bangishard(void *shootParams){
 						((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->monster->positionY][((ShootParams*)shootParams)->monster->positionX] = ' ';
 					}
 				}
-				break;
-			case '4': //shootLeft
+				free(shoot);
+				return 0;
+}
+		
+void* shootLeft(void *shootParams){
+	    Shoot * shoot = malloc(sizeof(Shoot));
+
 				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY][((ShootParams*)shootParams)->player->positionX-2] == ' '){
 	                shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
 	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
@@ -161,8 +153,13 @@ void* bangishard(void *shootParams){
 						((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->monster->positionY][((ShootParams*)shootParams)->monster->positionX] = ' ';
 					}
 				}
-				break;
-			case '6': //shootRight
+				free(shoot);
+				return 0;
+}
+
+void* shootRight(void *shootParams){
+	    Shoot * shoot = malloc(sizeof(Shoot));
+
 				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY][((ShootParams*)shootParams)->player->positionX+2] == ' '){
 	                shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
 	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
@@ -197,8 +194,7 @@ void* bangishard(void *shootParams){
 						((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->monster->positionY][((ShootParams*)shootParams)->monster->positionX] = ' ';
 					}
 				}
-				break;
-	}
-	free(shoot);
-	return 0;
+				free(shoot);
+				return 0;
 }
+	

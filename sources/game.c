@@ -453,7 +453,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
                             changeOfRoom = 1;   
                         }
                     }
-					break;
+				break;
 
 				case 's':
 
@@ -480,7 +480,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
                        }
 
 					}
-					break;
+				break;
 
 				case 'q':
 
@@ -511,7 +511,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
                         }
 
 					}
-                    break;
+                break;
                     
 				case 'd':
 
@@ -534,8 +534,31 @@ void gestionGame(Donjon * d, int stage, int * change) {
                         }
                         
 					}
-                    break;
+                break;
+
+                case '8': ;
+                    // Shoot Up
+                    pthread_t t2;
+                    pthread_create(&t2, NULL, shootUp, shootParams);
+                break;
                 
+                case '5': ;
+                    // Shoot Down
+                    pthread_t t3;
+                    pthread_create(&t3, NULL, shootDown, shootParams);
+                break;
+                
+                case '4': ;
+                    // Shoot Left
+                    pthread_t t4;
+                    pthread_create(&t4, NULL, shootLeft, shootParams);
+                break;
+
+                case '6': ;
+                    // Shoot Right
+                    pthread_t t5;
+                    pthread_create(&t5, NULL, shootRight, shootParams);
+                break;
                 
 
 			}
@@ -593,10 +616,6 @@ void gestionGame(Donjon * d, int stage, int * change) {
             }
 
             printf("reload : %d\n",shootParams->reload);
-            if (shootParams->reload == 1){
-            	pthread_t t1;
-            	pthread_create(&t1, NULL, bangishard, shootParams);
-            }
 
             continue;
         }
