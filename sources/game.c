@@ -371,6 +371,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
     int *pHp = &hp;
     int changeOfRoom = 1;
     int chargeBoss = 0;
+    int bossActive = 0;
 
     int iteration = 0;
     bool condition = true;
@@ -446,6 +447,10 @@ void gestionGame(Donjon * d, int stage, int * change) {
 
 				case 'z':
 
+                    if( d->stages[stage].rooms[id].name == 'B' ){
+                        bossActive = 1;
+                    }
+
                     player->directionView = 'z';
 
                     if(d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] != 'W' ){
@@ -470,6 +475,10 @@ void gestionGame(Donjon * d, int stage, int * change) {
 				break;
 
 				case 's':
+
+                   if( d->stages[stage].rooms[id].name == 'B' ){
+                        bossActive = 1;
+                    }
 
                     player->directionView = 's';
 
@@ -497,8 +506,13 @@ void gestionGame(Donjon * d, int stage, int * change) {
 				break;
 
 				case 'q':
+                
+                   if( d->stages[stage].rooms[id].name == 'B' ){
+                        bossActive = 1;
+                    }
 
                     player->directionView = 'q';
+                    
 
 					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] != 'W') {
 
@@ -528,6 +542,10 @@ void gestionGame(Donjon * d, int stage, int * change) {
                 break;
                     
 				case 'd':
+
+                   if( d->stages[stage].rooms[id].name == 'B' ){
+                        bossActive = 1;
+                    }
 
                     player->directionView = 'd';
 
@@ -605,6 +623,17 @@ void gestionGame(Donjon * d, int stage, int * change) {
 
 			}
 
+            if(bossActive == 1){
+                
+                    pthread_t thread;
+                    if(stage == 0){
+                        pthread_create(&thread, NULL, bossAthina, shootParams);
+                    }
+
+                
+
+            }
+
             gestionPassing(d, player, stage, id, NumberOfRoomsInt);
 
            
@@ -612,17 +641,18 @@ void gestionGame(Donjon * d, int stage, int * change) {
                 *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);                  
                 OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
                 checkName(d, NumberOfRoomsInt, stage, axeX, axeY, id);
+                shootParams->id = id;
                 (void)*pHp;
                 
                 changeOfRoom = 0;
             }
+
             
             if(d->stages[stage].rooms[id].name == 'B'){
                 if(chargeBoss == 0){
                     InitialiseBossRoom(d, stage, id);      
                     chargeBoss = 1;
-                }
-                    
+                }       
             }
     
 

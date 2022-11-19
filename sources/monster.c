@@ -15,11 +15,17 @@
 #include <time.h>
 #include <unistd.h>     
 
+#ifdef _WIN32 
+#include <Windows.h>  
+#else
+#include <unistd.h>
+#endif 
 
 #include "include/monster.h"
 #include "include/mystring.h"
 #include "Room.h"
 #include "Player.h"
+#include "shoot.h"
 
 
 void spawnMonster(Donjon * d, Monster * monster, int stage, int id){
@@ -48,6 +54,60 @@ void monsterShoot(Monster * monster, Player * player) {
     if(monster == NULL || player == NULL) {
         return;
     }
+}
+
+void * bossAthina(void *shootParams){
+    Shoot * shoot = malloc(sizeof(Shoot));
+
+    Monster * Athina = malloc(sizeof(Monster));
+    Athina->name = "Athina";
+    Athina->hpMax = 450;
+    Athina->shoot = 1;
+    
+    shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
+    shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
+
+        for (int i = 0; i < ((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].height; i++) {
+            for (int y = 0; y < ((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].width; y++) {
+                if (i == ((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].height / 2 && y == ((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].width / 2) {
+                    if (y % 2 == 0) {
+                        ((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[i][y] = 'A';
+                         shoot->positionX = y;
+                         shoot->positionY = i;
+                    } else {
+                        ((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[i][y - 1] = 'A';
+                        shoot->positionX = y-1;
+                        shoot->positionY = i;
+                    }
+                }
+
+            }
+        }
+        while(Athina->hpMax >= 0 || ((ShootParams*)shootParams)->player->hpMax >= 0){
+            
+            while(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] == ' '){ 
+            
+		    	((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] = '*';
+		    	#ifdef _WIN32 
+		    	Sleep(90); 
+		    	#else 
+		    	usleep(90000); 
+		    	#endif
+		    	((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] = ' ';
+		    	shoot->positionY = shoot->positionY - 1;
+    
+		    }
+		    if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] == ((ShootParams*)shootParams)->monster->firstLetter){
+		    	((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
+		    	if(((ShootParams*)shootParams)->monster->hpMax <= 0){
+		    		((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] = ' ';
+		    	}
+		    }
+
+    }
+    free(Athina);
+    free(shoot);
+    return 0;
 }
 
 void monsterFollowPlayerAndAttack(Monster * monster, Player * player) {
