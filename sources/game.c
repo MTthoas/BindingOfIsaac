@@ -388,6 +388,8 @@ void gestionGame(Donjon * d, int stage, int * change) {
     shootParams->reload = 1;
     shootParams->player = player;
     shootParams->d = d;
+    shootParams->stage = stage;
+    shootParams->id = id;
 
     NumberOfRoomsInt = numberOfRooms();
     InitialiseOtherRoomsFromArms(d,stage, NumberOfRoomsInt);
@@ -431,7 +433,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
             
             Monster * monster = getMonsterById(arrayMonster, 0);
             
-            spawnMonster(d, monster);
+            spawnMonster(d, monster, stage, id);
             shootParams->monster = monster;
 
         }

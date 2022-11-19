@@ -22,15 +22,15 @@
 #include "Player.h"
 
 
-void spawnMonster(Donjon * d, Monster * monster){
+void spawnMonster(Donjon * d, Monster * monster, int stage, int id){
     srand(time(NULL));
     int randomPositionX,randomPositionY;
-    int heightRoom = d->stages[0].rooms[0].height - 1;
-    int widthRoom = d->stages[0].rooms[0].width -2;
+    int heightRoom = d->stages[stage].rooms[id].height - 1;
+    int widthRoom = d->stages[stage].rooms[id].width -2;
     while (1){
         randomPositionY = 1 + rand() % (heightRoom - 1);
         randomPositionX = 2 + rand() % (widthRoom - 2);
-        if (randomPositionX % 2 == 0 && d->stages[0].rooms[0].room[randomPositionY][randomPositionX] == ' ' && d->stages[0].rooms[0].room[randomPositionY][randomPositionX - 2] != 'P' && d->stages[0].rooms[0].room[randomPositionY][randomPositionX + 2] != 'P' && d->stages[0].rooms[0].room[randomPositionY - 1][randomPositionX] != 'P' && d->stages[0].rooms[0].room[randomPositionY + 1][randomPositionX] != 'P' ){
+        if (randomPositionX % 2 == 0 && d->stages[stage].rooms[id].room[randomPositionY][randomPositionX] == ' ' && d->stages[stage].rooms[id].room[randomPositionY][randomPositionX - 2] != 'P' && d->stages[stage].rooms[id].room[randomPositionY][randomPositionX + 2] != 'P' && d->stages[stage].rooms[id].room[randomPositionY - 1][randomPositionX] != 'P' && d->stages[stage].rooms[id].room[randomPositionY + 1][randomPositionX] != 'P' ){
             monster->positionX = randomPositionX;
             monster->positionY = randomPositionY;
             break;
@@ -39,7 +39,7 @@ void spawnMonster(Donjon * d, Monster * monster){
     char letterForMonster = monster->name[0];
     letterForMonster = toupper(letterForMonster);
     monster->firstLetter = letterForMonster;
-    d->stages[0].rooms[0].room[monster->positionY][monster->positionX] = letterForMonster;        
+    d->stages[stage].rooms[id].room[monster->positionY][monster->positionX] = letterForMonster;        
 }
 
 

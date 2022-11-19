@@ -56,7 +56,7 @@ typedef struct Monster Monster;
 
     void monsterFollowPlayerAndAttack(Monster * monster, Player * player);
 
-    void spawnMonster(Donjon * d, Monster * monster );    // void freeListeMonster(ListeMonster* liste);
+    void spawnMonster(Donjon * d, Monster * monster, int stage, int id );    // void freeListeMonster(ListeMonster* liste);
     // void freeMonster(Monster* monster);
 
 #endif //MONSTER_H
