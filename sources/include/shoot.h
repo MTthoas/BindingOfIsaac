@@ -28,6 +28,8 @@ struct ShootParams {
     Monster *monster;
     int idMonster;
     int reload ;
+    int stage;
+    int id;
 };
 typedef struct ShootParams ShootParams;
 
