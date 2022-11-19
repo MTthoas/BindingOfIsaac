@@ -74,7 +74,7 @@ char ** RoomByNumber(int height, int length, int number);
 int NumberOfDoorsByRoom(char ** s, int height, int width);
 int * RandomBetweenRange(int number, int zero);
 int NowRoomIsUsed(struct Donjon *d, int NumberOfRoomsInt, int id);
-void InitialisationGameByStagesOptionsForArms(Donjon * d, int stage);
+void InitialisationGameByStagesOptionsForArms(Donjon * d, int stage, int numbe);
 void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms);
 
 

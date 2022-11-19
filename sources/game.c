@@ -304,7 +304,7 @@ void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id )
 
     for (int i = 0; i < d -> stages[stage].rooms[id].height; i++) {
         for (int y = 0; y < d -> stages[stage].rooms[id].width; y++) {
-            if (i == d -> stages[stage].rooms[id].height / 2 && y == d -> stages[stage].rooms[0].width / 2) {
+            if (i == d -> stages[stage].rooms[id].height / 2 && y == d -> stages[stage].rooms[id].width / 2) {
                 if (y % 2 == 0) {
                     d -> stages[stage].rooms[id].room[i][y] = 'P';
                 } else {
@@ -348,7 +348,7 @@ void InitialiseBossRoom(Donjon * d, int stage, int id){
 
      for (int i = 0; i < d -> stages[stage].rooms[id].height; i++) {
         for (int y = 0; y < d -> stages[stage].rooms[id].width; y++) {
-            if (i == d -> stages[stage].rooms[id].height / 2 && y == d -> stages[stage].rooms[0].width / 2) {
+            if (i == d -> stages[stage].rooms[id].height / 2 && y == d -> stages[stage].rooms[id].width / 2) {
                 if (y % 2 == 0) {
                     d -> stages[stage].rooms[id].room[i][y] = 'H';
                 } else {
@@ -427,12 +427,12 @@ void gestionGame(Donjon * d, int stage, int * change) {
 
         if (c == 'm') {
 
-            Monster * arrayMonster = fichierMonsterToListeMonster();
+            // Monster * arrayMonster = fichierMonsterToListeMonster();
             
-            Monster * monster = getMonsterById(arrayMonster, 0);
+            // Monster * monster = getMonsterById(arrayMonster, 0);
             
-            spawnMonster(d, monster);
-            shootParams->monster = monster;
+            // spawnMonster(d, monster);
+            // shootParams->monster = monster;
 
         }
 

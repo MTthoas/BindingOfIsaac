@@ -66,7 +66,7 @@ int main(int argc, char * argv[]) {
 					InitialisationGame(d, stage);			
 					gestionGame(d,stage, &change);
 					
-
+					free(d -> stages[stage].stage);
 					free(d);
 
 					stage++;
@@ -87,10 +87,6 @@ int main(int argc, char * argv[]) {
 						#endif 
 					}
 					
-
-
-
-
 				}
 									
 				condition = false;

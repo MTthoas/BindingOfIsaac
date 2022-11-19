@@ -18,7 +18,7 @@ char ** RoomByNumber(int height, int length, int number);
 int NumberOfDoorsByRoom(char ** s, int height, int width);
 int * RandomBetweenRange(int number, int zero);
 int NowRoomIsUsed(struct Donjon *d, int NumberOfRoomsInt, int id);
-void InitialisationGameByStagesOptionsForArms(Donjon * d, int stage);
+void InitialisationGameByStagesOptionsForArms(Donjon * d, int stage, int numbe);
 void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms);
 
 /**
@@ -36,6 +36,8 @@ void InitialisationGame(Donjon * d, int stageNum) {
         printf("Nombre de salles : %d\n\n", NumberOfRoomsInt);
 
         newStageByNumber(d, stageNum, NumberOfRoomsInt+1);
+
+        printf("testfonction");
     
         // Générer l'ensemble des étage
         InitialiseRoom(d, stageNum, NumberOfRoomsInt);
@@ -317,22 +319,15 @@ void InitialisationGame(Donjon * d, int stageNum) {
             int itemRoom = 0;
             int bossRoom = 0;
             int exit = 0;
+            int test = 0;
 
             for(int t = 2; t <= NumberOfRoomsInt-iteration + 2; t++) {
                 
                 int iterationRoom = 0;
+                int iterationTest = 0;
 
                 while(iterationRoom == 0 && iterationByRoom <= NumberOfRoomsInt + 2 && bossRoom == 0 && exit == 0) {
-
-                    int iterationTest;
-                    iterationTest++;
-                    printf("Iteration : %d\n", iterationTest);
-                    if(iterationTest > 18000) {
-                        printf("ERROR : Too many iteration\n");
-                        t--;
-                        exit = 1;
-                    }
-                
+      
                     int select = rand() % 3;
 
                     int randomHeight;
@@ -366,9 +361,23 @@ void InitialisationGame(Donjon * d, int stageNum) {
 
                     while(d->stages[stageNum].stage[randomHeight][randomLength] != 'R' && d->stages[stageNum].stage[randomHeight][randomLength] != 'I') {
 
+                            
+                   
+                        iterationTest++;
+                        printf("Iteration : %d\n", iterationTest);
+                        if(iterationTest > 296) {
+                            test = 1;
+                            break;
+                        }
+
                         randomHeight = rand() % NumberOfRoomsInt;
                         randomLength = rand() % NumberOfRoomsInt;
 
+                    }
+
+                    if(test == 1){
+                        t--;
+                        break;
                     }
 
 
@@ -737,10 +746,10 @@ void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms){
 
 }
 
-void InitialisationGameByStagesOptionsForArms(Donjon *d, int stage){
+void InitialisationGameByStagesOptionsForArms(Donjon *d, int stage, int numbe){
 
-    for (int i = 0; i < d -> stages[stage].rooms[0].height; i++) {
-		for (int y = 0; y < d -> stages[stage].rooms[0].width; y++) {
+    for (int i = 0; i < d -> stages[stage].rooms[numbe].height; i++) {
+		for (int y = 0; y < d -> stages[stage].rooms[numbe].width; y++) {
 
 
         }

@@ -15,7 +15,6 @@ struct Player{
 };
 typedef struct Player  Player;
 
-void gestionPositionPlayer(struct Donjon *d,struct Player *player, int stage, int c);
 int kbhit(void);
 
 #endif
