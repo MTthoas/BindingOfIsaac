@@ -44,12 +44,36 @@ void spawnMonster(Donjon * d, Monster * monster){
 
 
 //TODO
-void monsterAttack(Monster * monster, Player * player) {
+void monsterShoot(Monster * monster, Player * player) {
     if(monster == NULL || player == NULL) {
         return;
     }
 }
 
+void monsterFollowPlayerAndAttack(Monster * monster, Player * player) {
+    while( player->positionX - 2 != monster->positionX ||player->positionX + 2 != monster->positionX || player->positionY - 1!= monster->positionY || player->positionY + 1!= monster->positionY) {
+        if(player->positionX > monster->positionX) {
+            monster->positionX += 2;
+        } else if(player->positionX < monster->positionX) {
+            monster->positionX -= 2;
+        } else if(player->positionY > monster->positionY) {
+            monster->positionY += 1;
+        } else if(player->positionY < monster->positionY) {
+            monster->positionY -= 1;
+        }     
+    }
+    if(player->shield <= 0){
+        player->hpMax -= 1;
+    } else {
+        player->shield -= 1;
+    }
+}
+
+void monsterRandomMove(Monster * monster, Player * player) {
+    if(monster == NULL || player == NULL) {
+        return;
+    }
+}
 
 
 Monster createMonster(int idMonster, char* name, float hpMax, int shoot, int flight, int ss) {

@@ -54,6 +54,8 @@ void gestionGame(Donjon * d) {
 	player->positionX = 1;
 	player->positionY = 1;
     player->dmg = 1;
+    player->hpMax = 5;
+    player->shield = 5;
 	player->directionView = 'D';
 
     ShootParams *shootParams = malloc(sizeof(struct ShootParams));

@@ -50,7 +50,11 @@ typedef struct Monster Monster;
 
     Monster * getMonsterById(Monster * arrayMonster, int id);
 
-    void monsterAttack(Monster * monster, Player * player);
+    void monsterShoot(Monster * monster, Player * player);
+
+    void monsterRandomMove(Monster * monster, Player * player);
+
+    void monsterFollowPlayerAndAttack(Monster * monster, Player * player);
 
     void spawnMonster(Donjon * d, Monster * monster );    // void freeListeMonster(ListeMonster* liste);
     // void freeMonster(Monster* monster);
