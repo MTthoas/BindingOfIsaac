@@ -111,6 +111,8 @@ void gestionGame(Donjon * d) {
             Monster * monster = getMonsterById(arrayMonster, 0);
             
             spawnMonster(d, monster);
+            shootParams->monster = monster;
+
         }
 
 		if (c == 'x') {
