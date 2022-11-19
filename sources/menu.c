@@ -279,8 +279,7 @@ void menuCreateRoom(void) {
         printf("Press 'r' to go back.\n");
         return;
     }
-    displayAllRooms(head);
-    /*
+    //displayAllRooms(head);
 
     int lines;
     int columns;
@@ -305,7 +304,7 @@ void menuCreateRoom(void) {
         freeAllRooms(head);
         printf("New room added\n");
     }
-    */
+    
     printf("\n Press 'r' to continue\n");   
 
 }
