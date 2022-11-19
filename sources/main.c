@@ -57,7 +57,7 @@ int main(int argc, char * argv[]) {
 				int stage = 0;
 				int change = 0;
 
-				for(int i = 0; i < 1; i++){
+				for(int i = 0; i < 10; i++){
 
 
 					Donjon * d = malloc(sizeof(Donjon));
@@ -67,7 +67,7 @@ int main(int argc, char * argv[]) {
 					gestionGame(d,stage, &change);
 					
 
-					// free(d);
+					free(d);
 
 					stage++;
 					// printf("CHANGE : %d", change);

@@ -55,12 +55,19 @@ void* bangishard(void *shootParams){
 
 	switch (c) {
 			case '8': //shootUp
+
+				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY-1][((ShootParams*)shootParams)->player->positionX] != ' '){
+					break;
+				}
+
 				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY-1][((ShootParams*)shootParams)->player->positionX] == ' '){
 	                shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
 	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
 					((ShootParams*)shootParams)->reload = 0; 
+
+
 					while(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] == ' '){
-						
+							
 						((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] = '*';
 						#ifdef _WIN32 
 						Sleep(90); 
@@ -71,24 +78,30 @@ void* bangishard(void *shootParams){
 						shoot->positionY = shoot->positionY - 1;
 							
 					}
-					if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] == ((ShootParams*)shootParams)->monster->firstLetter){
-						((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
-						if(((ShootParams*)shootParams)->monster->hpMax <= 0){
-							((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] = ' ';
-						}
-					}
+
+					// if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] == ((ShootParams*)shootParams)->monster->firstLetter){
+					// 	((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
+						
+					// 	if(((ShootParams*)shootParams)->monster->hpMax <= 0){
+					// 		((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] = ' ';
+					// 	}
+					// }
+
+
 					((ShootParams*)shootParams)->reload = 1;
 					shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
 	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
 				}((ShootParams*)shootParams)->reload = 1; 
-				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY-1][((ShootParams*)shootParams)->player->positionX] == ((ShootParams*)shootParams)->monster->firstLetter){
+
+				
+				// if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY-1][((ShootParams*)shootParams)->player->positionX] == ((ShootParams*)shootParams)->monster->firstLetter){
 					
-					// Le monstre prends des dégats équivalent aux dmg du Player
-					((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
-					if(((ShootParams*)shootParams)->monster->hpMax <= 0){
-						((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->monster->positionY][((ShootParams*)shootParams)->monster->positionX] = ' ';
-					}
-				}
+				// 	// Le monstre prends des dégats équivalent aux dmg du Player
+				// 	((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
+				// 	if(((ShootParams*)shootParams)->monster->hpMax <= 0){
+				// 		((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->monster->positionY][((ShootParams*)shootParams)->monster->positionX] = ' ';
+				// 	}
+				// }
 				break;
 			case '5': //shootBottom
 				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY+1][((ShootParams*)shootParams)->player->positionX] == ' '){
@@ -127,6 +140,10 @@ void* bangishard(void *shootParams){
 				}
 				break;
 			case '4': //shootLeft
+
+				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY][((ShootParams*)shootParams)->player->positionX-2] != ' '){
+					break;
+				}
 				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY][((ShootParams*)shootParams)->player->positionX-2] == ' '){
 	                shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
 	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
