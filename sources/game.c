@@ -243,7 +243,7 @@ void checkName(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY, int 
     }
 }
 
-void gestionPassing(Donjon *d, Player * player, int stage, int id, int NumberOfRoomsInt){
+void gestionPassing(Donjon *d, Player * player, int stage, int id, int NumberOfRoomsInt) {
 
            for(int i = 0; i < d->stages[stage].rooms[id].height; i++){
                 for(int y = 0; y < d->stages[stage].rooms[id].width; y++){
@@ -487,7 +487,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
                             break;
                         }
                         
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B'){
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I') {
                             axeY--;
 
                             //   int temp2 = gestionRoom(d, stage, id, axeX, axeY);
@@ -516,7 +516,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
                             break;
                         }
 
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B'){
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I'){
                                 axeY++;
 
                                 
@@ -548,8 +548,9 @@ void gestionGame(Donjon * d, int stage, int * change) {
                             break;
                         }
 					
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX ] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B'){                                                                
-                                axeX--;
+                        
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I') {
+                               axeX--;
 
                                if((d->stages[stage].rooms[id].width - 2) % 2 == 0){
                                     player->positionX = d->stages[stage].rooms[id].width - 4;
@@ -581,8 +582,9 @@ void gestionGame(Donjon * d, int stage, int * change) {
                             break;
                         }
 				
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B'){
-                                axeX++;
+                       
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I'){
+                            axeX++;
                                                     
                                 player->positionX = 2;
                                 changeOfRoom = 1;             
@@ -719,7 +721,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
 
             printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, iteration);
                 
-            if( * change == 1){
+            if( * change == 1) {
                 condition = false;
             }
 
