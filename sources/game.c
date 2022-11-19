@@ -678,6 +678,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
                 *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);                  
                 OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
                 checkName(d, NumberOfRoomsInt, stage, axeX, axeY, id);
+                shootParams->id = id;
                 (void)*pHp;
                 
                 changeOfRoom = 0;
