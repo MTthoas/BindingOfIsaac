@@ -429,9 +429,9 @@ void gestionGame(Donjon * d, int stage, int * change) {
 
         if (c == 'm') {
 
-            // Monster * arrayMonster = fichierMonsterToListeMonster();
+            Monster * arrayMonster = fichierMonsterToListeMonster();
             
-            // Monster * monster = getMonsterById(arrayMonster, 0);
+            Monster * monster = getMonsterById(arrayMonster, 0);
             
             spawnMonster(d, monster, stage, id);
             shootParams->monster = monster;
@@ -677,6 +677,5 @@ void gestionGame(Donjon * d, int stage, int * change) {
     // (void)change;
 
     free(player);
-    free(shootParams);
 
 }

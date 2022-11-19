@@ -78,8 +78,8 @@ int main(int argc, char * argv[]) {
 					printf("		Changement d'étages ..\n\n");
 
 
-					for(int i = 0; i < 20; i++){
-						printProgress(i/20.0);
+					for(int i = 0; i < 5; i++){
+						printProgress(i/5.0);
 						#ifdef _WIN32 
 						Sleep(100); 
 						#else 
