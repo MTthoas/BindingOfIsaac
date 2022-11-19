@@ -538,26 +538,54 @@ void gestionGame(Donjon * d, int stage, int * change) {
 
                 case '8': ;
                     // Shoot Up
+                    Monster * monsterVide = malloc(sizeof(Monster));
+                    if (shootParams->reload == 1){
+                        if( shootParams->monster == NULL){
+                            shootParams->monster = monsterVide;
+                        }
                     pthread_t t2;
-                    pthread_create(&t2, NULL, shootUp, shootParams);
+                    pthread_create(&t2, NULL, shootUp, shootParams);                    
+                    }
+                    free(monsterVide);
                 break;
                 
                 case '5': ;
                     // Shoot Down
+                    Monster * monsterVide2 = malloc(sizeof(Monster));
+                    if (shootParams->reload == 1){
+                        if( shootParams->monster == NULL){
+                            shootParams->monster = monsterVide2;
+                        }
                     pthread_t t3;
                     pthread_create(&t3, NULL, shootDown, shootParams);
+                    }
+                    free(monsterVide2);
                 break;
                 
                 case '4': ;
                     // Shoot Left
+                    Monster * monsterVide3 = malloc(sizeof(Monster));
+                    if (shootParams->reload == 1){
+                        if( shootParams->monster == NULL){
+                            shootParams->monster = monsterVide3;
+                        }
                     pthread_t t4;
                     pthread_create(&t4, NULL, shootLeft, shootParams);
+                    }
+                    free(monsterVide3);
                 break;
 
                 case '6': ;
                     // Shoot Right
                     pthread_t t5;
+                    Monster * monsterVide4 = malloc(sizeof(Monster));
+                    if (shootParams->reload == 1){
+                        if( shootParams->monster == NULL){
+                            shootParams->monster = monsterVide4;
+                        }
                     pthread_create(&t5, NULL, shootRight, shootParams);
+                    }
+                    free(monsterVide4);
                 break;
                 
 

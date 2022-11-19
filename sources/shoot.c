@@ -35,12 +35,11 @@
 	
 void * shootUp(void *shootParams){
 	    Shoot * shoot = malloc(sizeof(Shoot));
-
 	if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY-1][((ShootParams*)shootParams)->player->positionX] == ' '){
         shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
         shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
 		((ShootParams*)shootParams)->reload = 0; 
-		while(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] == ' '){
+		while(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] == ' '){ 
 			
 			((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] = '*';
 			#ifdef _WIN32 
@@ -58,10 +57,10 @@ void * shootUp(void *shootParams){
 				((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] = ' ';
 			}
 		}
-		((ShootParams*)shootParams)->reload = 1;
+		((ShootParams*)shootParams)->reload = 1; 
 		shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
         shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
-	}((ShootParams*)shootParams)->reload = 1; 
+	}
 	if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY-1][((ShootParams*)shootParams)->player->positionX] == ((ShootParams*)shootParams)->monster->firstLetter){
 		
 		// Le monstre prends des dégats équivalent aux dmg du Player
@@ -77,7 +76,6 @@ void * shootUp(void *shootParams){
 				
 void* shootDown(void *shootParams){
 	    Shoot * shoot = malloc(sizeof(Shoot));
-
 				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY+1][((ShootParams*)shootParams)->player->positionX] == ' '){
 	                shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
 	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
@@ -103,7 +101,7 @@ void* shootDown(void *shootParams){
 					((ShootParams*)shootParams)->reload = 1;
 					shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
 	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
-				}((ShootParams*)shootParams)->reload = 1;
+				}
 				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY+1][((ShootParams*)shootParams)->player->positionX] == ((ShootParams*)shootParams)->monster->firstLetter){
 					
 					// Le monstre prends des dégats équivalent aux dmg du Player
@@ -144,7 +142,7 @@ void* shootLeft(void *shootParams){
 					((ShootParams*)shootParams)->reload = 1;
 					shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
 	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
-				}((ShootParams*)shootParams)->reload = 1;
+				}
 				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY][((ShootParams*)shootParams)->player->positionX-2] == ((ShootParams*)shootParams)->monster->firstLetter){
 					
 					// Le monstre prends des dégats équivalent aux dmg du Player
@@ -185,7 +183,7 @@ void* shootRight(void *shootParams){
 					((ShootParams*)shootParams)->reload = 1;
 					shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
 	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
-				}((ShootParams*)shootParams)->reload = 1;
+				}
 				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY][((ShootParams*)shootParams)->player->positionX+2] == ((ShootParams*)shootParams)->monster->firstLetter){
 					
 					// Le monstre prends des dégats équivalent aux dmg du Player
