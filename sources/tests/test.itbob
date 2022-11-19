@@ -1,21 +1,71 @@
-{3}
+{20}
 ---
-name=Epee
-
-damage=0.3
+name=<3
+hpMax=1.0
 ---
-name=Ailes
-
-hpMax=0.1
-
-
-
-
+name=SNACK
+hpMax=1.0
+---
+name=LAUNCH
+hpMax=1.0
+---
+name=BLACK LOTUS
+hpMax=1.0
+shield=1.0
+---
+name=BUCKET OF LARD
+hpMax=2.0
+damage=-0.1
+---
+name=CHAMPION BELT
+damage=2.0
+---
+name=BLOOD OF THE MARTYR
+damage=1.0
+---
+name=CAT-O-NINE-TAILS
+damage=1.0
+---
+name=CEREMONIAL ROBES
+shield=3.0
+damage=1.0
+---
+name=CUPID'S ARROW
+ps=true
+---
+name=DEAD DOVE
+ss=true
 flight=true
 ---
-name=Poison
-
-hpMax=-0.1
-
-
-
+name=DEAD ONION
+ps=true
+ss=true
+---
+name=GROWTH HORMONES
+damage=1.0
+---
+name=HOLY GRAIL
+hpMax=1.0
+flight=true
+---
+name=MAGIC MUSHROOM
+hpMax=1.0
+shield=1.0
+damage=1.0
+---
+name=MEAT!
+hpMax=1.0
+damage=1.0
+---
+name=OUIJA BOARD
+ss=true
+---
+name=PENTAGRAM
+damage=2.0
+---
+name=RAW LIVER
+hpMax=2.0
+---
+name=SPIRIT OF THE NIGHT
+ss=true
+flight=true

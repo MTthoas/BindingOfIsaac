@@ -12,6 +12,8 @@
 #ifndef USER_INPUT_H
 #define USER_INPUT_H
 
+#include "./roomsForCRUD.h"
+
 
 /**
  * @brief Fills 'string' with user input. Returns 1 if no problem, 0 otherwise.
@@ -101,5 +103,17 @@ void clearSTDIN();
  * @brief Asks the user how many rooms does he want to load during the game
  */
 void askNumberOfRooms(int* nRooms, int max);
+
+/**
+ * @brief Asks the user the dimensions for a room. 
+ * 
+ * @param lines 
+ * @param columns 
+ */
+void askRoomDimensions(int* lines, int* columns);
+
+void askRoomElement(char* element);
+
+void askPosition(int* x, int* y, CRUD_Room* room);
 
 #endif // USER_INPUT_H

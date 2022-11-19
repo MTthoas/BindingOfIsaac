@@ -1,7 +1,7 @@
 /**
  * @file lectureFichiers.h
  * @author TheGreat-Chain
- * @brief Fontions relatives à la lecture des fichiers des monstres, objets et pièces.
+ * @brief Fontions relatives à la lecture des fichiers des monstres, objects et pièces.
  * @version 0.1
  * @date 2022-10-10
  * 
@@ -15,33 +15,34 @@
     #include "cheminsFichiers.h"
     #include <stdlib.h>
     #include <stdio.h>
-    #include "objets.h"
+    #include "objects.h"
     #include "roomsForCRUD.h"
 
     /**
-     * @brief Transforme le fichier des objets bonus en structure de type ListeObjets et retourne
-     * l'adresse de l'espace mémoire alloué à la liste d'objets. 
+     * @brief Transforme le fichier des objects bonus en structure de type ListeObjects et retourne
+     * l'adresse de l'espace mémoire alloué à la liste d'objects. 
      * 
      * retourne NULL si erreur dans le traitement du fichier. 
      * 
-     * @return ListeObjets* 
+     * @return Object* Pointeur sur le premier objet de la liste
      */
-    ListeObjets* fichierObjetsToListeObjets();
+    Object* objectsFileToObjectsList();
 
     /**
-     * @brief Réécrit le fichier en fonction de la structure ListeObjets 
+     * @brief Réécrit le fichier en fonction de liste chainée d'objets dont le premier objet 
+     * est passé en paramètres 
      * 
-     * @param listeObjets 
+     * @param Object* premier objet de la liste
      */
-    void listeToFichierObjets(ListeObjets* listeObjets);
+    void listToObjectsFile(Object* head);
 
     /**
-     * @brief Retourne le nombre d'objets du fichier, lu à la première ligne entre les accolades.
+     * @brief Retourne le nombre d'objects du fichier, lu à la première ligne entre les accolades.
      * 
-     * @param fichierObjets fichier des objets (.itbob)
-     * @return int nombre d'objets bonus
+     * @param fichierObjects fichier des objects (.itbob)
+     * @return int nombre d'objects bonus
      */
-    int getNombreObjets(FILE* fichierObjets);
+    int getNombreObjects(FILE* fichierObjects);
 
     /**
      * @brief Permet d'afficher le contenu du fichier dans le terminal
@@ -57,7 +58,7 @@
     /**
      * @brief Renvoie l'extension du fichier sous forme d'un entier tel quel :
      * 0 : fichier invalide,
-     * 1 : fichier objets,
+     * 1 : fichier objects,
      * 2 : fichier monstres,
      * 3 : fichier salles
      * 
@@ -67,8 +68,8 @@
     int extensionType(char* filename);
 
     /**
-     * @brief Ajoute "---" à la toute fin du fichier pour permettre à fichierObjetsToListeObjets() 
-     * de parser le dernier objet. 
+     * @brief Ajoute "---" à la toute fin du fichier pour permettre à fichierObjectsToListeObjects() 
+     * de parser le dernier object. 
      * Ne fait rien si le fichier en paramètre est le fichier des salles
      */
     void correctFile(char* cheminFichier);
@@ -85,14 +86,14 @@
      * @brief Parses the .rtbob file and returns a pointer to RoomsList, handlable with functions written in roomsForCRUD.h
      * @return RoomsList pointer, NULL if failure (eg : file corrupted)
      */
-    RoomsList* roomsFileToRoomsList();
+    CRUD_Room* roomsFileToRoomsList();
 
     /**
-     * @brief Writes into the .rtbob file thanks to the given RoomsList pointer parameter
-     * @param roomListPointer
+     * @brief Writes into the .rtbob file thanks to the given head of the rooms list
+     * @param head first room of the list
      * @return 0 if problem encountered, 1 otherwise
      */
-    int listToRoomsFile(RoomsList*);
+    int listToRoomsFile(CRUD_Room* nhead);
 
     /**
      * @brief Get the number of lines and columns from a buffer that contains this information.

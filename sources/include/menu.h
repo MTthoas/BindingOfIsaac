@@ -20,15 +20,13 @@ void menuModifyItem(void);
 void menuDeleteItem(void);
 
 void menuCrudRoom(void);
-void menuSeeRoms(void);
+void menuSeeRooms(void);
 void menuCreateRoom(void);
 void menuModifyRoom(void);
 void menuDeleteRoom(void);
 
 void optionError(void);
-
 void menuControl(void);
-
 void printGameBanner(void);
 
 #endif

@@ -31,7 +31,7 @@ void clearIntArray(int *array, int size)
 void displayCharArray2D(char** array, int lines, int columns) {
     for(int i = 0 ; i < lines ; i += 1) {
         for(int j = 0 ; j < columns ; j += 1) {
-            printf("%c ",array[i][j]);
+            printf("%c",array[i][j]);
         }
         printf("\n");
     }

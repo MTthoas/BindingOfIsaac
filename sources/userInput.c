@@ -12,7 +12,8 @@
 #include <stdlib.h>
 #include <string.h> 
 
-#include "include/userInput.h"
+#include "./include/userInput.h"
+
 
 int readInput(char* string, int size) {
     char* startingPos = NULL;
@@ -73,6 +74,16 @@ int readInt() {
    return 0; // error
 }
 
+char readChar() {
+    char string[100] = {0}; 
+ 
+    if (readInput(string, 2)) {
+        return string[strlen(string)-1];
+    }
+
+   return -1; // error
+}
+
 void askName(char* name) {
     int success = 0;
     do {
@@ -81,6 +92,7 @@ void askName(char* name) {
         printf("NAME = %s. Is it correct ? (y/n) \n", name);
         success = confirmation();
     } while(!success); // handle error
+    strcat(name, "\n");
 }
 
 void askHpMax(float* hpMax) {
@@ -138,7 +150,7 @@ void askFlight(int* flight) {
     do {
         printf("Does the item provide FLIGHT ability (y/n) ?\n");
         *flight = confirmation();
-        printf("FLIGHT = %s. Is it correct ? (y/n) \n", (flight) ? "true" : "false");
+        printf("FLIGHT = %s. Is it correct ? (y/n) \n", (*flight) ? "true" : "false");
         success = confirmation();
     } while(success != 1);
 }
@@ -182,4 +194,49 @@ void askRoomDimensions(int* lines, int* columns) {
         printf("Your room will have a width of = %d. Is it correct ? (y/n) \n", *columns);
         success = confirmation();
     } while(success != 1);
+}
+
+void askPosition(int* x, int* y, CRUD_Room* room) {
+    int success = 0;
+    int min = 2;
+    int maxX = (room->lines/2)-1;
+    int maxY = (room->columns/2)-1;
+
+    do {
+        printf("Enter the LINE number of the element you want to change. Between 2 and %d\n", maxX);
+        *x = readInt();
+        if(*x < min || *x > maxX) {
+            printf("Please make a bigger room.\n");
+            continue;
+        }
+        printf("Line n° : %d. Is it correct ? (y/n) \n", *x);
+        success = confirmation();
+    } while(success != 1);
+
+    success = 0;
+
+    do {
+        printf("Enter the COLUMN number of the element you want to change. Between 2 and %d\n", maxY);
+        *y = readInt();
+        if(*y < min || *y > maxY) {
+            printf("Please make a bigger room.\n");
+            continue;
+        }
+        printf("Column n° : %d. Is it correct ? (y/n) \n", *y);
+        success = confirmation();
+    } while(success != 1);
+
+}
+
+void askRoomElement(char* element) {
+    int success = 0;
+    do {
+        printf("Choose between :\n- W (Wall)\n- ' ' (empty)\n- R (rock)\n- G (gap)\n- D (door)\n- H (health)\n- S (spike)\n");
+        *element = readChar();
+        if(*element != 'W' || *element != 'R' || *element != 'G' || *element != 'H' || *element != 'S' || *element != 'w' || *element != 'r'  || *element != 'g' || *element != 'h' || *element != 's') {
+            printf("Please writed one of the suggested characters\n");
+            continue;
+        }
+        success = 1;
+    } while(!success);
 }

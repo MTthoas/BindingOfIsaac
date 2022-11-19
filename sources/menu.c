@@ -16,7 +16,7 @@
 #include "./include/menu.h"
 #include "./include/cheminsFichiers.h"
 #include "./include/lectureFichiers.h"
-#include "./include/objets.h"
+#include "./include/objects.h"
 #include "./include/mystring.h"
 #include "./include/userInput.h"
 
@@ -67,11 +67,9 @@ void menuCreateItem(void){
     printGameBanner();
     printf("-------- CREATE ITEM  --------\n");
 
-    //ListeObjets* items = createListeObjets(); ok
-    ListeObjets* items = fichierObjetsToListeObjets(); // segfault wtf ???
-
-    if(items == NULL) {
-        printf("Couldn't open %s\n.", CHEMIN_FICHIER_OBJETS);
+    Object* head = objectsFileToObjectsList(); 
+    if(head == NULL) {
+        printf("Error while loading the head file. Contact the dev team :P.\n");
         printf("Press 'r' to go back.\n");
         return;
     }
@@ -88,35 +86,33 @@ void menuCreateItem(void){
     float damage;
     askDamage(&damage);
     
-    int piercingShot;
+    int piercingShot = 0;
     askPiercingShot(&piercingShot);
     
-    int spectralShot;
+    int spectralShot = 0;
     askSpectralShot(&spectralShot);
     
-    int flight;
+    int flight = 0;
     askFlight(&flight);
 
-    Objet* newItem = createObjet(duplicateString(name), hpMax, shield, damage, piercingShot, spectralShot, flight);
+    Object* newItem = createObject(2, duplicateString(name), hpMax, shield, damage, piercingShot, spectralShot, flight);
     
-    int res = addObjet(items, newItem);
-    if(res == 0) {
-        printf("Could not add the item.\n");
-        freeListeObjets(items);
-        freeObjet(newItem);
-        printf("\nPress 'r' to go back\n");
-        return;
-    }
-
     printf("New item : ");
-    displayObjet(newItem);
-    printf("Do you want to add it ?\n");
+    displayObject(newItem);
+    printf("Do you want to add it (y/n) ?\n");
     int success = confirmation();
     if(success) {
-        listeToFichierObjets(items);
+        int res = addObject(head, newItem);
+        if(res) {
+            listToObjectsFile(head);
+        } else {
+            printf("Could not add the item.\n");
+            freeAllObjects(head);
+        }
+    
         printf("New item added.\n");
     }     
-
+    printf("\n Press 'r' to continue\n");
 }
 
 void menuDeleteItem(void) {
@@ -124,17 +120,16 @@ void menuDeleteItem(void) {
     printGameBanner();
     printf("-------- DELETE ITEM  --------\n");
     
-    ListeObjets* items = fichierObjetsToListeObjets();
-    if(items == NULL) {
-        printf("Couldn't open %s\n.", CHEMIN_FICHIER_OBJETS);
-        printf("Press ENTER to continue\n");
-        getchar();
-        menuCrudItem();
+    Object* head = objectsFileToObjectsList();
+    if(head == NULL) {
+        printf("Couldn't load from %s\n.", CHEMIN_FICHIER_OBJETS);
+        printf("Press 'r' to go back\n");
+        return;
     }
 
     int id;
     int success = 0;
-    displayListeObjets(items);
+    displayAllObjects(head);
     printf("Enter the id of the item you want to delete (see above) : \n");
     do {
         id = readInt();
@@ -142,13 +137,12 @@ void menuDeleteItem(void) {
         success = confirmation();
     } while(!success);
 
-    removeObjet(items, id);
-    listeToFichierObjets(items);
-    freeListeObjets(items);
+    removeObject(&head, id);
+    listToObjectsFile(head);
+    freeAllObjects(head);
 
     printf("Item deleted.\n");
-    printf("\nPress ENTER to continue\n");
-    getchar();
+    printf("\nPress 'r' to continue\n");
 }
 
 void menuModifyItem(void){
@@ -156,17 +150,16 @@ void menuModifyItem(void){
     printGameBanner();
     printf("-------- UPDATE ITEM  --------\n");
 
-    ListeObjets* items = fichierObjetsToListeObjets();
-    if(items == NULL) {
+    Object* head = objectsFileToObjectsList();
+    if(head == NULL) {
         printf("Couldn't open %s\n.", CHEMIN_FICHIER_OBJETS);
-        printf("Press ENTER to continue\n");
-        getchar();
+        printf("Press 'r' to go back\n");
         return;
     }
 
     int id;
     int success = 0;
-    displayListeObjets(items);
+    displayAllObjects(head);
     do {
         printf("Enter the id of the item you want to update (see above) : \n");
         id = readInt();
@@ -174,11 +167,10 @@ void menuModifyItem(void){
         success = confirmation();
     } while(!success);
 
-    Objet* item = getObjetById(items, id);
+    Object* item = getObjectById(head, id);
     if(item == NULL) {
         printf("Couldn't get the item of id : %d\n", id);
-        printf("Press ENTER to continue\n");
-        getchar();
+        printf("Press 'r' to continue\n");
         return;
     }
 
@@ -244,19 +236,18 @@ void menuModifyItem(void){
     }
 
     printf("The item's stat now :\n");
-    displayObjet(item);
+    displayObject(item);
 
-    listeToFichierObjets(items);
-    freeListeObjets(items);
-    printf("\nPress ENTER to continue\n");
-    getchar();
+    listToObjectsFile(head);
+    freeAllObjects(head);
+    printf("\nPress 'r' to continue\n");
 }
 
 
 void menuCrudRoom(void){
     system("clear");
         printGameBanner();
-        printf("-------- ITEMS MENU  --------\n");
+        printf("-------- ROOMS MENU  --------\n");
         printf("Press 's' to see your rooms\n");
         printf("Press 'a' to add a room\n");
         printf("Press 'd' to delete a room\n");
@@ -280,64 +271,148 @@ void menuSeeRooms(void){
 void menuCreateRoom(void) {
     system("clear");
     printGameBanner();
-    printf("-------- CREATE ITEM  --------\n");
+    printf("-------- CREATE ROOM  --------\n");
 
-    RoomsList* rooms = roomsFileToRoomsList(); 
-    if(rooms == NULL) {
-        printf("Couldn't open %s\n.", CHEMIN_FICHIER_PIECES);
+    CRUD_Room* head = roomsFileToRoomsList(); 
+    if(head == NULL) {
+        printf("Couldn't load from %s\n.", CHEMIN_FICHIER_PIECES);
         printf("Press 'r' to go back.\n");
         return;
     }
+    displayAllRooms(head);
+    /*
 
     int lines;
     int columns;
     askRoomDimensions(&lines, &columns);
-    columns *= 2; // for spaces
+    columns *= 2; // to fill spaces
 
     CRUD_Room* newRoom = createEmptyCRUD_Room(lines, columns);
 
-    int res = addCRUD_Room(rooms, newRoom);
-    if(res == 0) {
-        printf("Could not add the item.\n");
-        freeRoomsList(rooms);
-        freeCRUD_Room(newRoom);
-        printf("\nPress 'r' to go back\n");
-        return;
-    }
-    listToRoomsFile(rooms);
-
     printf("New room created and added : \n");
     displayCRUD_Room(newRoom);
+    printf("Do you want to add it (y/n)?\n");
+    int success = confirmation();
+    if(success) {
+        int res = addCRUD_Room(head, newRoom);
+        if(res) {
+            //displayAllRooms(head);
+            listToRoomsFile(head);
+        } else {
+            printf("Could not add the room.\n");
+            
+        }
+        freeAllRooms(head);
+        printf("New room added\n");
+    }
+    */
+    printf("\n Press 'r' to continue\n");   
 
 }
 
 void menuDeleteRoom(void){
-
     system("clear");
-            printGameBanner();
-            printf("------------ Binding Of Briatte --------------\n");
-            printf("-------- You chose to delete a room  --------\n");
-            //deleteRoom();
+    printGameBanner();
+    printf("-------- DELETE ROOM  --------\n");
+
+    CRUD_Room* head = roomsFileToRoomsList();
+    if(head == NULL) {
+        printf("Couldn't load from %s\n.", CHEMIN_FICHIER_PIECES);
+        printf("Press 'r' to go back\n");
+        return;
+    }
+
+    int id;
+    int success = 0;
+    displayAllRooms(head);
+    printf("Enter the id of the room you want to delete (see above) : \n");
+    do {
+        id = readInt();
+        printf("id = %d. Is it correct ? (y/n) \n", id);
+        success = confirmation();
+    } while(!success);
+
+    removeCRUD_Room(&head, id);
+    listToRoomsFile(head);
+    freeAllRooms(head);
+
+    printf("Room deleted.\n");
+    printf("\nPress 'r' to continue\n");
 }
 
 
 void menuModifyRoom(void){
+   system("clear");
+    printGameBanner();
+    printf("-------- UPDATE ROOM  --------\n");
+
+    CRUD_Room* head = roomsFileToRoomsList();
+    if(head == NULL) {
+        printf("Couldn't open %s\n.", CHEMIN_FICHIER_PIECES);
+        printf("Press 'r' to go back\n");
+        return;
+    }
+
+    int id;
+    int success = 0;
+    displayAllRooms(head);
+    do {
+        printf("Enter the id of the room you want to update (see above) : \n");
+        id = readInt();
+        printf("You selected the id %d. Is it correct ? (y/n) \n", id);
+        success = confirmation();
+    } while(!success);
+
+    CRUD_Room* room = getCRUD_RoomById(head, id);
+    if(room == NULL) {
+        printf("Couldn't get the room of id : %d\n", id);
+        printf("Press 'r' to continue\n");
+        return;
+    }
+
+    success = 1;
+    int x, y; // position
+    char element;
+    do {
+        system("clear");
+        printGameBanner();
+        printf("-------- UPDATE ROOM  --------\n");
+        displayCRUD_Room(room);
+
+        printf("\nSelect the position of the element you want to change in this room.\n");
+        askPosition(&x, &y, room);
+        printf("What element do you want to place at position (%d,%d) ?\n", x, y);
+        askRoomElement(&element);
+        room->map[x-1][y-1] = element;
+        printf("Changes : \n");
+        displayCRUD_Room(room);
+
+        printf("\nContinue changes ?(y/n) ? \n");
+        success = confirmation();
+    } while(success);
+
     system("clear");
-            printGameBanner();
-            printf("------------ Binding Of Briatte --------------\n");
-            printf("-------- You chose to modify a room  --------\n");
-            //modifyRoom();
+    printGameBanner();
+    printf("-------- UPDATE ROOM  --------\n");
+    displayCRUD_Room(room);
+    printf("Validate changes ?\n");
+    success = 0;
+    success = confirmation();
+    if(success) {
+        listToRoomsFile(head);
+    }
+
 }
 
 void menuControl(void){
     system("clear");
-            printGameBanner();
-            printf("--------------- Info control  ----------------\n");
-            printf("Use z,q,s,d to move\n");
-            printf("Use 8,4,5,6 to attack\n");
-            printf("Use x to quit the game\n");
+    printGameBanner();
+    printf("--------------- Info control  ----------------\n");
+    printf("Use z,q,s,d to move\n");
+    printf("Use 8,4,5,6 to attack\n");
+    printf("Use x to quit the game\n");
 
-        printf("\nPress ENTER to continue ...\n");
-        getchar();
-        return;
+    printf("\nPress ENTER to continue ...\n");
+    getchar();
+    return;
 }

@@ -21,25 +21,10 @@
         int id;
         int lines;
         int columns;
-
         char** map; // array with the elements (doors, gaps, spikes, ...)
 
         CRUD_Room* next;
     };
-
-    /**
-     * @brief Beginning of chained list of CRUD_Rooms
-     */
-    typedef struct RoomsList {
-            CRUD_Room* firstRoom;
-    } RoomsList;
-
-    /**
-     * @brief Create a Rooms List object
-     * 
-     * @return RoomsList*
-     */
-    RoomsList* createRoomsList();
 
     /**
      * @brief Create a CRUD_Room object with the given elements
@@ -68,26 +53,33 @@
     /**
      * @brief Displays all the rooms of a list
      */
-    void displayRoomsList(RoomsList*);
+    void displayAllRooms(CRUD_Room*);
 
     /**
      * @brief Adds the given room to the rooms list
      * 
-     * @return int id of new room
+     * @param head first room of the list
+     * @return int 1 if success, 0 otherwise
      */
-    int addCRUD_Room(RoomsList*, CRUD_Room*);
+    int addCRUD_Room(CRUD_Room* head, CRUD_Room* newROom);
 
     /**
      * @brief Removes the room with the given id from the list
+     * 
+     * @param head first room of the list
+     * @param id id of the room to delete
      */
-    void removeCRUD_Room(RoomsList*, int);
+    void removeCRUD_Room(CRUD_Room** ptr_head, int id);
 
     /**
      * @brief Get the room corresponding the the given id
      * 
+     * @param head first room of the list
+     * @param id id of the room to get
+     * 
      * @return CRUD_Room* id, NULL if not found
      */
-    CRUD_Room* getCRUD_RoomById(RoomsList* , int);
+    CRUD_Room* getCRUD_RoomById(CRUD_Room* head, int id);
 
     /**
      * @brief Duplicates a room
@@ -104,21 +96,24 @@
 
      /**
      * @brief Desallocate memory allocated to the all the rooms of a room list 
-     * 
+     * @param head first room of the list
+     * @return 1 if success 0 otherwise
      */
-    void freeRoomsList(RoomsList*);
+    int freeAllRooms(CRUD_Room* head);
 
     /**
-     * @brief Reorders the ids of Rooms.
+     * @brief Reorders the ids of rooms.
      * Use after a room deletion for example
+     * @param head first room of the list
      */
-    void arrangeRoomsList(RoomsList*);
+    void arrangeRoomsIds(CRUD_Room* head);
 
     /**
      * @brief Returns the number of rooms in the rooms list 
+     * @param head first room of the list
      * @return int number of rooms
      */
-    int getRoomsListSize(RoomsList*);
+    int getRoomsListSize(CRUD_Room* head);
 
 
     

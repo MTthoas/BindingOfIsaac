@@ -1,1 +1,1 @@
-gcc -Wall testLectureFichiers.c ../userInput.c ../lectureFichiers.c ../mystring.c ../objets.c ../roomsForCRUD.c ../array.c && ./a.out
+gcc -Wall testLectureFichiers.c ../userInput.c ../lectureFichiers.c ../mystring.c ../objects.c ../roomsForCRUD.c ../array.c && ./a.out

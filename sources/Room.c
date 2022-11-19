@@ -55,10 +55,8 @@ void InitialisationGame(Donjon * d) {
         int * randomNumberRooms = RandomBetweenRange(NumberOfRoomsInt, 1);
         d->stages[i].randomNumberRooms = malloc(sizeof(int) * NumberOfRoomsInt);
 
-        for (int y = 0; y < NumberOfRoomsInt; y++) {
-
+        for (int y = 0 ; y < NumberOfRoomsInt ; y++) {
             d->stages[i].randomNumberRooms[y] = randomNumberRooms[y];	
-
         }
 
         printf("\n");	
@@ -69,7 +67,7 @@ void InitialisationGame(Donjon * d) {
                  d->stages[i].rooms[y].id = 0;
                  d->stages[i].rooms[y].roomUsed = 0;
 
-            }else{
+            } else{
                 
                 if(d->stages[i].randomNumberRooms[y] != 0){
 
@@ -1080,7 +1078,7 @@ int NumberOfDoorsByRoom(char ** s, int height, int width){
 
     for(int i  = 0; i< height; i++){
         for(int y = 0; y < width+1; y++){
-            if(s[i][y] == 'D'){
+            if(s[i][y] == 'D') {
                 iteration++;
             }
         }
