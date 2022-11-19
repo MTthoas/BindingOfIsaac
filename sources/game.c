@@ -344,6 +344,29 @@ void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id )
 
 }
 
+
+// void* Jagger(void *params){
+
+//     (void)params;
+
+//     // void * params = ((ShootParams*)params);
+
+//     //  for (int i = 0; i < params->d -> stages[params->stage].rooms[params->id].height; i++) {
+//     //     // for (int y = 0; y < d -> stages[stage].rooms[id].width; y++) {
+//     //     //     if (i == d -> stages[stage].rooms[id].height / 2 && y == d -> stages[stage].rooms[id].width / 2) {
+//     //     //         if (y % 2 == 0) {
+//     //     //             d -> stages[stage].rooms[id].room[i][y] = 'H';
+//     //     //         } else {
+//     //     //             d -> stages[stage].rooms[id].room[i][y - 1] = 'H';
+//     //     //         }
+//     //     //     }
+
+//     //     // }
+//     // }
+
+
+// }
+
 void InitialiseBossRoom(Donjon * d, int stage, int id){
 
      for (int i = 0; i < d -> stages[stage].rooms[id].height; i++) {
@@ -360,6 +383,7 @@ void InitialiseBossRoom(Donjon * d, int stage, int id){
     }
 }
 
+
 void gestionGame(Donjon * d, int stage, int * change) {
     
     int NumberOfRoomsInt;
@@ -371,6 +395,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
     int *pHp = &hp;
     int changeOfRoom = 1;
     int chargeBoss = 0;
+    int bossActive = 0;
 
     int iteration = 0;
     bool condition = true;
@@ -429,9 +454,9 @@ void gestionGame(Donjon * d, int stage, int * change) {
 
         if (c == 'm') {
 
-            // Monster * arrayMonster = fichierMonsterToListeMonster();
+            Monster * arrayMonster = fichierMonsterToListeMonster();
             
-            // Monster * monster = getMonsterById(arrayMonster, 0);
+            Monster * monster = getMonsterById(arrayMonster, 0);
             
             spawnMonster(d, monster, stage, id);
             shootParams->monster = monster;
@@ -445,6 +470,10 @@ void gestionGame(Donjon * d, int stage, int * change) {
             switch (c) {
 
 				case 'z':
+
+                    if( d->stages[stage].rooms[id].name == 'B' ){
+                        bossActive = 1;
+                    }
 
                     player->directionView = 'z';
 
@@ -470,6 +499,10 @@ void gestionGame(Donjon * d, int stage, int * change) {
 				break;
 
 				case 's':
+
+                   if( d->stages[stage].rooms[id].name == 'B' ){
+                        bossActive = 1;
+                    }
 
                     player->directionView = 's';
 
@@ -497,8 +530,13 @@ void gestionGame(Donjon * d, int stage, int * change) {
 				break;
 
 				case 'q':
+                
+                   if( d->stages[stage].rooms[id].name == 'B' ){
+                        bossActive = 1;
+                    }
 
                     player->directionView = 'q';
+                    
 
 					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] != 'W') {
 
@@ -528,6 +566,10 @@ void gestionGame(Donjon * d, int stage, int * change) {
                 break;
                     
 				case 'd':
+
+                   if( d->stages[stage].rooms[id].name == 'B' ){
+                        bossActive = 1;
+                    }
 
                     player->directionView = 'd';
 
@@ -605,6 +647,30 @@ void gestionGame(Donjon * d, int stage, int * change) {
 
 			}
 
+            if(bossActive == 1){
+
+
+                    // pthread_t thread;
+                    // Monster * Boss = malloc(sizeof(Monster));
+
+                    // if(stage == 0){
+                    //     Boss->name = "Jagger";
+                    //     Boss->hpMax = 100;
+                    //     Boss->shoot = 1;
+                    //     if( shootParams->monster == NULL){
+                    //         shootParams->monster = Boss;
+                    //     }
+
+                    //     pthread_t thread;
+                    //     pthread_create(&thread, NULL, Jagger, shootParams);
+
+
+                    // }
+
+                
+
+            }
+
             gestionPassing(d, player, stage, id, NumberOfRoomsInt);
 
            
@@ -677,6 +743,6 @@ void gestionGame(Donjon * d, int stage, int * change) {
     // (void)change;
 
     free(player);
-    free(shootParams);
+    //free(shootParams);
 
 }

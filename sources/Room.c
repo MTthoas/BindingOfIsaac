@@ -288,24 +288,7 @@ void InitialisationGame(Donjon * d, int stageNum) {
                                
                             }
                         
-                  
-                        // for(int t = 0; t < NumberOfRoomsInt; t++) {
-
-                        //     printf("ROOM UTILISES [%d] : %d\n",t,d->stages[stageNum].rooms[t].roomUsed);                
-
-                        // }
-
-                        // Put room in the stage, left to R rooms
-
-                        
-
-
-
-
-
-
-
-                        printf("\n");
+                    printf("\n");
                         
                     }
              
@@ -361,22 +344,22 @@ void InitialisationGame(Donjon * d, int stageNum) {
 
                     while(d->stages[stageNum].stage[randomHeight][randomLength] != 'R' && d->stages[stageNum].stage[randomHeight][randomLength] != 'I') {
 
-                            
-                   
-                        iterationTest++;
-                        printf("Iteration : %d\n", iterationTest);
-                        if(iterationTest > 296) {
-                            test = 1;
-                            break;
-                        }
 
                         randomHeight = rand() % NumberOfRoomsInt;
                         randomLength = rand() % NumberOfRoomsInt;
 
+                    
+                    }
+
+                    iterationTest++;
+                    printf("Iteration : %d\n", iterationTest);
+                    if(iterationTest > 57) {
+                        test = 1;
                     }
 
                     if(test == 1){
-                        t--;
+                        // t--;
+                        test = 0;
                         break;
                     }
 
