@@ -71,16 +71,23 @@ void* bangishard(void *shootParams){
 						shoot->positionY = shoot->positionY - 1;
 							
 					}
+					if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] == ((ShootParams*)shootParams)->monster->firstLetter){
+						((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
+						if(((ShootParams*)shootParams)->monster->hpMax <= 0){
+							((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY - 1][shoot->positionX] = ' ';
+						}
+					}
+					((ShootParams*)shootParams)->reload = 1;
 					shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
 	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
 				}((ShootParams*)shootParams)->reload = 1; 
-				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY-1][((ShootParams*)shootParams)->player->positionX] == 'M'){
+				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY-1][((ShootParams*)shootParams)->player->positionX] == ((ShootParams*)shootParams)->monster->firstLetter){
+					
 					// Le monstre prends des dégats équivalent aux dmg du Player
-					/////////////////////////////////////////////////////////////
-					// Comment savoir les stats du Monter en question ??
-					//
-				
-
+					((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
+					if(((ShootParams*)shootParams)->monster->hpMax <= 0){
+						((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->monster->positionY][((ShootParams*)shootParams)->monster->positionX] = ' ';
+					}
 				}
 				break;
 			case '5': //shootBottom
@@ -100,9 +107,24 @@ void* bangishard(void *shootParams){
 						shoot->positionY = shoot->positionY + 1;
 							
 					}
+					if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY + 1][shoot->positionX] == ((ShootParams*)shootParams)->monster->firstLetter){
+						((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
+						if(((ShootParams*)shootParams)->monster->hpMax <= 0){
+							((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY + 1][shoot->positionX] = ' ';
+						}
+					}
+					((ShootParams*)shootParams)->reload = 1;
 					shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
 	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
 				}((ShootParams*)shootParams)->reload = 1;
+				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY+1][((ShootParams*)shootParams)->player->positionX] == ((ShootParams*)shootParams)->monster->firstLetter){
+					
+					// Le monstre prends des dégats équivalent aux dmg du Player
+					((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
+					if(((ShootParams*)shootParams)->monster->hpMax <= 0){
+						((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->monster->positionY][((ShootParams*)shootParams)->monster->positionX] = ' ';
+					}
+				}
 				break;
 			case '4': //shootLeft
 				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY][((ShootParams*)shootParams)->player->positionX-2] == ' '){
@@ -121,9 +143,24 @@ void* bangishard(void *shootParams){
 						shoot->positionX = shoot->positionX - 2;
 							
 					}
+					if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY][shoot->positionX - 2] == ((ShootParams*)shootParams)->monster->firstLetter){
+						((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
+						if(((ShootParams*)shootParams)->monster->hpMax <= 0){
+							((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY][shoot->positionX - 2] = ' ';
+						}
+					}
+					((ShootParams*)shootParams)->reload = 1;
 					shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
 	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
 				}((ShootParams*)shootParams)->reload = 1;
+				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY][((ShootParams*)shootParams)->player->positionX-2] == ((ShootParams*)shootParams)->monster->firstLetter){
+					
+					// Le monstre prends des dégats équivalent aux dmg du Player
+					((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
+					if(((ShootParams*)shootParams)->monster->hpMax <= 0){
+						((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->monster->positionY][((ShootParams*)shootParams)->monster->positionX] = ' ';
+					}
+				}
 				break;
 			case '6': //shootRight
 				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY][((ShootParams*)shootParams)->player->positionX+2] == ' '){
@@ -142,9 +179,24 @@ void* bangishard(void *shootParams){
 						shoot->positionX = shoot->positionX + 2;
 							
 					}
+					if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY][shoot->positionX + 2] == ((ShootParams*)shootParams)->monster->firstLetter){
+						((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
+						if(((ShootParams*)shootParams)->monster->hpMax <= 0){
+							((ShootParams*)shootParams)->d->stages[0].rooms[0].room[shoot->positionY][shoot->positionX + 2] = ' ';
+						}
+					}
+					((ShootParams*)shootParams)->reload = 1;
 					shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
 	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
 				}((ShootParams*)shootParams)->reload = 1;
+				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY][((ShootParams*)shootParams)->player->positionX+2] == ((ShootParams*)shootParams)->monster->firstLetter){
+					
+					// Le monstre prends des dégats équivalent aux dmg du Player
+					((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
+					if(((ShootParams*)shootParams)->monster->hpMax <= 0){
+						((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->monster->positionY][((ShootParams*)shootParams)->monster->positionX] = ' ';
+					}
+				}
 				break;
 	}
 	free(shoot);

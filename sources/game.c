@@ -4,7 +4,11 @@
 #include <string.h>
 #include <ctype.h>
 #include <termios.h>          
-#include <unistd.h>     
+#ifdef _WIN32 
+#include <Windows.h>  
+#else
+#include <unistd.h>
+#endif    
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdbool.h>
@@ -14,12 +18,15 @@
 #define KRED "\x1B[31m"
 #define KNRM "\x1B[0m"
 
+#include "include/mystring.h"
 #include <time.h>
 #include "Room.h"
 #include "Player.h"
 #include "menu.h"
 #include "game.h"
 #include "shoot.h"
+#include "lectureFichiers.h"
+
 
 void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int numberOfRooms){
 
@@ -360,6 +367,9 @@ void gestionGame(Donjon * d, int stage, int * change) {
     int c;
 
     Player * player = malloc(sizeof(Player));
+    player->dmg = 1;
+    player->hpMax = 5;
+    player->shield = 5;
 	player->positionX = 1;
 	player->positionY = 1;
 	player->directionView = 'D';
@@ -388,7 +398,12 @@ void gestionGame(Donjon * d, int stage, int * change) {
 
 	while (condition) {
 
-        SDL_Delay(35);
+        #ifdef _WIN32 
+		Sleep(25); 
+		#else 
+		usleep(25000); 
+		#endif 
+
 
         c = 'p';
 		iteration++;
@@ -400,6 +415,17 @@ void gestionGame(Donjon * d, int stage, int * change) {
 		if (c == 'x') {
 			condition = false;
 		}
+
+        if (c == 'm') {
+
+            Monster * arrayMonster = fichierMonsterToListeMonster();
+            
+            Monster * monster = getMonsterById(arrayMonster, 0);
+            
+            spawnMonster(d, monster);
+            shootParams->monster = monster;
+
+        }
 
 		if (c != 'e') {
  
@@ -476,12 +502,10 @@ void gestionGame(Donjon * d, int stage, int * change) {
                         if(d->stages[stage].rooms[id].room[player->positionY][player->positionX ] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B'){                                                                
                                 axeX--;
 
-                                  int temp = gestionRoom(d, stage, id, axeX, axeY);
-
-                                if((d->stages[stage].rooms[temp].width - 2) % 2 == 0){
-                                    player->positionX = d->stages[stage].rooms[temp].width - 4;
+                               if((d->stages[stage].rooms[id].width - 2) % 2 == 0){
+                                    player->positionX = d->stages[stage].rooms[id].width - 4;
                                 }else{
-                                    player->positionX = d->stages[stage].rooms[temp].width - 3;
+                                    player->positionX = d->stages[stage].rooms[id].width - 3;
                                 }
                                 
                                 changeOfRoom = 1;
@@ -564,7 +588,6 @@ void gestionGame(Donjon * d, int stage, int * change) {
 				printf("\n");
 				
 			}
-
 
             printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, iteration);
                 

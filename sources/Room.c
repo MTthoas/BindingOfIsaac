@@ -1188,4 +1188,3 @@ int NumberOfDoorsByRoom(char ** s, int height, int width){
 }
 
 
-
