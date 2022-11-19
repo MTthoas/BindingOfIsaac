@@ -66,7 +66,7 @@ void menuCreateItem(void){
     system("clear");
     printGameBanner();
     printf("-------- CREATE ITEM  --------\n");
-
+    
     Object* head = objectsFileToObjectsList(); 
     if(head == NULL) {
         printf("Error while loading the head file. Contact the dev team :P.\n");
@@ -112,7 +112,8 @@ void menuCreateItem(void){
     
         printf("New item added.\n");
     }     
-    printf("\n Press 'r' to continue\n");
+    
+    printf("\nPress 'r' to continue\n");
 }
 
 void menuDeleteItem(void) {
@@ -150,6 +151,7 @@ void menuModifyItem(void){
     printGameBanner();
     printf("-------- UPDATE ITEM  --------\n");
 
+    
     Object* head = objectsFileToObjectsList();
     if(head == NULL) {
         printf("Couldn't open %s\n.", CHEMIN_FICHIER_OBJETS);
@@ -240,6 +242,7 @@ void menuModifyItem(void){
 
     listToObjectsFile(head);
     freeAllObjects(head);
+    
     printf("\nPress 'r' to continue\n");
 }
 
@@ -260,6 +263,7 @@ void menuSeeRooms(void){
     system("clear");
     printGameBanner();
     printf("-------- YOUR ROOMS --------\n");
+    
 
     FILE* fichier = fopen(CHEMIN_FICHIER_PIECES, "r");
     afficherFichier(fichier);
@@ -272,15 +276,24 @@ void menuCreateRoom(void) {
     system("clear");
     printGameBanner();
     printf("-------- CREATE ROOM  --------\n");
-
+    printf("Not possible for the moment. Contact the dev team :)\n");
+    /*
     CRUD_Room* head = roomsFileToRoomsList(); 
     if(head == NULL) {
         printf("Couldn't load from %s\n.", CHEMIN_FICHIER_PIECES);
         printf("Press 'r' to go back.\n");
         return;
     }
-    //displayAllRooms(head);
+    freeAllRooms(head);
+    head = roomsFileToRoomsList(); 
+    if(head == NULL) {
+        printf("Couldn't load from %s\n.", CHEMIN_FICHIER_PIECES);
+        printf("Press 'r' to go back.\n");
+        return;
+    }
 
+    //displayAllRooms(head);
+    
     int lines;
     int columns;
     askRoomDimensions(&lines, &columns);
@@ -303,7 +316,7 @@ void menuCreateRoom(void) {
         }
         freeAllRooms(head);
         printf("New room added\n");
-    }
+    } */
     
     printf("\n Press 'r' to continue\n");   
 
@@ -344,7 +357,8 @@ void menuModifyRoom(void){
    system("clear");
     printGameBanner();
     printf("-------- UPDATE ROOM  --------\n");
-
+    printf("Not possible for the moment. Contact the dev team :)\n");
+    /*
     CRUD_Room* head = roomsFileToRoomsList();
     if(head == NULL) {
         printf("Couldn't open %s\n.", CHEMIN_FICHIER_PIECES);
@@ -400,6 +414,8 @@ void menuModifyRoom(void){
     if(success) {
         listToRoomsFile(head);
     }
+    */
+    printf("\nPress 'b' to continue ...\n");
 
 }
 
@@ -411,7 +427,6 @@ void menuControl(void){
     printf("Use 8,4,5,6 to attack\n");
     printf("Use x to quit the game\n");
 
-    printf("\nPress ENTER to continue ...\n");
-    getchar();
+    printf("\nPress 'b' to continue ...\n");
     return;
 }

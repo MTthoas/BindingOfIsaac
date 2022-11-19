@@ -38,7 +38,7 @@ int listToRoomsFile(CRUD_Room* head) {
     CRUD_Room* current = head;
     while(current != NULL) {
         for(int i = 0 ; i < current->lines ; i += 1) {
-            if(i==0) {
+            if(i == 0) {
                 sprintf(buffer_out, "[%d|%d]%d\n", current->lines, current->columns/2, current->id);
                 fwrite(buffer_out, sizeof(char), strlen(buffer_out), file);
             }
@@ -82,11 +82,19 @@ CRUD_Room* roomsFileToRoomsList() {
         if(firstLetter == '[') { // new room
             parseRoomInfo(buffer, &lines, &columns);
             columns *= 2; // because of spaces
-                map = createCharArray2D(lines, columns);
+            columns -= 1;
+
+            // prepare map
+            map = malloc(sizeof(char*) * lines);
+
+            for(int i=0 ; i < lines ; i+=1) {
+                map[i] = malloc(sizeof(char) * columns);
+            }
+
             fgets(buffer, 255, file); // skip [9|15]1 line
 
             for(int i = 0 ; i < lines ; i += 1) { // fill map
-                for(int j = 0 ; j < columns-1 ; j +=1) {
+                for(int j = 0 ; j < columns ; j +=1) {
                     //printf("%c", buffer[j]);
                     map[i][j] = buffer[j];
                 }
@@ -94,9 +102,9 @@ CRUD_Room* roomsFileToRoomsList() {
             }          
 
             if(iteration == 1) {
-                head = createCRUD_Room(lines, columns, map);
+                head = createCRUD_Room(lines, columns+1, map);
             } else {
-                addCRUD_Room(head, createCRUD_Room(lines, columns, map));
+                addCRUD_Room(head, createCRUD_Room(lines, columns+1, map));
             }
             iteration += 1;
             fseek(file, -strlen(buffer), SEEK_CUR); // go back one line
@@ -104,6 +112,7 @@ CRUD_Room* roomsFileToRoomsList() {
         
     } // while
 
+    //displayAllRooms(head);
     fclose(file);
     return head;
 }
@@ -126,8 +135,7 @@ int parseRoomInfo(char* buffer, int* ptr_lines, int* ptr_columns) {
     return 0;
 }
 
-
-int getNombreObjects(FILE* fichierObjects){
+int getNombreObjects(FILE* fichierObjects) {
     char token[256];
     int index = 0;
     char c = fgetc(fichierObjects);

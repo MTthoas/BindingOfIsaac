@@ -29,7 +29,7 @@ void test_objectsFileToObjectsList();
 void test_listToObjectsFile(); // ok
 
 int main(void) {
-    test_listToRoomsFile();
+    //test_listToRoomsFile();
     //test_roomsFileToRoomsList();
     //test_extensionType();
     //test_getNbLignesFichier();
