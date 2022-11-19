@@ -67,7 +67,7 @@ int main(int argc, char * argv[]) {
 					gestionGame(d,stage, &change);
 					
 
-					// free(d);
+					free(d);
 
 					stage++;
 					// printf("CHANGE : %d", change);

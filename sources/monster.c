@@ -43,8 +43,8 @@ void spawnMonster(Donjon * d, Monster * monster){
 }
 
 
-//TODO
 void monsterShoot(Monster * monster, Player * player) {
+
     if(monster == NULL || player == NULL) {
         return;
     }
