@@ -29,7 +29,7 @@ int getTailleListeObjects(ListeObjects* l) {
     int count = 0;
     while(courant != NULL) {
         count += 1;
-        courant = courant->suivant;
+        courant = courant->next;
     }
 
     return count;
@@ -64,7 +64,7 @@ void* displayListeObjects(ListeObjects* listeObjects) {
     Object* courant = listeObjects->premier;
     while(courant != NULL) { // tant qu'on n'est pas à la fin de la liste 
         displayObject(courant);
-        courant = courant->suivant;
+        courant = courant->next;
     }
     return NULL;
 }
@@ -83,29 +83,48 @@ Object* duplicateObject(Object* object) {
     newObject->piercingShot = object->piercingShot;
     newObject->spectralShot = object->spectralShot;
     newObject->flight = object->flight;
-    newObject->suivant = object->suivant;
+    newObject->next = object->next;
     
     return newObject;
 }
+
+// int addObject(ListeObjects* listeObjects, Object* newObject) {
+//     Object* courant = listeObjects->premier;
+//     int index = 1; //formera l'id du nouvel object
+
+//     if(courant == NULL) { // liste vide
+//         newObject->id = index;
+//         listeObjects->premier = duplicateObject(newObject);
+//         return index;
+//     }
+
+//     while(courant != NULL) { // ajout a la fin de liste
+//         index += 1;
+//         if(courant->next == NULL) {
+//             newObject->id = index;
+//             courant->next = duplicateObject(newObject);
+//             return index;
+//         }
+//         courant = courant->next;
+//     }
+
+//     return 0;
+// }
 
 int addObject(ListeObjects* listeObjects, Object* newObject) {
     Object* courant = listeObjects->premier;
     int index = 1; //formera l'id du nouvel object
 
     if(courant == NULL) { // liste vide
-        newObject->id = index;
         listeObjects->premier = duplicateObject(newObject);
-        return index;
     }
 
     while(courant != NULL) { // ajout a la fin de liste
         index += 1;
-        if(courant->suivant == NULL) {
-            newObject->id = index;
-            courant->suivant = duplicateObject(newObject);
-            return index;
+        if(courant->next == NULL) {
+            courant->next = duplicateObject(newObject);
         }
-        courant = courant->suivant;
+        courant = courant->next;
     }
 
     return 0;
@@ -131,7 +150,7 @@ Object* createObject(char* name, float hpMax, float shield, float damage, int pi
     o->piercingShot = piercingShot;
     o->spectralShot = spectralShot;
     o->flight = flight;
-    o->suivant = NULL;
+    o->next = NULL;
 
     return o;
 }
@@ -140,7 +159,7 @@ void modifyObject(ListeObjects* liste, int id, Object* newObject) {
     Object* toDelete;
     if(liste->premier != NULL && liste->premier->id == id) { // modifier premier element
         toDelete = liste->premier;
-        newObject->suivant = liste->premier->suivant;
+        newObject->next = liste->premier->next;
         liste->premier = newObject;
         freeObject(toDelete);
         rangerListeObjects(liste);
@@ -150,16 +169,16 @@ void modifyObject(ListeObjects* liste, int id, Object* newObject) {
     Object* courant = liste->premier;
     while(courant != NULL ) {
 
-        if(courant->suivant != NULL && courant->suivant->id == id) { // modifier
-            toDelete = courant->suivant;
-            newObject->suivant = courant->suivant->suivant;
-            courant->suivant = newObject;
+        if(courant->next != NULL && courant->next->id == id) { // modifier
+            toDelete = courant->next;
+            newObject->next = courant->next->next;
+            courant->next = newObject;
             freeObject(toDelete);
             rangerListeObjects(liste);
             return;
         }
         
-        courant = courant->suivant;
+        courant = courant->next;
     }
 }
 
@@ -169,7 +188,7 @@ void rangerListeObjects(ListeObjects* liste) {
     while(courant != NULL) {
         courant->id = count;
         count += 1;
-        courant = courant->suivant;
+        courant = courant->next;
     }
 }
 
@@ -177,7 +196,7 @@ void removeObject(ListeObjects* liste, int id) {
     Object* toDelete;
     if(liste->premier != NULL && liste->premier->id == id) { // supprimer premier element
         toDelete = liste->premier;
-        liste->premier = liste->premier->suivant;
+        liste->premier = liste->premier->next;
         freeObject(toDelete);
         rangerListeObjects(liste);
         return;
@@ -186,15 +205,15 @@ void removeObject(ListeObjects* liste, int id) {
     Object* courant = liste->premier;
     while(courant != NULL ) {
 
-        if(courant->suivant != NULL && courant->suivant->id == id) { // suppression
-            toDelete = courant->suivant;
-            courant->suivant = courant->suivant->suivant;
+        if(courant->next != NULL && courant->next->id == id) { // suppression
+            toDelete = courant->next;
+            courant->next = courant->next->next;
             freeObject(toDelete);
             rangerListeObjects(liste);
             return;
         }
         
-        courant = courant->suivant;
+        courant = courant->next;
     }
 
 }
@@ -206,7 +225,7 @@ Object* getObjectById(ListeObjects* liste, int id) {
         if(result->id == id) {
             return result;
         }
-        result = result->suivant;
+        result = result->next;
     }
 
     return NULL;
@@ -214,12 +233,12 @@ Object* getObjectById(ListeObjects* liste, int id) {
 
 void freeListeObjects(ListeObjects* liste) {
     Object* courant = liste->premier;
-    Object* suivant;
+    Object* next;
 
     while(courant != NULL) {
-        suivant = courant->suivant;
+        next = courant->next;
         free(courant);
-        courant = suivant;
+        courant = next;
     }
 }
 

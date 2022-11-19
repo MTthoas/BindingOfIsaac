@@ -74,11 +74,14 @@ void* bangishard(void *shootParams){
 					shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
 	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
 				}((ShootParams*)shootParams)->reload = 1; 
-				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY-1][((ShootParams*)shootParams)->player->positionX] == 'M'){
+				if(((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->player->positionY-1][((ShootParams*)shootParams)->player->positionX] == ((ShootParams*)shootParams)->monster->firstLetter){
+					
 					// Le monstre prends des dégats équivalent aux dmg du Player
-					/////////////////////////////////////////////////////////////
-					// Comment savoir les stats du Monter en question ??
-					//
+					((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
+					if(((ShootParams*)shootParams)->monster->hpMax <= 0){
+						((ShootParams*)shootParams)->d->stages[0].rooms[0].room[((ShootParams*)shootParams)->monster->positionY][((ShootParams*)shootParams)->monster->positionX] = ' ';
+					}
+					
 				
 
 				}

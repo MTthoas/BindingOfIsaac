@@ -27,7 +27,7 @@
      * @return ListeObjects* 
      */
     ListeObjects* fichierObjectsToListeObjects();
-    ListeMonster* fichierMonsterToListeMonster();
+    Monster* fichierMonsterToListeMonster();
     /**
      * @brief Réécrit le fichier en fonction de la structure ListeObjects 
      * 

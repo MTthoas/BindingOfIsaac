@@ -48,9 +48,12 @@ void gestionGame(Donjon * d) {
     bool condition = true;
     int c;
 
+    
+
     Player * player = malloc(sizeof(Player));
 	player->positionX = 1;
 	player->positionY = 1;
+    player->dmg = 1;
 	player->directionView = 'D';
 
     ShootParams *shootParams = malloc(sizeof(struct ShootParams));
@@ -84,6 +87,7 @@ void gestionGame(Donjon * d) {
         }
     }
     iterationTest++;   
+    
 	while (condition) {
 
         #ifdef _WIN32 
@@ -101,55 +105,11 @@ void gestionGame(Donjon * d) {
 
         //Faire spawn un Mooter (mob)
         if (c == 'm') {
-            ListeMonster * listMonster = fichierMonsterToListeMonster();
-            Monster * monster1 = getMonsterById(listMonster, 9);
-            //---------------------------------------- 
-            Monster* courant = listMonster->premier;
+
+            Monster * arrayMonster = fichierMonsterToListeMonster();
             
-            if(listMonster == NULL) {
-                printf("Pas de liste.\n");
-                                 sleep(3);
-
-            }
-
+            Monster * monster = getMonsterById(arrayMonster, 0);
             
-            while(courant != NULL) { // tant qu'on n'est pas à la fin de la liste 
-               if(courant == NULL) {
-                printf("Pas d'monster\n");
-                 sleep(3);
-            }
-
-                printf("\n");
-                printf("id : %d\n", courant->idMonster);
-                printf("name : %s\n", duplicateString(courant->name));
-                printf("hpMax : %f\n", courant->hpMax);
-                printf("shoot : %d\n", courant->shoot);
-                printf("ss : %d\n", courant->ss);
-                printf("flight : %d\n", courant->flight);
-                printf("\n");
-                courant = courant->suivant;
-                                 sleep(3);
-
-            }
-
-
-             //-------------------------------------
-            Monster* result = listMonster->premier;
-            // printf("%d\n", result->idMonster);
-
-                 sleep(3);
-            (void) result;
-            (void) monster1;
-
-            Monster * o = malloc(sizeof(Monster));
-            o->idMonster = 10;
-            o->name = "test";
-            o->hpMax = 5;
-            o->shoot = 0;
-            o->flight = 0;
-            o->ss = 0;
-            Monster * monster = o;
-
             spawnMonster(d, monster);
         }
 

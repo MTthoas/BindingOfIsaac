@@ -125,7 +125,7 @@ void test_rangerListeObjects() {
     o1.piercingShot = 1;
     o1.spectralShot = 0;
     o1.flight = 0;
-    o1.suivant = &o2;
+    o1.next = &o2;
 
     o2.id = 99;
     o2.name = "PC";
@@ -135,7 +135,7 @@ void test_rangerListeObjects() {
     o2.piercingShot = 1;
     o2.spectralShot = 0;
     o2.flight = 0;
-    o2.suivant = NULL;
+    o2.next = NULL;
 
     // tests
     printf("Affichage de la liste avant arrangement : \n");
@@ -322,7 +322,7 @@ void test_addObject() {
     o1.piercingShot = 1;
     o1.spectralShot = 0;
     o1.flight = 0;
-    o1.suivant = NULL;
+    o1.next = NULL;
 
     o2.id = 99;
     o2.name = "PC";
@@ -332,7 +332,7 @@ void test_addObject() {
     o2.piercingShot = 1;
     o2.spectralShot = 0;
     o2.flight = 0;
-    o2.suivant = NULL;
+    o2.next = NULL;
 
     // appel fonction
     int res;
@@ -367,9 +367,9 @@ void test_displayListeObjects() {
     liste.premier = &o1;
 
     // maillage
-    o1.suivant = &o2;
-    o2.suivant = &o3;
-    o3.suivant = NULL;
+    o1.next = &o2;
+    o2.next = &o3;
+    o3.next = NULL;
 
     // remplissage
     o1.id = 1;
@@ -460,7 +460,7 @@ void test_displayObject() {
     Object* toDelete;
     if(liste->premier != NULL && liste->premier->id == id) { // modifier premier element
         toDelete = liste->premier;
-        newObject->suivant = liste->premier->suivant;
+        newObject->next = liste->premier->next;
         liste->premier = newObject;
         freeObject(toDelete);
         rangerListeObjects(liste);
@@ -470,16 +470,16 @@ void test_displayObject() {
     Object* courant = liste->premier;
     while(courant != NULL ) {
 
-        if(courant->suivant != NULL && courant->suivant->id == id) { // modifier
-            toDelete = courant->suivant;
-            newObject->suivant = courant->suivant->suivant;
-            courant->suivant = newObject;
+        if(courant->next != NULL && courant->next->id == id) { // modifier
+            toDelete = courant->next;
+            newObject->next = courant->next->next;
+            courant->next = newObject;
             freeObject(toDelete);
             rangerListeObjects(liste);
             return;
         }
         
-        courant = courant->suivant;
+        courant = courant->next;
     }
 }
 
@@ -512,7 +512,7 @@ void test_displayObject() {
     o->piercingShot = piercingShot;
     o->spectralShot = spectralShot;
     o->flight = flight;
-    o->suivant = NULL;
+    o->next = NULL;
 
     return o;
 }
@@ -529,12 +529,12 @@ void test_displayObject() {
 
     while(courant != NULL) { // ajout a la fin de liste
         index += 1;
-        if(courant->suivant == NULL) {
+        if(courant->next == NULL) {
             newObject->id = index;
-            courant->suivant = duplicateObject(newObject);
+            courant->next = duplicateObject(newObject);
             return index;
         }
-        courant = courant->suivant;
+        courant = courant->next;
     }
 
     return 0;
@@ -549,7 +549,7 @@ void* displayListeObjects(ListeObjects* listeObjects) {
     Object* courant = listeObjects->premier;
     while(courant != NULL) { // tant qu'on n'est pas à la fin de la liste 
         displayObject(courant);
-        courant = courant->suivant;
+        courant = courant->next;
     }
     return NULL;
 }
@@ -568,7 +568,7 @@ void* displayListeObjects(ListeObjects* listeObjects) {
     newObject->piercingShot = object->piercingShot;
     newObject->spectralShot = object->spectralShot;
     newObject->flight = object->flight;
-    newObject->suivant = object->suivant;
+    newObject->next = object->next;
     
     return newObject;
 }
@@ -604,7 +604,7 @@ int getTailleListeObjects(ListeObjects* l) {
     int count = 0;
     while(courant != NULL) {
         count += 1;
-        courant = courant->suivant;
+        courant = courant->next;
     }
 
     return count;
@@ -616,18 +616,18 @@ void rangerListeObjects(ListeObjects* liste) {
     while(courant != NULL) {
         courant->id = count;
         count += 1;
-        courant = courant->suivant;
+        courant = courant->next;
     }
 }
 
 void freeListeObjects(ListeObjects* liste) {
     Object* courant = liste->premier;
-    Object* suivant;
+    Object* next;
 
     while(courant != NULL) {
-        suivant = courant->suivant;
+        next = courant->next;
         free(courant);
-        courant = suivant;
+        courant = next;
     }
 }
 
@@ -635,7 +635,7 @@ void removeObject(ListeObjects* liste, int id) {
     Object* toDelete;
     if(liste->premier != NULL && liste->premier->id == id) { // supprimer premier element
         toDelete = liste->premier;
-        liste->premier = liste->premier->suivant;
+        liste->premier = liste->premier->next;
         freeObject(toDelete);
         rangerListeObjects(liste);
         return;
@@ -644,15 +644,15 @@ void removeObject(ListeObjects* liste, int id) {
     Object* courant = liste->premier;
     while(courant != NULL ) {
 
-        if(courant->suivant != NULL && courant->suivant->id == id) { // suppression
-            toDelete = courant->suivant;
-            courant->suivant = courant->suivant->suivant;
+        if(courant->next != NULL && courant->next->id == id) { // suppression
+            toDelete = courant->next;
+            courant->next = courant->next->next;
             freeObject(toDelete);
             rangerListeObjects(liste);
             return;
         }
         
-        courant = courant->suivant;
+        courant = courant->next;
     }
 
 }
@@ -664,7 +664,7 @@ Object* getObjectById(ListeObjects* liste, int id) {
         if(result->id == id) {
             return result;
         }
-        result = result->suivant;
+        result = result->next;
     }
 
     return NULL;

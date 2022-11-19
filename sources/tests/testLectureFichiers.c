@@ -282,7 +282,7 @@ void listeToFichierObjects(ListeObjects* listeObjects) {
             fwrite(buffer_out, sizeof(char), strlen(buffer_out), fichier);
         }
 
-        courant = courant->suivant;
+        courant = courant->next;
     }
 
     fclose(fichier);

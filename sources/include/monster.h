@@ -14,9 +14,9 @@
 #include <stdlib.h>
 #include "Player.h"
 
-typedef struct Monster Monster;
-struct Monster {
+ struct Monster {
     int idMonster;
+    char firstLetter;
     char* name;
     float hpMax;
     int shoot;
@@ -25,34 +25,18 @@ struct Monster {
     int positionX;
     int positionY;
 
-    Monster* suivant;
-    };    
+};
 
-
-/**
- * @brief Liste de tous les monsters du jeu. 
- * Pointe vers le premier monster de la liste chainée.
- */
-typedef struct ListeMonster {
-    Monster* premier;
-} ListeMonster;
-
-/**
- * @brief Alloue un espace mémoire pour une liste de monster et renvoie son adresse. 
- * Pour ajouter des Monster dans la liste, utiliser addMonster().
- * 
- * @return ListeMonster* 
- */
-ListeMonster* createListeMonster();
-
-
-void monsterAttack(Monster* monster, Player* player);
-
-void spawnMonster(Donjon* d,Monster* monster );
+typedef struct Monster Monster;
 
     /**
-     * @brief Constructeur d'monsters
+     * @brief Fonction creer monsters
+     */
+
+    /**
+     * @brief Constructeur de monsters e
      * 
+     * @param idMonster
      * @param name 
      * @param hpMax 
      * @param shield 
@@ -60,29 +44,15 @@ void spawnMonster(Donjon* d,Monster* monster );
      * @param flight 
      * @param spectralShot ss
      * 
-     * @return Monster* adresse de l'monster suivant (NULL par défaut)
+     * @return void 
      */
-    Monster* createMonster(int idMonster, char* name, float hpMax, int shoot, int flight, int ss);
+    Monster createMonster(int idMonster, char* name, float hpMax, int shoot, int flight, int ss);
 
-    /**
-     * @brief Ajouter un monster dans la liste des monsters.
-     * 
-     * @param listeMonster 
-     * @param newMonster 
-     */
-    void addMonster(ListeMonster* listeMonster, Monster* newMonster);
+    Monster * getMonsterById(Monster * arrayMonster, int id);
 
-    void freeListeMonster(ListeMonster* liste);
-    void freeMonster(Monster* monster);
-    Monster* getMonsterById(ListeMonster* liste, int id);
+    void monsterAttack(Monster * monster, Player * player);
 
-    /**
-     * @brief Retourne l'adresse d'un nouvel espace mémoire alloué à un monster dont la valeur des champs est identique
-     * à ceux de l'monster en paramètre.
-     * 
-     * @param monster monster à copier
-     * @return Monster* 
-     */
-    Monster* duplicateMonster(Monster* monster);
+    void spawnMonster(Donjon * d, Monster * monster );    // void freeListeMonster(ListeMonster* liste);
+    // void freeMonster(Monster* monster);
 
 #endif //MONSTER_H

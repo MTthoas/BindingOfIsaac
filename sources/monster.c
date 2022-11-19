@@ -22,22 +22,7 @@
 #include "Player.h"
 
 
-int getTailleListeMonster(ListeMonster* l) {
-    Monster* courant = l->premier;
-    if(courant == NULL) {
-        return 0;
-    }
-
-    int count = 0;
-    while(courant != NULL) {
-        count += 1;
-        courant = courant->suivant;
-    }
-
-    return count;
-}
-
-void spawnMonster(Donjon* d, Monster * monster){
+void spawnMonster(Donjon * d, Monster * monster){
     srand(time(NULL));
     int randomPositionX,randomPositionY;
     int heightRoom = d->stages[0].rooms[0].height - 1;
@@ -53,94 +38,42 @@ void spawnMonster(Donjon* d, Monster * monster){
     } // la lettre doit correspondre au monstre 
     char letterForMonster = monster->name[0];
     letterForMonster = toupper(letterForMonster);
+    monster->firstLetter = letterForMonster;
     d->stages[0].rooms[0].room[monster->positionY][monster->positionX] = letterForMonster;        
 }
 
 
 //TODO
-void monsterAttack(Monster* monster, Player* player) {
+void monsterAttack(Monster * monster, Player * player) {
     if(monster == NULL || player == NULL) {
         return;
     }
 }
 
-ListeMonster* createListeMonster() {
-    ListeMonster* liste = malloc(sizeof(ListeMonster) * 1);
-    return liste;   
+
+
+Monster createMonster(int idMonster, char* name, float hpMax, int shoot, int flight, int ss) {
+
+    Monster monster;
+    monster.idMonster = idMonster;
+    monster.name = duplicateString(name);
+    monster.hpMax = hpMax;
+    monster.shoot = shoot;
+    monster.flight = flight;
+    monster.ss = ss;
+
+    return monster;
 }
 
-void freeMonster(Monster* monster) {
-    free(monster);
-}
+Monster * getMonsterById(Monster * arrayMonster,int id) {
 
-void freeListeMonster(ListeMonster* liste) {
-    Monster* courant = liste->premier;
-    while(courant != NULL) {
-        Monster* tmp = courant;
-        courant = courant->suivant;
-        freeMonster(tmp);
-    }
-    free(liste);
-}
-
-Monster* getMonsterById(ListeMonster* liste, int id) {
-    Monster* result = liste->premier;
-
-    while(result != NULL) {
-        if(result->idMonster == id) {
-            return result;
+    struct Monster * monster = malloc(sizeof(struct Monster)*1);
+    for(int i = 0; i < 9; i++) {
+        if(arrayMonster[i].idMonster == (id)) {
+            *monster = arrayMonster[i];
+            return monster;
         }
-        result = result->suivant;
     }
 
     return NULL;
-}
-
-Monster* createMonster(int idMonster, char* name, float hpMax, int shoot, int flight, int ss) {
-    Monster* o = malloc(sizeof(Monster) * 1);
-    
-    // verification des entrees
-    if(strcmp("", name) == 0) { //nom par défaut
-        name = duplicateString("monster");
-    }
-    // allocation 
-    o->idMonster = idMonster;
-    o->name = duplicateString(name);
-    o->hpMax = hpMax;
-    o->shoot = shoot;
-    o->flight = flight;
-    o->ss = ss;
-    o->suivant = NULL;
-
-    return o;
-}
-
-void addMonster(struct ListeMonster *listeMonster,Monster* newMonster){
-    Monster* courant = listeMonster->premier;
-
-    if(courant == NULL) { // liste vide
-       listeMonster->premier = duplicateMonster(newMonster);
-    }
-// ??? TODO pourquoi retour vide
-        // ajout a la fin de liste
-        if(courant->suivant == NULL) {
-            courant->suivant = duplicateMonster(newMonster);
-        }   
-}
-
-Monster* duplicateMonster(Monster* monster) {
-    if(monster == NULL) {
-        return NULL;
-    }
-
-    Monster* newMonster = malloc(sizeof(Monster)* 1);
-    newMonster->idMonster = monster->idMonster;
-    newMonster->name = duplicateString(monster->name);
-    newMonster->hpMax = monster->hpMax;
-    newMonster->shoot = monster->shoot;
-    newMonster->flight = monster->flight;
-    newMonster->ss = monster->ss;
-    newMonster->suivant = monster->suivant;
-    
-    return newMonster;
 }

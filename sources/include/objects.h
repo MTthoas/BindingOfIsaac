@@ -14,7 +14,7 @@
 
     /**
      * @brief Objects apportant des bonus de statistique au personnage.
-     * Element de la liste chaînée ListeObjects. Pointe sur l'object suivant.
+     * Element de la liste chaînée ListeObjects. Pointe sur l'object next.
      */
     typedef struct Object Object;
     struct Object {
@@ -27,7 +27,7 @@
         int spectralShot; //tirs passent à travers les rochers mais pas les ennemis
         int flight; //passer au dessus de trous rochers et pic
 
-        Object* suivant;
+        Object* next;
     };
 
     /**
@@ -57,7 +57,7 @@
      * @param spectralShot 
      * @param flight 
      * 
-     * @return Object* adresse de l'object suivant (NULL par défaut)
+     * @return Object* adresse de l'object next (NULL par défaut)
      */
     Object* createObject(char* name, float hpMax, float shield, float damage, int piercingShot, int spectralShot, int flight);
 

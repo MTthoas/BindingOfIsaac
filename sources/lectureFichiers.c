@@ -12,6 +12,7 @@
 #include "include/array.h"
 #include "include/mystring.h"
 #include "include/monster.h"
+#include <unistd.h>     
 
 #include <string.h>
 
@@ -116,7 +117,7 @@ void listeToFichierObjects(ListeObjects* listeObjects) {
             fwrite(buffer_out, sizeof(char), strlen(buffer_out), fichier);
         }
 
-        courant = courant->suivant;
+        courant = courant->next;
     }
 
     fclose(fichier);
@@ -251,7 +252,7 @@ ListeObjects* fichierObjectsToListeObjects() {
     return liste;
 }
 
-ListeMonster* fichierMonsterToListeMonster() {
+Monster* fichierMonsterToListeMonster() {
     char* filepath = CHEMIN_FICHIER_MONSTRES;
     FILE* fichier = fopen(filepath, "r"); // ouverture fichier
     if(fichier == NULL) { 
@@ -260,9 +261,10 @@ ListeMonster* fichierMonsterToListeMonster() {
     }
 
     rewind(fichier);
-   
-    ListeMonster* liste = createListeMonster(); // variables
-    Monster* m = malloc(sizeof(Monster));
+    int nbrMonster = getNomberMonster(fichier);
+    Monster * arrayMonster = malloc(sizeof(Monster) * nbrMonster+1);
+    
+
     int idMonster = 0;
     char* name = "";
     float hpMax = 0;
@@ -276,13 +278,16 @@ ListeMonster* fichierMonsterToListeMonster() {
     int creatingMonster = 1;
     char firstLetter;
 
+  
+
     while(fgets(buffer, 255, fichier)) { // lecture fichier ligne par ligne
         firstLetter = buffer[0];
+        // printf("firstLetter %d\n", firstLetter);
+
         //printf("%s", buffer);
 
         if(firstLetter == 'n' || firstLetter == '-' || firstLetter == 'h' || firstLetter == 's' || firstLetter == 's' || firstLetter == 'f' || firstLetter == EOF) {
             if(firstLetter == '-') { 
-                idMonster ++;
                 creatingMonster = (creatingMonster) ? 0 : 1;
 
             } else { // construction object
@@ -290,7 +295,6 @@ ListeMonster* fichierMonsterToListeMonster() {
                 value = strtok(NULL, "="); //ex : 1 (depuis "hpMax=1")
                 uppercase(stat);
                 uppercase(value);
-
                 if(strcmp(stat, "NAME") == 0) {
                     name = duplicateString(value);
                 } else if((strcmp(stat, "HPMAX") == 0)) {
@@ -308,23 +312,29 @@ ListeMonster* fichierMonsterToListeMonster() {
                     flight = 1;
                     }
                 }
+
             }
 
             if(firstLetter == '-' && creatingMonster == 1) { // ajout object
-                m = createMonster(idMonster, name, hpMax, shoot, flight, ss);
-                addMonster(liste, m);
+            //TODO faire une fonction simple qui malloc un monster et qui le retourne
+                arrayMonster[idMonster] = createMonster(idMonster, name, hpMax, shoot,flight,ss);
+                idMonster = idMonster + 1;
                 creatingMonster = (creatingMonster) ? 0 : 1;
+                // printf("idMonster %d\n", idMonster);
+                // printf("%s", name);
             }   
         }
     }
 
     if(feof(fichier)) { 
         if(strcmp(name, "") != 0) {
-            m = createMonster(idMonster, name, hpMax, shoot, flight, ss);
-            addMonster(liste, m);
+            arrayMonster[idMonster] = createMonster(idMonster, name, hpMax, shoot,flight,ss);
+            idMonster = idMonster + 1;
+               
         }
     } // ajout du dernier object
     
     fclose(fichier);
-    return liste;
+    sleep(1);
+    return arrayMonster;
 }

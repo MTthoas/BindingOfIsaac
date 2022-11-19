@@ -26,6 +26,7 @@ struct ShootParams {
     Donjon *d;
     Player *player;
     Monster *monster;
+    int idMonster;
     int reload ;
 };
 typedef struct ShootParams ShootParams;
