@@ -4,17 +4,18 @@
 #include "Room.h"
 
 struct Player{
+    char * name;
     int positionX;
     int positionY;
     char directionView;
     float hpMax;
+    float dmg;
+    float shield;
+    int flight;
 };
-
 typedef struct Player  Player;
-// typedef struct Room Room;
 
-void gestionPositionPlayer(Donjon *d, Player *player);
+void gestionPositionPlayer(struct Donjon *d,struct Player *player, int stage, int c);
 int kbhit(void);
-// void gestionPosition(Player * player, Room * room, int KeyboardEntry);
 
 #endif

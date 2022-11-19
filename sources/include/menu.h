@@ -1,22 +1,30 @@
+/**
+ * @file menu.h
+ * @author  Nairod36
+ * @brief Declaration fonctions du menu
+ * @version 0.1
+ * @date 2022-11-5
+ * 
+ * @copyright Copyright (c) 2022
+ */
+
 #ifndef H_MENU
 #define H_MENU
 
+void menu_init(void);
 
-int menu_init(void);
-int menuCrudMonster(void);
-void menuCreateMonster(void);
-void menuModifyMonster(void);
-void menuDeleteMonster(void);
-
-int menuCrudItem(void);
+void menuCrudItem(void);
 void menuCreateItem(void);
 void menuModifyItem(void);
 void menuDeleteItem(void);
 
-int menuCrudRoom(void);
+void menuCrudRoom(void);
 void menuCreateRoom(void);
 void menuModifyRoom(void);
 void menuDeleteRoom(void);
 
 void optionError(void);
- #endif
+
+void menuControl(void);
+
+#endif

@@ -1,8 +1,17 @@
+/**
+ * @file room.h
+ * @author MTthoas
+ * @brief Declaration fonctions et structures des Rooms,Donjons et stages
+ * @version 0.5
+ * @date 2022-11-12
+ * 
+ * @copyright Copyright (c) 2022
+ */
 #ifndef H_ROOM
 #define H_ROOM
 
 #define NUMBER_ROOM_MAX 30
-#define NUMBER_STAGES_MAX 1
+#define NUMBER_STAGES_MAX 10
 
 // Structure Donjon
 struct Donjon{
@@ -24,25 +33,22 @@ struct Donjon{
 
         // Structure Salles
         struct Room{
+            char name;
             int id;
             char** room;
-            int positionX;
-            int positionY;
+            int AxeX;
+            int AxeY;
             int number;
             int width;
             int height;
-            int VoisinRight;
-            int VoisinLeft;
             char * Doors;
-            int VoisinBottom;
-            int VoisinTop;
             int numberOfDoors;
             int doorTop;
             int doorBottom; 
             int doorLeft;
             int doorRight;
             int numberOfRoomsReturned;
-            int roomPlaced;
+            int roomUsed;
 
         }rooms[NUMBER_ROOM_MAX];
 
@@ -57,13 +63,19 @@ typedef struct Donjon Donjon;
 
 // void newRooms(Room * s, RoomInSpace * v);
 
-
-// void printRoom(Room room);
-// void printRooms(Room room);
-void InitialisationGame(Donjon * d);
-// int NumberOfDoorsByRoom(Room * s);
-// void numberOfRooms(Room *s);
-// void freeRoom(Room *s);
+int * RandomArrayForAttribution(int number);
+void InitialisationGame(Donjon * d, int stageNum);
+void gestionGame(Donjon * d, int stage, int * change);
+int numberOfRooms();
+int PickRoomNotUsed(struct Donjon * d, int NumberOfRoomsInt, int stage);
+void newStageByNumber(struct Donjon * d, int stage, int numberOfRooms);
+void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms);
+char ** RoomByNumber(int height, int length, int number);
+int NumberOfDoorsByRoom(char ** s, int height, int width);
+int * RandomBetweenRange(int number, int zero);
+int NowRoomIsUsed(struct Donjon *d, int NumberOfRoomsInt, int id);
+void InitialisationGameByStagesOptionsForArms(Donjon * d, int stage);
+void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms);
 
 
 #endif
