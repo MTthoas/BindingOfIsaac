@@ -632,9 +632,9 @@ void gestionGame(Donjon * d, int stage, int * change) {
 
     Player * player = malloc(sizeof(Player));
     if(stage == 0){
-        player->dmg = 1;
-        player->hpMax = 5;
-        player->shield = 5;
+        player->dmg = 3.5;
+        player->hpMax = 3;
+        player->shield = 0;
     }
 	player->positionX = 1;
 	player->positionY = 1;
@@ -915,7 +915,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
                 
 
 			}
-
+           
             if(bossActive == 1){
 
                     pthread_t thread;
@@ -951,6 +951,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
                 
                 changeOfRoom = 0;
             }
+
             
             if(BossInfinite == 1){
                 if(shootParams->monster->hpMax == 0){
@@ -1005,7 +1006,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
                 printf("Boss HP : %.f\n", shootParams->monster->hpMax);
             }
             printf("\n");
-            printf("HP : %.2f\n", player->hpMax);
+            printf("HP player: %.2f\n", player->hpMax);
 
 			for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
 				for (int y = 0; y < d->stages[stage].rooms[id].width - 1; y++) {
