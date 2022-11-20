@@ -59,13 +59,7 @@ void monsterShoot(Monster * monster, Player * player) {
 void * bossAthina(void *shootParams){
     int BossPosX, BossPosY;
     Shoot * shoot = malloc(sizeof(Shoot));
-    int reload = 1;
-    Monster * Athina = malloc(sizeof(Monster));
-    Athina->firstLetter = 'A';
-    Athina->name = "Athina";
-    Athina->hpMax = 450;
-    Athina->shoot = 1;
-    
+    int reload = 1;    
 
     for (int i = 0; i < ((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].height; i++) {
         for (int y = 0; y < ((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].width; y++) {
@@ -89,7 +83,7 @@ void * bossAthina(void *shootParams){
     }   
     if (reload == 1){
         reload = 0;
-        while(Athina->hpMax > 0 && ((ShootParams*)shootParams)->player->hpMax > 0){
+        while(((ShootParams*)shootParams)->monster->hpMax > 0 && ((ShootParams*)shootParams)->player->hpMax > 0){
                 #ifdef _WIN32 
     	        Sleep(400); 
     	        #else 
@@ -185,18 +179,7 @@ void * bossAthina(void *shootParams){
             reload = 1;
         }
         
-    // if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] == ((ShootParams*)shootParams)->monster->firstLetter){
-    // 	((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
-    // 	if(((ShootParams*)shootParams)->monster->hpMax <= 0){
-    // 		((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] = ' ';
     }
-        
-        
-    // }         
-            
-
-    // }
-    free(Athina);
     free(shoot);
     return 0;
 }
