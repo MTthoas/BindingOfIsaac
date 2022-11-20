@@ -30,6 +30,7 @@ struct ShootParams {
     int reloadBoss;
     int reload ;
     int stage;
+    int condition;
     int id;
     char directionView;
 };
