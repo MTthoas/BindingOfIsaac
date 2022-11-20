@@ -954,7 +954,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
 
             
             if(BossInfinite == 1){
-                if(shootParams->monster->hpMax == 0){
+                if(shootParams->monster->hpMax <=  0){
 
                     system("clear");
 
