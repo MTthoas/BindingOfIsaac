@@ -63,7 +63,7 @@ void InitialisationGame(Donjon * d, int stageNum) {
                  d->stages[stageNum].rooms[y].id = 0;
                  d->stages[stageNum].rooms[y].roomUsed = 1;
 
-            }else{
+            } else{
                 
                 if(d->stages[stageNum].randomNumberRooms[y] != 0){
 
@@ -933,7 +933,7 @@ void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms){
 
             // printf("\nSTAGE %d / Room %d \n", stage, iteration+1);
 
-            int iterationDoorsReturned = NumberOfDoorsByRoom( d-> stages[stage].rooms[iteration].room, height, width);
+            int iterationDoorsReturned = NumberOfDoorsByRoom(d-> stages[stage].rooms[iteration].room, height, width);
 
             d-> stages[stage].rooms[iteration].room = RoomByNumber(height, width, iteration+1);
             d-> stages[stage].rooms[iteration].number = iteration;
@@ -1148,7 +1148,7 @@ int NumberOfDoorsByRoom(char ** s, int height, int width){
 
     for(int i  = 0; i< height; i++){
         for(int y = 0; y < width+1; y++){
-            if(s[i][y] == 'D'){
+            if(s[i][y] == 'D') {
                 iteration++;
             }
         }

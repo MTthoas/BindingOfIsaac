@@ -17,72 +17,63 @@
 #include "../include/mystring.h"
 #include "../include/objects.h"
 #include "../include/lectureFichiers.h"
+#include "../include/array.h"
+#include "../include/roomsForCRUD.h"
 
 void test_extensionType(); //ok
 void test_getNbLignesFichier(); //ok
-void test_fichierToListeObjects(); //ok
-void test_listeToFichierObjects(); //ok
+void test_roomsFileToRoomsList(); //ok
+void test_listToRoomsFile(); //ok
+
+void test_objectsFileToObjectsList(); 
+void test_listToObjectsFile(); // ok
 
 int main(void) {
-    test_listeToFichierObjects();
-    //test_fichierToListeObjects();
+    //test_listToRoomsFile();
+    //test_roomsFileToRoomsList();
     //test_extensionType();
     //test_getNbLignesFichier();
+    //test_objectsFileToObjectsList();
+    //test_listToObjectsFile();
 
     return 0;
 }
 
-void test_listeToFichierObjects() {
-    printf("\033[1;32m");
-    printf("[TEST] fichierObjectsToListeObjects() :\n\n");
-    printf("\033[0m"); 
+void test_listToObjectsFile() {
+    printf("[TEST] writing fichier objets\n");
 
-    // initialisation
-    ListeObjects* l = createListeObjects();
-    Object* epee = createObject("Epee\n", 0, 0, 0.3, 0, 0, 0);
-    Object* ailes = createObject("Ailes\n", 0.1, 0, 0, 0, 0, 1);
-    Object* poison = createObject("Poison\n", -0.1, 0, 0, 0, 0, 0);
-    addObject(l, epee);
-    addObject(l, ailes);
-    addObject(l, poison);
-
-    // test
-    printf("Affichage de la liste :\n");
-    displayListeObjects(l);
-
-    printf("\nAffichage du fichier généré : \n");
-    listeToFichierObjects(l);
-    FILE* fichier = fopen("./test.itbob", "r");
-    if(fichier == NULL) {
-        printf("Impossible d'ouvrir le fichier\n");
-        return;
-    }
-    afficherFichier(fichier);
-
-    freeListeObjects(l);
+    Object* head = objectsFileToObjectsList();
+    displayAllObjects(head);
+    printf("\n The above items should be written inside ./test.rtbob :)\n");
+    listToObjectsFile(head);
 }
+
+void test_objectsFileToObjectsList() {
+    printf("[TEST] parsing fichier objets\n");
+
+    Object* head = objectsFileToObjectsList();
+    displayAllObjects(head);
+}
+
+void test_listToRoomsFile() {
+    printf("[TEST] listToRoomsFile() :\n\n");
+    CRUD_Room* rooms = roomsFileToRoomsList();
+    listToRoomsFile(rooms);
+    printf("Check the test.rtbob file ;)\n");
+}
+
+void test_roomsFileToRoomsList() {
+    printf("[TEST] roomsFileToRoomsList() :\n\n");
+    CRUD_Room* rooms = roomsFileToRoomsList();
+    displayAllRooms(rooms);
+}
+
 
 void test_getNbLignesFichier() {
     char* chemin = "./test.itbob";
     printf("Attendu : 10\nResultat : %d\n\n", getNbLignesFichier(chemin));
     chemin = "rkovnej";
     printf("\nAttendu : 0 (Impossible d'ouvrir le fichier)\nRésultat : %d\n", getNbLignesFichier(chemin));
-
-}
-
-void test_fichierToListeObjects() {
-    printf("[TEST] fichierObjectsToListeObjects() :\n\n");
-
-    FILE* fichier = fopen("../../resources/items.itbob", "r");
-
-    printf("Fichier de base : \n");
-    afficherFichier(fichier);
-    fclose(fichier);
-
-    printf("\nAffichage de la liste : \n");
-    ListeObjects* l = fichierObjectsToListeObjects();
-    displayListeObjects(l);
-    freeListeObjects(l);
 }
 
 

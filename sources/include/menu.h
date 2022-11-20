@@ -14,17 +14,19 @@
 void menu_init(void);
 
 void menuCrudItem(void);
+void menuSeeItems(void);
 void menuCreateItem(void);
 void menuModifyItem(void);
 void menuDeleteItem(void);
 
 void menuCrudRoom(void);
+void menuSeeRooms(void);
 void menuCreateRoom(void);
 void menuModifyRoom(void);
 void menuDeleteRoom(void);
 
 void optionError(void);
-
 void menuControl(void);
+void printGameBanner(void);
 
 #endif
