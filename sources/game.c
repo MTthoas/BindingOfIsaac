@@ -344,6 +344,29 @@ void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id )
 
 }
 
+
+// void* Jagger(void *params){
+
+//     (void)params;
+
+//     // void * params = ((ShootParams*)params);
+
+//     //  for (int i = 0; i < params->d -> stages[params->stage].rooms[params->id].height; i++) {
+//     //     // for (int y = 0; y < d -> stages[stage].rooms[id].width; y++) {
+//     //     //     if (i == d -> stages[stage].rooms[id].height / 2 && y == d -> stages[stage].rooms[id].width / 2) {
+//     //     //         if (y % 2 == 0) {
+//     //     //             d -> stages[stage].rooms[id].room[i][y] = 'H';
+//     //     //         } else {
+//     //     //             d -> stages[stage].rooms[id].room[i][y - 1] = 'H';
+//     //     //         }
+//     //     //     }
+
+//     //     // }
+//     // }
+
+
+// }
+
 void InitialiseBossRoom(Donjon * d, int stage, int id){
 
      for (int i = 0; i < d -> stages[stage].rooms[id].height; i++) {
@@ -360,30 +383,31 @@ void InitialiseBossRoom(Donjon * d, int stage, int id){
     }
 }
 
+
 void gestionGame(Donjon * d, int stage, int * change) {
     
-    int NumberOfRoomsInt;
-    int axeX = 0;
-    int axeY = 0;
-    int id = 0;
-    int *pId = &id;
-    int hp = 100;
-    int *pHp = &hp;
-    int changeOfRoom = 1;
-    int chargeBoss = 0;
-    int bossActive = 0;
-
     int iteration = 0;
     bool condition = true;
     int c;
 
     Player * player = malloc(sizeof(Player));
-    player->dmg = 1;
-    player->hpMax = 5;
-    player->shield = 5;
+    player->dmg = 3.5;
+    player->hpMax = 3;
+    player->shield = 0;
 	player->positionX = 1;
 	player->positionY = 1;
 	player->directionView = 'D';
+
+    int NumberOfRoomsInt;
+    int axeX = 0;
+    int axeY = 0;
+    int id = 0;
+    int *pId = &id;
+    int hp =  player->hpMax;
+    int *pHp = &hp;
+    int changeOfRoom = 1;
+    int chargeBoss = 0;
+    int bossActive = 0;
 
     ShootParams *shootParams = malloc(sizeof(struct ShootParams));
     shootParams->reload = 1;
@@ -622,15 +646,15 @@ void gestionGame(Donjon * d, int stage, int * change) {
                 
 
 			}
-
+           
             if(bossActive == 1){
-                
                     pthread_t thread;
                     if(stage == 0){
                         pthread_create(&thread, NULL, bossAthina, shootParams);
                     }
 
-                
+                d->stages[stage].rooms[id].name = 'O';
+                bossActive = 0;
 
             }
 
@@ -656,14 +680,15 @@ void gestionGame(Donjon * d, int stage, int * change) {
             }
     
 
-            printf("Axe Position X : %d / and Position Y : %d\n", axeX, axeY);
             printf("ETAGE : %d\n", stage);
             printf("Name : %c\n",d->stages[stage].rooms[id].name);
             printf("ID : %d\n", id);
-            printf("Width : %d\n", d->stages[stage].rooms[id].width);
-            printf("Height : %d\n", d->stages[stage].rooms[id].height);
             printf("\n");
-            printf("HP : %d\n", hp);
+            printf("HP joueur: %.2f\n",  player->hpMax);
+            // if(d->stages[stage].rooms[id].name == 'O'){
+            //     printf("Boss : %s\n", shootParams->monster->name);
+            //     printf("Boss HP : %.f\n", shootParams->monster->hpMax);
+            // }
 
 			for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
 				for (int y = 0; y < d->stages[stage].rooms[id].width - 1; y++) {
@@ -707,5 +732,4 @@ void gestionGame(Donjon * d, int stage, int * change) {
     // (void)change;
 
     free(player);
-
 }

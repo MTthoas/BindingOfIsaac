@@ -10,7 +10,7 @@ struct Player{
     char directionView;
     float hpMax;
     float dmg;
-    float shield;
+    int shield;
     int flight;
 };
 typedef struct Player  Player;
