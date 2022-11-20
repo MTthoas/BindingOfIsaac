@@ -41,8 +41,6 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
     int It = 0, Vt = 0, Bt = 0;
     int Ib = 0, Vb = 0, Bb = 0;
 
-
-
     for(int i = 0; i < numberOfRooms; i++){
         for(int y = 0; y < numberOfRooms; y++){
             if(d->stages[stage].stage[i][y] == 'P'){
@@ -62,7 +60,8 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
                             if(d->stages[stage].stage[i + axeY][w + axeX + 1] == 'B'){
                                 Br = 1;
                             }
-                            // printf("DoorRight");
+                            
+                            
                         }
 
                         if(d->stages[stage].stage[i + axeY][w + axeX - 1] !=' '){
@@ -224,6 +223,7 @@ void checkName(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY, int 
                 
                 if( d->stages[stage].stage[i + axeY][y + axeX] == 'R'){
                     d->stages[stage].rooms[t].name = 'R';
+                    
                 }
 
                 if( d->stages[stage].stage[i + axeY][y + axeX] == 'I'){
@@ -474,7 +474,6 @@ void * BossShoot(void * params){
 
 }
 
-
 void * Jagger(void *params){
 
     // Shoot * shoot = malloc(sizeof(Shoot));
@@ -626,7 +625,6 @@ void InitialiseBossRoom(Donjon * d, int stage, int id, char letter){
         }
     }
 }
-
 
 void gestionGame(Donjon * d, int stage, int * change) {
 
@@ -919,7 +917,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
 			}
 
             if(bossActive == 1){
-                
+
                     pthread_t thread;
 
                     d->stages[stage].rooms[id].name = 'O';
@@ -937,12 +935,9 @@ void gestionGame(Donjon * d, int stage, int * change) {
                         }
 
                         pthread_create(&thread, NULL, Jagger, shootParams);
-                    }
-
-                    
+                    }    
                     bossActive = 0;     
                     BossInfinite = 1;    
-
             }
 
             gestionPassing(d, player, stage, id, NumberOfRoomsInt);
@@ -967,8 +962,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
                     printf("You killed the boss, you can now go to the next stage ( n )\n");
                     printf("\n");
                     printf("------------------------------------------------------------\n");
-
-                    
+     
                     #ifdef _WIN32 
                     Sleep(25); 
                     #else 
@@ -987,13 +981,9 @@ void gestionGame(Donjon * d, int stage, int * change) {
                         }else{
                             continue;
                         }
-
-                    }
-                    
+                    }  
                     BossInfinite = 0;
-                    
-                }
-                
+                }  
             }
 
 
@@ -1062,3 +1052,16 @@ void gestionGame(Donjon * d, int stage, int * change) {
     //free(shootParams);
 
 }
+
+// void lockDoors(Donjon * d, int stage, int id){
+
+//     for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
+//         for (int y = 0; y < d->stages[stage].rooms[id].width - 1; y++) {
+//             if (y % 2 == 0) {
+//                 if(d-> stages[stage].rooms[id].room[i][y] == 'B'){
+//                     d-> stages[stage].rooms[id].room[i][y] = 'L';
+//                 }
+//             }
+//         }
+//     }
+// }

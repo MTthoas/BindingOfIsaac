@@ -49,6 +49,7 @@ void InitialisationGame(Donjon * d, int stageNum) {
 
         for (int y = 0; y < NumberOfRoomsInt; y++) {
             
+            
             printf("Salle %d : %d\n", y, randomNumberRooms[y]);
 
             d->stages[stageNum].randomNumberRooms[y] = randomNumberRooms[y];	

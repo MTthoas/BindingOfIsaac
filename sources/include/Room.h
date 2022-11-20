@@ -50,12 +50,18 @@ struct Donjon{
             int numberOfRoomsReturned;
             int roomUsed;
 
+            struct Door{
+                int doorTop;
+                int doorBottom; 
+                int doorLeft;
+                int doorRight;
+            }doors[4];
+
         }rooms[NUMBER_ROOM_MAX];
 
     }stages[NUMBER_STAGES_MAX];
     
 };
-
 
 typedef struct Donjon Donjon;
 
