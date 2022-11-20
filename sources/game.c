@@ -369,9 +369,9 @@ void * BossShoot(void * params){
 
         if(((ShootParams*)params) -> directionView == 'R'){
 
-            ((ShootParams*)params)->reload = 0;
+            ((ShootParams*)params)->reloadBoss = 0;
 
-            while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX + 2] == ' ' && ((ShootParams*)params)->reload  == 0 ){
+            while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX + 2] == ' ' && ((ShootParams*)params)->reloadBoss  == 0 ){
 
                 ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] = '*';
 
@@ -389,15 +389,15 @@ void * BossShoot(void * params){
 
             }
     
-            ((ShootParams*)params)->reload = 1;
+            ((ShootParams*)params)->reloadBoss = 1;
        
         }
 
         if(((ShootParams*)params) -> directionView == 'L'){
 
-                      ((ShootParams*)params)->reload = 0;
+                      ((ShootParams*)params)->reloadBoss = 0;
 
-            while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX - 2] == ' ' && ((ShootParams*)params)->reload  == 0){
+            while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX - 2] == ' ' && ((ShootParams*)params)->reloadBoss  == 0){
 
                 ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] = '*';
 
@@ -415,15 +415,15 @@ void * BossShoot(void * params){
             }
 
             
-            ((ShootParams*)params)->reload = 1;
+            ((ShootParams*)params)->reloadBoss = 1;
        
         }
 
         if(((ShootParams*)params) -> directionView == 'T'){
 
-                      ((ShootParams*)params)->reload = 0;
+                      ((ShootParams*)params)->reloadBoss = 0;
 
-            while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY - 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reload  == 0){
+            while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY - 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reloadBoss  == 0){
 
                 ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX] = '*';
 
@@ -439,15 +439,15 @@ void * BossShoot(void * params){
 
             }
 
-            ((ShootParams*)params)->reload = 1;
+            ((ShootParams*)params)->reloadBoss = 1;
 
         }
 
         if(((ShootParams*)params) -> directionView == 'B'){
 
-                      ((ShootParams*)params)->reload = 0;
+                      ((ShootParams*)params)->reloadBoss = 0;
 
-            while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY + 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reload  == 0){ 
+            while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY + 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reloadBoss  == 0){ 
 
                 ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX] = '*';
 
@@ -463,7 +463,7 @@ void * BossShoot(void * params){
 
             }
 
-              ((ShootParams*)params)->reload = 1;
+              ((ShootParams*)params)->reloadBoss = 1;
         }
 
 
