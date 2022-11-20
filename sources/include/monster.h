@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Player.h"
+#include "Room.h"
 
  struct Monster {
     int idMonster;
@@ -60,5 +61,12 @@ typedef struct Monster Monster;
 
     void spawnMonster(Donjon * d, Monster * monster, int stage, int id );    // void freeListeMonster(ListeMonster* liste);
     // void freeMonster(Monster* monster);
+
+    void * BossShoot(void * params);
+
+    void * Jagger(void *params);
+    
+
+
 
 #endif //MONSTER_H

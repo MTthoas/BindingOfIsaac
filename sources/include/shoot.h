@@ -27,9 +27,12 @@ struct ShootParams {
     Player *player;
     Monster *monster;
     int idMonster;
+    int reloadBoss;
     int reload ;
     int stage;
+    int condition;
     int id;
+    char directionView;
 };
 typedef struct ShootParams ShootParams;
 
