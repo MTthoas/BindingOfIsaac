@@ -34,19 +34,7 @@ int main(int argc, char * argv[]) {
 	bool condition = true, condition2 = true, etape = true;
 	int c,c2;
 
-	Player* player = malloc(sizeof(Player));
-	player->dmg = 1;
-	player->hpMax = 5;
-	player->shield = 5;
-	player->ss = 0;
-	player->ps = 0;
-	player->flight = 0;
-	player->positionX = 1;
-	player->positionY = 1;
-	player->directionView = 'D';
-	
 	menu_init();
-
 	while (condition) {
 		c = 'p';
 
@@ -63,15 +51,17 @@ int main(int argc, char * argv[]) {
 				(void) argc;
 				(void) argv;
 
+				int character = choseCharacter();
+				PlayerStats* playerStats = initialisePlayerStats(character); 
+
 				int stage = 0;
 				int change = 0;
-
 				for(int i = 0; i < 10; i+=1) {
 
 					Donjon * d = malloc(sizeof(Donjon));
 					
 					InitialisationGame(d, stage);			
-					gestionGame(d,stage, &change, player);
+					gestionGame(d,stage, &change, playerStats);
 					
 					free(d -> stages[stage].stage);
 					free(d);

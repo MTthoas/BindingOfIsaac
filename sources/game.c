@@ -627,15 +627,20 @@ void InitialiseBossRoom(Donjon * d, int stage, int id, char letter){
 }
 
 
-void gestionGame(Donjon * d, int stage, int * change, Player* player) {
+void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) {
     
     Monster * Boss = malloc(sizeof(Monster));
+    Player* player = malloc(sizeof(Player));
 
-     if(stage == 0){
-        player->dmg = 3.5;
-        player->hpMax = 3;
-        player->shield = 0;
-    }
+	player->ss = playerStats->ss;
+	player->ps = playerStats->ps;
+	player->flight = playerStats->flight;
+    player->dmg = playerStats->dmg;
+	player->hpMax = playerStats->hpMax;
+	player->shield = playerStats->shield;
+	player->positionX = 1;
+	player->positionY = 1;
+	player->directionView = 'D';
     
     int NumberOfRoomsInt;
     int axeX = 0;

@@ -469,3 +469,60 @@ Monster* fichierMonsterToListeMonster() {
     return arrayMonster;
 }
  
+int choseCharacter2() {
+    char* filepath = "../../resources/progression.ptbob";
+    FILE* file = fopen(filepath, "r"); // ouverture fichier
+    if(file == NULL) { 
+        printf("Problème d'ouverture du fichier de progression.\n");
+        return NULL;
+    }
+
+    struct Character {
+        char* name;
+        int usable;
+    };
+    typedef struct Character Character;
+
+    
+    char* original; // will be each line
+    char* characterName; // will be the character name (eg : Briatte)
+    char* usable; // will be 0 or 1
+    char buffer[255];
+    Character characters[3];
+
+    for(int i = 0 ; i < 3 ; i+=1) {
+        fgets(buffer, 255, file);
+
+        original = strdup(buffer); // original = "Briatte:1"
+        usable = original; 
+        characterName = strtok_r(usable, ":", &usable); // characterName = "Briatte", usable = "1"
+    
+        characters[i].name = malloc(sizeof(char) * strlen(characterName));
+        characters[i].name = characterName;
+        characters[i].usable = atoi(usable);
+    }
+
+    system("clear");
+    printf("\n\n\n\n==========================================================================\n");
+    printf("|%50s", "CHOSE A CHARACTER");
+    printf("%22s|\n");
+    printf("==========================================================================\n");
+    
+    for(int i = 0 ; i < 3 ; i+=1) {
+        printf("                   ");
+        printf("%d.%s %s\n\n", i+1, characters[i].name, (characters[i].usable) ? " " : "(locked)");
+    }
+
+    int choice = 0;
+    do {
+        choice = readInt();
+        if(choice < 1 || choice > 3 || !(characters[choice-1].usable)) {
+            printf("Try again.\n");
+        } else {
+            break;
+        }
+    } while(1);
+    
+    return choice;
+}
+

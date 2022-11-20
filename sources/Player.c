@@ -53,3 +53,29 @@ int kbhit(void) {
 	return 0;
 }
 
+PlayerStats* initialisePlayerStats(int character) {
+	PlayerStats* playerStats = 	malloc(sizeof(PlayerStats));
+
+	if(character == BRIATTE) {
+		playerStats->hpMax = 3;
+		playerStats->dmg = 3.5;
+		playerStats->shield = 0;
+		playerStats->flight = 0;
+	} else if(character == HENNOU) {
+		playerStats->hpMax = 6;
+		playerStats->dmg = 2.5;
+		playerStats->shield = 0;
+		playerStats->flight = 0;
+	} else if(character == CHEVAILLIER) {
+		playerStats->hpMax = 1;
+		playerStats->dmg = 2;
+		playerStats->shield = 8;
+		playerStats->flight = 1;
+	}
+	
+	playerStats->ps = 0;
+	playerStats->ss = 0;
+
+	return playerStats;
+}
+

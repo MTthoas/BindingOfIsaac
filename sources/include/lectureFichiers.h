@@ -18,6 +18,13 @@
     #include <stdio.h>
     #include "objects.h"
     #include "roomsForCRUD.h"
+    #include "charactersId.h"
+
+    /**
+     * @brief Makes the user choose a player. Returns the id of the player selected. 
+     * @return int 
+     */
+    int choseCharacter();
 
     /**
      * @brief Transforme le fichier des objects bonus en structure de type ListeObjects et retourne

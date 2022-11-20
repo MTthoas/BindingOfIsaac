@@ -14,7 +14,7 @@
 #include "Room.h"
 
 int gestionRoom(Donjon * d, int numberOfRooms, int stage, int axeX, int axeY);
-void gestionGame(Donjon * d, int stage, int * change, Player* player);
+void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats);
 
 /**
  * @brief Set items in the room of the given id and stage
@@ -26,6 +26,6 @@ void setItemInsideRoom(Donjon* d, int stage, int id);
  * @param item 
  * @param player 
  */
-void setItemEffects(Object* item, Player* player);
+void setItemEffects(Object* item, PlayerStats* playerStats, Player* player);
 
 #endif
