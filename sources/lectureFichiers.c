@@ -1,7 +1,7 @@
 /**
  * @file lectureFichiers.c
- * @author TheGreat-Chain & Nairod36
- * @brief Fontions relatives à la lecture des fichiers des monstres et objects.
+ * @author TheGreat-Chain
+ * @brief Fontions relatives à la lecture des fichiers des monstres, objects et pièces.
  * @version 0.1
  * @date 2022-10-11
  * 
@@ -11,13 +11,134 @@
 #include "include/lectureFichiers.h"
 #include "include/array.h"
 #include "include/mystring.h"
+
 #include "include/monster.h"
 #include <unistd.h>     
+#include "include/userInput.h"
 
-
+#include <ctype.h>
 #include <string.h>
 
-int getNomberObjects(FILE* fichierObjects){
+int listToRoomsFile(CRUD_Room* head) {
+    char* filepath = CHEMIN_FICHIER_PIECES;
+    FILE* file = fopen(filepath, "w"); 
+    if(file == NULL) { 
+        printf("Unable to open room.rtbob. Path : %s\n", filepath);
+        return 0;
+    }
+
+    char* buffer_out = malloc(sizeof(char) * 256);
+    
+    int numRooms;
+    int listSize = getRoomsListSize(head);
+    if(listSize == 0) {
+        return 0; // no rooms
+    }
+    askNumberOfRooms(&numRooms, listSize);
+    sprintf(buffer_out, "{%d}\n", numRooms);
+    fwrite(buffer_out, sizeof(char), strlen(buffer_out), file);
+
+    CRUD_Room* current = head;
+    while(current != NULL) {
+        for(int i = 0 ; i < current->lines ; i += 1) {
+            if(i == 0) {
+                sprintf(buffer_out, "[%d|%d]%d\n", current->lines, current->columns/2, current->id);
+                fwrite(buffer_out, sizeof(char), strlen(buffer_out), file);
+            }
+            
+            sprintf(buffer_out, "%s\n", current->map[i]);
+            fwrite(buffer_out, sizeof(char), strlen(buffer_out), file);
+        }
+        current = current->next;
+    }
+
+    fclose(file);
+    free(buffer_out);
+    freeAllRooms(head);
+    return 1;
+}
+
+CRUD_Room* roomsFileToRoomsList() {
+    char* filepath = CHEMIN_FICHIER_PIECES;
+    FILE* file = fopen(filepath, "r"); 
+    if(file == NULL) { 
+        printf("Unable to open room.rtbob. Path : %s\n", filepath);
+        return NULL;
+    }
+
+    rewind(file);
+
+    // to create rooms
+    CRUD_Room* head;
+
+    int iteration = 1;
+    int lines = 0;
+    int columns = 0;
+    char** map;
+    char firstLetter;
+
+    // to parse file
+    char buffer[255];
+    while(fgets(buffer, 255, file)) {
+        firstLetter = toupper(buffer[0]);
+        
+        if(firstLetter == '[') { // new room
+            parseRoomInfo(buffer, &lines, &columns);
+            columns *= 2; // because of spaces
+            columns -= 1;
+
+            // prepare map
+            map = malloc(sizeof(char*) * lines);
+
+            for(int i=0 ; i < lines ; i+=1) {
+                map[i] = malloc(sizeof(char) * columns);
+            }
+
+            fgets(buffer, 255, file); // skip [9|15]1 line
+
+            for(int i = 0 ; i < lines ; i += 1) { // fill map
+                for(int j = 0 ; j < columns ; j +=1) {
+                    //printf("%c", buffer[j]);
+                    map[i][j] = buffer[j];
+                }
+                fgets(buffer, 255, file);
+            }          
+
+            if(iteration == 1) {
+                head = createCRUD_Room(lines, columns+1, map);
+            } else {
+                addCRUD_Room(head, createCRUD_Room(lines, columns+1, map));
+            }
+            iteration += 1;
+            fseek(file, -strlen(buffer), SEEK_CUR); // go back one line
+        } // if
+        
+    } // while
+
+    //displayAllRooms(head);
+    fclose(file);
+    return head;
+}
+
+int parseRoomInfo(char* buffer, int* ptr_lines, int* ptr_columns) {
+    char* original;
+    char* token;
+    char* theRest;
+
+    original = strdup(buffer);
+    theRest = original;
+    token = strtok_r(theRest, "|", &theRest);
+
+    char* lines = token + 1;
+    *ptr_lines = atoi(lines);
+
+    token = strtok_r(theRest, "]", &theRest);
+    *ptr_columns = atoi(token);
+    
+    return 0;
+}
+
+int getNombreObjects(FILE* fichierObjects) {
     char token[256];
     int index = 0;
     char c = fgetc(fichierObjects);
@@ -66,7 +187,7 @@ void afficherFichier(FILE* fichier) {
     return;
 }
 
-void listeToFichierObjects(ListeObjects* listeObjects) {
+void listToObjectsFile(Object* head) {
     char* filepath = CHEMIN_FICHIER_OBJECTS;
     FILE* fichier = fopen(filepath, "w+"); // ouverture fichier
     if(fichier == NULL) { 
@@ -77,7 +198,7 @@ void listeToFichierObjects(ListeObjects* listeObjects) {
     char* buffer_out = malloc(sizeof(char) * 256);
 
     // ecriture de l'indicateur du nombre d'objects :
-    int listSize = getTailleListeObjects(listeObjects);
+    int listSize = getNumberObjects(head);
     if(listSize == 0) { // fin si pas d'objects dans la liste
         return;
     }
@@ -85,7 +206,7 @@ void listeToFichierObjects(ListeObjects* listeObjects) {
     fwrite(buffer_out, sizeof(char), strlen(buffer_out), fichier);
 
     // ecriture des objects :
-    Object* courant = listeObjects->premier;
+    Object* courant = head;
     while(courant != NULL) {
         buffer_out = duplicateString("---\n");
         fwrite(buffer_out, sizeof(char), strlen(buffer_out), fichier);
@@ -123,6 +244,7 @@ void listeToFichierObjects(ListeObjects* listeObjects) {
 
     fclose(fichier);
     free(buffer_out);
+    freeAllObjects(head);
 }
 
 int extensionType(char* filename) { 
@@ -139,7 +261,7 @@ int extensionType(char* filename) {
     if(strcmp(extension, "mtbob") == 0) {
         return EXTENSION_FICHIER_MONSTRES;
     } else if(strcmp(extension, "itbob") == 0) {
-        return EXTENSION_FICHIER_OBJECT;
+        return EXTENSION_FICHIER_OBJET;
     } else if(strcmp(extension, "rtbob") == 0) {
         return EXTENSION_FICHIER_SALLES;
     } 
@@ -165,7 +287,8 @@ int getNbLignesFichier(char* chemin_fichier) {
     return nbLignes;
 }
 
-ListeObjects* fichierObjectsToListeObjects() {
+Object* objectsFileToObjectsList() {
+    
     char* filepath = CHEMIN_FICHIER_OBJECTS;
     FILE* fichier = fopen(filepath, "r"); // ouverture fichier
     if(fichier == NULL) { 
@@ -174,9 +297,10 @@ ListeObjects* fichierObjectsToListeObjects() {
     }
 
     rewind(fichier);
-   
-    ListeObjects* liste = createListeObjects(); // variables
-    Object* o;
+
+    Object* head;
+
+    int id = 1;
     char* name = "";
     float hpMax = 0;
     float shield = 0;
@@ -212,7 +336,7 @@ ListeObjects* fichierObjectsToListeObjects() {
                     hpMax = atof(value);
                 } else if((strcmp(stat, "SHIELD") == 0)) {
                     shield = atof(value);
-                } else if((strcmp(stat, "DMG") == 0)) {
+                } else if((strcmp(stat, "DAMAGE") == 0)) {
                     damage = atof(value);
                 } else if((strcmp(stat, "PS") == 0)) {
                     activated = (strcmp(value, "TRUE\n") == 0);
@@ -227,8 +351,14 @@ ListeObjects* fichierObjectsToListeObjects() {
             }
 
             if(firstLetter == '-' && creatingObject == 1) { // ajout object
-                o = createObject(name, hpMax, shield, damage, piercingShot, spectralShot, flight);
-                addObject(liste, o);
+                if(id == 1) {
+                    head = createObject(id, name, hpMax, shield, damage, piercingShot, spectralShot, flight);
+                } else {
+                    addObject(head, createObject(id, name, hpMax, shield, damage, piercingShot, spectralShot, flight));
+                }
+
+                id += 1;
+            
                 name = "";
                 hpMax = 0;
                 shield = 0;
@@ -244,13 +374,12 @@ ListeObjects* fichierObjectsToListeObjects() {
 
     if(feof(fichier)) { 
         if(strcmp(name, "") != 0) {
-            o = createObject(name, hpMax, shield, damage, piercingShot, spectralShot, flight);
-            addObject(liste, o);
+            addObject(head, createObject(id, name, hpMax, shield, damage, piercingShot, spectralShot, flight));
         }
     } // ajout du dernier object
     
     fclose(fichier);
-    return liste;
+    return head;
 }
 
 Monster* fichierMonsterToListeMonster() {
@@ -339,3 +468,4 @@ Monster* fichierMonsterToListeMonster() {
     sleep(1);
     return arrayMonster;
 }
+ 

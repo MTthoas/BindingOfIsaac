@@ -1,0 +1,1 @@
+gcc testRoomsForCRUD.c ../userInput.c ../array.c ../objects.c ../roomsForCRUD.c ../mystring.c && ./a.out

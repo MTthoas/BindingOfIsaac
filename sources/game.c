@@ -28,7 +28,7 @@
 #include "lectureFichiers.h"
 
 
-void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int numberOfRooms){
+void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int numberOfRooms) {
 
     int t = id;
     int DoorLeft = 0;
@@ -51,13 +51,13 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
                         
                         if(d->stages[stage].stage[i + axeY][w + axeX + 1] != ' '){
                             DoorRight = 1;
-                            if(d->stages[stage].stage[i + axeY][w + axeX + 1] == 'V'){
+                            if(d->stages[stage].stage[i + axeY][w + axeX + 1] == 'V') {
                                 Vr = 1;
                             }
-                            if(d->stages[stage].stage[i + axeY][w + axeX + 1] == 'I'){
+                            if(d->stages[stage].stage[i + axeY][w + axeX + 1] == 'I') {
                                 Ir = 1;
                             }
-                            if(d->stages[stage].stage[i + axeY][w + axeX + 1] == 'B'){
+                            if(d->stages[stage].stage[i + axeY][w + axeX + 1] == 'B') {
                                 Br = 1;
                             }
                             
@@ -79,29 +79,29 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
                             // printf("DoorLeft");
                         }
 
-                        if(d->stages[stage].stage[i + axeY - 1 ][w + axeX]!=' '){
+                        if(d->stages[stage].stage[i + axeY - 1 ][w + axeX]!=' ') {
                             DoorTop = 1;
-                            if(d->stages[stage].stage[i + axeY - 1][w + axeX] == 'V'){
+                            if(d->stages[stage].stage[i + axeY - 1][w + axeX] == 'V') {
                                 Vt = 1;
                             }
-                            if(d->stages[stage].stage[i + axeY - 1][w + axeX] == 'I'){
+                            if(d->stages[stage].stage[i + axeY - 1][w + axeX] == 'I') {
                                 It = 1;
                             }
-                            if(d->stages[stage].stage[i + axeY - 1][w + axeX] == 'B'){
+                            if(d->stages[stage].stage[i + axeY - 1][w + axeX] == 'B') {
                                 Bt = 1;
                             }
                             // printf("DoorTop");
                         }
 
-                        if(d->stages[stage].stage[i + axeY + 1][w + axeX]!=' '){
+                        if(d->stages[stage].stage[i + axeY + 1][w + axeX]!=' ') {
                             DoorBottom = 1;
-                            if(d->stages[stage].stage[i + axeY + 1][w + axeX] == 'V'){
+                            if(d->stages[stage].stage[i + axeY + 1][w + axeX] == 'V') {
                                 Vb = 1;
                             }
-                            if(d->stages[stage].stage[i + axeY + 1][w + axeX] == 'I'){
+                            if(d->stages[stage].stage[i + axeY + 1][w + axeX] == 'I') {
                                 Ib = 1;
                             }
-                            if(d->stages[stage].stage[i + axeY + 1][w + axeX] == 'B'){
+                            if(d->stages[stage].stage[i + axeY + 1][w + axeX] == 'B') {
                                 Bb = 1;
                             }
 
@@ -300,7 +300,7 @@ int gestionRoom(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY){
     return 0;
 }
 
-void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id ){
+void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id ) {
 
     for (int i = 0; i < d -> stages[stage].rooms[id].height; i++) {
         for (int y = 0; y < d -> stages[stage].rooms[id].width; y++) {
@@ -626,19 +626,16 @@ void InitialiseBossRoom(Donjon * d, int stage, int id, char letter){
     }
 }
 
-void gestionGame(Donjon * d, int stage, int * change) {
 
+void gestionGame(Donjon * d, int stage, int * change, Player* player) {
+    
     Monster * Boss = malloc(sizeof(Monster));
 
-    Player * player = malloc(sizeof(Player));
-    if(stage == 0){
+     if(stage == 0){
         player->dmg = 3.5;
         player->hpMax = 3;
         player->shield = 0;
     }
-	player->positionX = 1;
-	player->positionY = 1;
-	player->directionView = 'D';
     
     int NumberOfRoomsInt;
     int axeX = 0;
@@ -649,6 +646,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
     // int chargeBoss = 0;
     int bossActive = 0;
     int BossInfinite = 0;
+    int itemIsSet = 0;
 
     int iteration = 0;
     bool condition = true;
@@ -666,7 +664,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
     NumberOfRoomsInt = numberOfRooms();
     InitialiseOtherRoomsFromArms(d,stage, NumberOfRoomsInt);
     SetColorAndPositionForPlayer(d, player, stage, id);
-
+    
     for (int i = 0; i < NumberOfRoomsInt; i++) {
         printf("ID : %d\n", d-> stages[stage].rooms[i].id);
         printf("AxeX : %d\n", d-> stages[stage].rooms[i].AxeX);
@@ -733,7 +731,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
                             break;
                         }
                         
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B'){
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I'){
                             axeY--;
 
                             //   int temp2 = gestionRoom(d, stage, id, axeX, axeY);
@@ -742,6 +740,11 @@ void gestionGame(Donjon * d, int stage, int * change) {
                             changeOfRoom = 1;   
                         }
                     }
+
+                    if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
+                        setItemEffects(d->stages[stage].rooms[id].object, player);            
+                    }
+
 				break;
 
 				case 's':
@@ -754,7 +757,6 @@ void gestionGame(Donjon * d, int stage, int * change) {
 
 					if (d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] != 'W' && d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] != Boss->firstLetter) {
 
-
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
 						player->positionY++;
                         
@@ -763,17 +765,17 @@ void gestionGame(Donjon * d, int stage, int * change) {
                             break;
                         }
 
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B'){
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I'){
                                 axeY++;
-
-                                
-
                                  player->positionY = 1;
                                  changeOfRoom = 1;   
-                               
                        }
-
 					}
+
+                    if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
+                        setItemEffects(d->stages[stage].rooms[id].object, player);            
+                    }
+
 				break;
 
 				case 'q':
@@ -795,7 +797,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
                             break;
                         }
 					
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX ] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B'){                                                                
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX ] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I'){                                                                
                                 axeX--;
 
                                if((d->stages[stage].rooms[id].width - 2) % 2 == 0){
@@ -805,8 +807,10 @@ void gestionGame(Donjon * d, int stage, int * change) {
                                 }
                                 
                                 changeOfRoom = 1;
-                           
+                        }
 
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
+                                setItemEffects(d->stages[stage].rooms[id].object, player);            
                         }
 
 					}
@@ -828,12 +832,14 @@ void gestionGame(Donjon * d, int stage, int * change) {
                             break;
                         }
 				
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B'){
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I'){
                                 axeX++;
-                                                    
                                 player->positionX = 2;
                                 changeOfRoom = 1;             
+                        }
 
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
+                                setItemEffects(d->stages[stage].rooms[id].object, player);            
                         }
                         
 					}
@@ -987,14 +993,10 @@ void gestionGame(Donjon * d, int stage, int * change) {
                 }  
             }
 
-
-            
-            // if(d->stages[stage].rooms[id].name == 'B'){
-            //     if(chargeBoss == 0){
-            //         InitialiseBossRoom(d, stage, id);      
-            //         chargeBoss = 1;
-            //     }       
-            // }
+            if(d->stages[stage].rooms[id].name == 'I' && itemIsSet == 0) {
+                setItemInsideRoom(d, stage, id);
+                itemIsSet = 1;
+            }
     
 
             // printf("Axe Position X : %d / and Position Y : %d\n", axeX, axeY);
@@ -1007,6 +1009,11 @@ void gestionGame(Donjon * d, int stage, int * change) {
             }
             printf("\n");
             printf("HP player: %.2f\n", player->hpMax);
+
+            if(d->stages[stage].rooms[id].name == 'I') {
+                printf("Room item : \n");
+                displayObject(d->stages[stage].rooms[id].object);
+            }
 
 			for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
 				for (int y = 0; y < d->stages[stage].rooms[id].width - 1; y++) {
@@ -1025,12 +1032,19 @@ void gestionGame(Donjon * d, int stage, int * change) {
 			}
 
             printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, iteration);
-                
+            printf("\nHP MAX : %.1f\n", player->hpMax); 
+            printf("DAMAGE  : %.1f\n", player->dmg);
+            printf("SHIELD : %.1f\n", player->shield);
+            printf("PIERCING SHOT : %s\n", (player->ps) ? "Yes" : "No");
+            printf("SPECTRAL SHOT: %s\n", (player->ss) ? "Yes" : "No");
+            printf("FLIGHT: %s\n\n", (player->flight) ? "Yes" : "No");
+
             if( * change == 1){
                 condition = false;
             }
 
             printf("reload : %d\n",shootParams->reload);
+
 
             continue;
         }
@@ -1054,15 +1068,24 @@ void gestionGame(Donjon * d, int stage, int * change) {
 
 }
 
-// void lockDoors(Donjon * d, int stage, int id){
+void setItemInsideRoom(Donjon* d, int stage, int id) {
+    int roomHeight =  d -> stages[stage].rooms[id].height;
+    int roomWidth =  d -> stages[stage].rooms[id].width;
+    int itemPosX = roomHeight / 2;
+    int itemPosY = roomWidth / 2;
+    itemPosY = (itemPosY % 2 == 0) ? itemPosY : itemPosY-1;
+    
+    d -> stages[stage].rooms[id].object = getRandomObject(d->headObject);
+    d -> stages[stage].rooms[id].room[itemPosX][itemPosY] = 'O';
+}
 
-//     for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
-//         for (int y = 0; y < d->stages[stage].rooms[id].width - 1; y++) {
-//             if (y % 2 == 0) {
-//                 if(d-> stages[stage].rooms[id].room[i][y] == 'B'){
-//                     d-> stages[stage].rooms[id].room[i][y] = 'L';
-//                 }
-//             }
-//         }
-//     }
-// }
+void setItemEffects(Object* item, Player* player) {
+    player->dmg += item->damage;
+    player->hpMax += item->hpMax;
+    player->shield += item->shield;
+
+    player->flight += item->flight;
+    player->ps += item->piercingShot;
+    player->ss += item->spectralShot;
+}
+    

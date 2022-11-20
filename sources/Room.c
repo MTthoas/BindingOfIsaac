@@ -3,13 +3,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "Room.h"
-#define KRED "\x1B[31m"
-#define KNRM "\x1B[0m"
 #include <time.h>
 
-/* Prototypes */
+#include "Room.h"
+#include "lectureFichiers.h"
 
+#define KRED "\x1B[31m"
+#define KNRM "\x1B[0m"
+
+
+/* Prototypes */
 int numberOfRooms();
 int PickRoomNotUsed(struct Donjon * d, int NumberOfRoomsInt, int stage);
 void newStageByNumber(struct Donjon * d, int stage, int numberOfRooms);
@@ -25,41 +28,28 @@ void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms);
  * @brief Ininitialise le jeu
  * 
  */
-
 void InitialisationGame(Donjon * d, int stageNum) {
 
     srand(time(NULL));
 
+        d->headObject = objectsFileToObjectsList();
         int NumberOfRoomsInt = numberOfRooms();
-
         // printf("Stage : %d\n", i+1);
         printf("Nombre de salles : %d\n\n", NumberOfRoomsInt);
-
         newStageByNumber(d, stageNum, NumberOfRoomsInt+1);
-
-        printf("testfonction");
-    
+        //printf("testfonction");
         // Générer l'ensemble des étage
         InitialiseRoom(d, stageNum, NumberOfRoomsInt);
-
-
 
         int * randomNumberRooms = RandomArrayForAttribution(NumberOfRoomsInt);
         d->stages[stageNum].randomNumberRooms = malloc(sizeof(int) * NumberOfRoomsInt);
 
         for (int y = 0; y < NumberOfRoomsInt; y++) {
-            
-            
-            printf("Salle %d : %d\n", y, randomNumberRooms[y]);
-
+            printf("Salle %d : %d\n", y, randomNumberRooms[y]); 
             d->stages[stageNum].randomNumberRooms[y] = randomNumberRooms[y];	
-
         }
 
         // printf("\n");	
-
-        
-
         for (int y = 0; y < NumberOfRoomsInt; y++) {
 
             if(y == 0 ){
@@ -297,8 +287,6 @@ void InitialisationGame(Donjon * d, int stageNum) {
                 }
             }
 
-
-      
             int iterationByRoom = iteration;
             int itemRoom = 0;
             int bossRoom = 0;
@@ -882,7 +870,7 @@ int * RandomBetweenRange(int number, int zero){
  * @param numberOfRooms Nombre de rooms
  */
 
-void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms){
+void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms) {
 
     FILE * fp;
     char * line = NULL;
@@ -943,8 +931,6 @@ void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms){
             d-> stages[stage].rooms[iteration].width = width;
             d-> stages[stage].rooms[iteration].height = height;
             d-> stages[stage].rooms[iteration].numberOfDoors = iterationDoorsReturned;
-
-
             d-> stages[stage].rooms[iteration].Doors = malloc(sizeof(char) * iterationDoorsReturned);
                  
                 int iterationDoors = 0;
@@ -1159,5 +1145,3 @@ int NumberOfDoorsByRoom(char ** s, int height, int width){
 
     return iteration;
 }
-
-

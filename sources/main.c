@@ -11,7 +11,7 @@
 #include "Room.h"
 #include "Player.h"
 #include "menu.h"
-#include "game.h"
+#include "game.h"	
 
 #define KRED  "\x1B[31m"
 #define KNRM  "\x1B[0m"
@@ -33,8 +33,17 @@ int main(int argc, char * argv[]) {
 	//Menu
 	bool condition = true, condition2 = true, etape = true;
 	int c,c2;
-	
-	
+
+	Player* player = malloc(sizeof(Player));
+	player->dmg = 1;
+	player->hpMax = 5;
+	player->shield = 5;
+	player->ss = 0;
+	player->ps = 0;
+	player->flight = 0;
+	player->positionX = 1;
+	player->positionY = 1;
+	player->directionView = 'D';
 	
 	menu_init();
 
@@ -57,26 +66,23 @@ int main(int argc, char * argv[]) {
 				int stage = 0;
 				int change = 0;
 
-				for(int i = 0; i < 10; i++){
-
+				for(int i = 0; i < 10; i+=1) {
 
 					Donjon * d = malloc(sizeof(Donjon));
-		
 					
 					InitialisationGame(d, stage);			
-					gestionGame(d,stage, &change);
+					gestionGame(d,stage, &change, player);
 					
 					free(d -> stages[stage].stage);
 					free(d);
 
-					stage++;
+					stage+=1;
 					// printf("CHANGE : %d", change);
 					change = 0;
 
 					system("clear");
 					printf("\n\n\n\n\n\n\n\n\n");
-					printf("		Changement d'étages ..\n\n");
-
+					printf("		Changement d'étage ...\n\n");
 
 					for(int i = 0; i < 5; i++){
 						printProgress(i/5.0);
@@ -86,7 +92,6 @@ int main(int argc, char * argv[]) {
 						usleep(100000); 
 						#endif 
 					}
-					
 				}
 									
 				condition = false;
