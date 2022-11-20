@@ -26,6 +26,7 @@
 #include "game.h"
 #include "shoot.h"
 #include "lectureFichiers.h"
+#include "objects.h"
 
 
 void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int numberOfRooms){
@@ -405,6 +406,9 @@ void gestionGame(Donjon * d, int stage, int * change) {
     player->dmg = 1;
     player->hpMax = 5;
     player->shield = 5;
+    player->ps = 0;
+    player->ss = 0;
+    player->flight = 0;
 	player->positionX = 1;
 	player->positionY = 1;
 	player->directionView = 'D';
@@ -473,7 +477,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
 
                     if( d->stages[stage].rooms[id].name == 'B' ){
                         bossActive = 1;
-                    }
+                    }                 
 
                     player->directionView = 'z';
 
@@ -518,9 +522,6 @@ void gestionGame(Donjon * d, int stage, int * change) {
 
                         if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I'){
                                 axeY++;
-
-                                
-
                                  player->positionY = 1;
                                  changeOfRoom = 1;   
                                
@@ -685,6 +686,10 @@ void gestionGame(Donjon * d, int stage, int * change) {
                 
                 changeOfRoom = 0;
             }
+
+            if(d->stages[stage].rooms[id].name == 'I'){
+                setItemInsideRoom(d, stage, id);
+            }
             
             if(d->stages[stage].rooms[id].name == 'B'){
                 if(chargeBoss == 0){
@@ -721,7 +726,13 @@ void gestionGame(Donjon * d, int stage, int * change) {
 			}
 
             printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, iteration);
-                
+            printf("\nHP MAX : %.1f\n", player->hpMax); 
+            printf("DAMAGE  : %.1f\n", player->dmg);
+            printf("SHIELD : %.1f\n\n", player->shield);
+            printf("PIERCING SHOT : %s\n", (player->ps) ? "Yes" : "No");
+            printf("SPECTRAL SHOT: %s\n", (player->ss) ? "Yes" : "No");
+            printf("FLIGHT: %s\n\n", (player->flight) ? "Yes" : "No");
+
             if( * change == 1) {
                 condition = false;
             }
@@ -748,4 +759,15 @@ void gestionGame(Donjon * d, int stage, int * change) {
     free(player);
     //free(shootParams);
 
+}
+
+void setItemInsideRoom(Donjon* d, int stage, int id) {
+
+    int roomHeight =  d -> stages[stage].rooms[id].height;
+    int roomWidth =  d -> stages[stage].rooms[id].width;
+    int itemPosX = roomHeight / 2;
+    int itemPosY = roomWidth / 2;
+    itemPosY = (itemPosY % 2 == 0) ? itemPosY : itemPosY-1;
+
+    d -> stages[stage].rooms[id].room[itemPosX][itemPosY] = 'O';
 }

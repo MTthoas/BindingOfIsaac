@@ -14,4 +14,9 @@
 int gestionRoom(Donjon * d, int numberOfRooms, int stage, int axeX, int axeY);
 void gestionGame(Donjon * d, int stage, int * change);
 
+/**
+ * @brief Set items in the room of the given id and stage
+ */
+void setItemInsideRoom(Donjon* d, int stage, int id);
+
 #endif

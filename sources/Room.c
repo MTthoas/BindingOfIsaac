@@ -55,9 +55,7 @@ void InitialisationGame(Donjon * d, int stageNum) {
 
         }
 
-        // printf("\n");	
-
-        
+        // printf("\n");	        
 
         for (int y = 0; y < NumberOfRoomsInt; y++) {
 
@@ -821,7 +819,7 @@ int * RandomArrayForAttribution(int number){
     return tab;
 }
 
-int * RandomBetweenRange(int number, int zero){
+int * RandomBetweenRange(int number, int zero) {
     
 
     (void)zero;
@@ -1158,5 +1156,3 @@ int NumberOfDoorsByRoom(char ** s, int height, int width){
 
     return iteration;
 }
-
-

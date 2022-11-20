@@ -8,9 +8,12 @@ struct Player{
     int positionX;
     int positionY;
     char directionView;
+    
     float hpMax;
     float dmg;
     float shield;
+    int ps;
+    int ss;
     int flight;
 };
 typedef struct Player  Player;

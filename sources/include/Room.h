@@ -39,8 +39,8 @@ struct Donjon{
             int AxeX;
             int AxeY;
             int number;
-            int width;
-            int height;
+            int width; // columns
+            int height; // rows
             char * Doors;
             int numberOfDoors;
             int doorTop;
