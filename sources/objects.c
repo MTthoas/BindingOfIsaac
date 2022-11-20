@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>    
 
 #include "include/objects.h"
 #include "include/mystring.h"
@@ -42,9 +43,9 @@ void displayObject(Object* object) {
     printf("\n");
     printf("id : %d\n", object->id);
     printf("name : %s\n", duplicateString(object->name));
-    printf("hpMax : %f\n", object->hpMax);
-    printf("shield : %f\n", object->shield);
-    printf("damage : %f\n", object->damage);
+    printf("hpMax : %.2f\n", object->hpMax);
+    printf("shield : %.2f\n", object->shield);
+    printf("damage : %.2f\n", object->damage);
     printf("piercingShot : %d\n", object->piercingShot);
     printf("spectralShot : %d\n", object->spectralShot);
     printf("flight : %d\n", object->flight);
@@ -188,3 +189,18 @@ int freeAllObjects(Object* head) {
 
     return 1;
 }
+
+Object* getRandomObject(Object* head) {
+    srand(time(NULL));
+    int max = getNumberObjects(head);
+    int index;
+
+    for(int i=0; i<100; i+=1) { // be sure to be random
+        index = rand();
+        index = index % (max-1);
+    }
+
+    return getObjectById(head, index+1);
+}
+
+    

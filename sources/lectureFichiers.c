@@ -336,7 +336,7 @@ Object* objectsFileToObjectsList() {
                     hpMax = atof(value);
                 } else if((strcmp(stat, "SHIELD") == 0)) {
                     shield = atof(value);
-                } else if((strcmp(stat, "DMG") == 0)) {
+                } else if((strcmp(stat, "DAMAGE") == 0)) {
                     damage = atof(value);
                 } else if((strcmp(stat, "PS") == 0)) {
                     activated = (strcmp(value, "TRUE\n") == 0);

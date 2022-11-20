@@ -123,6 +123,14 @@
      */
     Object* getObjectById(Object* head, int id);
 
+    /**
+     * @brief Get a random object from the list
+     * 
+     * @param head 
+     * @return Object* 
+     */
+    Object* getRandomObject(Object* head);
+
 
 
 #endif //OBJETS_H

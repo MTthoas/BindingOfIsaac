@@ -12,7 +12,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "Player.h"
+#include "Room.h"
 
  struct Monster {
     int idMonster;

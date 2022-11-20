@@ -1,9 +1,9 @@
 #ifndef H_PLAYER
 #define H_PLAYER
 
-#include "Room.h"
 
-struct Player{
+
+struct Player {
     char * name;
     int positionX;
     int positionY;
@@ -16,7 +16,7 @@ struct Player{
     int ss;
     int flight;
 };
-typedef struct Player  Player;
+typedef struct Player Player;
 
 int kbhit(void);
 

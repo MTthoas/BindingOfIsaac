@@ -1,4 +1,4 @@
-b#include<stdio.h>
+#include<stdio.h>
 #include<string.h>
 #include<string.h>
 #include<stdlib.h>
@@ -16,6 +16,7 @@ void test_arrangeObjectsIds(); // not tested but OK
 void test_removeObject(); //OK
 void test_getObjectById(); //ok
 void test_freeAllObjects(); //ok
+void test_getRandomObject(); //ok 
 
 int main(void) {
     //test_displayAllObjects();
@@ -28,7 +29,21 @@ int main(void) {
     //test_removeObject();
     //test_getObjectById();
 
+    //test_getRandomObject();
+
     return 0;
+}
+
+void test_getRandomObject() {
+    printf("[TEST] getObjectById()\n\n");
+    Object* head = createObject(1, "item", 0, 0, 0, 1, 0, 0);
+    addObject(head, createObject(678, "item2", -2, 0, 0, 1, 0, 0));
+    addObject(head, createObject(678, "item3", 0, 0, 0, 0, 0, 1));
+    addObject(head, createObject(678, "item4", 0, 0, 0, 0, 0, 1));
+    addObject(head, createObject(678, "item5", 0, 0, 0, 0, 0, 1));
+    addObject(head, createObject(678, "item6", 0, 0, 0, 0, 0, 1));
+
+    displayObject(getRandomObject(head));
 }
 
 void test_getObjectById() {
