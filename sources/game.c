@@ -364,6 +364,8 @@ void * BossShoot(void * params){
         shoot -> positionX = monster -> positionX;
         shoot -> positionY = monster -> positionY;
 
+          ((ShootParams*)params)->reload = 0;
+
         if(((ShootParams*)params) -> directionView == 'R'){
 
             ((ShootParams*)params)->reload = 0;
@@ -423,7 +425,7 @@ void * BossShoot(void * params){
                 #ifdef _WIN32 
                     Sleep(290); 
                 #else 
-                    usleep(290000); 
+                    usleep(29000); 
                 #endif
 
                 ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX] = ' ';
@@ -445,7 +447,7 @@ void * BossShoot(void * params){
                 #ifdef _WIN32 
                     Sleep(290); 
                 #else 
-                    usleep(290000); 
+                    usleep(29000); 
                 #endif
 
                 ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX] = ' ';
@@ -461,9 +463,6 @@ void * BossShoot(void * params){
     (void)params;
 
     free(shoot);
-
-
-
     return NULL;
 
 }
@@ -485,21 +484,20 @@ void * Jagger(void *params){
         }
     }
 
+                
+        int id = ((ShootParams*)params)->id;
+        int stage = ((ShootParams*)params)->stage;
+                    pthread_t thread;
+
     while(condition){
 
         #ifdef _WIN32 
-		Sleep(9013); 
+		Sleep(9090); 
 		#else 
-		usleep(901300); 
+		usleep(2500000); 
 		#endif
-        
-        
-        int positionPlayerX = ((ShootParams*)params)->player -> positionX;
-        int positionPlayerY = ((ShootParams*)params)->player -> positionY;
-        int id = ((ShootParams*)params)->id;
-        int stage = ((ShootParams*)params)->stage;
-
-          ((ShootParams*)params)->reload = 0;
+    
+        ((ShootParams*)params)->reload = 0;
         
 
         for (int i = 0; i < ((ShootParams*)params)->d -> stages[stage].rooms[id].height; i++) {
@@ -513,49 +511,55 @@ void * Jagger(void *params){
             }
         }
 
-
+        int positionPlayerX = ((ShootParams*)params)->player -> positionX;
+        int positionPlayerY = ((ShootParams*)params)->player -> positionY;
 
         int DiffPositionX =  monster -> positionX - positionPlayerX;
         int DiffPositionY =  monster -> positionY - positionPlayerY;
+        int block = 0;
 
         if(DiffPositionX > 1){
-            
-            monster -> positionX--;
-            monster -> positionX--;
+            if(((ShootParams*)params)->d -> stages[stage].rooms[id].room[monster -> positionY][monster -> positionX - 2] == ' ' && block == 0){
+                monster -> positionX = monster -> positionX - 2;
+                ((ShootParams*)params) -> directionView = 'L';
+                block = 1;
+            }
+        }
 
-            ((ShootParams*)params) -> directionView = 'L';
-
-        }else if(DiffPositionX < 1){
-
-            monster -> positionX++;
-            monster -> positionX++;
-
-           ((ShootParams*)params) -> directionView = 'R';
-
+        if(DiffPositionX < -1){
+            if(((ShootParams*)params)->d -> stages[stage].rooms[id].room[monster -> positionY][monster -> positionX + 2] == ' ' && block == 0){
+               monster -> positionX = monster -> positionX + 2;
+                ((ShootParams*)params) -> directionView = 'R';
+                block = 1;
+            }
         }
 
         if(DiffPositionY > 1){
-
-            monster -> positionY--;
-
-            ((ShootParams*)params) -> directionView = 'T';
-
-        }else if(DiffPositionY < 1){
-
-            monster -> positionY++;
-
-            ((ShootParams*)params) -> directionView = 'B';
-            
-
+            if(((ShootParams*)params)->d -> stages[stage].rooms[id].room[monster -> positionY - 1][monster -> positionX] == ' ' && block == 0){
+                monster -> positionY--;
+                ((ShootParams*)params) -> directionView = 'T';
+                block = 1;
+            }
         }
-     
-        ((ShootParams*)params)->d->stages[stage].rooms[id].room[monster->positionY][monster->positionX] = 'H';
 
-        int random = rand() % 4;
+        if(DiffPositionY < -1){
+            if(((ShootParams*)params)->d -> stages[stage].rooms[id].room[monster -> positionY + 1][monster -> positionX] == ' ' && block == 0){
+                monster -> positionY++;
+                ((ShootParams*)params) -> directionView = 'B';
+                block = 1;
+            }
+        }
+
+            
+        if(((ShootParams*)params)->d->stages[stage].rooms[id].room[monster->positionY][monster->positionX] != 'W'){
+            ((ShootParams*)params)->d->stages[stage].rooms[id].room[monster->positionY][monster->positionX] = 'H';
+        }
+
+
+        int random = rand() % 70;
 
         if(random == 0 && ((ShootParams*)params)->reload == 0){
 
-            pthread_t thread;
             pthread_create(&thread, NULL, BossShoot, params);
 
         }
@@ -865,6 +869,8 @@ void gestionGame(Donjon * d, int stage, int * change) {
 
                         pthread_create(&thread, NULL, Jagger, shootParams);
                     }
+
+                    
 
                     bossActive = 0;         
 

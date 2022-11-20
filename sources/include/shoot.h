@@ -27,6 +27,7 @@ struct ShootParams {
     Player *player;
     Monster *monster;
     int idMonster;
+    int reloadBoss;
     int reload ;
     int stage;
     int id;
