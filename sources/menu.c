@@ -54,7 +54,7 @@ void menuSeeItems(void) {
     printGameBanner();
     printf("-------- YOUR ITEMS --------\n");
 
-    FILE* fichier = fopen(CHEMIN_FICHIER_OBJETS, "r");
+    FILE* fichier = fopen(CHEMIN_FICHIER_OBJECTS, "r");
     afficherFichier(fichier);
     fclose(fichier);
 
@@ -123,7 +123,7 @@ void menuDeleteItem(void) {
     
     Object* head = objectsFileToObjectsList();
     if(head == NULL) {
-        printf("Couldn't load from %s\n.", CHEMIN_FICHIER_OBJETS);
+        printf("Couldn't load from %s\n.", CHEMIN_FICHIER_OBJECTS);
         printf("Press 'r' to go back\n");
         return;
     }
@@ -154,7 +154,7 @@ void menuModifyItem(void){
     
     Object* head = objectsFileToObjectsList();
     if(head == NULL) {
-        printf("Couldn't open %s\n.", CHEMIN_FICHIER_OBJETS);
+        printf("Couldn't open %s\n.", CHEMIN_FICHIER_OBJECTS);
         printf("Press 'r' to go back\n");
         return;
     }

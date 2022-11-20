@@ -27,11 +27,7 @@ int getNumberObjects(Object* head) {
     int count = 0;
     while(head != NULL) {
         count += 1;
-<<<<<<< HEAD
-        courant = courant->next;
-=======
         head = head->next;
->>>>>>> menu-crud-items
     }
 
     return count;

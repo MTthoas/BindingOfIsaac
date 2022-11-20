@@ -107,4 +107,6 @@
      */
     int parseRoomInfo(char* buffer, int* ptr_lines, int* ptr_columns);
 
+    Monster* fichierMonsterToListeMonster();
+
 #endif //LECTURE_FICHIERS_H

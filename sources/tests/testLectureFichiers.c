@@ -112,7 +112,7 @@ int getNbLignesFichier(char* chemin_fichier) {
 }
 
 ListeObjects* fichierObjectsToListeObjects() {
-    char* filepath = "../../resources/items.itbob"; // CHEMIN_FICHIER_OBJETS
+    char* filepath = "../../resources/items.itbob"; // CHEMIN_FICHIER_OBJECTS
     FILE* fichier = fopen(filepath, "r"); // ouverture fichier
     if(fichier == NULL) { 
         printf("Problème d'ouverture du fichier des objects.\n");
@@ -222,7 +222,7 @@ int extensionType(char* filename) {
 }
 
 void listeToFichierObjects(ListeObjects* listeObjects) {
-    char* filepath = "./test.itbob"; // CHEMIN_FICHIER_OBJETS
+    char* filepath = "./test.itbob"; // CHEMIN_FICHIER_OBJECTS
     FILE* fichier = fopen(filepath, "w+"); // ouverture fichier
     if(fichier == NULL) { 
         printf("Problème d'ouverture du fichier des objects.\n");
