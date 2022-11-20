@@ -30,6 +30,7 @@ struct ShootParams {
     int reload ;
     int stage;
     int id;
+    char directionView;
 };
 typedef struct ShootParams ShootParams;
 

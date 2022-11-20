@@ -344,28 +344,228 @@ void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id )
 
 }
 
+void * BossShoot(void * params){
 
-// void* Jagger(void *params){
+    Shoot * shoot = malloc(sizeof(Shoot));
+    Monster * monster = malloc(sizeof(Monster));
 
-//     (void)params;
+    int id = ((ShootParams*)params)->id;
+    int stage = ((ShootParams*)params)->stage;
 
-//     // void * params = ((ShootParams*)params);
+     for (int i = 0; i < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].height; i++) {
+        for(int y = 0; y < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].width; y++){
+            if(((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[i][y] == 'H'){
+                monster -> positionX = y;
+                monster -> positionY = i;
+            }
+        }
+    }
 
-//     //  for (int i = 0; i < params->d -> stages[params->stage].rooms[params->id].height; i++) {
-//     //     // for (int y = 0; y < d -> stages[stage].rooms[id].width; y++) {
-//     //     //     if (i == d -> stages[stage].rooms[id].height / 2 && y == d -> stages[stage].rooms[id].width / 2) {
-//     //     //         if (y % 2 == 0) {
-//     //     //             d -> stages[stage].rooms[id].room[i][y] = 'H';
-//     //     //         } else {
-//     //     //             d -> stages[stage].rooms[id].room[i][y - 1] = 'H';
-//     //     //         }
-//     //     //     }
+        shoot -> positionX = monster -> positionX;
+        shoot -> positionY = monster -> positionY;
 
-//     //     // }
-//     // }
+        if(((ShootParams*)params) -> directionView == 'R'){
+
+            ((ShootParams*)params)->reload = 0;
+
+            while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX + 2] == ' ' && ((ShootParams*)params)->reload  == 0 ){
+
+                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] = '*';
+
+                #ifdef _WIN32 
+                    Sleep(290); 
+                #else 
+                    usleep(29000); 
+                #endif
+
+                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] = ' ';
+                
+                shoot -> positionX =  shoot -> positionX + 2;
+
+            }
+    
+            ((ShootParams*)params)->reload = 1;
+       
+        }
+
+        if(((ShootParams*)params) -> directionView == 'L'){
+
+            ((ShootParams*)params)->reload = 0;
+
+            while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX - 2] == ' ' && ((ShootParams*)params)->reload  == 0){
+
+                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] = '*';
+
+                #ifdef _WIN32 
+                    Sleep(290); 
+                #else 
+                    usleep(29000); 
+                #endif
+
+                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] = ' ';
+                
+                
+                shoot -> positionX = shoot -> positionX - 2;
+
+            }
+
+            
+            ((ShootParams*)params)->reload = 1;
+       
+        }
+
+        if(((ShootParams*)params) -> directionView == 'T'){
+
+            while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY - 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reload  == 0){
+
+                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX] = '*';
+
+                #ifdef _WIN32 
+                    Sleep(290); 
+                #else 
+                    usleep(290000); 
+                #endif
+
+                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX] = ' ';
+
+                shoot -> positionY--;
+
+            }
+
+            ((ShootParams*)params)->reload = 1;
+
+        }
+
+        if(((ShootParams*)params) -> directionView == 'B'){
+
+            while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY + 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reload  == 0){ 
+
+                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX] = '*';
+
+                #ifdef _WIN32 
+                    Sleep(290); 
+                #else 
+                    usleep(290000); 
+                #endif
+
+                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX] = ' ';
+
+                shoot -> positionY++;
+
+            }
+
+              ((ShootParams*)params)->reload = 1;
+        }
 
 
-// }
+    (void)params;
+
+    free(shoot);
+
+
+
+    return NULL;
+
+}
+
+
+void * Jagger(void *params){
+
+    // Shoot * shoot = malloc(sizeof(Shoot));
+
+    Monster * monster = malloc(sizeof(Monster));
+    int condition = 1;
+
+    for (int i = 0; i < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].height; i++) {
+        for(int y = 0; y < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].width; y++){
+            if(((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[i][y] == 'H'){
+                monster -> positionX = y;
+                monster -> positionY = i;
+            }
+        }
+    }
+
+    while(condition){
+
+        #ifdef _WIN32 
+		Sleep(9013); 
+		#else 
+		usleep(901300); 
+		#endif
+        
+        
+        int positionPlayerX = ((ShootParams*)params)->player -> positionX;
+        int positionPlayerY = ((ShootParams*)params)->player -> positionY;
+        int id = ((ShootParams*)params)->id;
+        int stage = ((ShootParams*)params)->stage;
+
+          ((ShootParams*)params)->reload = 0;
+        
+
+        for (int i = 0; i < ((ShootParams*)params)->d -> stages[stage].rooms[id].height; i++) {
+
+            for(int y = 0; y < ((ShootParams*)params)->d -> stages[stage].rooms[id].width; y++){
+
+                if(((ShootParams*)params)->d -> stages[stage].rooms[id].room[i][y] == 'H'){
+
+                        (((ShootParams*)params)->d -> stages[stage].rooms[id].room[i][y] = ' ');
+                }
+            }
+        }
+
+
+
+        int DiffPositionX =  monster -> positionX - positionPlayerX;
+        int DiffPositionY =  monster -> positionY - positionPlayerY;
+
+        if(DiffPositionX > 1){
+            
+            monster -> positionX--;
+            monster -> positionX--;
+
+            ((ShootParams*)params) -> directionView = 'L';
+
+        }else if(DiffPositionX < 1){
+
+            monster -> positionX++;
+            monster -> positionX++;
+
+           ((ShootParams*)params) -> directionView = 'R';
+
+        }
+
+        if(DiffPositionY > 1){
+
+            monster -> positionY--;
+
+            ((ShootParams*)params) -> directionView = 'T';
+
+        }else if(DiffPositionY < 1){
+
+            monster -> positionY++;
+
+            ((ShootParams*)params) -> directionView = 'B';
+            
+
+        }
+     
+        ((ShootParams*)params)->d->stages[stage].rooms[id].room[monster->positionY][monster->positionX] = 'H';
+
+        int random = rand() % 4;
+
+        if(random == 0 && ((ShootParams*)params)->reload == 0){
+
+            pthread_t thread;
+            pthread_create(&thread, NULL, BossShoot, params);
+
+        }
+
+    }
+
+    free(monster);
+
+    return 0;
+}
 
 void InitialiseBossRoom(Donjon * d, int stage, int id){
 
@@ -477,7 +677,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
 
                     player->directionView = 'z';
 
-                    if(d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] != 'W' ){
+                    if(d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] != 'W' && d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] != 'H'){
 
                         d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
                         player->positionY--;
@@ -506,7 +706,8 @@ void gestionGame(Donjon * d, int stage, int * change) {
 
                     player->directionView = 's';
 
-					if (d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] != 'W') {
+					if (d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] != 'W' && d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] != 'H') {
+
 
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
 						player->positionY++;
@@ -538,7 +739,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
                     player->directionView = 'q';
                     
 
-					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] != 'W') {
+					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] != 'W' && d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] != 'H') {
 
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
 						player->positionX -= 2;
@@ -573,7 +774,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
 
                     player->directionView = 'd';
 
-					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] != 'W') {
+					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] != 'W' && d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] != 'H') {
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
 						player->positionX += 2;
                         if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N'){
@@ -590,6 +791,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
                         }
                         
 					}
+
                 break;
 
                 case '8': ;
@@ -616,6 +818,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
                     pthread_create(&t3, NULL, shootDown, shootParams);
                     }
                     free(monsterVide2);
+
                 break;
                 
                 case '4': ;
@@ -648,26 +851,22 @@ void gestionGame(Donjon * d, int stage, int * change) {
 			}
 
             if(bossActive == 1){
-
-
-                    // pthread_t thread;
-                    // Monster * Boss = malloc(sizeof(Monster));
-
-                    // if(stage == 0){
-                    //     Boss->name = "Jagger";
-                    //     Boss->hpMax = 100;
-                    //     Boss->shoot = 1;
-                    //     if( shootParams->monster == NULL){
-                    //         shootParams->monster = Boss;
-                    //     }
-
-                    //     pthread_t thread;
-                    //     pthread_create(&thread, NULL, Jagger, shootParams);
-
-
-                    // }
-
                 
+                    pthread_t thread;
+                    Monster * Boss = malloc(sizeof(Monster));
+
+                    if(stage == 0){
+                        Boss->name = "Jagger";
+                        Boss->hpMax = 100;
+                        Boss->shoot = 1;
+                        if( shootParams->monster == NULL){
+                            shootParams->monster = Boss;
+                        }
+
+                        pthread_create(&thread, NULL, Jagger, shootParams);
+                    }
+
+                    bossActive = 0;         
 
             }
 
@@ -683,13 +882,13 @@ void gestionGame(Donjon * d, int stage, int * change) {
                 
                 changeOfRoom = 0;
             }
+
             
             if(d->stages[stage].rooms[id].name == 'B'){
                 if(chargeBoss == 0){
                     InitialiseBossRoom(d, stage, id);      
                     chargeBoss = 1;
-                }
-                    
+                }       
             }
     
 
