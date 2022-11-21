@@ -16,6 +16,13 @@
 #include "objects.h"
 #include "Player.h"
 
+struct Door{
+    char doorTop;
+    char doorBottom; 
+    char doorLeft;
+    char doorRight;
+};
+
 // Structure Donjon
 struct Donjon{
 
@@ -54,19 +61,15 @@ struct Donjon{
             int numberOfRoomsReturned;
             int roomUsed;
             Object* object; // an object of the donjon objects linked list
-
-            struct Door{
-                int doorTop;
-                int doorBottom; 
-                int doorLeft;
-                int doorRight;
-            }doors[4];
+         
+            struct Door Door;
 
         }rooms[NUMBER_ROOM_MAX];
 
     }stages[NUMBER_STAGES_MAX];
     
 };
+
 typedef struct Donjon Donjon;
 
 // Room* newRoom(int number);
