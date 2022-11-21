@@ -294,6 +294,8 @@ void InitialisationGame(Donjon * d, int stageNum) {
             int test = 0;
 
             for(int t = 2; t <= NumberOfRoomsInt-iteration + 2; t++) {
+
+                printf("Number of room : %d\n", t);
                 
                 int iterationRoom = 0;
                 int iterationTest = 0;
@@ -307,7 +309,7 @@ void InitialisationGame(Donjon * d, int stageNum) {
 
                     if(t < 2){
 
-                        randomHeight = rand() % (NumberOfRoomsInt+1);
+                        randomHeight = 1 + rand() % (NumberOfRoomsInt+1);
                         randomLength = (rand() % (((NumberOfRoomsInt/2)+1) - (NumberOfRoomsInt/2) + 1)) + NumberOfRoomsInt/2;
 
                     }else{
@@ -324,8 +326,8 @@ void InitialisationGame(Donjon * d, int stageNum) {
  
                          // Générer aléatoirement la salle dans l'étage
 
-                         randomHeight = rand() % (NumberOfRoomsInt-1);
-                         randomLength = rand() % (NumberOfRoomsInt-1);
+                         randomHeight = 1 + rand() % (NumberOfRoomsInt-1);
+                         randomLength = 1 + rand() % (NumberOfRoomsInt-1);
 
                         }
                     }

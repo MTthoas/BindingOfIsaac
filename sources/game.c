@@ -651,7 +651,7 @@ void GestionDoorsForMobRoom(Donjon *d, int stage, int id, int done){
 
     if(done == 0 ){
 
-            if( d->stages[stage].rooms[id].name != 'P' && d->stages[stage].rooms[id].name != 'I'  && d->stages[stage].rooms[id].name != 'V'  ){
+            if( d->stages[stage].rooms[id].name != 'P' && d->stages[stage].rooms[id].name != 'I'  && d->stages[stage].rooms[id].name != 'V' ){
             for(int i = 0; i<d->stages[stage].rooms[id].height; i++){
                 for(int y = 0; y< d->stages[stage].rooms[id].width; y++){
                     if(d->stages[stage].rooms[id].room[i][y] == 'D' ){
@@ -678,9 +678,25 @@ void GestionDoorsForMobRoom(Donjon *d, int stage, int id, int done){
 
          for(int i = 0; i<d->stages[stage].rooms[id].height; i++){
                 for(int y = 0; y< d->stages[stage].rooms[id].width; y++){
-                    if(d->stages[stage].rooms[id].room[i][y] == 'L' ){
-                        d->stages[stage].rooms[id].room[i][y] = 'D';
+                    if(d->stages[stage].rooms[id].room[i][y] == 'L'  && i  == 0){
+                        d->stages[stage].rooms[id].room[i][y] = d->stages[stage].rooms[id].Door.doorTop;
                     }
+                    if( i == d->stages[stage].rooms[id].height - 1 || d->stages[stage].rooms[id].height == 'L'){
+                        if( d->stages[stage].rooms[id].room[i][y] == 'L' ){
+                            d->stages[stage].rooms[id].room[i][y] = d->stages[stage].rooms[id].Door.doorBottom;
+                        }
+                    }
+
+                    if(d->stages[stage].rooms[id].room[i][y] == 'L' && y == 0){
+                        d->stages[stage].rooms[id].room[i][y] = d->stages[stage].rooms[id].Door.doorLeft;
+                    }
+
+                    if(y > d->stages[stage].rooms[id].width/2  ){
+                        if(d->stages[stage].rooms[id].room[i][y] == 'L'){
+                            d->stages[stage].rooms[id].room[i][y] = d->stages[stage].rooms[id].Door.doorRight;
+                        }
+                    }
+
                 }
         }
 
@@ -700,7 +716,7 @@ void gestionGame(Donjon * d, int stage, int * change, Player* player) {
         player->hpMax = 3;
         player->shield = 0;
     }
-    
+
     int NumberOfRoomsInt;
     int axeX = 0;
     int axeY = 0;
@@ -728,6 +744,9 @@ void gestionGame(Donjon * d, int stage, int * change, Player* player) {
     NumberOfRoomsInt = numberOfRooms();
     InitialiseOtherRoomsFromArms(d,stage, NumberOfRoomsInt);
     SetColorAndPositionForPlayer(d, player, stage, id);
+
+    d->stages[stage].rooms[id].name = 'P';
+    
     
     for (int i = 0; i < NumberOfRoomsInt; i++) {
         printf("ID : %d\n", d-> stages[stage].rooms[i].id);
@@ -757,7 +776,7 @@ void gestionGame(Donjon * d, int stage, int * change, Player* player) {
 		}
         
 		if (c == 'x') {
-			condition = false;
+            GestionDoorsForMobRoom(d, stage, id, 1);
 		}
 
         if (c == 'm') {
@@ -851,7 +870,7 @@ void gestionGame(Donjon * d, int stage, int * change, Player* player) {
                     player->directionView = 'q';
                     
 
-					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] != 'W' && d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] != Boss->firstLetter) {
+					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] != 'W' && d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] != Boss->firstLetter && d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] != 'L') {
 
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
 						player->positionX -= 2;
@@ -985,7 +1004,7 @@ void gestionGame(Donjon * d, int stage, int * change, Player* player) {
                 
 
 			}
-           
+
             if(bossActive == 1){
 
                     pthread_t thread;
@@ -1017,6 +1036,7 @@ void gestionGame(Donjon * d, int stage, int * change, Player* player) {
                 *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);                  
                 OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
                 checkName(d, NumberOfRoomsInt, stage, axeX, axeY, id);
+                GestionDoorsForMobRoom(d, stage, id, 0);
                 shootParams->id = id;
                 
                 changeOfRoom = 0;
