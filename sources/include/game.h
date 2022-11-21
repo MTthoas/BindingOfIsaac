@@ -26,6 +26,15 @@ void setItemInsideRoom(Donjon* d, int stage, int id);
  * @param item 
  * @param player 
  */
-void setItemEffects(Object* item, PlayerStats* playerStats, Player* player);
+void setItemEffects(Object* item, Player* player);
+
+/**
+ * @brief Loads the player stats in the PlayerStats object. 
+ * Usage : after a change in the statistics of the player
+ * 
+ * @param player 
+ * @param playerStats 
+ */
+void savePlayerStats(Player* player, PlayerStats* playerStats);
 
 #endif

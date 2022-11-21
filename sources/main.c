@@ -12,6 +12,7 @@
 #include "Player.h"
 #include "menu.h"
 #include "game.h"	
+#include "lectureFichiers.h"
 
 #define KRED  "\x1B[31m"
 #define KNRM  "\x1B[0m"
@@ -57,11 +58,10 @@ int main(int argc, char * argv[]) {
 				int stage = 0;
 				int change = 0;
 				for(int i = 0; i < 10; i+=1) {
-
 					Donjon * d = malloc(sizeof(Donjon));
-					
+
 					InitialisationGame(d, stage);			
-					gestionGame(d,stage, &change, playerStats);
+					gestionGame(d, stage, &change, playerStats);
 					
 					free(d -> stages[stage].stage);
 					free(d);

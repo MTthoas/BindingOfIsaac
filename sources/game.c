@@ -610,8 +610,7 @@ void * Jagger(void *params){
     return 0;
 }
 
-void InitialiseBossRoom(Donjon * d, int stage, int id, char letter){
-
+void InitialiseBossRoom(Donjon * d, int stage, int id, char letter) {
      for (int i = 0; i < d -> stages[stage].rooms[id].height; i++) {
         for (int y = 0; y < d -> stages[stage].rooms[id].width; y++) {
             if (i == d -> stages[stage].rooms[id].height / 2 && y == d -> stages[stage].rooms[id].width / 2) {
@@ -747,7 +746,8 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
                     }
 
                     if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
-                        setItemEffects(d->stages[stage].rooms[id].object, player);            
+                        setItemEffects(d->stages[stage].rooms[id].object, player); 
+                        savePlayerStats(player, playerStats);           
                     }
 
 				break;
@@ -778,7 +778,8 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
 					}
 
                     if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
-                        setItemEffects(d->stages[stage].rooms[id].object, player);            
+                        setItemEffects(d->stages[stage].rooms[id].object, player);  
+                        savePlayerStats(player, playerStats);          
                     }
 
 				break;
@@ -815,7 +816,8 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
                         }
 
                         if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
-                                setItemEffects(d->stages[stage].rooms[id].object, player);            
+                            setItemEffects(d->stages[stage].rooms[id].object, player); 
+                            savePlayerStats(player, playerStats);           
                         }
 
 					}
@@ -844,7 +846,8 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
                         }
 
                         if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
-                                setItemEffects(d->stages[stage].rooms[id].object, player);            
+                            setItemEffects(d->stages[stage].rooms[id].object, player); 
+                            savePlayerStats(player, playerStats);           
                         }
                         
 					}
@@ -1088,9 +1091,17 @@ void setItemEffects(Object* item, Player* player) {
     player->dmg += item->damage;
     player->hpMax += item->hpMax;
     player->shield += item->shield;
-
     player->flight += item->flight;
     player->ps += item->piercingShot;
     player->ss += item->spectralShot;
+}
+
+void savePlayerStats(Player* player, PlayerStats* playerStats) {
+    playerStats->hpMax = player->hpMax;
+    playerStats->dmg = player->dmg;
+    playerStats->shield = player->shield;
+    playerStats->ps = player->ps;
+    playerStats->ss = player->ss;
+    playerStats->flight = player->flight;
 }
     

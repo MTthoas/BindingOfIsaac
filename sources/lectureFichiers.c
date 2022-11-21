@@ -469,12 +469,13 @@ Monster* fichierMonsterToListeMonster() {
     return arrayMonster;
 }
  
-int choseCharacter2() {
-    char* filepath = "../../resources/progression.ptbob";
+int choseCharacter() {
+    char* filepath = CHEMIN_FICHIER_PERSONNAGES ;
     FILE* file = fopen(filepath, "r"); // ouverture fichier
     if(file == NULL) { 
-        printf("Problème d'ouverture du fichier de progression.\n");
-        return NULL;
+        printf("Could not open character's file.\n--> The chosen player is Briatte.\n");
+        sleep(2);
+        return BRIATTE;   
     }
 
     struct Character {
@@ -489,10 +490,9 @@ int choseCharacter2() {
     char* usable; // will be 0 or 1
     char buffer[255];
     Character characters[3];
+    int i = 0;
 
-    for(int i = 0 ; i < 3 ; i+=1) {
-        fgets(buffer, 255, file);
-
+    while(fgets(buffer, 255, file)) {
         original = strdup(buffer); // original = "Briatte:1"
         usable = original; 
         characterName = strtok_r(usable, ":", &usable); // characterName = "Briatte", usable = "1"
@@ -500,12 +500,13 @@ int choseCharacter2() {
         characters[i].name = malloc(sizeof(char) * strlen(characterName));
         characters[i].name = characterName;
         characters[i].usable = atoi(usable);
+        i += 1;
     }
 
     system("clear");
     printf("\n\n\n\n==========================================================================\n");
     printf("|%50s", "CHOSE A CHARACTER");
-    printf("%22s|\n");
+    printf("%22s|\n", " ");
     printf("==========================================================================\n");
     
     for(int i = 0 ; i < 3 ; i+=1) {
@@ -517,10 +518,17 @@ int choseCharacter2() {
     do {
         choice = readInt();
         if(choice < 1 || choice > 3 || !(characters[choice-1].usable)) {
+            if(choice == HENNOU) {
+                printf("To unlock %s you have to unlock the bonus item room for the first time.\n", characters[choice-1].name);
+            } else if(choice == CHEVAILLIER) {
+                printf("To unlock %s you have to beat Athina.\n", characters[choice-1].name);
+            }
             printf("Try again.\n");
+
         } else {
             break;
-        }
+        } // if
+
     } while(1);
     
     return choice;
