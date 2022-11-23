@@ -1,8 +1,6 @@
 #ifndef H_PLAYER
 #define H_PLAYER
 
-#include "Room.h"
-
 struct Player{
     char * name;
     int positionX;

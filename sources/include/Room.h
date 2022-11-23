@@ -13,6 +13,9 @@
 #define NUMBER_ROOM_MAX 30
 #define NUMBER_STAGES_MAX 10
 
+#include "monster.h"
+typedef struct Monster Monster;
+
 // Structure Donjon
 struct Donjon{
 
@@ -49,6 +52,7 @@ struct Donjon{
             int doorRight;
             int numberOfRoomsReturned;
             int roomUsed;
+            Monster * newArrayMonster;
 
         }rooms[NUMBER_ROOM_MAX];
 
@@ -65,7 +69,7 @@ typedef struct Donjon Donjon;
 
 int * RandomArrayForAttribution(int number);
 void InitialisationGame(Donjon * d, int stageNum);
-void gestionGame(Donjon * d, int stage, int * change);
+void gestionGame(Donjon * d, int stage, int * change, Monster * arrayMonster);
 int numberOfRooms();
 int PickRoomNotUsed(struct Donjon * d, int NumberOfRoomsInt, int stage);
 void newStageByNumber(struct Donjon * d, int stage, int numberOfRooms);

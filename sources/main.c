@@ -12,6 +12,8 @@
 #include "Player.h"
 #include "menu.h"
 #include "game.h"
+#include "lectureFichiers.h"
+
 
 #define KRED  "\x1B[31m"
 #define KNRM  "\x1B[0m"
@@ -33,7 +35,7 @@ int main(int argc, char * argv[]) {
 	//Menu
 	bool condition = true, condition2 = true, etape = true;
 	int c,c2;
-	
+	Monster * arrayMonster = fichierMonsterToListeMonster();
 	
 	
 	menu_init();
@@ -64,7 +66,7 @@ int main(int argc, char * argv[]) {
 		
 					
 					InitialisationGame(d, stage);			
-					gestionGame(d,stage, &change);
+					gestionGame(d,stage, &change, arrayMonster);
 					
 					free(d -> stages[stage].stage);
 					free(d);

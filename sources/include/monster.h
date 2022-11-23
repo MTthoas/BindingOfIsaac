@@ -29,6 +29,7 @@
 };
 
 typedef struct Monster Monster;
+typedef struct Donjon Donjon;
 
     /**
      * @brief Fonction creer monsters
@@ -59,8 +60,7 @@ typedef struct Monster Monster;
 
     void * bossAthina(void *shootParams);
 
-    void spawnMonster(Donjon * d, Monster * monster, int stage, int id );    // void freeListeMonster(ListeMonster* liste);
-    // void freeMonster(Monster* monster);
+    void spawnMonster(Donjon * d, Monster * monster, int stage, int id );    
 
     void * BossShoot(void * params);
 

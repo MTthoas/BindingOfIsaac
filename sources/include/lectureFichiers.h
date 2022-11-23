@@ -13,10 +13,10 @@
     #define LECTURE_FICHIERS_H
 
     #include "cheminsFichiers.h"
-    #include "monster.h"
     #include <stdlib.h>
     #include <stdio.h>
     #include "objects.h"
+    typedef struct Monster Monster;
 
     /**
      * @brief Transforme le fichier des objects bonus en structure de type ListeObjects et retourne

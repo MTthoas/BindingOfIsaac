@@ -11,7 +11,9 @@
 #ifndef H_GAME
 #define H_GAME
 
+typedef Monster Monster;
+
 int gestionRoom(Donjon * d, int numberOfRooms, int stage, int axeX, int axeY);
-void gestionGame(Donjon * d, int stage, int * change);
+void gestionGame(Donjon * d, int stage, int * change, Monster * arrayMonster);
 
 #endif

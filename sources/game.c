@@ -25,7 +25,6 @@
 #include "menu.h"
 #include "game.h"
 #include "shoot.h"
-#include "lectureFichiers.h"
 
 
 void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int numberOfRooms){
@@ -628,7 +627,7 @@ void InitialiseBossRoom(Donjon * d, int stage, int id, char letter){
 }
 
 
-void gestionGame(Donjon * d, int stage, int * change) {
+void gestionGame(Donjon * d, int stage, int * change, Monster * arrayMonster) {
 
     Monster * Boss = malloc(sizeof(Monster));
 
@@ -648,6 +647,7 @@ void gestionGame(Donjon * d, int stage, int * change) {
     int id = 0;
     int *pId = &id;
     int changeOfRoom = 1;
+    int randomMonsterId = 0, randomNumberMonster = 0;
     // int chargeBoss = 0;
     int bossActive = 0;
     int BossInfinite = 0;
@@ -702,7 +702,6 @@ void gestionGame(Donjon * d, int stage, int * change) {
 
         if (c == 'm') {
 
-            Monster * arrayMonster = fichierMonsterToListeMonster();
             
             Monster * monster = getMonsterById(arrayMonster, 0);
             
@@ -751,6 +750,8 @@ void gestionGame(Donjon * d, int stage, int * change) {
                    if( d->stages[stage].rooms[id].name == 'B' ){
                         bossActive = 1;
                     }
+
+                   
 
                     player->directionView = 's';
 
@@ -969,6 +970,23 @@ void gestionGame(Donjon * d, int stage, int * change) {
                 shootParams->id = id;
                 
                 changeOfRoom = 0;
+
+                 if (d->stages[stage].rooms[id].name == 'R'){
+                    //Créer une liste de monstre aléatoire, d'une taille aléatoire
+                    randomMonsterId = 0 + rand() % (9 - 0);
+                    randomNumberMonster = 2 + rand() % (5 - 2);
+
+                    Monster * newArrayMonster = malloc(sizeof(Monster) *randomNumberMonster +1);
+
+                    for (int i = 0; i < randomNumberMonster; i++){
+                    Monster * monster = getMonsterById(arrayMonster,randomMonsterId);
+                    newArrayMonster[i] = *monster;
+
+                    }
+                }
+
+
+                
             }
 
             
