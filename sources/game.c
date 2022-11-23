@@ -971,17 +971,23 @@ void gestionGame(Donjon * d, int stage, int * change, Monster * arrayMonster) {
                 
                 changeOfRoom = 0;
 
-                 if (d->stages[stage].rooms[id].name == 'R'){
+                if (d->stages[stage].rooms[id].name == 'R'){
                     //Créer une liste de monstre aléatoire, d'une taille aléatoire
-                    randomMonsterId = 0 + rand() % (9 - 0);
                     randomNumberMonster = 2 + rand() % (5 - 2);
 
                     Monster * newArrayMonster = malloc(sizeof(Monster) *randomNumberMonster +1);
 
                     for (int i = 0; i < randomNumberMonster; i++){
-                    Monster * monster = getMonsterById(arrayMonster,randomMonsterId);
-                    newArrayMonster[i] = *monster;
+                        randomMonsterId = 0 + rand() % (9 - 0);
+                        Monster * monster = getMonsterById(arrayMonster,randomMonsterId);
+                        newArrayMonster[i] = *monster;
 
+                        d->stages[stage].rooms[id].newArrayMonster = newArrayMonster;    
+                    }
+
+                    for(int y = 0; y < randomNumberMonster; y++ ){
+                        Monster * monsterDisplay = getMonsterById(newArrayMonster,y);
+                        spawnMonster(d,monsterDisplay,stage,id);
                     }
                 }
 
