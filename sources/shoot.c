@@ -22,7 +22,6 @@
 #include <fcntl.h>
 
 #include "shoot.h"
-#include "mystring.h"
 #include "Room.h"
 #include "Player.h"
 

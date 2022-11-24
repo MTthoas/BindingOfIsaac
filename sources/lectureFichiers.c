@@ -19,6 +19,8 @@
 #include <ctype.h>
 #include <string.h>
 
+
+
 int listToRoomsFile(CRUD_Room* head) {
     char* filepath = CHEMIN_FICHIER_PIECES;
     FILE* file = fopen(filepath, "w"); 

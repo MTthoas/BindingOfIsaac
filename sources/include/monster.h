@@ -48,6 +48,10 @@ typedef struct Monster Monster;
      * 
      * @return void 
      */
+
+    void * Jagger(void *params);
+
+
     Monster createMonster(int idMonster, char* name, float hpMax, int shoot, int flight, int ss);
 
     Monster * getMonsterById(Monster * arrayMonster, int id);
@@ -67,7 +71,7 @@ typedef struct Monster Monster;
 
     void * Jagger(void *params);
     
-
+void * BossShoot(void * params);
 
 
 #endif //MONSTER_H

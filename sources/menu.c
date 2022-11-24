@@ -8,9 +8,15 @@
  * @copyright Copyright (c) 2022
  */
 
-#include <stdio.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include<stdio.h>
+#include <termios.h>          
+#include <unistd.h>     
 #include <stdlib.h>
-#include <string.h>
+#include <sys/select.h>
+#include <stdbool.h>
+#include <fcntl.h>
 
 #include "./include/Player.h"
 #include "./include/menu.h"
@@ -20,22 +26,29 @@
 #include "./include/mystring.h"
 #include "./include/userInput.h"
 
+#define PBSTR "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+#define PBWIDTH 60
+
+
 void printGameBanner() {
-    printf("=================================================\n");
-    printf("=========== THE BINDING OF BRIATTE ==============\n");
-    printf("=================================================\n");
+    printf("===========================================================\n");
+    printf("=========      THE BINDING OF BRIATTE        ==============\n");
+    printf("===========================================================\n");
+    printf("\n");
+    printf("\n");
 }
 
 void menu_init(void) {
     system("clear");
     printGameBanner();
-    printf("Press 'g' to start the game\n");
-    printf("Press 'i' for the ITEMS menu\n");
-    printf("Press 'r' for the ROOMS menu\n");
-    printf("Press 'c' for the controls information\n");
-    printf("----------- Dorian-Alexandre-Matthias ----------\n");
-}
+    printf("               Press 'g' to start the game\n\n");
+    printf("               Press 'i' for the ITEMS menu\n\n");
+    printf("               Press 'r' for the ROOMS menu\n\n");
+    printf("               Press 'c' for the controls information\n\n");
+    printf("               Press 'x' to exit the game\n\n\n\n");
 
+    printf("========   Credit : Dorian-Alexandre-Matthias   ==========\n");
+}
 
 void menuCrudItem(void) {
     system("clear");
@@ -246,7 +259,6 @@ void menuModifyItem(void){
     printf("\nPress 'r' to continue\n");
 }
 
-
 void menuCrudRoom(void){
     system("clear");
         printGameBanner();
@@ -352,7 +364,6 @@ void menuDeleteRoom(void){
     printf("\nPress 'r' to continue\n");
 }
 
-
 void menuModifyRoom(void){
    system("clear");
     printGameBanner();
@@ -429,4 +440,150 @@ void menuControl(void){
 
     printf("\nPress 'b' to continue ...\n");
     return;
+}
+
+void printProgress(double percentage) {
+
+    int val = (int) (percentage * 100);
+    int lpad = (int) (percentage * PBWIDTH);
+    int rpad = PBWIDTH - lpad;
+    printf("\r%3d%% [%.*s%*s]", val, lpad, PBSTR, rpad, "");
+    fflush(stdout);
+}
+
+
+void menuGame(Player *player){
+
+    bool condition = true, condition2 = true, etape = true;
+	int c,c2;
+
+    int stage;
+    int change;
+
+    menu_init();
+
+	while (condition) {
+
+		c = 'p';
+
+		if (etape == true && kbhit()) {
+			c = getchar();
+		}
+		if (c == 'x') {
+			condition = false;
+		}
+
+		switch (c) {
+
+			case 'g':
+
+				stage = 0;
+				change = 0;
+
+				for(int i = 0; i < 3; i+=1) {
+
+					Donjon * d = malloc(sizeof(Donjon));
+					
+					InitialisationGame(d, stage);			
+					gestionGame(d,stage, &change, player);
+					
+					  if(player->hpMax <= 0){
+						system("clear");
+						printf("===========================================================\n");
+						printf("=========                YOU ARE DEAD                    ==============\n");
+						printf("===========================================================\n");
+						printf("\n");
+
+						#ifdef _WIN32 
+						Sleep(10000); 
+						#else 
+						usleep(5000000); 
+						#endif 
+
+						menuGame(player);
+
+					}
+
+					free(d -> stages[stage].stage);
+					free(d);
+
+					stage+=1;
+					// printf("CHANGE : %d", change);
+					change = 0;
+
+					system("clear");
+					printf("\n\n\n\n\n\n\n\n\n");
+					printf("		Changement d'étage ...\n\n");
+
+					for(int i = 0; i < 5; i++){
+						printProgress(i/5.0);
+						#ifdef _WIN32 
+						Sleep(100); 
+						#else 
+						usleep(30000); 
+						#endif 
+					}
+				}
+								
+			
+			case 'i':
+			while (condition2)
+			{
+			etape = false;
+				c2 = 'p';
+				menuCrudItem();
+				if (kbhit()) {
+					c2 = getchar();
+				}
+				switch (c2){
+					case 'a':
+						menuCreateItem();
+						condition2 = false;
+						break;
+					case 'd':
+						menuDeleteItem();
+						condition2 = false;
+
+						break;
+					case 'm':
+						menuModifyItem();
+						condition2 = false;
+
+						break;
+
+				}
+			}
+			break;
+				
+
+			case 'r':
+			 while (condition2)
+			 {
+				etape = false;
+				c2 = 'p';
+				menuCrudRoom();
+				if (kbhit()) {
+					c2 = getchar();
+				}
+				switch (c2){
+					case 'a':
+						menuCreateRoom();
+						condition2 = false;
+						break;
+					case 'd':
+						menuDeleteRoom();
+						condition2 = false;
+						break;
+					case 'm':
+						menuModifyRoom();
+						condition2 = false;
+						break;
+				}
+			 }
+				break;
+
+			case 'c':
+				menuControl();
+		}
+	}
 }
