@@ -1,7 +1,7 @@
 /**
  * @file room.h
  * @author MTthoas
- * @brief Declaration fonctions et structures des Rooms,Donjons et stages
+ * @brief Declaration fonctions et structures des Rooms, Donjons et stages
  * @version 0.5
  * @date 2022-11-12
  * 
@@ -16,11 +16,22 @@
 #include "monster.h"
 typedef struct Monster Monster;
 
+#include "objects.h"
+#include "Player.h"
+
+struct Door{
+    char doorTop;
+    char doorBottom; 
+    char doorLeft;
+    char doorRight;
+};
+
 // Structure Donjon
 struct Donjon{
 
     char name[256];
     int numberStage;
+    Object* headObject; // first object of object linked list
 
     // Structure Etages
     struct Stage{
@@ -42,8 +53,8 @@ struct Donjon{
             int AxeX;
             int AxeY;
             int number;
-            int width;
-            int height;
+            int width; // columns
+            int height; // rows
             char * Doors;
             int numberOfDoors;
             int doorTop;
@@ -53,13 +64,15 @@ struct Donjon{
             int numberOfRoomsReturned;
             int roomUsed;
             Monster * newArrayMonster;
+            Object* object; // an object of the donjon objects linked list
+         
+            struct Door Door;
 
         }rooms[NUMBER_ROOM_MAX];
 
     }stages[NUMBER_STAGES_MAX];
     
 };
-
 
 typedef struct Donjon Donjon;
 
@@ -69,7 +82,6 @@ typedef struct Donjon Donjon;
 
 int * RandomArrayForAttribution(int number);
 void InitialisationGame(Donjon * d, int stageNum);
-void gestionGame(Donjon * d, int stage, int * change, Monster * arrayMonster);
 int numberOfRooms();
 int PickRoomNotUsed(struct Donjon * d, int NumberOfRoomsInt, int stage);
 void newStageByNumber(struct Donjon * d, int stage, int numberOfRooms);

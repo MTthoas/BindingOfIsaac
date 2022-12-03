@@ -1,6 +1,6 @@
 /**
  * @file objects.c
- * @author TheGreat-Chain - Nairod36
+ * @author TheGreat-Chain
  * @brief Structures et fonctions relatives aux objects de personnage
  * @version 0.1
  * @date 2022-10-24
@@ -8,65 +8,55 @@
  * @copyright Copyright (c) 2022
  * 
  */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdlib.h>
-#include <string.h>
+#include <time.h>    
 
 #include "include/objects.h"
 #include "include/mystring.h"
 
-
-
-int getTailleListeObjects(ListeObjects* l) {
-    Object* courant = l->premier;
-    if(courant == NULL) {
+int getNumberObjects(Object* head) {
+    if(head == NULL) { 
         return 0;
     }
 
+    if(head->id != 1) { // pas le premier objet
+        return -1;
+    }
+
     int count = 0;
-    while(courant != NULL) {
+    while(head != NULL) {
         count += 1;
-        courant = courant->next;
+        head = head->next;
     }
 
     return count;
 }
 
-void* displayObject(Object* object) {
+void displayObject(Object* object) {
     if(object == NULL) {
         printf("Pas d'object\n");
-        return NULL;
+        return;
     }
 
     printf("\n");
     printf("id : %d\n", object->id);
     printf("name : %s\n", duplicateString(object->name));
-    printf("hpMax : %f\n", object->hpMax);
-    printf("shield : %f\n", object->shield);
-    printf("damage : %f\n", object->damage);
+    printf("hpMax : %.2f\n", object->hpMax);
+    printf("shield : %.2f\n", object->shield);
+    printf("damage : %.2f\n", object->damage);
     printf("piercingShot : %d\n", object->piercingShot);
     printf("spectralShot : %d\n", object->spectralShot);
     printf("flight : %d\n", object->flight);
     printf("\n");
-
-    return NULL;
 }
 
-void* displayListeObjects(ListeObjects* listeObjects) {
-    if(listeObjects == NULL) {
-        printf("Pas de liste.\n");
-        return NULL;
+void displayAllObjects(Object* head) {
+    while(head != NULL) {  
+        displayObject(head);
+        head = head->next;
     }
-
-    Object* courant = listeObjects->premier;
-    while(courant != NULL) { // tant qu'on n'est pas à la fin de la liste 
-        displayObject(courant);
-        courant = courant->next;
-    }
-    return NULL;
 }
 
 Object* duplicateObject(Object* object) {
@@ -84,53 +74,29 @@ Object* duplicateObject(Object* object) {
     newObject->spectralShot = object->spectralShot;
     newObject->flight = object->flight;
     newObject->next = object->next;
-    
+
+    free(object);
     return newObject;
 }
 
-// int addObject(ListeObjects* listeObjects, Object* newObject) {
-//     Object* courant = listeObjects->premier;
-//     int index = 1; //formera l'id du nouvel object
+int addObject(Object* head, Object* newObject) {
+    Object* current = head;
+    //int count = 1;
 
-//     if(courant == NULL) { // liste vide
-//         newObject->id = index;
-//         listeObjects->premier = duplicateObject(newObject);
-//         return index;
-//     }
-
-//     while(courant != NULL) { // ajout a la fin de liste
-//         index += 1;
-//         if(courant->next == NULL) {
-//             newObject->id = index;
-//             courant->next = duplicateObject(newObject);
-//             return index;
-//         }
-//         courant = courant->next;
-//     }
-
-//     return 0;
-// }
-
-int addObject(ListeObjects* listeObjects, Object* newObject) {
-    Object* courant = listeObjects->premier;
-    int index = 1; //formera l'id du nouvel object
-
-    if(courant == NULL) { // liste vide
-        listeObjects->premier = duplicateObject(newObject);
+    if(head == NULL || head->id != 1) { // fail if null or not first
+        return 0; 
     }
 
-    while(courant != NULL) { // ajout a la fin de liste
-        index += 1;
-        if(courant->next == NULL) {
-            courant->next = duplicateObject(newObject);
-        }
-        courant = courant->next;
+    while(current->next != NULL) { // aller a la fin de liste
+        current = current->next;
     }
 
-    return 0;
+    current->next = duplicateObject(newObject);
+    arrangeObjectsIds(head);
+    return 1; // success
 }
 
-Object* createObject(char* name, float hpMax, float shield, float damage, int piercingShot, int spectralShot, int flight) {
+Object* createObject(int id, char* name, float hpMax, float shield, float damage, int piercingShot, int spectralShot, int flight) {
     Object* o = malloc(sizeof(Object) * 1);
     
     // verification des entrees
@@ -142,7 +108,7 @@ Object* createObject(char* name, float hpMax, float shield, float damage, int pi
     flight = (flight == 0) ? 0 : 1;
 
     // allocation 
-    o->id = 1;
+    o->id = id;
     o->name = duplicateString(name);
     o->hpMax = hpMax;
     o->shield = shield;
@@ -155,71 +121,49 @@ Object* createObject(char* name, float hpMax, float shield, float damage, int pi
     return o;
 }
 
-void modifyObject(ListeObjects* liste, int id, Object* newObject) {
-    Object* toDelete;
-    if(liste->premier != NULL && liste->premier->id == id) { // modifier premier element
-        toDelete = liste->premier;
-        newObject->next = liste->premier->next;
-        liste->premier = newObject;
-        freeObject(toDelete);
-        rangerListeObjects(liste);
-        return;
+int arrangeObjectsIds(Object* head) {
+    if(head == NULL || head->id != 1) {
+        return 0;
     }
 
-    Object* courant = liste->premier;
-    while(courant != NULL ) {
-
-        if(courant->next != NULL && courant->next->id == id) { // modifier
-            toDelete = courant->next;
-            newObject->next = courant->next->next;
-            courant->next = newObject;
-            freeObject(toDelete);
-            rangerListeObjects(liste);
-            return;
-        }
-        
-        courant = courant->next;
-    }
-}
-
-void rangerListeObjects(ListeObjects* liste) {
     int count = 1;
-    Object* courant = liste->premier;
-    while(courant != NULL) {
-        courant->id = count;
+    while(head != NULL) {
+        head->id = count;
         count += 1;
-        courant = courant->next;
+        head = head->next;
     }
+
+    return 1;
 }
 
-void removeObject(ListeObjects* liste, int id) {
-    Object* toDelete;
-    if(liste->premier != NULL && liste->premier->id == id) { // supprimer premier element
-        toDelete = liste->premier;
-        liste->premier = liste->premier->next;
-        freeObject(toDelete);
-        rangerListeObjects(liste);
+
+void removeObject(Object** ptr_head, int id) {
+    Object* tmp = *ptr_head;
+    Object* previous;
+
+    if(tmp != NULL && tmp->id == id) { // supprimer premier element
+        tmp->next->id = 1; // the second object becomes the first
+        *ptr_head = tmp->next;
+        free(tmp);
+        arrangeObjectsIds(*ptr_head);
         return;
     }
 
-    Object* courant = liste->premier;
-    while(courant != NULL ) {
-
-        if(courant->next != NULL && courant->next->id == id) { // suppression
-            toDelete = courant->next;
-            courant->next = courant->next->next;
-            freeObject(toDelete);
-            rangerListeObjects(liste);
-            return;
-        }
-        
-        courant = courant->next;
+    while(tmp != NULL && tmp->id != id) { // aller jusqu'à l'objet à delete
+        previous = tmp;
+        tmp = tmp->next;
     }
 
+    if(tmp == NULL) { // id non présent
+        return;
+    }
+
+    previous->next = tmp->next;
+    arrangeObjectsIds(*ptr_head);
 }
 
-Object* getObjectById(ListeObjects* liste, int id) {
-    Object* result = liste->premier;
+Object* getObjectById(Object* head, int id) {
+    Object* result = head;
 
     while(result != NULL) {
         if(result->id == id) {
@@ -231,23 +175,32 @@ Object* getObjectById(ListeObjects* liste, int id) {
     return NULL;
 }
 
-void freeListeObjects(ListeObjects* liste) {
-    Object* courant = liste->premier;
-    Object* next;
-
-    while(courant != NULL) {
-        next = courant->next;
-        free(courant);
-        courant = next;
+int freeAllObjects(Object* head) {
+    if(head == NULL || head->id != 1) { // pas le premier objet
+        return 0;
     }
+
+    Object* next;
+    while(head != NULL) {
+        next = head->next;
+        free(head);
+        head = next;
+    }
+
+    return 1;
 }
 
-ListeObjects* createListeObjects() {
-    ListeObjects* liste = malloc(sizeof(ListeObjects) * 1);
-    return liste;   
+Object* getRandomObject(Object* head) {
+    srand(time(NULL));
+    int max = getNumberObjects(head);
+    int index;
+
+    for(int i=0; i<100; i+=1) { // be sure to be random
+        index = rand();
+        index = index % (max-1);
+    }
+
+    return getObjectById(head, index+1);
 }
 
-void freeObject(Object* object) {
-    free(object);
-}
-
+    

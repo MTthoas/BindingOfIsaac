@@ -12,6 +12,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "Player.h"
 #include "Room.h"
 
@@ -48,6 +49,10 @@ typedef struct Donjon Donjon;
      * 
      * @return void 
      */
+
+    void * Jagger(void *params);
+
+
     Monster createMonster(int idMonster, char* name, float hpMax, int shoot, int flight, int ss);
 
     Monster * getMonsterById(Monster * arrayMonster, int id);
@@ -66,7 +71,7 @@ typedef struct Donjon Donjon;
 
     void * Jagger(void *params);
     
-
+void * BossShoot(void * params);
 
 
 #endif //MONSTER_H

@@ -1,6 +1,6 @@
 /**
  * @file fichierObjects.h
- * @author TheGreat-Chain & Nairod36
+ * @author TheGreat-Chain
  * @brief Structures et fonctions relatives aux objects de personnage
  * @version 0.1
  * @date 2022-10-10
@@ -8,9 +8,8 @@
  * @copyright Copyright (c) 2022
  */
 
-
-#ifndef OBJECTS_H
-#define OBJECTS_H
+#ifndef OBJETS_H
+#define OBJETS_H
 
     /**
      * @brief Objects apportant des bonus de statistique au personnage.
@@ -31,24 +30,9 @@
     };
 
     /**
-     * @brief Liste de tous les objects du jeu. 
-     * Pointe vers le premier object de la liste chainée.
-     */
-    typedef struct ListeObjects {
-        Object* premier;
-    } ListeObjects;
-
-    /**
-     * @brief Alloue un espace mémoire pour une liste d'object et renvoie son adresse. 
-     * Pour ajouter des Objects dans la liste, utiliser addObject().
-     * 
-     * @return ListeObject* 
-     */
-    ListeObjects* createListeObjects();
-
-    /**
      * @brief Constructeur d'objects
      * 
+     * @param id
      * @param name 
      * @param hpMax 
      * @param shield 
@@ -59,16 +43,16 @@
      * 
      * @return Object* adresse de l'object next (NULL par défaut)
      */
-    Object* createObject(char* name, float hpMax, float shield, float damage, int piercingShot, int spectralShot, int flight);
+    Object* createObject(int id, char* name, float hpMax, float shield, float damage, int piercingShot, int spectralShot, int flight);
 
     /**
-     * @brief Afficher le contenu de la liste des objects.
+     * @brief Affiche tous les objets à partir de celui passé en paramètres
      * 
      * READ du CRUD
      * 
-     * @param listeObjects 
+     * @param firstObject premier maillon de la liste chainee
      */
-    void* displayListeObjects(ListeObjects* listeObjects);
+    void displayAllObjects(Object* head);
 
     /**
      * @brief Affiche l'object et ses attributs dans le terminal.
@@ -76,53 +60,31 @@
      * 
      * @param object object à afficher
      */
-    void* displayObject(Object* object);
+    void displayObject(Object* object);
 
     /**
-     * @brief Ajouter un object dans la liste des objects.
-     * Retourne l'id du nouvel object, 0 si l'object n'a pas pu être ajouté.
      * 
-     * CREATE du CRUD
+     * CREATE du CRUD. Ajoute un objet à la liste commençant par head. Toujours donner le premier objet. 
+     * Réarrange les id et duplique (et donc désalloue) l'objet donné
      * 
-     * @param listeObjects 
+     * @param head first object 
      * @param newObject 
+     * 
+     * @return 1 success, 0 otherwise
      */
-    int addObject(ListeObjects* listeObjects, Object* newObject);
+    int addObject(Object* head, Object* newObject);
 
     /**
-     * @brief Retire un object de la structure de la liste des objects
+     * @brief Removes the object of the given id from the linked list
      * 
-     * REMOVE du CRUD
-     * 
-     * @param listeObjects 
-     * @param idObject 
+     * @param ptr_head pointer of first object
+     * @param id id of object to remove
      */
-    void removeObject(ListeObjects* listeObjects, int idObject);
-
-    /**
-     * @brief Modifie un object spécifié par un nouvel object passé en paramètre.
-     * TODO : free l'object ayant l'id correspondant et pointer vers newObject
-     * UPDATE du CRUD
-     * 
-     * @param ListeObjects 
-     * @param idObjectToReplace 
-     * @param newObject 
-     */
-    void modifyObject(ListeObjects* listeObjects, int idObjectToReplace, Object* newObject);
-
-    /**
-     * @brief Retourne l'adresse de l'object de la liste ayant l'id correspondant.
-     * Retourne NULL si l'id demandé n'existe pas.
-     * 
-     * @param ListeObjects 
-     * @param id 
-     * @return Object* 
-     */
-    Object* getObjectById(ListeObjects* , int );
+    void removeObject(Object** ptr_head, int id);
 
     /**
      * @brief Retourne l'adresse d'un nouvel espace mémoire alloué à un object dont la valeur des champs est identique
-     * à ceux de l'object en paramètre.
+     * à ceux de l'object en paramètre. Désalloue l'objet à l'adresse passée en paramètres pour éviter les fuites mémoires.
      * 
      * @param object object à copier
      * @return Object* 
@@ -130,32 +92,45 @@
     Object* duplicateObject(Object* object);
 
     /**
-     * @brief Désalloue la mémoire allouée à un object
+     * @brief Retourne le nombre d'objets de la liste chaînée 
      * 
+     * @return int 0 si liste vide, -1 si l'objet n'est pas le premier, un entier sinon
      */
-    void freeObject(Object*);
-    
-    /**
-     * @brief Désalloue la mémoire allouée à une liste d'objects.
-     * 
-     */
-    void freeListeObjects(ListeObjects*);
+    int getNumberObjects(Object* head);
 
     /**
-     * @brief Remet les identifiants des objects dans l'ordre.
-     * A utiliser par exemple après une suppression.
-     */
-    void rangerListeObjects(ListeObjects*);
-
-
-    /**
-     * @brief Retourne le nombre d'éléments d'une liste d'objects
+     * @brief Free all objects of the linked list
      * 
+     * @param head object of id 1.
      * @return int 
      */
-    int getTailleListeObjects(ListeObjects*);
+    int freeAllObjects(Object* head);
+
+    /**
+     * @brief Remet les id dans l'ordre
+     * 
+     * @param head 
+     * @return int 
+     */
+    int arrangeObjectsIds(Object* head);
+
+    /**
+     * @brief Get the Object with the given id
+     * 
+     * @param head first object of the list
+     * @param id 
+     * @return Object* 
+     */
+    Object* getObjectById(Object* head, int id);
+
+    /**
+     * @brief Get a random object from the list
+     * 
+     * @param head 
+     * @return Object* 
+     */
+    Object* getRandomObject(Object* head);
 
 
 
-
-#endif //OBJECTS_H
+#endif //OBJETS_H
