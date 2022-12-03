@@ -9,8 +9,7 @@
 #else
 #include <unistd.h>
 #endif    
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <time.h>
 #include <stdbool.h>
 #include <fcntl.h>
 #include <pthread.h>
@@ -19,10 +18,6 @@
 #define KNRM "\x1B[0m"
 
 #include "include/mystring.h"
-#include <time.h>
-#include "Room.h"
-#include "Player.h"
-#include "menu.h"
 #include "game.h"
 #include "shoot.h"
 #include "lectureFichiers.h"
@@ -46,6 +41,11 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
             if(d->stages[stage].stage[i][y] == 'P'){
 
                 for(int w = 0; w < numberOfRooms; w++) {
+
+                    d->stages[stage].rooms[w].Door.doorLeft = 'X';
+                    d->stages[stage].rooms[w].Door.doorRight = 'X';
+                    d->stages[stage].rooms[w].Door.doorTop = 'X';
+                    d->stages[stage].rooms[w].Door.doorBottom = 'X';
 
                     if(d->stages[stage].stage[i][w] == 'P'){
                         
@@ -144,12 +144,16 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
 
                 if(Vl == 1){
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = 'V';
+                    d->stages[stage].rooms[t].Door.doorLeft = 'V';
                 }else  if(Il == 1){
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = 'I';
+                    d->stages[stage].rooms[t].Door.doorLeft = 'I';
                 }else if(Bl == 1){
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = 'B';
+                    d->stages[stage].rooms[t].Door.doorLeft = 'B';
                 }else{
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = 'D';
+                    d->stages[stage].rooms[t].Door.doorLeft = 'D';
                 }
 
                 
@@ -160,12 +164,16 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
      
                 if(Vr == 1){
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = 'V';
+                    d->stages[stage].rooms[t].Door.doorRight = 'V';
                 }else if(Ir == 1){
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = 'I';
+                    d->stages[stage].rooms[t].Door.doorRight = 'I';
                 }else if(Br == 1){
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = 'B';
+                    d->stages[stage].rooms[t].Door.doorRight = 'B';
                 }else{
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = 'D';
+                    d->stages[stage].rooms[t].Door.doorRight = 'D';
                 }
 
             }
@@ -182,12 +190,16 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
 
                 if(Vt == 1){
                     d->stages[stage].rooms[t].room[0][width] = 'V';
+                    d->stages[stage].rooms[t].Door.doorTop = 'V';
                 }else if(It == 1){
                     d->stages[stage].rooms[t].room[0][width] = 'I';
+                    d->stages[stage].rooms[t].Door.doorTop = 'I';
                 }else if(Bt == 1){
                     d->stages[stage].rooms[t].room[0][width] = 'B';
+                    d->stages[stage].rooms[t].Door.doorTop = 'B';
                 }else{
                     d->stages[stage].rooms[t].room[0][width] = 'D';
+                    d->stages[stage].rooms[t].Door.doorTop = 'D';
                 }
                                                                                        
             }
@@ -197,12 +209,16 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
 
                 if(Vb == 1){
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height-1][width] = 'V';
+                    d->stages[stage].rooms[t].Door.doorBottom = 'V';
                 }else if(Ib == 1){
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height-1][width] = 'I';
+                    d->stages[stage].rooms[t].Door.doorBottom = 'I';
                 }else if(Bb == 1){
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height-1][width] = 'B';
+                    d->stages[stage].rooms[t].Door.doorBottom = 'B';
                 }else{
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height-1][width] = 'D';
+                    d->stages[stage].rooms[t].Door.doorBottom = 'D';
                 }
                 
                                                                                                      
@@ -212,7 +228,7 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
            
         }
     }
-
+    
 }
 
 void checkName(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY, int t){
@@ -271,7 +287,7 @@ int gestionRoom(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY){
     int t = 0;
 
     if(axeX != 0 && axeY != 0){
-        t+=1;
+        t++;
     }
     
     for(int i = 0; i < numberOfRooms+2; i++){
@@ -300,525 +316,21 @@ int gestionRoom(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY){
     return 0;
 }
 
-void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id ) {
-
-    for (int i = 0; i < d -> stages[stage].rooms[id].height; i++) {
-        for (int y = 0; y < d -> stages[stage].rooms[id].width; y++) {
-            if (i == d -> stages[stage].rooms[id].height / 2 && y == d -> stages[stage].rooms[id].width / 2) {
-                if (y % 2 == 0) {
-                    d -> stages[stage].rooms[id].room[i][y] = 'P';
-                } else {
-                    d -> stages[stage].rooms[id].room[i][y + 1] = 'P';
-                }
-            }
-
-        }
-    }
-
-    for (int i = 0; i < d -> stages[stage].rooms[id].height; i++) {
-        for (int y = 0; y < d -> stages[stage].rooms[id].width; y++) {
-            if (y % 2 == 0) {
-                if (d -> stages[stage].rooms[id].room[i][y] == 'P') {
-                    player -> positionX = y;
-                    player -> positionY = i;
-                }
-            }
-        }
-    }
-
-    for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
-				for (int y = 0; y < d->stages[stage].rooms[id].width; y++) {
-					if (y % 2 == 0) {
-						if(d-> stages[stage].rooms[id].room[i][y] == 'P'){
-							printf("%s", KRED);
-							printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
-							printf("%s", KNRM);
-						} else {
-							printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
-						}
-					}
-				}
-				printf("\n");
-				
-			}
-
-}
-
-void * BossShoot(void * params) {
-
-    Shoot * shoot = malloc(sizeof(Shoot));
-    Monster * monster = malloc(sizeof(Monster));
-
-    
-    char letter = ((ShootParams*)params)->monster->firstLetter;
-
-    int id = ((ShootParams*)params)->id;
-    int stage = ((ShootParams*)params)->stage;
-
-     for (int i = 0; i < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].height; i++) {
-        for(int y = 0; y < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].width; y++){
-            if(((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[i][y] == letter){
-                monster -> positionX = y;
-                monster -> positionY = i;
-            }
-        }
-    }
-
-        shoot -> positionX = monster -> positionX;
-        shoot -> positionY = monster -> positionY;
-
-        if(((ShootParams*)params) -> directionView == 'R') { 
-
-            ((ShootParams*)params)->reloadBoss = 0;
-
-            while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX + 2] == ' ' && ((ShootParams*)params)->reloadBoss  == 0 ){
-
-                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] = '*';
-
-                #ifdef _WIN32 
-                    Sleep(290); 
-                #else 
-                    usleep(29000); 
-                #endif
-
-
-
-                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] = ' ';
-                
-                shoot -> positionX =  shoot -> positionX + 2;
-
-            }
-    
-            ((ShootParams*)params)->reloadBoss = 1;
-       
-        }
-
-        if(((ShootParams*)params) -> directionView == 'L') {
-
-                      ((ShootParams*)params)->reloadBoss = 0;
-
-            while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX - 2] == ' ' && ((ShootParams*)params)->reloadBoss  == 0){
-
-                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] = '*';
-
-                #ifdef _WIN32 
-                    Sleep(290); 
-                #else 
-                    usleep(29000); 
-                #endif
-
-                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] = ' ';
-                
-                
-                shoot -> positionX = shoot -> positionX - 2;
-
-            }
-
-            
-            ((ShootParams*)params)->reloadBoss = 1;
-       
-        }
-
-        if(((ShootParams*)params) -> directionView == 'T'){
-
-            ((ShootParams*)params)->reloadBoss = 0;
-
-            while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY - 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reloadBoss  == 0){
-
-                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX] = '*';
-
-                #ifdef _WIN32 
-                    Sleep(290); 
-                #else 
-                    usleep(20000); 
-                #endif
-
-                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX] = ' ';
-
-                shoot -> positionY--;
-
-            }
-
-            ((ShootParams*)params)->reloadBoss = 1;
-
-        }
-
-        if(((ShootParams*)params) -> directionView == 'B'){
-
-                      ((ShootParams*)params)->reloadBoss = 0;
-
-            while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY + 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reloadBoss  == 0){ 
-
-                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX] = '*';
-
-                #ifdef _WIN32 
-                    Sleep(290); 
-                #else 
-                    usleep(20000); 
-                #endif
-
-                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX] = ' ';
-
-                shoot -> positionY++;
-
-            }
-
-              ((ShootParams*)params)->reloadBoss = 1;
-        }
-
-
-    (void)params;
-
-    free(shoot);
-    return NULL;
-
-}
-
-void * LeninaShoot(void * params) {
-
-    Shoot * shoot = malloc(sizeof(Shoot));
-    Monster * monster = malloc(sizeof(Monster));
-
-    
-    char letter = 'L';
-    int height = ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].height;
-    int width = ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].width;
-
-
-    int id = ((ShootParams*)params)->id;
-    int stage = ((ShootParams*)params)->stage;
-
-    for (int i = 0; i < height; i+=1) { // set monster position
-        for(int y = 0; y < width; y+=1) {
-            if(((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[i][y] == letter) {
-                monster -> positionX = y;
-                monster -> positionY = i;
-            }
-        }
-    }
-
-    shoot -> positionX = monster -> positionX;
-    shoot -> positionY = monster -> positionY;
-
-    // shoot right
-    if(((ShootParams*)params)->player->positionX > monster->positionX) { 
-
-        ((ShootParams*)params)->reloadBoss = 0;
-
-        while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX + 2] == ' ' && ((ShootParams*)params)->reloadBoss  == 0 ){
-
-            ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] = '*';
-
-            #ifdef _WIN32 
-                Sleep(290); 
-            #else 
-                usleep(30000); 
-            #endif
-
-            ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] = ' ';
-            
-            shoot -> positionX =  shoot -> positionX + 2;
-
-        }
-
-        ((ShootParams*)params)->reloadBoss = 1;
-    
-    }
-    if(((ShootParams*)params)->d->stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[shoot->positionY][shoot->positionX + 2] == 'P'){
-        playerLoseLife(((ShootParams*)params)->player, ((ShootParams*)params)->playerStats, 1);
-    }
-
-    // shoot left
-    if(((ShootParams*)params)->player->positionX < monster->positionX) {
-
-        ((ShootParams*)params)->reloadBoss = 0;
-
-        while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX - 2] == ' ' && ((ShootParams*)params)->reloadBoss  == 0){
-
-            ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] = '*';
-
-            #ifdef _WIN32 
-                Sleep(290); 
-            #else 
-                usleep(30000); 
-            #endif
-
-            ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] = ' ';
-            
-            
-            shoot -> positionX = shoot -> positionX - 2;
-
-        }
-
-        
-        ((ShootParams*)params)->reloadBoss = 1;
-    
-    }
-    if(((ShootParams*)params)->d->stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[shoot->positionY][shoot->positionX - 2] == 'P'){
-        ((ShootParams*)params)->player->hpMax = ((ShootParams*)params)->player->hpMax - 1;
-        if(((ShootParams*)params)->player->hpMax <= 0) { // dead player
-            //Le joueur est mort, fin partie 
-        }
-    }
-
-    // shoot BOTTOM
-    if(((ShootParams*)params)->player->positionX == monster->positionX) { 
-
-        ((ShootParams*)params)->reloadBoss = 0;
-        
-
-        while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY + 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reloadBoss  == 0 ) { 
-            int placeIsNotBoss = ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX] != letter; // to avoid replacing the boss
-            if(placeIsNotBoss) {
-                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX] = '*';
-            }
-
-            #ifdef _WIN32 
-                Sleep(290); 
-            #else 
-                usleep(33000); 
-            #endif
-
-            
-            if(placeIsNotBoss) {
-                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX] = ' ';
-            }
-
-            shoot -> positionY += 1;
-
-        }
-
-        ((ShootParams*)params)->reloadBoss = 1;
-    }
-    if(((ShootParams*)params)->d->stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[shoot->positionY+1][shoot->positionX] == 'P'){
-        ((ShootParams*)params)->player->hpMax = ((ShootParams*)params)->player->hpMax - 1;
-        if(((ShootParams*)params)->player->hpMax <= 0) { // dead player
-            //Le joueur est mort, fin partie 
-        }
-    }
-
-
-
-    (void)params;
-
-    free(shoot);
-    return NULL;
-
-}
-
-void * Jagger(void *params) {
-
-    // Shoot * shoot = malloc(sizeof(Shoot));
-
-    // int condition = 1;
-
-    char letter = ((ShootParams*)params)->monster->firstLetter;
-
-    for (int i = 0; i < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].height; i++) {
-        for(int y = 0; y < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].width; y++){
-            if(((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[i][y] == letter){
-                ((ShootParams*)params)->monster -> positionX = y;
-                ((ShootParams*)params)->monster -> positionY = i;
-            }
-        }
-    }
-
-                
-        int id = ((ShootParams*)params)->id;
-        int stage = ((ShootParams*)params)->stage;
-                    pthread_t thread;
-
-    while(((ShootParams*)params)->condition) {
-
-        int random = rand() % 3;
-
-            if(random == 2) {
-                pthread_create(&thread, NULL, BossShoot, params);
-            }
-
-        #ifdef _WIN32 
-		Sleep(9090); 
-		#else 
-		usleep(500000); 
-		#endif
-        
-
-        for (int i = 0; i < ((ShootParams*)params)->d -> stages[stage].rooms[id].height; i++) {
-
-            for(int y = 0; y < ((ShootParams*)params)->d -> stages[stage].rooms[id].width; y++){
-
-                if(((ShootParams*)params)->d -> stages[stage].rooms[id].room[i][y] == letter){
-
-                        (((ShootParams*)params)->d -> stages[stage].rooms[id].room[i][y] = ' ');
-                }
-            }
-        }
-
-        int positionPlayerX = ((ShootParams*)params)->player -> positionX;
-        int positionPlayerY = ((ShootParams*)params)->player -> positionY;
-
-        int DiffPositionX = ((ShootParams*)params)->monster -> positionX - positionPlayerX;
-        int DiffPositionY = ((ShootParams*)params)->monster -> positionY - positionPlayerY;
-
-        int randMonster = rand() % 2;
-
-
-        if(randMonster == 0) {
-
-            if(DiffPositionX > 1) {
-                
-                if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionX-2] == ' '){
-                    
-                    ((ShootParams*)params)->monster -> positionX--;
-                    ((ShootParams*)params)->monster -> positionX--;
-
-                    ((ShootParams*)params) -> directionView = 'L';
-
-                }
-
-            } else if(DiffPositionX < 1){
-
-                if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionX-2] == ' '){
-
-                   ((ShootParams*)params)->monster -> positionX++;
-                   ((ShootParams*)params)->monster -> positionX++;
-
-                    ((ShootParams*)params) -> directionView = 'R';
-
-                }
-
-            }
-        
-                    
-        }else{
-
-            if(DiffPositionY > 1){
-
-                if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY-1][((ShootParams*)params)->monster ->positionX] == ' '){
-
-                    ((ShootParams*)params) -> monster -> positionY--;
-                    ((ShootParams*)params) -> directionView = 'T';
-
-                    #ifdef _WIN32 
-                    Sleep(9090); 
-                    #else 
-                    usleep(50000); 
-                    #endif
-                    
-
-                }
-
-            }else if(DiffPositionY < 1){
-
-                if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY+1][((ShootParams*)params)->monster ->positionX] == ' '){
-
-                    ((ShootParams*)params)->monster -> positionY++;
-                    ((ShootParams*)params) -> directionView = 'B';
-
-                    #ifdef _WIN32 
-                    Sleep(9090); 
-                    #else 
-                    usleep(50000); 
-                    #endif
-                
-                }
-
-            }
-                    
-        }
-
-                    
-        if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionX] == ' '){
-            ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionX] = letter;
-        }
-
-
-    }
-
-    free(((ShootParams*)params)->monster);
-
-    return 0;
-}
-
-void * bossLenina(void *params) {
-
-    char letter = ((ShootParams*)params)->monster->firstLetter;
-    int height = ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].height;
-    int width = ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].width;
-
-    
-    for (int i = 0; i < height; i+=1) { // set boss position
-        for(int y = 0; y < width; y+=1){
-            if(((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[i][y] == letter){
-                ((ShootParams*)params)->monster -> positionX = y;
-                ((ShootParams*)params)->monster -> positionY = i;
-            }
-        }
-    }
-    
-
-                
-        int id = ((ShootParams*)params)->id;
-        int stage = ((ShootParams*)params)->stage;
-                    pthread_t thread;
-
-    while(((ShootParams*)params)->condition) {
-
-        int random = rand() % 3;
-
-            if(random == 2) {
-                pthread_create(&thread, NULL, LeninaShoot, params);
-            }
-
-        #ifdef _WIN32 
-		Sleep(9090); 
-		#else 
-		usleep(500000); 
-		#endif
-        
-
-        for (int i = 0; i < height; i+=1) {
-
-            for(int y = 0; y < width; y+=1) {
-
-                if(((ShootParams*)params)->d -> stages[stage].rooms[id].room[i][y] == letter){
-
-                        (((ShootParams*)params)->d -> stages[stage].rooms[id].room[i][y] = ' ');
-                }
-            }
-        }
-
-        //int positionPlayerX = ((ShootParams*)params)->player -> positionX;
-        //int positionPlayerY = ((ShootParams*)params)->player -> positionY;
-
-        //int randMonster = rand() % 2;
-
-        if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionX] == ' '){
-            ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionX] = letter;
-        }
-
-    }
-
-    free(((ShootParams*)params)->monster);
-
-    return 0;
-}
 
 void InitialiseBossRoom(Donjon * d, int stage, int id, char letter) {
-    int height = d -> stages[stage].rooms[id].height;
-    int width = d -> stages[stage].rooms[id].width;
 
-     for (int i = 0; i < height ; i+=1) {
-        for (int y = 0; y < width; y+=1) {
-            if (i == height / 2 && y == width / 2) {
+     for (int i = 0; i < d -> stages[stage].rooms[id].height; i++) {
+        for (int y = 0; y < d -> stages[stage].rooms[id].width; y++) {
+            if (i == d -> stages[stage].rooms[id].height / 2 && y == d -> stages[stage].rooms[id].width / 2) {
                 if (y % 2 == 0) {
                     d -> stages[stage].rooms[id].room[i][y] = letter;
                 } else {
                     d -> stages[stage].rooms[id].room[i][y - 1] = letter;
                 }
             }
+
         }
-    } // for
+    }
 }
 
 void InitialiseBossLeninaRoom(Donjon * d, int stage, int id, char letter) {
@@ -835,30 +347,67 @@ void InitialiseBossLeninaRoom(Donjon * d, int stage, int id, char letter) {
 
 }
 
+void GestionDoorsForMobRoom(Donjon *d, int stage, int id, int done){
 
-void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) {
-    
-    Monster * Boss = malloc(sizeof(Monster));
-    Player* player = malloc(sizeof(Player));
+    if(done == 0 ){
 
-	player->ss = playerStats->ss;
-	player->ps = playerStats->ps;
-	player->flight = playerStats->flight;
-    player->dmg = playerStats->dmg;
-	player->hpMax = playerStats->hpMax;
-	player->shield = playerStats->shield;
-	player->positionX = 1;
-	player->positionY = 1;
-	player->directionView = 'D';
-    player->canTakeBonusItem = 1; // put to 0 if loss of hp (not shield)
-    
-    int NumberOfRoomsInt;
-    int axeX = 0;
-    int axeY = 0;
-    int id = 0;
+            if( d->stages[stage].rooms[id].name != 'P' && d->stages[stage].rooms[id].name != 'I'  && d->stages[stage].rooms[id].name != 'V' ){
+            for(int i = 0; i<d->stages[stage].rooms[id].height; i++){
+                for(int y = 0; y< d->stages[stage].rooms[id].width; y++){
+                    if(d->stages[stage].rooms[id].room[i][y] == 'D' ){
+                        d->stages[stage].rooms[id].room[i][y] = 'L';
+                    }
+                    if(d->stages[stage].rooms[id].room[i][y] == 'V' ){
+                        d->stages[stage].rooms[id].room[i][y] = 'L';
+                    }
+                    if(d->stages[stage].rooms[id].room[i][y] == 'I' ){
+                        d->stages[stage].rooms[id].room[i][y] = 'L';
+                    }
+                    if(d->stages[stage].rooms[id].room[i][y] == 'B' ){
+                        d->stages[stage].rooms[id].room[i][y] = 'L';
+                    }
+
+
+                }
+            }
+        }
+
+    }
+
+    if(done == 1){
+
+         for(int i = 0; i<d->stages[stage].rooms[id].height; i++){
+                for(int y = 0; y< d->stages[stage].rooms[id].width; y++){
+                    if(d->stages[stage].rooms[id].room[i][y] == 'L'  && i  == 0){
+                        d->stages[stage].rooms[id].room[i][y] = d->stages[stage].rooms[id].Door.doorTop;
+                    }
+                    if( i == d->stages[stage].rooms[id].height - 1 || d->stages[stage].rooms[id].height == 'L'){
+                        if( d->stages[stage].rooms[id].room[i][y] == 'L' ){
+                            d->stages[stage].rooms[id].room[i][y] = d->stages[stage].rooms[id].Door.doorBottom;
+                        }
+                    }
+
+                    if(d->stages[stage].rooms[id].room[i][y] == 'L' && y == 0){
+                        d->stages[stage].rooms[id].room[i][y] = d->stages[stage].rooms[id].Door.doorLeft;
+                    }
+
+                    if(y > d->stages[stage].rooms[id].width/2  ){
+                        if(d->stages[stage].rooms[id].room[i][y] == 'L'){
+                            d->stages[stage].rooms[id].room[i][y] = d->stages[stage].rooms[id].Door.doorRight;
+                        }
+                    }
+
+                }
+        }
+
+    }
+
+}
+
+void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage, int * change, Player* player, int NumberOfRoomsInt, int id, int axeX, int axeY) {
+
     int *pId = &id;
     int changeOfRoom = 1;
-    // int chargeBoss = 0;
     int bossActive = 0;
     int BossInfinite = 0;
     int itemIsSet = 0;
@@ -867,19 +416,7 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
     bool condition = true;
     int c;
 
-    ShootParams *shootParams = malloc(sizeof(struct ShootParams));
-    shootParams->reload = 1;
-    shootParams->player = player;
-    shootParams->playerStats = playerStats;
-    shootParams->d = d;
-    shootParams->stage = stage;
-    shootParams->id = id;
-    Boss->firstLetter = 'X';
-
-
-    NumberOfRoomsInt = numberOfRooms();
-    InitialiseOtherRoomsFromArms(d,stage, NumberOfRoomsInt);
-    SetColorAndPositionForPlayer(d, player, stage, id);
+    d->stages[stage].rooms[id].name = 'P';
     
     for (int i = 0; i < NumberOfRoomsInt; i++) {
         printf("ID : %d\n", d-> stages[stage].rooms[i].id);
@@ -901,6 +438,12 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
 		usleep(25000); 
 		#endif 
 
+        if(player->hpMax <= 0){
+            *pId = 0;
+            condition = false;
+            break;
+        }
+
         c = 'p';
 		iteration++;
 
@@ -909,7 +452,7 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
 		}
         
 		if (c == 'x') {
-			condition = false;
+            GestionDoorsForMobRoom(d, stage, id, 1);
 		}
 
         if (c == 'm') {
@@ -937,7 +480,7 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
 
                     player->directionView = 'z';
 
-                    if(d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] != 'W' && d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] != Boss->firstLetter){
+                    if(d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] != 'W' && d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] != Boss->firstLetter && d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] != 'L'){
 
                         d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
                         player->positionY--;
@@ -947,7 +490,7 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
                             break;
                         }
                         
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I'){
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I' ){
                             axeY--;
 
                             //   int temp2 = gestionRoom(d, stage, id, axeX, axeY);
@@ -958,21 +501,20 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
                     }
 
                     if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
-                        setItemEffects(d->stages[stage].rooms[id].object, player); 
-                        savePlayerStats(player, playerStats);           
+                        setItemEffects(d->stages[stage].rooms[id].object, player);            
                     }
 
 				break;
 
 				case 's':
 
-                   if( d->stages[stage].rooms[id].name == 'B' ){
+                   if( d->stages[stage].rooms[id].name == 'B' ) {
                         bossActive = 1;
                     }
 
                     player->directionView = 's';
 
-					if (d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] != 'W' && d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] != Boss->firstLetter) {
+					if (d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] != 'W' && d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] != Boss->firstLetter && d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] != 'L') {
 
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
 						player->positionY++;
@@ -990,8 +532,7 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
 					}
 
                     if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
-                        setItemEffects(d->stages[stage].rooms[id].object, player);  
-                        savePlayerStats(player, playerStats);          
+                        setItemEffects(d->stages[stage].rooms[id].object, player);            
                     }
 
 				break;
@@ -1005,7 +546,7 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
                     player->directionView = 'q';
                     
 
-					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] != 'W' && d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] != Boss->firstLetter) {
+					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] != 'W' && d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] != Boss->firstLetter && d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] != 'L') {
 
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
 						player->positionX -= 2;
@@ -1028,8 +569,7 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
                         }
 
                         if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
-                            setItemEffects(d->stages[stage].rooms[id].object, player); 
-                            savePlayerStats(player, playerStats);           
+                                setItemEffects(d->stages[stage].rooms[id].object, player);            
                         }
 
 					}
@@ -1043,7 +583,7 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
 
                     player->directionView = 'd';
 
-					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] != 'W' && d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] != Boss->firstLetter) {
+					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] != 'W' && d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] != Boss->firstLetter && d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] != 'L') {
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
 						player->positionX += 2;
                         if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N'){
@@ -1051,15 +591,14 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
                             break;
                         }
 				
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I'){
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I' ){
                                 axeX++;
                                 player->positionX = 2;
                                 changeOfRoom = 1;             
                         }
 
                         if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
-                            setItemEffects(d->stages[stage].rooms[id].object, player); 
-                            savePlayerStats(player, playerStats);           
+                                setItemEffects(d->stages[stage].rooms[id].object, player);            
                         }
                         
 					}
@@ -1141,61 +680,60 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
                 
 
 			}
-           
-            if(bossActive == 1) {                                      
-                pthread_t thread;                      
-                d->stages[stage].rooms[id].name = 'O';  
-                                    
-                if(stage == 0) {                         
-                    InitialiseBossRoom(d, stage, id, 'J');                            
-                    Boss->idMonster = 0;                         
-                    Boss->firstLetter = 'J';                         
-                    Boss->name = "Jagger";                       
-                    Boss->hpMax = 100;                         
-                    Boss->shoot = 1;                           
-                    shootParams->condition = 1; 
 
-                    if( shootParams->monster == NULL) {                             
-                        shootParams->monster = Boss;                         
-                    }                     
+            if(bossActive == 1){
 
-                    pthread_create(&thread, NULL, Jagger, shootParams);   
-                } 
+                    pthread_t thread;
 
-                if(stage == 1) {                         
-                    InitialiseBossLeninaRoom(d, stage, id, 'L');                            
-                    Boss->idMonster = 1;                         
-                    Boss->firstLetter = 'L';                         
-                    Boss->name = "Lenina";                       
-                    Boss->hpMax = 300;                         
-                    Boss->shoot = 1;                           
-                    shootParams->condition = 1; 
+                    d->stages[stage].rooms[id].name = 'O';
 
-                    if( shootParams->monster == NULL) {                             
-                        shootParams->monster = Boss;                         
-                    }                     
+                    if(stage == 0){
+                        InitialiseBossRoom(d, stage, id, 'J');   
+                        Boss->idMonster = 0;
+                        Boss->firstLetter = 'J';
+                        Boss->name = "Jagger";
+                        Boss->hpMax = 100;
+                        Boss->shoot = 1;
+                        shootParams->condition = 1;
+                        if( shootParams->monster == NULL){
+                            shootParams->monster = Boss;
+                        }
 
-                    pthread_create(&thread, NULL, bossLenina, shootParams);   
-                } 
-
-                if(stage == 2) {
-                    //InitialiseBossRoom(d, stage, id, 'J');   
-                    Boss->firstLetter = 'A';
-                    Boss->name = "Athina";
-                    Boss->hpMax = 450;
-                    Boss->shoot = 1;
-                    shootParams->condition = 1;
-
-                    if( shootParams->monster == NULL) {
-                        shootParams->monster = Boss;
+                        pthread_create(&thread, NULL, Jagger, shootParams);
                     }
 
-                    pthread_create(&thread, NULL, bossAthina, shootParams);
-                }
+                    if(stage == 1) {                         
+                        InitialiseBossLeninaRoom(d, stage, id, 'L');                            
+                        Boss->idMonster = 1;                         
+                        Boss->firstLetter = 'L';                         
+                        Boss->name = "Lenina";                       
+                        Boss->hpMax = 300;                         
+                        Boss->shoot = 1;                           
+                        shootParams->condition = 1; 
 
-                bossActive = 0;
-                BossInfinite = 1;                 
-            }         
+                        if( shootParams->monster == NULL) {                             
+                            shootParams->monster = Boss;                         
+                        }                     
+
+                        pthread_create(&thread, NULL, Lenina, shootParams);   
+                    } 
+
+                    if(stage == 2) {
+                        InitialiseBossRoom(d, stage, id, 'J');   
+                        Boss->firstLetter = 'A';
+                        Boss->name = "Athina";
+                        Boss->hpMax = 450;
+                        Boss->shoot = 1;
+                        shootParams->condition = 1;
+                        if( shootParams->monster == NULL){
+                            shootParams->monster = Boss;
+                        }
+
+                        pthread_create(&thread, NULL, bossAthina, shootParams);
+                    }    
+                    bossActive = 0;     
+                    BossInfinite = 1;    
+            }
 
             gestionPassing(d, player, stage, id, NumberOfRoomsInt);
 
@@ -1204,6 +742,8 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
                 *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);                  
                 OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
                 checkName(d, NumberOfRoomsInt, stage, axeX, axeY, id);
+       
+                GestionDoorsForMobRoom(d, stage, id, 0);
                 shootParams->id = id;
                 
                 changeOfRoom = 0;
@@ -1253,6 +793,7 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
             // printf("Axe Position X : %d / and Position Y : %d\n", axeX, axeY);
             printf("ETAGE : %d\n", stage);
             printf("Name : %c\n",d->stages[stage].rooms[id].name);
+            printf("ID : %d\n", id);
             // printf("ID : %d\n", id);
             if(d->stages[stage].rooms[id].name == 'O' && BossInfinite == 1){
                 printf("Boss : %s\n", shootParams->monster->name);
@@ -1302,19 +843,7 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
 
     }
 
-
-    // (void)condition;
-    // (void)c;
-    // (void)iteration;
-    // (void)chargeBoss;
-    // (void)changeOfRoom;
-    // (void)pHp;
-    // (void)pId;
-    // (void)axeX;
-    // (void)axeY;
-    // (void)change;
-
-    free(player);
+    // free(player);
     //free(shootParams);
 
 }
@@ -1334,21 +863,13 @@ void setItemEffects(Object* item, Player* player) {
     player->dmg += item->damage;
     player->hpMax += item->hpMax;
     player->shield += item->shield;
+
     player->flight += item->flight;
     player->ps += item->piercingShot;
     player->ss += item->spectralShot;
 }
 
-void savePlayerStats(Player* player, PlayerStats* playerStats) {
-    playerStats->hpMax = player->hpMax;
-    playerStats->dmg = player->dmg;
-    playerStats->shield = player->shield;
-    playerStats->ps = player->ps;
-    playerStats->ss = player->ss;
-    playerStats->flight = player->flight;
-}
-
-void playerLoseLife(Player* player, PlayerStats* playerStats, float damageTaken) {
+void playerLoseLife(Player* player, float damageTaken) {
     if(player->shield > 0) { // player got shield
         if(damageTaken > player->shield) { // more damage than shield
             damageTaken -= player->shield;
@@ -1362,15 +883,5 @@ void playerLoseLife(Player* player, PlayerStats* playerStats, float damageTaken)
         player->hpMax -= damageTaken;
         player->canTakeBonusItem = 0;
     }
-
-    if(player->hpMax <= 0) {
-        playerDeath(player);
-    }
-
-    savePlayerStats(player, playerStats);
 }
     
-void playerDeath(Player* player) {
-    player->hpMax += 0; // pour le compilo
-    // TODO
-}

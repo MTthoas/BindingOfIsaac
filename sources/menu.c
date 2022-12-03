@@ -8,34 +8,49 @@
  * @copyright Copyright (c) 2022
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+
+#include<stdio.h>
+#include <termios.h>          
+#include <unistd.h>     
+#include <sys/select.h>
+#include <stdbool.h>
+#include <fcntl.h>
 
 #include "./include/Player.h"
 #include "./include/menu.h"
-#include "./include/cheminsFichiers.h"
 #include "./include/lectureFichiers.h"
-#include "./include/objects.h"
 #include "./include/mystring.h"
 #include "./include/userInput.h"
+#include "./include/game.h"
+#include "./include/Room.h"
+#include "./include/shoot.h"
+
+#define KRED "\x1B[31m"
+#define KNRM "\x1B[0m"
+
+#define PBSTR "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+#define PBWIDTH 60
+
 
 void printGameBanner() {
-    printf("=================================================\n");
-    printf("=========== THE BINDING OF BRIATTE ==============\n");
-    printf("=================================================\n");
+    printf("===========================================================\n");
+    printf("=========      THE BINDING OF BRIATTE        ==============\n");
+    printf("===========================================================\n");
+    printf("\n");
+    printf("\n");
 }
 
 void menu_init(void) {
     system("clear");
     printGameBanner();
-    printf("Press 'g' to start the game\n");
-    printf("Press 'i' for the ITEMS menu\n");
-    printf("Press 'r' for the ROOMS menu\n");
-    printf("Press 'c' for the controls information\n");
-    printf("----------- Dorian-Alexandre-Matthias ----------\n");
-}
+    printf("               Press 'g' to start the game\n\n");
+    printf("               Press 'i' for the ITEMS menu\n\n");
+    printf("               Press 'r' for the ROOMS menu\n\n");
+    printf("               Press 'c' for the controls information\n\n");
+    printf("               Press 'x' to exit the game\n\n\n\n");
 
+    printf("========   Credit : Dorian-Alexandre-Matthias   ==========\n");
+}
 
 void menuCrudItem(void) {
     system("clear");
@@ -246,7 +261,6 @@ void menuModifyItem(void){
     printf("\nPress 'r' to continue\n");
 }
 
-
 void menuCrudRoom(void){
     system("clear");
         printGameBanner();
@@ -276,48 +290,7 @@ void menuCreateRoom(void) {
     system("clear");
     printGameBanner();
     printf("-------- CREATE ROOM  --------\n");
-    printf("Not possible for the moment. Contact the dev team :)\n");
-    /*
-    CRUD_Room* head = roomsFileToRoomsList(); 
-    if(head == NULL) {
-        printf("Couldn't load from %s\n.", CHEMIN_FICHIER_PIECES);
-        printf("Press 'r' to go back.\n");
-        return;
-    }
-    freeAllRooms(head);
-    head = roomsFileToRoomsList(); 
-    if(head == NULL) {
-        printf("Couldn't load from %s\n.", CHEMIN_FICHIER_PIECES);
-        printf("Press 'r' to go back.\n");
-        return;
-    }
-
-    //displayAllRooms(head);
-    
-    int lines;
-    int columns;
-    askRoomDimensions(&lines, &columns);
-    columns *= 2; // to fill spaces
-
-    CRUD_Room* newRoom = createEmptyCRUD_Room(lines, columns);
-
-    printf("New room created and added : \n");
-    displayCRUD_Room(newRoom);
-    printf("Do you want to add it (y/n)?\n");
-    int success = confirmation();
-    if(success) {
-        int res = addCRUD_Room(head, newRoom);
-        if(res) {
-            //displayAllRooms(head);
-            listToRoomsFile(head);
-        } else {
-            printf("Could not add the room.\n");
-            
-        }
-        freeAllRooms(head);
-        printf("New room added\n");
-    } */
-    
+    printf("Not possible for the moment. Contact the dev team :)\n");  
     printf("\n Press 'r' to continue\n");   
 
 }
@@ -352,69 +325,11 @@ void menuDeleteRoom(void){
     printf("\nPress 'r' to continue\n");
 }
 
-
 void menuModifyRoom(void){
    system("clear");
     printGameBanner();
     printf("-------- UPDATE ROOM  --------\n");
     printf("Not possible for the moment. Contact the dev team :)\n");
-    /*
-    CRUD_Room* head = roomsFileToRoomsList();
-    if(head == NULL) {
-        printf("Couldn't open %s\n.", CHEMIN_FICHIER_PIECES);
-        printf("Press 'r' to go back\n");
-        return;
-    }
-
-    int id;
-    int success = 0;
-    displayAllRooms(head);
-    do {
-        printf("Enter the id of the room you want to update (see above) : \n");
-        id = readInt();
-        printf("You selected the id %d. Is it correct ? (y/n) \n", id);
-        success = confirmation();
-    } while(!success);
-
-    CRUD_Room* room = getCRUD_RoomById(head, id);
-    if(room == NULL) {
-        printf("Couldn't get the room of id : %d\n", id);
-        printf("Press 'r' to continue\n");
-        return;
-    }
-
-    success = 1;
-    int x, y; // position
-    char element;
-    do {
-        system("clear");
-        printGameBanner();
-        printf("-------- UPDATE ROOM  --------\n");
-        displayCRUD_Room(room);
-
-        printf("\nSelect the position of the element you want to change in this room.\n");
-        askPosition(&x, &y, room);
-        printf("What element do you want to place at position (%d,%d) ?\n", x, y);
-        askRoomElement(&element);
-        room->map[x-1][y-1] = element;
-        printf("Changes : \n");
-        displayCRUD_Room(room);
-
-        printf("\nContinue changes ?(y/n) ? \n");
-        success = confirmation();
-    } while(success);
-
-    system("clear");
-    printGameBanner();
-    printf("-------- UPDATE ROOM  --------\n");
-    displayCRUD_Room(room);
-    printf("Validate changes ?\n");
-    success = 0;
-    success = confirmation();
-    if(success) {
-        listToRoomsFile(head);
-    }
-    */
     printf("\nPress 'b' to continue ...\n");
 
 }
@@ -429,4 +344,232 @@ void menuControl(void){
 
     printf("\nPress 'b' to continue ...\n");
     return;
+}
+
+void printProgress(double percentage) {
+
+    int val = (int) (percentage * 100);
+    int lpad = (int) (percentage * PBWIDTH);
+    int rpad = PBWIDTH - lpad;
+    printf("\r%3d%% [%.*s%*s]", val, lpad, PBSTR, rpad, "");
+    fflush(stdout);
+}
+
+void GameRecur(Donjon *d, Monster * Boss, ShootParams * shootParams, Player * player, int stage, int * change, int NumberOfRoomsInt, int id, int axeX, int axeY) {
+    player->canTakeBonusItem = 1;
+	gestionGame(d, shootParams, Boss, stage, change, player, NumberOfRoomsInt, id, axeX, axeY);
+				
+    if(player->hpMax <= 0){
+        system("clear");
+        printf("===========================================================\n");
+        printf("=========                YOU ARE DEAD                    ==============\n");
+        printf("===========================================================\n");
+        printf("\n");
+
+        #ifdef _WIN32 
+        Sleep(10000); 
+        #else 
+        usleep(5000000); 
+        #endif 
+        player->hpMax = 100;
+        GameRecur(d, Boss, shootParams, player, stage, change, NumberOfRoomsInt, id, axeX, axeY);
+    }
+
+
+}
+
+void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id ) {
+
+    for (int i = 0; i < d -> stages[stage].rooms[id].height; i++) {
+        for (int y = 0; y < d -> stages[stage].rooms[id].width; y++) {
+            if (i == d -> stages[stage].rooms[id].height / 2 && y == d -> stages[stage].rooms[id].width / 2) {
+                if (y % 2 == 0) {
+                    d -> stages[stage].rooms[id].room[i][y] = 'P';
+                } else {
+                    d -> stages[stage].rooms[id].room[i][y + 1] = 'P';
+                }
+            }
+
+        }
+    }
+
+    for (int i = 0; i < d -> stages[stage].rooms[id].height; i++) {
+        for (int y = 0; y < d -> stages[stage].rooms[id].width; y++) {
+            if (y % 2 == 0) {
+                if (d -> stages[stage].rooms[id].room[i][y] == 'P') {
+                    player -> positionX = y;
+                    player -> positionY = i;
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
+				for (int y = 0; y < d->stages[stage].rooms[id].width; y++) {
+					if (y % 2 == 0) {
+						if(d-> stages[stage].rooms[id].room[i][y] == 'P'){
+							printf("%s", KRED);
+							printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
+							printf("%s", KNRM);
+						}else{
+							printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
+						}
+					}
+				}
+				printf("\n");
+				
+			}
+
+}
+
+
+void menuGame(){
+
+    bool condition = true, condition2 = true, etape = true;
+	int c,c2;
+		
+    int stage;
+    int change;
+
+    menu_init();
+
+	while (condition) {
+
+		c = 'p';
+
+		if (etape == true && kbhit()) {
+			c = getchar();
+		}
+		if (c == 'x') {
+			condition = false;
+		}
+
+		switch (c) {
+
+			case 'g':
+
+				stage = 0;
+				change = 0;
+
+                // Boucle pour chaque étage
+
+				for(int i = 0; i < 3; i+=1) {
+
+                    Donjon * d = malloc(sizeof(Donjon));
+                    Monster * Boss = malloc(sizeof(Monster));
+                    Player* player = malloc(sizeof(Player));
+                    player->positionX = 1;
+                    player->positionY = 1;
+                    player->directionView = 'D';
+                    int characterID = choseCharacter();
+                    initialisePlayerStats(player, characterID);
+
+                    int id = 0;
+
+                    ShootParams *shootParams = malloc(sizeof(struct ShootParams));
+                    shootParams->reload = 1;
+                    shootParams->player = player;
+                    shootParams->d = d;
+                    shootParams->stage = stage;
+                    shootParams->id = id;
+                    Boss->firstLetter = 'X';
+
+                    if(stage == 0){
+                        player->dmg = 3.5;
+                        player->hpMax = 3;
+                        player->shield = 0;
+                    }
+
+                    int axeX = 0;
+                    int axeY = 0;
+
+                    int NumberOfRoomsInt = numberOfRooms();
+                    InitialisationGame(d, stage);	
+                    InitialiseOtherRoomsFromArms(d,stage, NumberOfRoomsInt);
+                    SetColorAndPositionForPlayer(d, player, stage, id);
+
+                    GameRecur(d, Boss, shootParams, player, stage, &change, NumberOfRoomsInt, id, axeX, axeY);
+    
+					free(d -> stages[stage].stage);
+					free(d);
+
+					stage+=1;
+					// printf("CHANGE : %d", change);
+					change = 0;
+
+					system("clear");
+					printf("\n\n\n\n\n\n\n\n\n");
+					printf("		Changement d'étage ...\n\n");
+
+					for(int i = 0; i < 5; i+=1) {
+						printProgress(i/5.0);
+						#ifdef _WIN32 
+						Sleep(100); 
+						#else 
+						usleep(30000); 
+						#endif 
+					}
+				}
+								
+			
+			case 'i':
+			while (condition2)
+			{
+			etape = false;
+				c2 = 'p';
+				menuCrudItem();
+				if (kbhit()) {
+					c2 = getchar();
+				}
+				switch (c2){
+					case 'a':
+						menuCreateItem();
+						condition2 = false;
+						break;
+					case 'd':
+						menuDeleteItem();
+						condition2 = false;
+
+						break;
+					case 'm':
+						menuModifyItem();
+						condition2 = false;
+
+						break;
+
+				}
+			}
+			break;
+				
+
+			case 'r':
+			 while (condition2)
+			 {
+				etape = false;
+				c2 = 'p';
+				menuCrudRoom();
+				if (kbhit()) {
+					c2 = getchar();
+				}
+				switch (c2){
+					case 'a':
+						menuCreateRoom();
+						condition2 = false;
+						break;
+					case 'd':
+						menuDeleteRoom();
+						condition2 = false;
+						break;
+					case 'm':
+						menuModifyRoom();
+						condition2 = false;
+						break;
+				}
+			 }
+				break;
+
+			case 'c':
+				menuControl();
+		}
+	}
 }

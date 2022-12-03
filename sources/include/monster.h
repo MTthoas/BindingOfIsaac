@@ -48,6 +48,11 @@ typedef struct Monster Monster;
      * 
      * @return void 
      */
+
+    void * Jagger(void *params);
+
+    void* Lenina(void* params);
+
     Monster createMonster(int idMonster, char* name, float hpMax, int shoot, int flight, int ss);
 
     Monster * getMonsterById(Monster * arrayMonster, int id);
@@ -64,9 +69,12 @@ typedef struct Monster Monster;
 
     void spawnMonster(Donjon * d, Monster * monster, int stage, int id );    // void freeListeMonster(ListeMonster* liste);
 
-    void* BossShoot(void * params);
+    void * BossShoot(void * params);
+    
+    void* LeninaShoot(void* params);
 
-    void* Jagger(void *params);
+    void * Jagger(void *params);
+
 
     //void* Lenina(void *params);
 

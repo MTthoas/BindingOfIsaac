@@ -8,8 +8,6 @@
  * @copyright Copyright (c) 2022
  */
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include<stdio.h>
 #include <termios.h>          
 #include <unistd.h>     
@@ -22,6 +20,7 @@
 #include "Player.h"
 #include "shoot.h"
 #include "menu.h"
+#include "characters.h"
 
 
 #define KRED  "\x1B[31m"
@@ -53,29 +52,25 @@ int kbhit(void) {
 	return 0;
 }
 
-PlayerStats* initialisePlayerStats(int character) {
-	PlayerStats* playerStats = 	malloc(sizeof(PlayerStats));
-
+void initialisePlayerStats(Player* player, int character) {
 	if(character == BRIATTE) {
-		playerStats->hpMax = 3;
-		playerStats->dmg = 3.5;
-		playerStats->shield = 0;
-		playerStats->flight = 0;
+		player->hpMax = 3;
+		player->dmg = 3.5;
+		player->shield = 0;
+		player->flight = 0;
 	} else if(character == HENNOU) {
-		playerStats->hpMax = 6;
-		playerStats->dmg = 2.5;
-		playerStats->shield = 0;
-		playerStats->flight = 0;
+		player->hpMax = 6;
+		player->dmg = 2.5;
+		player->shield = 0;
+		player->flight = 0;
 	} else if(character == CHEVAILLIER) {
-		playerStats->hpMax = 1;
-		playerStats->dmg = 2;
-		playerStats->shield = 8;
-		playerStats->flight = 1;
+		player->hpMax = 1;
+		player->dmg = 2;
+		player->shield = 8;
+		player->flight = 1;
 	}
 	
-	playerStats->ps = 0;
-	playerStats->ss = 0;
-
-	return playerStats;
+	player->ps = 0;
+	player->ss = 0;
 }
 

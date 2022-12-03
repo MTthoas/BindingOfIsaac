@@ -12,9 +12,13 @@
 #define H_GAME
 
 #include "Room.h"
+#include "monster.h"
+#include "Player.h"
+#include "shoot.h"
 
 int gestionRoom(Donjon * d, int numberOfRooms, int stage, int axeX, int axeY);
-void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats);
+void gestionGame(Donjon * d, ShootParams *shootParams, Monster * Boss, int stage, int * change, Player* player, int numberOfRoomsInt, int id, int axeX, int axeY);
+
 
 /**
  * @brief Set items in the room of the given id and stage
@@ -28,40 +32,15 @@ void setItemInsideRoom(Donjon* d, int stage, int id);
  */
 void setItemEffects(Object* item, Player* player);
 
+void InitialiseBossLeninaRoom(Donjon * d, int stage, int id, char letter);
+void InitialiseBossRoom(Donjon * d, int stage, int id, char letter);
+
 /**
- * @brief Loads the player stats in the PlayerStats object. 
- * Usage : after a change in the statistics of the player
+ * @brief use when the player must lose life
  * 
  * @param player 
- * @param playerStats 
+ * @param damageTaken 
  */
-void savePlayerStats(Player* player, PlayerStats* playerStats);
+void playerLoseLife(Player* player, float damageTaken);
 
-void InitialiseBossLeninaRoom(Donjon * d, int stage, int id, char letter);
-
-/**
- * @brief Use when the player should loose some HP, after an attack for example
- * 
- * @param player the player
- * @param playerStats to save the player statistics
- * @param damageTaken points to remove to hpMax / shield
- * 
- */
-void playerLoseLife(Player* player, PlayerStats* playerStats, float damageTaken);
-
-void playerDeath(Player* player);
-
-/**
- * @brief When a monster dies, it disappears and has 5% chance to drop 'H' (hpMax or shield)
- * 
- */
-void monsterDeath();
-
-/**
- * @brief Function that handles the shoots of Lenina
- * 
- * @param params 
- * @return void* 
- */
-void * LeninaShoot(void * params);
 #endif

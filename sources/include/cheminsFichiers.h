@@ -15,7 +15,6 @@
     #define CHEMIN_FICHIER_OBJECTS "../resources/items.itbob"
     #define CHEMIN_FICHIER_MONSTRES "../resources/mob.rtbob"
     #define CHEMIN_FICHIER_PIECES "../resources/room.rtbob"
-    #define CHEMIN_FICHIER_PROGRESSION "../resources/progression.ptbob"
     #define CHEMIN_FICHIER_PERSONNAGES "../resources/characters.ctbob"
 
 #endif
