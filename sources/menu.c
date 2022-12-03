@@ -25,6 +25,8 @@
 #include "./include/objects.h"
 #include "./include/mystring.h"
 #include "./include/userInput.h"
+#include "./include/game.h"
+#include "./include/Room.h"
 
 #define PBSTR "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
 #define PBWIDTH 60
@@ -288,48 +290,7 @@ void menuCreateRoom(void) {
     system("clear");
     printGameBanner();
     printf("-------- CREATE ROOM  --------\n");
-    printf("Not possible for the moment. Contact the dev team :)\n");
-    /*
-    CRUD_Room* head = roomsFileToRoomsList(); 
-    if(head == NULL) {
-        printf("Couldn't load from %s\n.", CHEMIN_FICHIER_PIECES);
-        printf("Press 'r' to go back.\n");
-        return;
-    }
-    freeAllRooms(head);
-    head = roomsFileToRoomsList(); 
-    if(head == NULL) {
-        printf("Couldn't load from %s\n.", CHEMIN_FICHIER_PIECES);
-        printf("Press 'r' to go back.\n");
-        return;
-    }
-
-    //displayAllRooms(head);
-    
-    int lines;
-    int columns;
-    askRoomDimensions(&lines, &columns);
-    columns *= 2; // to fill spaces
-
-    CRUD_Room* newRoom = createEmptyCRUD_Room(lines, columns);
-
-    printf("New room created and added : \n");
-    displayCRUD_Room(newRoom);
-    printf("Do you want to add it (y/n)?\n");
-    int success = confirmation();
-    if(success) {
-        int res = addCRUD_Room(head, newRoom);
-        if(res) {
-            //displayAllRooms(head);
-            listToRoomsFile(head);
-        } else {
-            printf("Could not add the room.\n");
-            
-        }
-        freeAllRooms(head);
-        printf("New room added\n");
-    } */
-    
+    printf("Not possible for the moment. Contact the dev team :)\n");  
     printf("\n Press 'r' to continue\n");   
 
 }
@@ -369,63 +330,6 @@ void menuModifyRoom(void){
     printGameBanner();
     printf("-------- UPDATE ROOM  --------\n");
     printf("Not possible for the moment. Contact the dev team :)\n");
-    /*
-    CRUD_Room* head = roomsFileToRoomsList();
-    if(head == NULL) {
-        printf("Couldn't open %s\n.", CHEMIN_FICHIER_PIECES);
-        printf("Press 'r' to go back\n");
-        return;
-    }
-
-    int id;
-    int success = 0;
-    displayAllRooms(head);
-    do {
-        printf("Enter the id of the room you want to update (see above) : \n");
-        id = readInt();
-        printf("You selected the id %d. Is it correct ? (y/n) \n", id);
-        success = confirmation();
-    } while(!success);
-
-    CRUD_Room* room = getCRUD_RoomById(head, id);
-    if(room == NULL) {
-        printf("Couldn't get the room of id : %d\n", id);
-        printf("Press 'r' to continue\n");
-        return;
-    }
-
-    success = 1;
-    int x, y; // position
-    char element;
-    do {
-        system("clear");
-        printGameBanner();
-        printf("-------- UPDATE ROOM  --------\n");
-        displayCRUD_Room(room);
-
-        printf("\nSelect the position of the element you want to change in this room.\n");
-        askPosition(&x, &y, room);
-        printf("What element do you want to place at position (%d,%d) ?\n", x, y);
-        askRoomElement(&element);
-        room->map[x-1][y-1] = element;
-        printf("Changes : \n");
-        displayCRUD_Room(room);
-
-        printf("\nContinue changes ?(y/n) ? \n");
-        success = confirmation();
-    } while(success);
-
-    system("clear");
-    printGameBanner();
-    printf("-------- UPDATE ROOM  --------\n");
-    displayCRUD_Room(room);
-    printf("Validate changes ?\n");
-    success = 0;
-    success = confirmation();
-    if(success) {
-        listToRoomsFile(head);
-    }
-    */
     printf("\nPress 'b' to continue ...\n");
 
 }
@@ -457,6 +361,7 @@ void menuGame(Player *player){
     bool condition = true, condition2 = true, etape = true;
 	int c,c2;
 
+		
     int stage;
     int change;
 
@@ -485,9 +390,9 @@ void menuGame(Player *player){
 					Donjon * d = malloc(sizeof(Donjon));
 					
 					InitialisationGame(d, stage);			
-					gestionGame(d,stage, &change, player);
+					gestionGame(d,stage, &change, player );
 					
-					  if(player->hpMax <= 0){
+					if(player->hpMax <= 0){
 						system("clear");
 						printf("===========================================================\n");
 						printf("=========                YOU ARE DEAD                    ==============\n");

@@ -10,6 +10,7 @@
 #include <unistd.h>
 #endif    
 #include <SDL2/SDL.h>
+#include <time.h>
 #include <SDL2/SDL_image.h>
 #include <stdbool.h>
 #include <fcntl.h>
@@ -19,10 +20,6 @@
 #define KNRM "\x1B[0m"
 
 #include "include/mystring.h"
-#include <time.h>
-#include "Room.h"
-#include "Player.h"
-#include "menu.h"
 #include "game.h"
 #include "shoot.h"
 #include "lectureFichiers.h"
@@ -760,6 +757,19 @@ void gestionGame(Donjon * d, int stage, int * change, Player* player) {
                         }
 
                         pthread_create(&thread, NULL, Jagger, shootParams);
+                    }
+                    if(stage == 2){
+                        InitialiseBossRoom(d, stage, id, 'J');   
+                        Boss->firstLetter = 'A';
+                        Boss->name = "Athina";
+                        Boss->hpMax = 450;
+                        Boss->shoot = 1;
+                        shootParams->condition = 1;
+                        if( shootParams->monster == NULL){
+                            shootParams->monster = Boss;
+                        }
+
+                        pthread_create(&thread, NULL, bossAthina, shootParams);
                     }    
                     bossActive = 0;     
                     BossInfinite = 1;    
@@ -871,18 +881,6 @@ void gestionGame(Donjon * d, int stage, int * change, Player* player) {
         }
 
     }
-
-
-    // (void)condition;
-    // (void)c;
-    // (void)iteration;
-    // (void)chargeBoss;
-    // (void)changeOfRoom;
-    // (void)pHp;
-    // (void)pId;
-    // (void)axeX;
-    // (void)axeY;
-    // (void)change;
 
     free(player);
     //free(shootParams);

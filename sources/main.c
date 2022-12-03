@@ -7,17 +7,15 @@
 #include <sys/select.h>
 #include <stdbool.h>
 #include <fcntl.h>
-#include "Room.h"
+
 #include "Player.h"
-#include "menu.h"
-#include "game.h"	
+#include "menu.h"	
 
 #define KRED  "\x1B[31m"
 #define KNRM  "\x1B[0m"
 
 
 int main(int argc, char * argv[]) {
-	//Menu
 
 	(void) argc;
 	(void) argv;

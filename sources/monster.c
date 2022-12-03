@@ -195,12 +195,7 @@ void * bossAthina(void *shootParams){
     // 	if(((ShootParams*)shootParams)->monster->hpMax <= 0){
     // 		((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] = ' ';
     }
-        
-        
-    // }         
-            
 
-    // }
     free(Athina);
     free(shoot);
     return 0;
