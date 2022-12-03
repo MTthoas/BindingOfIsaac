@@ -63,7 +63,6 @@ typedef struct Monster Monster;
    void * bossLenina(void *params);
 
     void spawnMonster(Donjon * d, Monster * monster, int stage, int id );    // void freeListeMonster(ListeMonster* liste);
-    // void freeMonster(Monster* monster);
 
     void* BossShoot(void * params);
 
