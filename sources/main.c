@@ -55,7 +55,7 @@ int main(int argc, char * argv[]) {
 				int character = choseCharacter();
 				PlayerStats* playerStats = initialisePlayerStats(character); 
 
-				int stage = 0;
+				int stage = 1;
 				int change = 0;
 				for(int i = 0; i < 10; i+=1) {
 					Donjon * d = malloc(sizeof(Donjon));
@@ -74,7 +74,7 @@ int main(int argc, char * argv[]) {
 					printf("\n\n\n\n\n\n\n\n\n");
 					printf("		Changement d'étage ...\n\n");
 
-					for(int i = 0; i < 5; i++){
+					for(int i = 0; i < 5; i+=1) {
 						printProgress(i/5.0);
 						#ifdef _WIN32 
 						Sleep(100); 
@@ -105,14 +105,11 @@ int main(int argc, char * argv[]) {
 					case 'd':
 						menuDeleteItem();
 						condition2 = false;
-
 						break;
 					case 'm':
 						menuModifyItem();
 						condition2 = false;
-
 						break;
-
 				}
 			}
 			break;

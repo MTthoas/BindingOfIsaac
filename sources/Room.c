@@ -52,7 +52,7 @@ void InitialisationGame(Donjon * d, int stageNum) {
         // printf("\n");	
         for (int y = 0; y < NumberOfRoomsInt; y++) {
 
-            if(y == 0 ){
+            if(y == 0){
                  d->stages[stageNum].rooms[y].id = 0;
                  d->stages[stageNum].rooms[y].roomUsed = 1;
 

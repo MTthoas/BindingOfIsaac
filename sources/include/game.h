@@ -37,4 +37,7 @@ void setItemEffects(Object* item, Player* player);
  */
 void savePlayerStats(Player* player, PlayerStats* playerStats);
 
+void InitialiseBossLeninaRoom(Donjon * d, int stage, int id, char letter);
+
+
 #endif

@@ -60,14 +60,15 @@ typedef struct Monster Monster;
 
     void * bossAthina(void *shootParams);
 
+   void * bossLenina(void *params);
+
     void spawnMonster(Donjon * d, Monster * monster, int stage, int id );    // void freeListeMonster(ListeMonster* liste);
     // void freeMonster(Monster* monster);
 
-    void * BossShoot(void * params);
+    void* BossShoot(void * params);
 
-    void * Jagger(void *params);
-    
+    void* Jagger(void *params);
 
-
+    //void* Lenina(void *params);
 
 #endif //MONSTER_H

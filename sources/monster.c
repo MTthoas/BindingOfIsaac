@@ -14,18 +14,14 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>     
-
-#ifdef _WIN32 
-#include <Windows.h>  
-#else
-#include <unistd.h>
-#endif 
+#include <pthread.h>
 
 #include "include/monster.h"
 #include "include/mystring.h"
 #include "Room.h"
 #include "Player.h"
 #include "shoot.h"
+#include "myUtils.h"
 
 
 void spawnMonster(Donjon * d, Monster * monster, int stage, int id){
@@ -56,7 +52,7 @@ void monsterShoot(Monster * monster, Player * player) {
     }
 }
 
-void * bossAthina(void *shootParams){
+void * bossAthina(void *shootParams) {
     int BossPosX, BossPosY;
     Shoot * shoot = malloc(sizeof(Shoot));
     int reload = 1;
@@ -81,13 +77,13 @@ void * bossAthina(void *shootParams){
                     shoot->positionX = y-1;
                     BossPosX = shoot->positionX;
                     shoot->positionY = i;
-                    BossPosY =shoot->positionY;
+                    BossPosY = shoot->positionY;
                 }
             }
 
         }
     }   
-    if (reload == 1){
+    if (reload == 1) {
         reload = 0;
         while(Athina->hpMax > 0 && ((ShootParams*)shootParams)->player->hpMax > 0){
                 #ifdef _WIN32 
@@ -97,9 +93,7 @@ void * bossAthina(void *shootParams){
     	        #endif
 
             //ShootUp
-            while(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] == ' '){ 
-               
-
+            while(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] == ' ') { 
     	        ((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] = '*';
     	        #ifdef _WIN32 
     	        Sleep(40); 
@@ -158,10 +152,10 @@ void * bossAthina(void *shootParams){
 					((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY][shoot->positionX -2] = ' ';
 				}
 			}
-                        shoot->positionX = BossPosX;
+            shoot->positionX = BossPosX;
+
             //ShootRight
-            while(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY][shoot->positionX + 2] == ' '){
-						
+            while(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY][shoot->positionX + 2] == ' ') {
 				((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY][shoot->positionX + 2] = '*';
 				#ifdef _WIN32 
 				Sleep(40); 
@@ -185,17 +179,8 @@ void * bossAthina(void *shootParams){
             reload = 1;
         }
         
-    // if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] == ((ShootParams*)shootParams)->monster->firstLetter){
-    // 	((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
-    // 	if(((ShootParams*)shootParams)->monster->hpMax <= 0){
-    // 		((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] = ' ';
     }
-        
-        
-    // }         
-            
 
-    // }
     free(Athina);
     free(shoot);
     return 0;
@@ -243,7 +228,7 @@ Monster createMonster(int idMonster, char* name, float hpMax, int shoot, int fli
 Monster * getMonsterById(Monster * arrayMonster,int id) {
 
     struct Monster * monster = malloc(sizeof(struct Monster)*1);
-    for(int i = 0; i < 9; i++) {
+    for(int i = 0; i < 9; i+=1) {
         if(arrayMonster[i].idMonster == (id)) {
             *monster = arrayMonster[i];
             return monster;

@@ -271,7 +271,7 @@ int gestionRoom(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY){
     int t = 0;
 
     if(axeX != 0 && axeY != 0){
-        t++;
+        t+=1;
     }
     
     for(int i = 0; i < numberOfRooms+2; i++){
@@ -333,7 +333,7 @@ void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id )
 							printf("%s", KRED);
 							printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
 							printf("%s", KNRM);
-						}else{
+						} else {
 							printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
 						}
 					}
@@ -344,7 +344,7 @@ void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id )
 
 }
 
-void * BossShoot(void * params){
+void * BossShoot(void * params) {
 
     Shoot * shoot = malloc(sizeof(Shoot));
     Monster * monster = malloc(sizeof(Monster));
@@ -367,7 +367,7 @@ void * BossShoot(void * params){
         shoot -> positionX = monster -> positionX;
         shoot -> positionY = monster -> positionY;
 
-        if(((ShootParams*)params) -> directionView == 'R'){
+        if(((ShootParams*)params) -> directionView == 'R') { 
 
             ((ShootParams*)params)->reloadBoss = 0;
 
@@ -393,7 +393,7 @@ void * BossShoot(void * params){
        
         }
 
-        if(((ShootParams*)params) -> directionView == 'L'){
+        if(((ShootParams*)params) -> directionView == 'L') {
 
                       ((ShootParams*)params)->reloadBoss = 0;
 
@@ -421,7 +421,7 @@ void * BossShoot(void * params){
 
         if(((ShootParams*)params) -> directionView == 'T'){
 
-                      ((ShootParams*)params)->reloadBoss = 0;
+            ((ShootParams*)params)->reloadBoss = 0;
 
             while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY - 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reloadBoss  == 0){
 
@@ -474,7 +474,142 @@ void * BossShoot(void * params){
 
 }
 
-void * Jagger(void *params){
+void * LeninaShoot(void * params) {
+
+    Shoot * shoot = malloc(sizeof(Shoot));
+    Monster * monster = malloc(sizeof(Monster));
+
+    
+    char letter = 'L';
+    int height = ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].height;
+    int width = ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].width;
+
+
+    int id = ((ShootParams*)params)->id;
+    int stage = ((ShootParams*)params)->stage;
+
+    for (int i = 0; i < height; i+=1) { // set monster position
+        for(int y = 0; y < width; y+=1) {
+            if(((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[i][y] == letter) {
+                monster -> positionX = y;
+                monster -> positionY = i;
+            }
+        }
+    }
+
+    shoot -> positionX = monster -> positionX;
+    shoot -> positionY = monster -> positionY;
+
+    // shoot right
+    if(((ShootParams*)params)->player->positionX > monster->positionX) { 
+
+        ((ShootParams*)params)->reloadBoss = 0;
+
+        while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX + 2] == ' ' && ((ShootParams*)params)->reloadBoss  == 0 ){
+
+            ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] = '*';
+
+            #ifdef _WIN32 
+                Sleep(290); 
+            #else 
+                usleep(30000); 
+            #endif
+
+            ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] = ' ';
+            
+            shoot -> positionX =  shoot -> positionX + 2;
+
+        }
+
+        ((ShootParams*)params)->reloadBoss = 1;
+    
+    }
+    if(((ShootParams*)params)->d->stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[shoot->positionY][shoot->positionX + 2] == 'P'){
+        ((ShootParams*)params)->player->hpMax = ((ShootParams*)params)->player->hpMax - 1;
+        if(((ShootParams*)params)->player->hpMax <= 0) { // dead player
+            //Le joueur est mort, fin partie 
+        }
+    }
+
+    // shoot left
+    if(((ShootParams*)params)->player->positionX < monster->positionX) {
+
+        ((ShootParams*)params)->reloadBoss = 0;
+
+        while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX - 2] == ' ' && ((ShootParams*)params)->reloadBoss  == 0){
+
+            ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] = '*';
+
+            #ifdef _WIN32 
+                Sleep(290); 
+            #else 
+                usleep(30000); 
+            #endif
+
+            ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] = ' ';
+            
+            
+            shoot -> positionX = shoot -> positionX - 2;
+
+        }
+
+        
+        ((ShootParams*)params)->reloadBoss = 1;
+    
+    }
+    if(((ShootParams*)params)->d->stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[shoot->positionY][shoot->positionX - 2] == 'P'){
+        ((ShootParams*)params)->player->hpMax = ((ShootParams*)params)->player->hpMax - 1;
+        if(((ShootParams*)params)->player->hpMax <= 0) { // dead player
+            //Le joueur est mort, fin partie 
+        }
+    }
+
+    // shoot BOTTOM
+    if(((ShootParams*)params)->player->positionX == monster->positionX) { 
+
+        ((ShootParams*)params)->reloadBoss = 0;
+        
+
+        while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY + 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reloadBoss  == 0 ) { 
+            int placeIsNotBoss = ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX] != letter; // to avoid replacing the boss
+            if(placeIsNotBoss) {
+                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX] = '*';
+            }
+
+            #ifdef _WIN32 
+                Sleep(290); 
+            #else 
+                usleep(33000); 
+            #endif
+
+            
+            if(placeIsNotBoss) {
+                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX] = ' ';
+            }
+
+            shoot -> positionY += 1;
+
+        }
+
+        ((ShootParams*)params)->reloadBoss = 1;
+    }
+    if(((ShootParams*)params)->d->stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[shoot->positionY+1][shoot->positionX] == 'P'){
+        ((ShootParams*)params)->player->hpMax = ((ShootParams*)params)->player->hpMax - 1;
+        if(((ShootParams*)params)->player->hpMax <= 0) { // dead player
+            //Le joueur est mort, fin partie 
+        }
+    }
+
+
+
+    (void)params;
+
+    free(shoot);
+    return NULL;
+
+}
+
+void * Jagger(void *params) {
 
     // Shoot * shoot = malloc(sizeof(Shoot));
 
@@ -496,14 +631,12 @@ void * Jagger(void *params){
         int stage = ((ShootParams*)params)->stage;
                     pthread_t thread;
 
-    while(((ShootParams*)params)->condition){
+    while(((ShootParams*)params)->condition) {
 
         int random = rand() % 3;
 
-            if(random == 2 ){
-
+            if(random == 2) {
                 pthread_create(&thread, NULL, BossShoot, params);
-
             }
 
         #ifdef _WIN32 
@@ -533,9 +666,9 @@ void * Jagger(void *params){
         int randMonster = rand() % 2;
 
 
-        if(randMonster == 0){
+        if(randMonster == 0) {
 
-            if(DiffPositionX > 1){
+            if(DiffPositionX > 1) {
                 
                 if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionX-2] == ' '){
                     
@@ -546,7 +679,7 @@ void * Jagger(void *params){
 
                 }
 
-            }else if(DiffPositionX < 1){
+            } else if(DiffPositionX < 1){
 
                 if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionX-2] == ' '){
 
@@ -610,19 +743,101 @@ void * Jagger(void *params){
     return 0;
 }
 
+void * bossLenina(void *params) {
+
+    char letter = ((ShootParams*)params)->monster->firstLetter;
+    int height = ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].height;
+    int width = ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].width;
+
+    
+    for (int i = 0; i < height; i+=1) { // set boss position
+        for(int y = 0; y < width; y+=1){
+            if(((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[i][y] == letter){
+                ((ShootParams*)params)->monster -> positionX = y;
+                ((ShootParams*)params)->monster -> positionY = i;
+            }
+        }
+    }
+    
+
+                
+        int id = ((ShootParams*)params)->id;
+        int stage = ((ShootParams*)params)->stage;
+                    pthread_t thread;
+
+    while(((ShootParams*)params)->condition) {
+
+        int random = rand() % 3;
+
+            if(random == 2) {
+                pthread_create(&thread, NULL, LeninaShoot, params);
+            }
+
+        #ifdef _WIN32 
+		Sleep(9090); 
+		#else 
+		usleep(500000); 
+		#endif
+        
+
+        for (int i = 0; i < ((ShootParams*)params)->d -> stages[stage].rooms[id].height; i++) {
+
+            for(int y = 0; y < ((ShootParams*)params)->d -> stages[stage].rooms[id].width; y++){
+
+                if(((ShootParams*)params)->d -> stages[stage].rooms[id].room[i][y] == letter){
+
+                        (((ShootParams*)params)->d -> stages[stage].rooms[id].room[i][y] = ' ');
+                }
+            }
+        }
+
+        //int positionPlayerX = ((ShootParams*)params)->player -> positionX;
+        //int positionPlayerY = ((ShootParams*)params)->player -> positionY;
+
+        //int randMonster = rand() % 2;
+
+    
+        if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionX] == ' '){
+            ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionX] = letter;
+        }
+
+
+    }
+
+    free(((ShootParams*)params)->monster);
+
+    return 0;
+}
+
 void InitialiseBossRoom(Donjon * d, int stage, int id, char letter) {
-     for (int i = 0; i < d -> stages[stage].rooms[id].height; i++) {
-        for (int y = 0; y < d -> stages[stage].rooms[id].width; y++) {
-            if (i == d -> stages[stage].rooms[id].height / 2 && y == d -> stages[stage].rooms[id].width / 2) {
+    int height = d -> stages[stage].rooms[id].height;
+    int width = d -> stages[stage].rooms[id].width;
+
+     for (int i = 0; i < height ; i+=1) {
+        for (int y = 0; y < width; y+=1) {
+            if (i == height / 2 && y == width / 2) {
                 if (y % 2 == 0) {
                     d -> stages[stage].rooms[id].room[i][y] = letter;
                 } else {
                     d -> stages[stage].rooms[id].room[i][y - 1] = letter;
                 }
             }
-
         }
-    }
+    } // for
+}
+
+void InitialiseBossLeninaRoom(Donjon * d, int stage, int id, char letter) {
+    int width = d -> stages[stage].rooms[id].width;
+    for (int y = 0; y < width; y+=1) {
+        if (y == width / 2) {
+            if (y % 2 == 0) {
+                d -> stages[stage].rooms[id].room[1][y] = letter;
+            } else {
+                d -> stages[stage].rooms[id].room[1][y - 1] = letter;
+            }
+        }
+    } // for
+
 }
 
 
@@ -930,29 +1145,60 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
 
 			}
            
-            if(bossActive == 1){
+            if(bossActive == 1) {                                      
+                pthread_t thread;                      
+                d->stages[stage].rooms[id].name = 'O';  
+                                    
+                if(stage == 0) {                         
+                    InitialiseBossRoom(d, stage, id, 'J');                            
+                    Boss->idMonster = 0;                         
+                    Boss->firstLetter = 'J';                         
+                    Boss->name = "Jagger";                       
+                    Boss->hpMax = 100;                         
+                    Boss->shoot = 1;                           
+                    shootParams->condition = 1; 
 
-                    pthread_t thread;
+                    if( shootParams->monster == NULL) {                             
+                        shootParams->monster = Boss;                         
+                    }                     
 
-                    d->stages[stage].rooms[id].name = 'O';
+                    pthread_create(&thread, NULL, Jagger, shootParams);   
+                } 
 
-                    if(stage == 0){
-                        InitialiseBossRoom(d, stage, id, 'J');   
-                        Boss->idMonster = 0;
-                        Boss->firstLetter = 'J';
-                        Boss->name = "Jagger";
-                        Boss->hpMax = 100;
-                        Boss->shoot = 1;
-                        shootParams->condition = 1;
-                        if( shootParams->monster == NULL){
-                            shootParams->monster = Boss;
-                        }
+                if(stage == 1) {                         
+                    InitialiseBossLeninaRoom(d, stage, id, 'L');                            
+                    Boss->idMonster = 1;                         
+                    Boss->firstLetter = 'L';                         
+                    Boss->name = "Lenina";                       
+                    Boss->hpMax = 300;                         
+                    Boss->shoot = 1;                           
+                    shootParams->condition = 1; 
 
-                        pthread_create(&thread, NULL, Jagger, shootParams);
-                    }    
-                    bossActive = 0;     
-                    BossInfinite = 1;    
-            }
+                    if( shootParams->monster == NULL) {                             
+                        shootParams->monster = Boss;                         
+                    }                     
+
+                    pthread_create(&thread, NULL, bossLenina, shootParams);   
+                } 
+
+                if(stage == 2) {
+                    //InitialiseBossRoom(d, stage, id, 'J');   
+                    Boss->firstLetter = 'A';
+                    Boss->name = "Athina";
+                    Boss->hpMax = 450;
+                    Boss->shoot = 1;
+                    shootParams->condition = 1;
+
+                    if( shootParams->monster == NULL) {
+                        shootParams->monster = Boss;
+                    }
+
+                    pthread_create(&thread, NULL, bossAthina, shootParams);
+                }
+
+                bossActive = 0;
+                BossInfinite = 1;                 
+            }         
 
             gestionPassing(d, player, stage, id, NumberOfRoomsInt);
 
