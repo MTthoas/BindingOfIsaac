@@ -19,8 +19,6 @@
 #else
 #include <unistd.h>
 #endif    
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <stdbool.h>
 #include <fcntl.h>
 #include <pthread.h>

@@ -9,9 +9,7 @@
 #else
 #include <unistd.h>
 #endif    
-#include <SDL2/SDL.h>
 #include <time.h>
-#include <SDL2/SDL_image.h>
 #include <stdbool.h>
 #include <fcntl.h>
 #include <pthread.h>
@@ -318,49 +316,6 @@ int gestionRoom(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY){
     return 0;
 }
 
-void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id ) {
-
-    for (int i = 0; i < d -> stages[stage].rooms[id].height; i++) {
-        for (int y = 0; y < d -> stages[stage].rooms[id].width; y++) {
-            if (i == d -> stages[stage].rooms[id].height / 2 && y == d -> stages[stage].rooms[id].width / 2) {
-                if (y % 2 == 0) {
-                    d -> stages[stage].rooms[id].room[i][y] = 'P';
-                } else {
-                    d -> stages[stage].rooms[id].room[i][y + 1] = 'P';
-                }
-            }
-
-        }
-    }
-
-    for (int i = 0; i < d -> stages[stage].rooms[id].height; i++) {
-        for (int y = 0; y < d -> stages[stage].rooms[id].width; y++) {
-            if (y % 2 == 0) {
-                if (d -> stages[stage].rooms[id].room[i][y] == 'P') {
-                    player -> positionX = y;
-                    player -> positionY = i;
-                }
-            }
-        }
-    }
-
-    for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
-				for (int y = 0; y < d->stages[stage].rooms[id].width; y++) {
-					if (y % 2 == 0) {
-						if(d-> stages[stage].rooms[id].room[i][y] == 'P'){
-							printf("%s", KRED);
-							printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
-							printf("%s", KNRM);
-						}else{
-							printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
-						}
-					}
-				}
-				printf("\n");
-				
-			}
-
-}
 
 void InitialiseBossRoom(Donjon * d, int stage, int id, char letter){
 
@@ -435,23 +390,10 @@ void GestionDoorsForMobRoom(Donjon *d, int stage, int id, int done){
 
 }
 
-void gestionGame(Donjon * d, int stage, int * change, Player* player) {
-    
-    Monster * Boss = malloc(sizeof(Monster));
+void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage, int * change, Player* player, int NumberOfRoomsInt, int id, int axeX, int axeY) {
 
-     if(stage == 0){
-        player->dmg = 3.5;
-        player->hpMax = 3;
-        player->shield = 0;
-    }
-
-    int NumberOfRoomsInt;
-    int axeX = 0;
-    int axeY = 0;
-    int id = 0;
     int *pId = &id;
     int changeOfRoom = 1;
-    // int chargeBoss = 0;
     int bossActive = 0;
     int BossInfinite = 0;
     int itemIsSet = 0;
@@ -460,21 +402,7 @@ void gestionGame(Donjon * d, int stage, int * change, Player* player) {
     bool condition = true;
     int c;
 
-    ShootParams *shootParams = malloc(sizeof(struct ShootParams));
-    shootParams->reload = 1;
-    shootParams->player = player;
-    shootParams->d = d;
-    shootParams->stage = stage;
-    shootParams->id = id;
-    Boss->firstLetter = 'X';
-
-
-    NumberOfRoomsInt = numberOfRooms();
-    InitialiseOtherRoomsFromArms(d,stage, NumberOfRoomsInt);
-    SetColorAndPositionForPlayer(d, player, stage, id);
-
     d->stages[stage].rooms[id].name = 'P';
-    
     
     for (int i = 0; i < NumberOfRoomsInt; i++) {
         printf("ID : %d\n", d-> stages[stage].rooms[i].id);
@@ -497,6 +425,7 @@ void gestionGame(Donjon * d, int stage, int * change, Player* player) {
 		#endif 
 
         if(player->hpMax <= 0){
+            *pId = 0;
             condition = false;
             break;
         }
@@ -833,6 +762,7 @@ void gestionGame(Donjon * d, int stage, int * change, Player* player) {
             // printf("Axe Position X : %d / and Position Y : %d\n", axeX, axeY);
             printf("ETAGE : %d\n", stage);
             printf("Name : %c\n",d->stages[stage].rooms[id].name);
+            printf("ID : %d\n", id);
             // printf("ID : %d\n", id);
             if(d->stages[stage].rooms[id].name == 'O' && BossInfinite == 1){
                 printf("Boss : %s\n", shootParams->monster->name);
@@ -882,7 +812,7 @@ void gestionGame(Donjon * d, int stage, int * change, Player* player) {
 
     }
 
-    free(player);
+    // free(player);
     //free(shootParams);
 
 }

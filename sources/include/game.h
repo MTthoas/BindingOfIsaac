@@ -12,9 +12,13 @@
 #define H_GAME
 
 #include "Room.h"
+#include "monster.h"
+#include "Player.h"
+#include "shoot.h"
 
 int gestionRoom(Donjon * d, int numberOfRooms, int stage, int axeX, int axeY);
-void gestionGame(Donjon * d, int stage, int * change, Player* player);
+void gestionGame(Donjon * d, ShootParams *shootParams, Monster * Boss, int stage, int * change, Player* player, int numberOfRoomsInt, int id, int axeX, int axeY);
+
 
 /**
  * @brief Set items in the room of the given id and stage

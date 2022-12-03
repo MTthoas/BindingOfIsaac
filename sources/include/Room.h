@@ -78,7 +78,6 @@ typedef struct Donjon Donjon;
 
 int * RandomArrayForAttribution(int number);
 void InitialisationGame(Donjon * d, int stageNum);
-void gestionGame(Donjon * d, int stage, int * change, Player* player);
 int numberOfRooms();
 int PickRoomNotUsed(struct Donjon * d, int NumberOfRoomsInt, int stage);
 void newStageByNumber(struct Donjon * d, int stage, int numberOfRooms);
