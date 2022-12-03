@@ -27,6 +27,9 @@ void test_listToRoomsFile(); //ok
 
 void test_objectsFileToObjectsList(); 
 void test_listToObjectsFile(); // ok
+void test_choseCharacter();
+
+int choseCharacter2();
 
 int main(void) {
     //test_listToRoomsFile();
@@ -35,8 +38,17 @@ int main(void) {
     //test_getNbLignesFichier();
     //test_objectsFileToObjectsList();
     //test_listToObjectsFile();
+    //test_choseCharacter();
 
     return 0;
+}
+
+void test_choseCharacter() {
+    printf("[TEST] choseCharacter\n\n");
+
+    //int res = choseCharacter2();
+    //printf("Perso choisi : %d\n", res);
+
 }
 
 void test_listToObjectsFile() {

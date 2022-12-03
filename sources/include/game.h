@@ -32,4 +32,15 @@ void setItemInsideRoom(Donjon* d, int stage, int id);
  */
 void setItemEffects(Object* item, Player* player);
 
+void InitialiseBossLeninaRoom(Donjon * d, int stage, int id, char letter);
+void InitialiseBossRoom(Donjon * d, int stage, int id, char letter);
+
+/**
+ * @brief use when the player must lose life
+ * 
+ * @param player 
+ * @param damageTaken 
+ */
+void playerLoseLife(Player* player, float damageTaken);
+
 #endif

@@ -949,7 +949,7 @@ int NumberOfDoorsByRoom(char ** s, int height, int width){
     for(int i  = 0; i< height; i++){
         for(int y = 0; y < width+1; y++){
             if(s[i][y] == 'D'){
-                iteration++;
+                iteration+=1;
             }
         }
     }

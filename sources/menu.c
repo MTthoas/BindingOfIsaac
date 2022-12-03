@@ -12,16 +12,13 @@
 #include<stdio.h>
 #include <termios.h>          
 #include <unistd.h>     
-#include <stdlib.h>
 #include <sys/select.h>
 #include <stdbool.h>
 #include <fcntl.h>
 
 #include "./include/Player.h"
 #include "./include/menu.h"
-#include "./include/cheminsFichiers.h"
 #include "./include/lectureFichiers.h"
-#include "./include/objects.h"
 #include "./include/mystring.h"
 #include "./include/userInput.h"
 #include "./include/game.h"
@@ -460,15 +457,11 @@ void menuGame(){
 				change = 0;
 
                 Player* player = malloc(sizeof(Player));
-                    player->dmg = 1;
-                    player->hpMax = 5;
-                    player->shield = 5;
-                    player->ss = 0;
-                    player->ps = 0;
-                    player->flight = 0;
                     player->positionX = 1;
                     player->positionY = 1;
                     player->directionView = 'D';
+                    int characterID = choseCharacter();
+                    initialisePlayerStats(player, characterID);
 
                 // Boucle pour chaque étage
 
@@ -500,7 +493,6 @@ void menuGame(){
                     d->stages[stage].rooms[id].name = 'P';
 
                     int NumberOfRoomsInt = numberOfRooms();
-
                     InitialisationGame(d, stage);	
                     InitialiseOtherRoomsFromArms(d,stage, NumberOfRoomsInt);
                     SetColorAndPositionForPlayer(d, player, stage, id);
@@ -518,7 +510,7 @@ void menuGame(){
 					printf("\n\n\n\n\n\n\n\n\n");
 					printf("		Changement d'étage ...\n\n");
 
-					for(int i = 0; i < 5; i++){
+					for(int i = 0; i < 5; i+=1) {
 						printProgress(i/5.0);
 						#ifdef _WIN32 
 						Sleep(100); 
