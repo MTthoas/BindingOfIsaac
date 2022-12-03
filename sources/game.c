@@ -525,10 +525,7 @@ void * LeninaShoot(void * params) {
     
     }
     if(((ShootParams*)params)->d->stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[shoot->positionY][shoot->positionX + 2] == 'P'){
-        ((ShootParams*)params)->player->hpMax = ((ShootParams*)params)->player->hpMax - 1;
-        if(((ShootParams*)params)->player->hpMax <= 0) { // dead player
-            //Le joueur est mort, fin partie 
-        }
+        playerLoseLife(((ShootParams*)params)->player, ((ShootParams*)params)->playerStats, 1);
     }
 
     // shoot left
@@ -780,9 +777,9 @@ void * bossLenina(void *params) {
 		#endif
         
 
-        for (int i = 0; i < ((ShootParams*)params)->d -> stages[stage].rooms[id].height; i++) {
+        for (int i = 0; i < height; i+=1) {
 
-            for(int y = 0; y < ((ShootParams*)params)->d -> stages[stage].rooms[id].width; y++){
+            for(int y = 0; y < width; y+=1) {
 
                 if(((ShootParams*)params)->d -> stages[stage].rooms[id].room[i][y] == letter){
 
@@ -796,11 +793,9 @@ void * bossLenina(void *params) {
 
         //int randMonster = rand() % 2;
 
-    
         if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionX] == ' '){
             ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionX] = letter;
         }
-
 
     }
 
@@ -855,6 +850,7 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
 	player->positionX = 1;
 	player->positionY = 1;
 	player->directionView = 'D';
+    player->canTakeBonusItem = 1; // put to 0 if loss of hp (not shield)
     
     int NumberOfRoomsInt;
     int axeX = 0;
@@ -874,6 +870,7 @@ void gestionGame(Donjon * d, int stage, int * change, PlayerStats* playerStats) 
     ShootParams *shootParams = malloc(sizeof(struct ShootParams));
     shootParams->reload = 1;
     shootParams->player = player;
+    shootParams->playerStats = playerStats;
     shootParams->d = d;
     shootParams->stage = stage;
     shootParams->id = id;
@@ -1350,4 +1347,30 @@ void savePlayerStats(Player* player, PlayerStats* playerStats) {
     playerStats->ss = player->ss;
     playerStats->flight = player->flight;
 }
+
+void playerLoseLife(Player* player, PlayerStats* playerStats, float damageTaken) {
+    if(player->shield > 0) { // player got shield
+        if(damageTaken > player->shield) { // more damage than shield
+            damageTaken -= player->shield;
+            player->shield = 0;
+            player->hpMax -= damageTaken;
+            player->canTakeBonusItem = 0;
+        } else { 
+            player->shield -= damageTaken;
+        }
+    } else { // player does not have shield
+        player->hpMax -= damageTaken;
+        player->canTakeBonusItem = 0;
+    }
+
+    if(player->hpMax <= 0) {
+        playerDeath(player);
+    }
+
+    savePlayerStats(player, playerStats);
+}
     
+void playerDeath(Player* player) {
+    player->hpMax += 0; // pour le compilo
+    // TODO
+}

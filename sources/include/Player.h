@@ -15,6 +15,8 @@ struct Player {
     int ps;
     int ss;
     int flight;
+
+    int canTakeBonusItem; // put to 0 if user loses hp
 };
 typedef struct Player Player;
 

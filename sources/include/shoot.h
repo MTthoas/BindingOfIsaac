@@ -25,6 +25,7 @@ typedef struct Shoot Shoot;
 struct ShootParams {
     Donjon *d;
     Player *player;
+    PlayerStats* playerStats;
     Monster *monster;
     int idMonster;
     int reloadBoss;
