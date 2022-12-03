@@ -51,6 +51,7 @@ typedef struct Monster Monster;
 
     void * Jagger(void *params);
 
+    void* Lenina(void* params);
 
     Monster createMonster(int idMonster, char* name, float hpMax, int shoot, int flight, int ss);
 
@@ -68,6 +69,7 @@ typedef struct Monster Monster;
     // void freeMonster(Monster* monster);
 
     void * BossShoot(void * params);
+    void* LeninaShoot(void* params);
 
     void * Jagger(void *params);
     

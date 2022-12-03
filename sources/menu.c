@@ -12,16 +12,13 @@
 #include<stdio.h>
 #include <termios.h>          
 #include <unistd.h>     
-#include <stdlib.h>
 #include <sys/select.h>
 #include <stdbool.h>
 #include <fcntl.h>
 
 #include "./include/Player.h"
 #include "./include/menu.h"
-#include "./include/cheminsFichiers.h"
 #include "./include/lectureFichiers.h"
-#include "./include/objects.h"
 #include "./include/mystring.h"
 #include "./include/userInput.h"
 #include "./include/game.h"
@@ -359,7 +356,7 @@ void printProgress(double percentage) {
 }
 
 void GameRecur(Donjon *d, Monster * Boss, ShootParams * shootParams, Player * player, int stage, int * change, int NumberOfRoomsInt, int id, int axeX, int axeY) {
-
+    player->canTakeBonusItem = 1;
 	gestionGame(d, shootParams, Boss, stage, change, player, NumberOfRoomsInt, id, axeX, axeY);
 				
     if(player->hpMax <= 0){
@@ -461,15 +458,11 @@ void menuGame(){
                     Donjon * d = malloc(sizeof(Donjon));
                     Monster * Boss = malloc(sizeof(Monster));
                     Player* player = malloc(sizeof(Player));
-                    player->dmg = 1;
-                    player->hpMax = 5;
-                    player->shield = 5;
-                    player->ss = 0;
-                    player->ps = 0;
-                    player->flight = 0;
                     player->positionX = 1;
                     player->positionY = 1;
                     player->directionView = 'D';
+                    int characterID = choseCharacter();
+                    initialisePlayerStats(player, characterID);
 
                     int id = 0;
 
@@ -491,11 +484,9 @@ void menuGame(){
                     int axeY = 0;
 
                     int NumberOfRoomsInt = numberOfRooms();
-
                     InitialisationGame(d, stage);	
                     InitialiseOtherRoomsFromArms(d,stage, NumberOfRoomsInt);
                     SetColorAndPositionForPlayer(d, player, stage, id);
-
 
                     GameRecur(d, Boss, shootParams, player, stage, &change, NumberOfRoomsInt, id, axeX, axeY);
     
@@ -510,7 +501,7 @@ void menuGame(){
 					printf("\n\n\n\n\n\n\n\n\n");
 					printf("		Changement d'étage ...\n\n");
 
-					for(int i = 0; i < 5; i++){
+					for(int i = 0; i < 5; i+=1) {
 						printProgress(i/5.0);
 						#ifdef _WIN32 
 						Sleep(100); 

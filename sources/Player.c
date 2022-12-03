@@ -20,6 +20,7 @@
 #include "Player.h"
 #include "shoot.h"
 #include "menu.h"
+#include "characters.h"
 
 
 #define KRED  "\x1B[31m"
@@ -49,5 +50,27 @@ int kbhit(void) {
 	}
 
 	return 0;
+}
+
+void initialisePlayerStats(Player* player, int character) {
+	if(character == BRIATTE) {
+		player->hpMax = 3;
+		player->dmg = 3.5;
+		player->shield = 0;
+		player->flight = 0;
+	} else if(character == HENNOU) {
+		player->hpMax = 6;
+		player->dmg = 2.5;
+		player->shield = 0;
+		player->flight = 0;
+	} else if(character == CHEVAILLIER) {
+		player->hpMax = 1;
+		player->dmg = 2;
+		player->shield = 8;
+		player->flight = 1;
+	}
+	
+	player->ps = 0;
+	player->ss = 0;
 }
 

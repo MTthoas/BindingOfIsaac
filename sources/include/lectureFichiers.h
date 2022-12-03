@@ -109,4 +109,6 @@
 
     Monster* fichierMonsterToListeMonster();
 
+    int choseCharacter();
+
 #endif //LECTURE_FICHIERS_H

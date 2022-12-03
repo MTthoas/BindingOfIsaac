@@ -317,7 +317,7 @@ int gestionRoom(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY){
 }
 
 
-void InitialiseBossRoom(Donjon * d, int stage, int id, char letter){
+void InitialiseBossRoom(Donjon * d, int stage, int id, char letter) {
 
      for (int i = 0; i < d -> stages[stage].rooms[id].height; i++) {
         for (int y = 0; y < d -> stages[stage].rooms[id].width; y++) {
@@ -331,6 +331,20 @@ void InitialiseBossRoom(Donjon * d, int stage, int id, char letter){
 
         }
     }
+}
+
+void InitialiseBossLeninaRoom(Donjon * d, int stage, int id, char letter) {
+    int width = d -> stages[stage].rooms[id].width;
+    for (int y = 0; y < width; y+=1) {
+        if (y == width / 2) {
+            if (y % 2 == 0) {
+                d -> stages[stage].rooms[id].room[1][y] = letter;
+            } else {
+                d -> stages[stage].rooms[id].room[1][y - 1] = letter;
+            }
+        }
+    } // for
+
 }
 
 void GestionDoorsForMobRoom(Donjon *d, int stage, int id, int done){
@@ -494,7 +508,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage,
 
 				case 's':
 
-                   if( d->stages[stage].rooms[id].name == 'B' ){
+                   if( d->stages[stage].rooms[id].name == 'B' ) {
                         bossActive = 1;
                     }
 
@@ -687,7 +701,24 @@ void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage,
 
                         pthread_create(&thread, NULL, Jagger, shootParams);
                     }
-                    if(stage == 2){
+
+                    if(stage == 1) {                         
+                        InitialiseBossLeninaRoom(d, stage, id, 'L');                            
+                        Boss->idMonster = 1;                         
+                        Boss->firstLetter = 'L';                         
+                        Boss->name = "Lenina";                       
+                        Boss->hpMax = 300;                         
+                        Boss->shoot = 1;                           
+                        shootParams->condition = 1; 
+
+                        if( shootParams->monster == NULL) {                             
+                            shootParams->monster = Boss;                         
+                        }                     
+
+                        pthread_create(&thread, NULL, Lenina, shootParams);   
+                    } 
+
+                    if(stage == 2) {
                         InitialiseBossRoom(d, stage, id, 'J');   
                         Boss->firstLetter = 'A';
                         Boss->name = "Athina";
@@ -836,5 +867,21 @@ void setItemEffects(Object* item, Player* player) {
     player->flight += item->flight;
     player->ps += item->piercingShot;
     player->ss += item->spectralShot;
+}
+
+void playerLoseLife(Player* player, float damageTaken) {
+    if(player->shield > 0) { // player got shield
+        if(damageTaken > player->shield) { // more damage than shield
+            damageTaken -= player->shield;
+            player->shield = 0;
+            player->hpMax -= damageTaken;
+            player->canTakeBonusItem = 0;
+        } else { 
+            player->shield -= damageTaken;
+        }
+    } else { // player does not have shield
+        player->hpMax -= damageTaken;
+        player->canTakeBonusItem = 0;
+    }
 }
     
