@@ -13,6 +13,9 @@
 #define NUMBER_ROOM_MAX 30
 #define NUMBER_STAGES_MAX 10
 
+#include "monster.h"
+typedef struct Monster Monster;
+
 #include "objects.h"
 #include "Player.h"
 
@@ -60,6 +63,7 @@ struct Donjon{
             int doorRight;
             int numberOfRoomsReturned;
             int roomUsed;
+            Monster * newArrayMonster;
             Object* object; // an object of the donjon objects linked list
          
             struct Door Door;

@@ -16,8 +16,9 @@
 #include "Player.h"
 #include "shoot.h"
 
-int gestionRoom(Donjon * d, int numberOfRooms, int stage, int axeX, int axeY);
-void gestionGame(Donjon * d, ShootParams *shootParams, Monster * Boss, int stage, int * change, Player* player, int numberOfRoomsInt, int id, int axeX, int axeY);
+typedef struct Monster Monster;
+
+void gestionGame(Donjon * d, ShootParams *shootParams, Monster * Boss, int stage, int * change, Player* player, int numberOfRoomsInt, int id, int axeX, int axeY, Monster* arrayMonster);
 
 
 /**

@@ -272,8 +272,10 @@ void InitialisationGame(Donjon * d, int stageNum) {
                                     }else{
                                         
                                         d->stages[stageNum].stage[randomHeight][randomLength+1] = 'R';
-                                      
+
                                         
+                                        
+                                    
                                     }
                                         iterationRoom++;
                                         iterationByRoom++;

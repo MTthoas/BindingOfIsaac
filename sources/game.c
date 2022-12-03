@@ -20,7 +20,6 @@
 #include "include/mystring.h"
 #include "game.h"
 #include "shoot.h"
-#include "lectureFichiers.h"
 
 
 void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int numberOfRooms) {
@@ -417,10 +416,11 @@ void PurgeRoomOfBoss(Donjon *d, int stage, int id){
 
 }
 
-void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage, int * change, Player* player, int NumberOfRoomsInt, int id, int axeX, int axeY) {
+void gestionGame(Donjon * d, ShootParams *shootParams, Monster * Boss, int stage, int * change, Player* player, int NumberOfRoomsInt, int id, int axeX, int axeY, Monster * arrayMonster) {
 
     int *pId = &id;
     int changeOfRoom = 1;
+    int randomMonsterId = 0, randomNumberMonster = 0;
     int bossActive = 0;
     int BossInfinite = 0;
     int itemIsSet = 0;
@@ -476,7 +476,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage,
 
         if (c == 'm') {
 
-            Monster * arrayMonster = fichierMonsterToListeMonster();     
+            
             Monster * monster = getMonsterById(arrayMonster, 0);
             
             spawnMonster(d, monster, stage, id);
@@ -533,6 +533,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage,
                     player->directionView = 's';
 
 					if (d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] != 'W' && d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] != Boss->firstLetter && d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] != 'L') {
+
 
 						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
 						player->positionY++;
@@ -749,7 +750,23 @@ void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage,
                         }
 
                         pthread_create(&thread, NULL, bossAthina, shootParams);
-                    }    
+                    }
+
+                     if(stage == 2){
+                        InitialiseBossRoom(d, stage, id, 'J');   
+                        Boss->firstLetter = 'A';
+                        Boss->name = "Athina";
+                        Boss->hpMax = 450;
+                        Boss->shoot = 1;
+                        shootParams->condition = 1;
+                        if( shootParams->monster == NULL){
+                            shootParams->monster = Boss;
+                        }
+
+                        pthread_create(&thread, NULL, bossAthina, shootParams);
+                    }
+
+                    
                     bossActive = 0;     
                     BossInfinite = 1;    
             }
@@ -765,6 +782,31 @@ void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage,
                 GestionDoorsForMobRoom(d, stage, id, 0);
                 shootParams->id = id;                
                 changeOfRoom = 0;
+                (void) randomMonsterId;
+                (void) randomNumberMonster;
+                
+                // if (d->stages[stage].rooms[id].name == 'R'){
+                //     //Créer une liste de monstre aléatoire, d'une taille aléatoire
+                //     randomNumberMonster = 2 + rand() % (5 - 2);
+                //     // To fix
+                //     Monster * newArrayMonster = malloc(sizeof(Monster) *randomNumberMonster +1);
+
+                //     for (int i = 0; i < randomNumberMonster; i++){
+                //         randomMonsterId = 0 + rand() % (9 - 0);
+                //         Monster * monster = getMonsterById(arrayMonster,randomMonsterId);
+                //         newArrayMonster[i] = *monster;
+
+                //         d->stages[stage].rooms[id].newArrayMonster = newArrayMonster;    
+                //     }
+
+                //     for(int y = 0; y < randomNumberMonster; y++ ){
+                //         Monster * monsterDisplay = getMonsterById(newArrayMonster,y);
+                //         spawnMonster(d,monsterDisplay,stage,id);
+                //     }
+                // }
+
+
+                
             }
 
             

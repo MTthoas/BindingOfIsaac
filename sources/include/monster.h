@@ -31,6 +31,7 @@
 };
 
 typedef struct Monster Monster;
+typedef struct Donjon Donjon;
 
     /**
      * @brief Fonction creer monsters
