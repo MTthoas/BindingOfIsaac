@@ -15,6 +15,8 @@ struct Player {
     int ps;
     int ss;
     int flight;
+    int stageAxeX;
+    int stageAxeY;
 };
 typedef struct Player Player;
 

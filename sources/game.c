@@ -316,7 +316,6 @@ int gestionRoom(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY){
     return 0;
 }
 
-
 void InitialiseBossRoom(Donjon * d, int stage, int id, char letter){
 
      for (int i = 0; i < d -> stages[stage].rooms[id].height; i++) {
@@ -382,10 +381,8 @@ void GestionDoorsForMobRoom(Donjon *d, int stage, int id, int done){
                             d->stages[stage].rooms[id].room[i][y] = d->stages[stage].rooms[id].Door.doorRight;
                         }
                     }
-
                 }
         }
-
     }
 
 }
@@ -402,8 +399,6 @@ void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage,
     bool condition = true;
     int c;
 
-    d->stages[stage].rooms[id].name = 'P';
-    
     for (int i = 0; i < NumberOfRoomsInt; i++) {
         printf("ID : %d\n", d-> stages[stage].rooms[i].id);
         printf("AxeX : %d\n", d-> stages[stage].rooms[i].AxeX);
@@ -427,6 +422,9 @@ void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage,
         if(player->hpMax <= 0){
             *pId = 0;
             condition = false;
+            player->stageAxeX = axeX;
+            player->stageAxeY = axeY;
+            GestionDoorsForMobRoom(d, stage, id, 1);
             break;
         }
 
@@ -443,8 +441,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage,
 
         if (c == 'm') {
 
-            Monster * arrayMonster = fichierMonsterToListeMonster();
-            
+            Monster * arrayMonster = fichierMonsterToListeMonster();     
             Monster * monster = getMonsterById(arrayMonster, 0);
             
             spawnMonster(d, monster, stage, id);
@@ -713,8 +710,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage,
                 checkName(d, NumberOfRoomsInt, stage, axeX, axeY, id);
        
                 GestionDoorsForMobRoom(d, stage, id, 0);
-                shootParams->id = id;
-                
+                shootParams->id = id;                
                 changeOfRoom = 0;
             }
 
@@ -763,6 +759,8 @@ void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage,
             printf("ETAGE : %d\n", stage);
             printf("Name : %c\n",d->stages[stage].rooms[id].name);
             printf("ID : %d\n", id);
+            printf("AXE X : %d\n", axeX);
+            printf("AXE Y : %d\n", axeY);
             // printf("ID : %d\n", id);
             if(d->stages[stage].rooms[id].name == 'O' && BossInfinite == 1){
                 printf("Boss : %s\n", shootParams->monster->name);
