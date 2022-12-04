@@ -61,8 +61,10 @@ typedef struct Donjon{
             int doorRight;
             int numberOfRoomsReturned;
             int roomUsed;
+            
             Monster * newArrayMonster;
-            Object* object; // an object of the donjon objects linked list
+
+            Object * object; // an object of the donjon objects linked list
          
             struct Door Door;
 

@@ -21,6 +21,566 @@
 #include "game.h"
 #include "shoot.h"
 
+void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, int * change, Player* player, int NumberOfRoomsInt, int id, int axeX, int axeY, Monster * arrayMonster) {
+
+    int *pId = &id;
+    int changeOfRoom = 1;
+    int bossActive = 0;
+    int BossInfinite = 0;
+    int itemIsSet = 0;
+    char FuturPosition = ' ';
+
+
+    int iteration = 0;
+    bool condition = true;  
+    int spawnMonsterVar = 0;
+
+
+    Monster * monsterVide = malloc(sizeof(Monster));
+    monsterVide->hpMax = 999;
+    struct Boss * bossVide = malloc(sizeof(Boss));
+    bossVide->hpMax = 999;
+    
+    pthread_t thread;
+    int c;
+
+    for (int i = 0; i < NumberOfRoomsInt; i++) {
+        printf("ID : %d\n", d-> stages[stage].rooms[i].id);
+        printf("AxeX : %d\n", d-> stages[stage].rooms[i].AxeX);
+        printf("AxeY : %d\n", d-> stages[stage].rooms[i].AxeY);
+        
+        for(int y = 0; y < d-> stages[stage].rooms[i].height; y++) {
+            for(int v = 0; v < d-> stages[stage].rooms[i].width; v++) {
+                printf("%c", d-> stages[stage].rooms[i].room[y][v]);
+            }
+        }
+    }
+
+	while (condition) {
+
+        #ifdef _WIN32 
+		Sleep(25); 
+		#else 
+		usleep(25000); 
+		#endif 
+
+        if(player->hpMax <= 0){
+            *pId = 0;
+            condition = false;
+            player->stageAxeX = 0;
+            player->stageAxeY = 0;
+            PurgeRoomOfBoss(d, stage, id);
+            GestionDoorsForMobRoom(d, stage, id, 1);
+            d->stages[stage].rooms[id].name = 'P';
+            pthread_cancel(thread);
+            break;
+        }
+
+        c = 'p';
+		iteration++;
+
+		if (kbhit()) {
+			c = getchar();
+		}
+        
+		if (c == 'x') {
+            GestionDoorsForMobRoom(d, stage, id, 1);
+		}
+
+        // if (c == 'm') {
+
+        //     Monster * monster = getMonsterById(arrayMonster, 1);
+            
+        //     spawnMonster(d, monster, stage, id);
+        //     shootParams->monster = monster;
+
+        // }
+
+		if (c != 'e') {
+ 
+			system("clear");
+
+            switch (c) {
+
+				case 'z':
+
+                    if( d->stages[stage].rooms[id].name == 'B' ){
+                        bossActive = 1;
+                    }
+
+                    // Initialisation
+                    player->directionView = 'z';
+                    FuturPosition = d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX]; 
+
+                    if(FuturPosition == ' ' 
+                    || FuturPosition == 'D' 
+                    || FuturPosition == 'B' 
+                    || FuturPosition == 'I' 
+                    || FuturPosition == 'J' 
+                    || FuturPosition == 'S'
+                    || FuturPosition == 'N'
+                    || (FuturPosition == 'G' && player->flight)) {
+
+                         playerMoveUp(d, stage, id, player);
+
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N') {
+                            * change = 1;
+                            break;
+                        }
+
+                        // if run trough spike then lose life
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'S') {
+                            playerLoseLife(player, 1);
+                            break;
+                        }
+                        
+                        // if you change room : 
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'V' ) {
+                            axeY--;
+                            player->positionY = d->stages[stage].rooms[id].height - 2;
+                            changeOfRoom = 1;   
+                        }
+
+                    }
+
+                    if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
+                        setItemEffects(d->stages[stage].rooms[id].object, player);            
+                    }
+
+				break;
+
+				case 's': // move down
+
+                   if( d->stages[stage].rooms[id].name == 'B' ) {
+                        bossActive = 1;
+                    }
+
+                    player->directionView = 's';
+                    FuturPosition = d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX];  
+
+                    if(FuturPosition == ' ' 
+                    || FuturPosition == 'D' 
+                    || FuturPosition == 'B' 
+                    || FuturPosition == 'I' 
+                    || FuturPosition == 'J' 
+                    || FuturPosition == 'S'
+                    || FuturPosition == 'N'
+                    || (FuturPosition == 'G' && player->flight)) {
+                        
+                        // move down :
+                        playerMoveDown(d, stage, id, player);
+
+                        // change of stage
+                           if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N') {
+                            * change = 1;
+                            break;
+                        }
+
+                        // if run trough spike then lose life
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'S') {
+                            playerLoseLife(player, 1);
+                            break;
+                        }
+                        
+                        // if you change room : 
+                       if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'V' ) {
+                            axeY++;
+                            player->positionY = 1;
+                            changeOfRoom = 1;  
+                        }
+                    }
+
+                    if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
+                        setItemEffects(d->stages[stage].rooms[id].object, player);            
+                    }
+
+				break;
+
+				case 'q': // move left
+                
+                   if( d->stages[stage].rooms[id].name == 'B' ){
+                        bossActive = 1;
+                    }
+
+                    player->directionView = 'q';
+                    FuturPosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2];
+                    
+                        if(FuturPosition == ' ' 
+                        || FuturPosition == 'D' 
+                        || FuturPosition == 'B' 
+                        || FuturPosition == 'I' 
+                        || FuturPosition == 'J' 
+                        || FuturPosition == 'S'
+                        || FuturPosition == 'N'
+                        || (FuturPosition == 'G' && player->flight)) {
+                        
+                            
+                            // move left :
+                            playerMoveLeft(d, stage, id, player);
+
+                            // change of stage
+                           if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N') {
+                            * change = 1;
+                            break;
+                            }
+
+                        // if run trough spike then lose life
+                            if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'S') {
+                                playerLoseLife(player, 1);
+                                break;
+                            }
+                        
+                        // if you change room : 
+                            if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'V' ) {
+                                axeX--;
+
+                               if((d->stages[stage].rooms[id].width - 2) % 2 == 0) {
+                                    player->positionX = d->stages[stage].rooms[id].width - 4;
+                                } else {
+                                    player->positionX = d->stages[stage].rooms[id].width - 3;
+                                }
+                                
+                                changeOfRoom = 1;  
+                            }
+                    }
+
+                    if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
+                        setItemEffects(d->stages[stage].rooms[id].object, player);            
+                    }
+
+                break;
+                    
+				case 'd': // move right
+
+                   if( d->stages[stage].rooms[id].name == 'B' ) {
+                        bossActive = 1;
+                    }
+
+                    player->directionView = 'd';
+                    FuturPosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2];
+
+                        if(FuturPosition == ' ' 
+                        || FuturPosition == 'D' 
+                        || FuturPosition == 'B' 
+                        || FuturPosition == 'I' 
+                        || FuturPosition == 'J' 
+                        || FuturPosition == 'S'
+                        || FuturPosition == 'N'
+                        || (FuturPosition == 'G' && player->flight)) {
+                        
+                            // move right :
+                            playerMoveRight(d, stage, id, player);
+
+                            // change of stage
+                           if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N') {
+                            * change = 1;
+                            break;
+                            }
+
+                        // if run trough spike then lose life
+                            if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'S') {
+                                playerLoseLife(player, 1);
+                                break;
+                            }
+                        
+                        // if you change room : 
+                            if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'V' ) {
+                                axeX+=1;
+                                player->positionX = 2;
+                                changeOfRoom = 1;  
+                            }
+                    }
+
+                    if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
+                        setItemEffects(d->stages[stage].rooms[id].object, player);            
+                    }
+
+                break;
+
+                case '8': ;
+                    // Shoot Up                 
+                    if (shootParams->reload == 1){
+                        if( shootParams->boss == NULL){
+                            if( d->stages[stage].rooms[id].name == 'O'){
+                                shootParams->boss = Boss;
+                            }else {
+                                shootParams->boss = bossVide;
+                            }
+                           
+                        }
+                        if (shootParams->monster == NULL) {
+                        shootParams->monster = monsterVide;
+                        }
+
+                    pthread_t t2;
+                    pthread_create(&t2, NULL, shootUp, shootParams);
+
+                    }
+                break;
+                
+                case '5': ;
+                    // Shoot Down
+                    if (shootParams->reload == 1){
+                        if( shootParams->boss == NULL){
+                            if( d->stages[stage].rooms[id].name == 'O'){
+                                shootParams->boss = Boss;
+                            }else {
+                                shootParams->boss = bossVide;
+                            }
+                        }
+                        if (shootParams->monster == NULL) {
+                        shootParams->monster = monsterVide;
+                        }
+                    pthread_t t3;
+                    pthread_create(&t3, NULL, shootDown, shootParams);
+                    }
+
+                break;
+                
+                case '4': ;
+                    // Shoot Left
+                    if (shootParams->reload == 1){
+                        if( shootParams->boss == NULL){
+                            if( d->stages[stage].rooms[id].name == 'O'){
+                                shootParams->boss = Boss;
+                            }else {
+                                shootParams->boss = bossVide;
+                            }
+                        }
+                        if (shootParams->monster == NULL) {
+                        shootParams->monster = monsterVide;
+                        }
+                    pthread_t t4;
+                    pthread_create(&t4, NULL, shootLeft, shootParams);
+                    }
+                break;
+
+                case '6': ;
+                    // Shoot Right
+                    pthread_t t5;
+                    if (shootParams->reload == 1){
+                        if( shootParams->boss == NULL){
+                            if( d->stages[stage].rooms[id].name == 'O'){
+                                shootParams->boss = Boss;
+                            }else {
+                                shootParams->boss = bossVide;
+                            }
+                        }
+                        if (shootParams->monster == NULL) {
+                        shootParams->monster = monsterVide;
+                        }
+                    pthread_create(&t5, NULL, shootRight, shootParams);
+                    }
+                break;
+                
+
+			}
+
+            if(bossActive == 1){
+
+                    d->stages[stage].rooms[id].name = 'O';
+
+                    if(stage == 0){
+                        InitialiseBossRoom(d, stage, id, 'J');   
+                        Boss->idMonster = 0;
+                        Boss->firstLetter = 'J';
+                        Boss->name = "Jagger";
+                        Boss->hpMax = 100;
+                        Boss->shoot = 1;
+                        shootParams->condition = 1;
+
+                        if( shootParams->boss == NULL){
+                            shootParams->boss = Boss;
+                        }
+
+                        pthread_create(&thread, NULL, Jagger, shootParams);
+                        // if( Boss->dead == 1){
+                        //     pthread_exit(&thread);
+                        // }
+                    }
+
+                    if(stage == 1) {                         
+                        InitialiseBossLeninaRoom(d, stage, id, 'L');                            
+                        Boss->idMonster = 1;                         
+                        Boss->firstLetter = 'L';                         
+                        Boss->name = "Lenina";                       
+                        Boss->hpMax = 300; 
+
+                        Boss->shoot = 1;                           
+                        shootParams->condition = 1; 
+                     
+                        if( shootParams->boss == NULL) {                             
+                            shootParams->boss = Boss;                         
+                        }
+
+                        pthread_create(&thread, NULL, Lenina, shootParams);   
+                    } 
+
+                    if(stage == 2) {
+                        InitialiseBossRoom(d, stage, id, 'J');   
+                        Boss->firstLetter = 'A';
+                        Boss->name = "Athina";
+                        Boss->hpMax = 450;
+                        Boss->shoot = 1;
+                        shootParams->condition = 1;
+                        if( shootParams->boss == NULL){
+                            shootParams->boss = Boss;
+                        }
+
+                        pthread_create(&thread, NULL, bossAthina, shootParams);
+                    }
+                    
+                    bossActive = 0;     
+                    BossInfinite = 1;    
+            }
+
+            gestionPassing(d, player, stage, id, NumberOfRoomsInt);
+
+           
+            if(changeOfRoom == 1){
+                *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);   
+            
+                OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
+                checkName(d, NumberOfRoomsInt, stage, axeX, axeY, id);
+
+                GestionDoorsForMobRoom(d, stage, id, 0);
+                shootParams->id = id;                
+                changeOfRoom = 0;
+                (void)spawnMonsterVar;
+
+                if (d->stages[stage].rooms[id].name == 'R'){
+                    //Créer une liste de monstre aléatoire, d'une taille aléatoire
+                    int randomNumberMonster = 2 + rand() % (5 - 2);
+
+                    //Liste de monstre de la room
+                    d->stages[stage].rooms[id].newArrayMonster = malloc(sizeof(Monster) *randomNumberMonster +1);
+
+                    for (int i = 0; i < randomNumberMonster; i++){
+                        //pour chaque iteration, on crée un id randomMonsterId
+                        int randomMonsterId = 0 + rand() % (9 - 0);
+                        //pour chaque iteration randomMonsterId doit être différent de ceux déjà stocké dans le tableau
+                        for (int j = 0; j < i; j++){
+                            while (randomMonsterId == d->stages[stage].rooms[id].newArrayMonster[j].idMonster){
+                                randomMonsterId = 0 + rand() % (9 - 0);
+                            }
+                        }
+                        //ajout du monstre dans le tableau
+                        Monster * monster = getMonsterById(arrayMonster,randomMonsterId);
+                        d->stages[stage].rooms[id].newArrayMonster[i] = *monster;
+
+                    }
+                    //spawn des monstres du tableau newArrayMonster dans la room
+                    // for(int y = 0; y < randomNumberMonster; y++ ){
+                       // Monster * monsterDisplay = getMonsterById( d->stages[stage].rooms[id].newArrayMonster,0);
+                      //  spawnMonster(d,monsterDisplay,stage,id);
+
+                    // }
+                // }
+                     
+                 
+                }
+            }
+
+            
+            if(BossInfinite == 1){
+                if(shootParams->boss->hpMax <=  0){
+
+                    system("clear");
+
+                    printf("-----------------------------------------------------------\n");
+                    printf("\n");
+                    printf("You killed the boss, you can now go to the next stage ( n )\n");
+                    printf("\n");
+                    printf("------------------------------------------------------------\n");
+     
+                    #ifdef _WIN32 
+                    Sleep(25); 
+                    #else 
+                    usleep(3000000); 
+                    #endif 
+
+                    while(1){
+
+                        int positionX_N = rand() % (d->stages[stage].rooms[id].width - 2) + 2;
+                        int positionY_N = rand() % (d->stages[stage].rooms[id].height - 2) + 2;
+
+                        if(d->stages[stage].rooms[id].room[positionY_N][positionX_N] == ' ' && positionX_N % 2 == 0){
+                            d->stages[stage].rooms[id].room[positionY_N][positionX_N] = 'N';
+                            shootParams->condition = 0;
+                            break;
+                        }else{
+                            continue;
+                        }
+                    }  
+                    BossInfinite = 0;
+                }  
+            }
+
+            if(d->stages[stage].rooms[id].name == 'I' && itemIsSet == 0) {
+                setItemInsideRoom(d, stage, id);
+                itemIsSet = 1;
+            }
+    
+
+            // printf("Axe Position X : %d / and Position Y : %d\n", axeX, axeY);
+            printf("ETAGE : %d\n", stage);
+            printf("Name : %c\n",d->stages[stage].rooms[id].name);
+            printf("ID : %d\n", id);
+            printf("AXE X : %d\n", axeX);
+            printf("AXE Y : %d\n", axeY);
+            // printf("ID : %d\n", id);
+            if(d->stages[stage].rooms[id].name == 'O' && BossInfinite == 1){
+                printf("Boss : %s\n", shootParams->boss->name);
+                printf("Boss HP : %.f\n", shootParams->boss->hpMax);
+            }
+            printf("\n");
+            printf("HP player: %.2f\n", player->hpMax);
+
+            if(d->stages[stage].rooms[id].name == 'I') {
+                printf("Room item : \n");
+                displayObject(d->stages[stage].rooms[id].object);
+            }
+
+			for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
+				for (int y = 0; y < d->stages[stage].rooms[id].width - 1; y++) {
+					if (y % 2 == 0) {
+						if(d-> stages[stage].rooms[id].room[i][y] == 'P'){
+					
+							printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
+		
+						}else{
+							printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
+						}
+					}
+				}
+				printf("\n");
+				
+			}
+
+            printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, iteration);
+            printf("\nHP MAX : %.1f\n", player->hpMax); 
+            printf("DAMAGE  : %.1f\n", player->dmg);
+            printf("SHIELD : %.1f\n", player->shield);
+            printf("PIERCING SHOT : %s\n", (player->ps) ? "Yes" : "No");
+            printf("SPECTRAL SHOT: %s\n", (player->ss) ? "Yes" : "No");
+            printf("FLIGHT: %s\n\n", (player->flight) ? "Yes" : "No");
+
+            if( * change == 1){
+                condition = false;
+            }
+
+            printf("reload : %d\n",shootParams->reload);
+
+
+            continue;
+        }
+
+    }
+
+    // free(player);
+    //free(shootParams);
+
+}
 
 void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int numberOfRooms) {
 
@@ -452,594 +1012,6 @@ void playerLoseLife(Player* player, float damageTaken) {
     }
 }
 
-void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, int * change, Player* player, int NumberOfRoomsInt, int id, int axeX, int axeY, Monster * arrayMonster) {
-
-    int *pId = &id;
-    int changeOfRoom = 1;
-    int bossActive = 0;
-    int BossInfinite = 0;
-    int itemIsSet = 0;
-    char FuturPosition = ' ';
-
-
-    int iteration = 0;
-    bool condition = true;  
-    int spawnMonsterVar = 0;
-
-
-    Monster * monsterVide = malloc(sizeof(Monster));
-    monsterVide->hpMax = 999;
-    struct Boss * bossVide = malloc(sizeof(Boss));
-    bossVide->hpMax = 999;
-    
-    pthread_t thread;
-    int c;
-
-    for (int i = 0; i < NumberOfRoomsInt; i++) {
-        printf("ID : %d\n", d-> stages[stage].rooms[i].id);
-        printf("AxeX : %d\n", d-> stages[stage].rooms[i].AxeX);
-        printf("AxeY : %d\n", d-> stages[stage].rooms[i].AxeY);
-        
-        for(int y = 0; y < d-> stages[stage].rooms[i].height; y++) {
-            for(int v = 0; v < d-> stages[stage].rooms[i].width; v++) {
-                printf("%c", d-> stages[stage].rooms[i].room[y][v]);
-            }
-        }
-    }
-
-	while (condition) {
-
-        #ifdef _WIN32 
-		Sleep(25); 
-		#else 
-		usleep(25000); 
-		#endif 
-
-        if(player->hpMax <= 0){
-            *pId = 0;
-            condition = false;
-            player->stageAxeX = 0;
-            player->stageAxeY = 0;
-            PurgeRoomOfBoss(d, stage, id);
-            GestionDoorsForMobRoom(d, stage, id, 1);
-            d->stages[stage].rooms[id].name = 'P';
-            pthread_cancel(thread);
-            break;
-        }
-
-        c = 'p';
-		iteration++;
-
-		if (kbhit()) {
-			c = getchar();
-		}
-        
-		if (c == 'x') {
-            GestionDoorsForMobRoom(d, stage, id, 1);
-		}
-
-        // if (c == 'm') {
-
-        //     Monster * monster = getMonsterById(arrayMonster, 1);
-            
-        //     spawnMonster(d, monster, stage, id);
-        //     shootParams->monster = monster;
-
-        // }
-
-		if (c != 'e') {
- 
-			system("clear");
-
-            switch (c) {
-
-				case 'z':
-
-                    if( d->stages[stage].rooms[id].name == 'B' ){
-                        bossActive = 1;
-                    }
-
-                    // Initialisation
-                    player->directionView = 'z';
-                    FuturPosition = d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX]; 
-
-                    if(FuturPosition == ' ' 
-                    || FuturPosition == 'D' 
-                    || FuturPosition == 'B' 
-                    || FuturPosition == 'I' 
-                    || FuturPosition == 'J' 
-                    || FuturPosition == 'S'
-                    || FuturPosition == 'N'
-                    || (FuturPosition == 'G' && player->flight)) {
-
-                         playerMoveUp(d, stage, id, player);
-
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N') {
-                            * change = 1;
-                            break;
-                        }
-
-                        // if run trough spike then lose life
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'S') {
-                            playerLoseLife(player, 1);
-                            break;
-                        }
-                        
-                        // if you change room : 
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'V' ) {
-                            axeY--;
-                            player->positionY = d->stages[stage].rooms[id].height - 2;
-                            changeOfRoom = 1;   
-                        }
-
-                    }
-
-                    if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
-                        setItemEffects(d->stages[stage].rooms[id].object, player);            
-                    }
-
-				break;
-
-				case 's': // move down
-
-                   if( d->stages[stage].rooms[id].name == 'B' ) {
-                        bossActive = 1;
-                    }
-
-                    player->directionView = 's';
-                    FuturPosition = d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX];  
-
-                    if(FuturPosition == ' ' 
-                    || FuturPosition == 'D' 
-                    || FuturPosition == 'B' 
-                    || FuturPosition == 'I' 
-                    || FuturPosition == 'J' 
-                    || FuturPosition == 'S'
-                    || FuturPosition == 'N'
-                    || (FuturPosition == 'G' && player->flight)) {
-                        
-                        // move down :
-                        playerMoveDown(d, stage, id, player);
-
-                        // change of stage
-                           if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N') {
-                            * change = 1;
-                            break;
-                        }
-
-                        // if run trough spike then lose life
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'S') {
-                            playerLoseLife(player, 1);
-                            break;
-                        }
-                        
-                        // if you change room : 
-                       if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'V' ) {
-                            axeY++;
-                            player->positionY = 1;
-                            changeOfRoom = 1;  
-                        }
-                    }
-
-                    if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
-                        setItemEffects(d->stages[stage].rooms[id].object, player);            
-                    }
-
-				break;
-
-				case 'q': // move left
-                
-                   if( d->stages[stage].rooms[id].name == 'B' ){
-                        bossActive = 1;
-                    }
-
-                    player->directionView = 'q';
-                    FuturPosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2];
-                    
-                        if(FuturPosition == ' ' 
-                        || FuturPosition == 'D' 
-                        || FuturPosition == 'B' 
-                        || FuturPosition == 'I' 
-                        || FuturPosition == 'J' 
-                        || FuturPosition == 'S'
-                        || FuturPosition == 'N'
-                        || (FuturPosition == 'G' && player->flight)) {
-                        
-                            
-                            // move left :
-                            playerMoveLeft(d, stage, id, player);
-
-                            // change of stage
-                           if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N') {
-                            * change = 1;
-                            break;
-                            }
-
-                        // if run trough spike then lose life
-                            if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'S') {
-                                playerLoseLife(player, 1);
-                                break;
-                            }
-                        
-                        // if you change room : 
-                            if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'V' ) {
-                                axeX--;
-
-                               if((d->stages[stage].rooms[id].width - 2) % 2 == 0) {
-                                    player->positionX = d->stages[stage].rooms[id].width - 4;
-                                } else {
-                                    player->positionX = d->stages[stage].rooms[id].width - 3;
-                                }
-                                
-                                changeOfRoom = 1;  
-                            }
-                    }
-
-                    if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
-                        setItemEffects(d->stages[stage].rooms[id].object, player);            
-                    }
-
-                break;
-                    
-				case 'd': // move right
-
-                   if( d->stages[stage].rooms[id].name == 'B' ) {
-                        bossActive = 1;
-                    }
-
-                    player->directionView = 'd';
-                    FuturPosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2];
-
-                        if(FuturPosition == ' ' 
-                        || FuturPosition == 'D' 
-                        || FuturPosition == 'B' 
-                        || FuturPosition == 'I' 
-                        || FuturPosition == 'J' 
-                        || FuturPosition == 'S'
-                        || FuturPosition == 'N'
-                        || (FuturPosition == 'G' && player->flight)) {
-                        
-                            // move right :
-                            playerMoveRight(d, stage, id, player);
-
-                            // change of stage
-                           if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N') {
-                            * change = 1;
-                            break;
-                            }
-
-                        // if run trough spike then lose life
-                            if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'S') {
-                                playerLoseLife(player, 1);
-                                break;
-                            }
-                        
-                        // if you change room : 
-                            if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'V' ) {
-                                axeX+=1;
-                                player->positionX = 2;
-                                changeOfRoom = 1;  
-                            }
-                    }
-
-                    if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
-                        setItemEffects(d->stages[stage].rooms[id].object, player);            
-                    }
-
-                break;
-
-                case '8': ;
-                    // Shoot Up                 
-                    if (shootParams->reload == 1){
-                        if( shootParams->boss == NULL){
-                            if( d->stages[stage].rooms[id].name == 'O'){
-                                shootParams->boss = Boss;
-                            }else {
-                                shootParams->boss = bossVide;
-                            }
-                           
-                        }
-                        if (shootParams->monster == NULL) {
-                        shootParams->monster = monsterVide;
-                        }
-
-                    pthread_t t2;
-                    pthread_create(&t2, NULL, shootUp, shootParams);
-
-                    }
-                break;
-                
-                case '5': ;
-                    // Shoot Down
-                    if (shootParams->reload == 1){
-                        if( shootParams->boss == NULL){
-                            if( d->stages[stage].rooms[id].name == 'O'){
-                                shootParams->boss = Boss;
-                            }else {
-                                shootParams->boss = bossVide;
-                            }
-                        }
-                        if (shootParams->monster == NULL) {
-                        shootParams->monster = monsterVide;
-                        }
-                    pthread_t t3;
-                    pthread_create(&t3, NULL, shootDown, shootParams);
-                    }
-
-                break;
-                
-                case '4': ;
-                    // Shoot Left
-                    if (shootParams->reload == 1){
-                        if( shootParams->boss == NULL){
-                            if( d->stages[stage].rooms[id].name == 'O'){
-                                shootParams->boss = Boss;
-                            }else {
-                                shootParams->boss = bossVide;
-                            }
-                        }
-                        if (shootParams->monster == NULL) {
-                        shootParams->monster = monsterVide;
-                        }
-                    pthread_t t4;
-                    pthread_create(&t4, NULL, shootLeft, shootParams);
-                    }
-                break;
-
-                case '6': ;
-                    // Shoot Right
-                    pthread_t t5;
-                    if (shootParams->reload == 1){
-                        if( shootParams->boss == NULL){
-                            if( d->stages[stage].rooms[id].name == 'O'){
-                                shootParams->boss = Boss;
-                            }else {
-                                shootParams->boss = bossVide;
-                            }
-                        }
-                        if (shootParams->monster == NULL) {
-                        shootParams->monster = monsterVide;
-                        }
-                    pthread_create(&t5, NULL, shootRight, shootParams);
-                    }
-                break;
-                
-
-			}
-
-            if(bossActive == 1){
-
-                    d->stages[stage].rooms[id].name = 'O';
-
-                    if(stage == 0){
-                        InitialiseBossRoom(d, stage, id, 'J');   
-                        Boss->idMonster = 0;
-                        Boss->firstLetter = 'J';
-                        Boss->name = "Jagger";
-                        Boss->hpMax = 100;
-                        Boss->shoot = 1;
-                        shootParams->condition = 1;
-
-                        if( shootParams->boss == NULL){
-                            shootParams->boss = Boss;
-                        }
-
-                        pthread_create(&thread, NULL, Jagger, shootParams);
-                        // if( Boss->dead == 1){
-                        //     pthread_exit(&thread);
-                        // }
-                    }
-
-                    if(stage == 1) {                         
-                        InitialiseBossLeninaRoom(d, stage, id, 'L');                            
-                        Boss->idMonster = 1;                         
-                        Boss->firstLetter = 'L';                         
-                        Boss->name = "Lenina";                       
-                        Boss->hpMax = 300; 
-
-                        Boss->shoot = 1;                           
-                        shootParams->condition = 1; 
-                     
-                        if( shootParams->boss == NULL) {                             
-                            shootParams->boss = Boss;                         
-                        }
-
-                        pthread_create(&thread, NULL, Lenina, shootParams);   
-                    } 
-
-                    if(stage == 2) {
-                        InitialiseBossRoom(d, stage, id, 'J');   
-                        Boss->firstLetter = 'A';
-                        Boss->name = "Athina";
-                        Boss->hpMax = 450;
-                        Boss->shoot = 1;
-                        shootParams->condition = 1;
-                        if( shootParams->boss == NULL){
-                            shootParams->boss = Boss;
-                        }
-
-                        pthread_create(&thread, NULL, bossAthina, shootParams);
-                    }
-                    
-                    bossActive = 0;     
-                    BossInfinite = 1;    
-            }
-
-            gestionPassing(d, player, stage, id, NumberOfRoomsInt);
-
-           
-            if(changeOfRoom == 1){
-                *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);   
-            
-                OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
-                checkName(d, NumberOfRoomsInt, stage, axeX, axeY, id);
-
-                GestionDoorsForMobRoom(d, stage, id, 0);
-                shootParams->id = id;                
-                changeOfRoom = 0;
-                (void)spawnMonsterVar;
-
-                 if (d->stages[stage].rooms[id].name == 'R'){ 
-                   //Créer une liste de monstre aléatoire, d'une taille aléatoire
-                 
-
-                    // //Liste de monstre de la room
-                    // d->stages[stage].rooms[id].newArrayMonster = malloc(sizeof(Monster) *randomNumberMonster +1);
-
-                    // for (int i = 0; i < randomNumberMonster; i++){
-                    //     //pour chaque iteration, on crée un id randomMonsterId
-                    //     int randomMonsterId = 0 + rand() % (9 - 0);
-                    //     //pour chaque iteration randomMonsterId doit être différent de ceux déjà stocké dans le tableau
-                    //     for (int j = 0; j < i; j++){
-                    //         while (randomMonsterId == d->stages[stage].rooms[id].newArrayMonster[j].idMonster){
-                    //             randomMonsterId = 0 + rand() % (9 - 0);
-                    //         }
-                    //     }
-                    //     //ajout du monstre dans le tableau
-                    //     Monster * monster = getMonsterById(arrayMonster,randomMonsterId);
-                    //     d->stages[stage].rooms[id].newArrayMonster[i] = *monster;
-                         
-                    // }
-
-                    // // print the list of monster
-
-                    // for (int i = 0; i < randomNumberMonster; i++){
-                    //     printf("Monster %d : %s", i, d->stages[stage].rooms[id].newArrayMonster[i].name);
-                    // }
-
-                    // // sleep(30000000);
-                    
-                    // // spawn des monstres du tableau newArrayMonster dans la room
-
-                    // Monster * monsterDisplay = getMonsterById( d->stages[stage].rooms[id].newArrayMonster,1);
-                       
-                    // //spawnMonster(d,monsterDisplay,stage,id);
-
-                    int randomNumberMonster = 2 + rand() % (5 - 2);
-
-                    d->stages[stage].rooms[id].newArrayMonster = malloc(sizeof(Monster) *randomNumberMonster);
-                    d->stages[stage].rooms[id].newArrayMonster = arrayMonster;
-
-                    for(int i = 0; i < randomNumberMonster; i++){
-
-                        int randomMonsterId = 1 + rand() % 9;
-                        while(randomMonsterId == d->stages[stage].rooms[id].newArrayMonster[i].idMonster){
-                            randomMonsterId = 1 + rand() % 9;
-                        }
-                        d->stages[stage].rooms[id].newArrayMonster[i].idMonster = randomMonsterId;
-
-                        Monster * monster = getMonsterById(d->stages[stage].rooms[id].newArrayMonster, randomMonsterId);
-                        spawnMonster(d, monster, stage, id);
-                        shootParams->monster = monster;
-                        
-                    }
-                     
-          
-
-                 
-                }
-            }
-
-            
-            if(BossInfinite == 1){
-                if(shootParams->boss->hpMax <=  0){
-
-                    system("clear");
-
-                    printf("-----------------------------------------------------------\n");
-                    printf("\n");
-                    printf("You killed the boss, you can now go to the next stage ( n )\n");
-                    printf("\n");
-                    printf("------------------------------------------------------------\n");
-     
-                    #ifdef _WIN32 
-                    Sleep(25); 
-                    #else 
-                    usleep(3000000); 
-                    #endif 
-
-                    while(1){
-
-                        int positionX_N = rand() % (d->stages[stage].rooms[id].width - 2) + 2;
-                        int positionY_N = rand() % (d->stages[stage].rooms[id].height - 2) + 2;
-
-                        if(d->stages[stage].rooms[id].room[positionY_N][positionX_N] == ' ' && positionX_N % 2 == 0){
-                            d->stages[stage].rooms[id].room[positionY_N][positionX_N] = 'N';
-                            shootParams->condition = 0;
-                            break;
-                        }else{
-                            continue;
-                        }
-                    }  
-                    BossInfinite = 0;
-                }  
-            }
-
-            if(d->stages[stage].rooms[id].name == 'I' && itemIsSet == 0) {
-                setItemInsideRoom(d, stage, id);
-                itemIsSet = 1;
-            }
-    
-
-            // printf("Axe Position X : %d / and Position Y : %d\n", axeX, axeY);
-            printf("ETAGE : %d\n", stage);
-            printf("Name : %c\n",d->stages[stage].rooms[id].name);
-            printf("ID : %d\n", id);
-            printf("AXE X : %d\n", axeX);
-            printf("AXE Y : %d\n", axeY);
-            // printf("ID : %d\n", id);
-            if(d->stages[stage].rooms[id].name == 'O' && BossInfinite == 1){
-                printf("Boss : %s\n", shootParams->boss->name);
-                printf("Boss HP : %.f\n", shootParams->boss->hpMax);
-            }
-            printf("\n");
-            printf("HP player: %.2f\n", player->hpMax);
-
-            if(d->stages[stage].rooms[id].name == 'I') {
-                printf("Room item : \n");
-                displayObject(d->stages[stage].rooms[id].object);
-            }
-
-			for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
-				for (int y = 0; y < d->stages[stage].rooms[id].width - 1; y++) {
-					if (y % 2 == 0) {
-						if(d-> stages[stage].rooms[id].room[i][y] == 'P'){
-					
-							printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
-		
-						}else{
-							printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
-						}
-					}
-				}
-				printf("\n");
-				
-			}
-
-            printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, iteration);
-            printf("\nHP MAX : %.1f\n", player->hpMax); 
-            printf("DAMAGE  : %.1f\n", player->dmg);
-            printf("SHIELD : %.1f\n", player->shield);
-            printf("PIERCING SHOT : %s\n", (player->ps) ? "Yes" : "No");
-            printf("SPECTRAL SHOT: %s\n", (player->ss) ? "Yes" : "No");
-            printf("FLIGHT: %s\n\n", (player->flight) ? "Yes" : "No");
-
-            if( * change == 1){
-                condition = false;
-            }
-
-            printf("reload : %d\n",shootParams->reload);
-
-
-            continue;
-        }
-
-    }
-
-    // free(player);
-    //free(shootParams);
-
-}
 
 void setItemInsideRoom(Donjon* d, int stage, int id) {
     int roomHeight =  d -> stages[stage].rooms[id].height;

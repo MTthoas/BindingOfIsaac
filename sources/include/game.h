@@ -47,5 +47,19 @@ void playerMoveUp(Donjon* donjon, int stage, int roomID, Player* player);
 void playerMoveDown(Donjon* donjon, int stage, int roomID, Player* player);
 void playerMoveLeft(Donjon* donjon, int stage, int roomID, Player* player);
 void playerMoveRight(Donjon* donjon, int stage, int roomID, Player* player);
+void playerLoseLife(Player* player, float damageTaken);
+void playerMoveLeft(Donjon* donjon, int stage, int roomID, Player* player);
+void playerMoveRight(Donjon* donjon, int stage, int roomID, Player* player);
+void playerMoveDown(Donjon* donjon, int stage, int roomID, Player* player);
+void playerMoveUp(Donjon* donjon, int stage, int roomID, Player* player);
+void PurgeRoomOfBoss(Donjon *d, int stage, int id);
+void GestionDoorsForMobRoom(Donjon *d, int stage, int id, int done);
+void InitialiseBossLeninaRoom(Donjon * d, int stage, int id, char letter);
+void InitialiseBossRoom(Donjon * d, int stage, int id, char letter);
+int gestionRoom(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY);
+void gestionPassing(Donjon *d, Player * player, int stage, int id, int NumberOfRoomsInt);
+void checkName(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY, int t);
+void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int numberOfRooms);
+
 
 #endif
