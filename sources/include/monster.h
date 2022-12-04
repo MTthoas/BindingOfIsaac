@@ -10,13 +10,9 @@
 #ifndef MONSTER_H
 #define MONSTER_H
 
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "Player.h"
-#include "Room.h"
 
- struct Monster {
+ typedef struct Monster {
     int idMonster;
     char firstLetter;
     char* name;
@@ -28,9 +24,9 @@
     int positionY;
     int dead;
 
-};
+} Monster ;
 
- struct Boss {
+typedef struct Boss {
     int idMonster;
     char firstLetter;
     char* name;
@@ -40,15 +36,8 @@
     int positionY;
     int dead;
 
-};
+} Boss;
 
-typedef struct Monster Monster;
-typedef struct Donjon Donjon;
-typedef struct Boss Boss;
-
-    /**
-     * @brief Fonction creer monsters
-     */
 
     /**
      * @brief Constructeur de monsters e
@@ -80,9 +69,7 @@ typedef struct Boss Boss;
 
     void * bossAthina(void *shootParams);
 
-   void * bossLenina(void *params);
-
-    void spawnMonster(Donjon * d, Monster * monster, int stage, int id );    // void freeListeMonster(ListeMonster* liste);
+   void * bossLenina(void *params); 
 
     void * BossShoot(void * params);
     

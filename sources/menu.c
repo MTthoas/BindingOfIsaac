@@ -16,14 +16,12 @@
 #include <stdbool.h>
 #include <fcntl.h>
 
-#include "./include/Player.h"
+
 #include "./include/menu.h"
 #include "./include/lectureFichiers.h"
 #include "./include/mystring.h"
 #include "./include/userInput.h"
 #include "./include/game.h"
-#include "./include/Room.h"
-#include "./include/shoot.h"
 
 #define KRED "\x1B[31m"
 #define KNRM "\x1B[0m"
@@ -355,9 +353,9 @@ void printProgress(double percentage) {
     fflush(stdout);
 }
 
-void GameRecur(Donjon *d, Monster * Boss, ShootParams * shootParams, Player * player, int characterID, int stage, int * change, int NumberOfRoomsInt, int id, int axeX, int axeY, Monster * arrayMonster) {
+void GameRecur(Donjon *d, Boss * boss, ShootParams * shootParams, Player * player, int characterID, int stage, int * change, int NumberOfRoomsInt, int id, int axeX, int axeY, Monster * arrayMonster) {
     player->canTakeBonusItem = 1;
-	gestionGame(d, shootParams, Boss, stage, change, player, NumberOfRoomsInt, id, axeX, axeY, arrayMonster);
+	gestionGame(d, shootParams, boss, stage, change, player, NumberOfRoomsInt, id, axeX, axeY, arrayMonster);
 				
     if(player->hpMax <= 0) { // player dead
         system("clear");
@@ -373,7 +371,7 @@ void GameRecur(Donjon *d, Monster * Boss, ShootParams * shootParams, Player * pl
         #endif 
         
         initialisePlayerStats(player, characterID);
-        GameRecur(d, Boss, shootParams, player, characterID, stage, change, NumberOfRoomsInt, id, axeX, axeY, arrayMonster);
+        GameRecur(d, boss, shootParams, player, characterID, stage, change, NumberOfRoomsInt, id, axeX, axeY, arrayMonster);
     }
 }
 
@@ -416,6 +414,7 @@ void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id) 
             }
         }
         printf("\n");
+    }
 }
 
 void menuGame() {

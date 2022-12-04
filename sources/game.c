@@ -438,7 +438,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     pthread_t thread;
     int c;
 
-    //->stages[stage].rooms[id].name = 'P';
+    //d->stages[stage].rooms[id].name = 'P';
     
     for (int i = 0; i < NumberOfRoomsInt; i+=1) {
         printf("ID : %d\n", d-> stages[stage].rooms[i].id);
@@ -454,21 +454,29 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
 	while (condition) {
 
+        //InitialisationDoorsAfterDeath();
+
         #ifdef _WIN32 
 		Sleep(25); 
 		#else 
 		usleep(25000); 
 		#endif 
 
-        if(player->hpMax <= 0){
+        if(player->hpMax <= 0) { // death of player
             *pId = 0;
             condition = false;
             player->stageAxeX = 0;
             player->stageAxeY = 0;
-            PurgeRoomOfBoss(d, stage, id);
+
             GestionDoorsForMobRoom(d, stage, id, 1);
-            d->stages[stage].rooms[id].name = 'P';
-            pthread_cancel(thread);
+
+            if(d->stages[stage].rooms[id].name == 'O') {
+                PurgeRoomOfBoss(d, stage, id);
+                pthread_cancel(thread);
+            }
+            
+            d->stages[stage].rooms[id].name = 'P'; // to respawn to P
+
             break;
         }
 
@@ -511,6 +519,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     || d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] == 'I' 
                     || d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] == 'J' 
                     || d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] == 'S'
+                    || d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] == 'N'
                     || (d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] == 'G' && player->flight)) {
                         
                         // move up :
@@ -558,11 +567,13 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     || d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] == 'I' 
                     || d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] == 'V' 
                     || d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] == 'S'
+                    || d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] == 'N'
                     || (d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] == 'G' && player->flight)) {
                         
                         // move down :
                         playerMoveDown(d, stage, id, player);
 
+                        // change of stage
                         if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N') {
                             * change = 1;
                             break;
@@ -604,6 +615,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     || d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] == 'B' 
                     || d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] == 'I' 
                     || d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] == 'V' 
+                    || d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] == 'N'
                     || d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] == 'S'
                     || (d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] == 'G' && player->flight)) {
                             
@@ -657,6 +669,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     || d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] == 'B' 
                     || d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] == 'I' 
                     || d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] == 'V' 
+                    || d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] == 'N'
                     || d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] == 'S'
                     || (d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] == 'G' && player->flight)) {
                         
@@ -1060,5 +1073,9 @@ void playerMoveLeft(Donjon* donjon, int stage, int roomID, Player* player) {
     donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = ' ';
     player->positionX -= 2;
 }
+
+// void InitialiseDoorsAfterDeath(Donjon* d) {
+
+// }
 
     
