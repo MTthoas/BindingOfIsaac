@@ -844,7 +844,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
             gestionPassing(d, player, stage, id, NumberOfRoomsInt);
 
            
-            if(changeOfRoom == 1){
+            if(changeOfRoom == 1) {
                 *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);   
             
                 OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
@@ -855,69 +855,40 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 changeOfRoom = 0;
                 (void)spawnMonsterVar;
 
-                 if (d->stages[stage].rooms[id].name == 'R'){ 
-                   //Créer une liste de monstre aléatoire, d'une taille aléatoire
-                 
 
-                    // //Liste de monstre de la room
-                    // d->stages[stage].rooms[id].newArrayMonster = malloc(sizeof(Monster) *randomNumberMonster +1);
-
-                    // for (int i = 0; i < randomNumberMonster; i++){
-                    //     //pour chaque iteration, on crée un id randomMonsterId
-                    //     int randomMonsterId = 0 + rand() % (9 - 0);
-                    //     //pour chaque iteration randomMonsterId doit être différent de ceux déjà stocké dans le tableau
-                    //     for (int j = 0; j < i; j++){
-                    //         while (randomMonsterId == d->stages[stage].rooms[id].newArrayMonster[j].idMonster){
-                    //             randomMonsterId = 0 + rand() % (9 - 0);
-                    //         }
-                    //     }
-                    //     //ajout du monstre dans le tableau
-                    //     Monster * monster = getMonsterById(arrayMonster,randomMonsterId);
-                    //     d->stages[stage].rooms[id].newArrayMonster[i] = *monster;
-                         
-                    // }
-
-                    // // print the list of monster
-
-                    // for (int i = 0; i < randomNumberMonster; i++){
-                    //     printf("Monster %d : %s", i, d->stages[stage].rooms[id].newArrayMonster[i].name);
-                    // }
-
-                    // // sleep(30000000);
-                    
-                    // // spawn des monstres du tableau newArrayMonster dans la room
-
-                    // Monster * monsterDisplay = getMonsterById( d->stages[stage].rooms[id].newArrayMonster,1);
-                       
-                    // //spawnMonster(d,monsterDisplay,stage,id);
+                 if (d->stages[stage].rooms[id].name == 'R') { // appear monsters inside rooms
 
                     int randomNumberMonster = 2 + rand() % (5 - 2);
 
                     d->stages[stage].rooms[id].newArrayMonster = malloc(sizeof(Monster) *randomNumberMonster);
-                    d->stages[stage].rooms[id].newArrayMonster = arrayMonster;
+                    // d->stages[stage].rooms[id].newArrayMonster = arrayMonster;
+                    Monster * monsterNew = NULL;
+                    int randomMonsterId;
+                    for(int i = 0; i < randomNumberMonster; i++){ // build the array monster for the room
 
-                    for(int i = 0; i < randomNumberMonster; i++){
+                        randomMonsterId = 1 + rand() % 9;
 
-                        int randomMonsterId = 1 + rand() % 9;
-                        while(randomMonsterId == d->stages[stage].rooms[id].newArrayMonster[i].idMonster){
-                            randomMonsterId = 1 + rand() % 9;
+                        for(int j = 0; j < i; j++){
+                            while(randomMonsterId == d->stages[stage].rooms[id].newArrayMonster[j].idMonster){
+                                randomMonsterId = 1 + rand() % 9;
+                            }
                         }
-                        d->stages[stage].rooms[id].newArrayMonster[i].idMonster = randomMonsterId;
-
-                        Monster * monster = getMonsterById(d->stages[stage].rooms[id].newArrayMonster, randomMonsterId);
-                        spawnMonster(d, monster, stage, id);
-                        shootParams->monster = monster;
-                        
+                        monsterNew = getMonsterById(arrayMonster,randomMonsterId);
+                        d->stages[stage].rooms[id].newArrayMonster[i] = *monsterNew;
+                        //d->stages[stage].rooms[id].newArrayMonster[i].idMonster = randomMonsterId;
                     }
-                     
-          
-
-                 
+                    
+                    Monster * monsterSpawn = NULL;
+                    for (int i = 0; i < randomNumberMonster; i++) { // spawn some monsters
+                        monsterSpawn = getMonsterById(d->stages[stage].rooms[id].newArrayMonster, i); (void)monsterSpawn;
+                        //shootParams->monster = monsterSpawn;
+                        spawnMonster(d, monsterSpawn, stage, id);
+                    }      
                 }
             }
 
             
-            if(BossInfinite == 1){
+            if(BossInfinite == 1) {
                 if(shootParams->boss->hpMax <=  0){
 
                     system("clear");

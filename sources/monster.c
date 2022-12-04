@@ -27,16 +27,18 @@
 #include "include/mystring.h"
 
 
-void spawnMonster(Donjon * d, Monster * monster, int stage, int id){
+void spawnMonster(Donjon * d, Monster * monster, int stage, int id) {
 
     srand(time(NULL));
-    int randomPositionX,randomPositionY;
+    int randomPositionX,randomPositionY; 
     int heightRoom = d->stages[stage].rooms[id].height - 1;
-    int widthRoom = d->stages[stage].rooms[id].width -2;
-
+    int widthRoom = d->stages[stage].rooms[id].width - 2;
+    (void) monster;
+    (void) randomPositionX;
+    (void) randomPositionY;
     // printf("\nOne\n");
     // sleep(1);
-    while (1){
+    while (1) {
         randomPositionY = 1 + rand() % (heightRoom - 1);
         randomPositionX = 2 + rand() % (widthRoom - 2);
         if (randomPositionX % 2 == 0 && d->stages[stage].rooms[id].room[randomPositionY][randomPositionX] == ' ' && d->stages[stage].rooms[id].room[randomPositionY][randomPositionX - 2] != 'P' && d->stages[stage].rooms[id].room[randomPositionY][randomPositionX + 2] != 'P' && d->stages[stage].rooms[id].room[randomPositionY - 1][randomPositionX] != 'P' && d->stages[stage].rooms[id].room[randomPositionY + 1][randomPositionX] != 'P' ){
@@ -45,8 +47,8 @@ void spawnMonster(Donjon * d, Monster * monster, int stage, int id){
             break;
         }   
     } // la lettre doit correspondre au monstre 
-    // printf("\nSecond\n");
-    // sleep(30000);
+    // // printf("\nSecond\n");
+    // // sleep(30000);
     char letterForMonster = monster->name[0];
     letterForMonster = toupper(letterForMonster);
     monster->firstLetter = letterForMonster;
