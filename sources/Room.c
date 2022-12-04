@@ -203,7 +203,6 @@ void InitialisationGame(Donjon * d, int stageNum) {
             int itemRoom = 0;
             int bossRoom = 0;
             int exit = 0;
-            int test = 0;
 
             for(int t = 2; t <= NumberOfRoomsInt-iteration + 2; t++) {
 
@@ -211,8 +210,13 @@ void InitialisationGame(Donjon * d, int stageNum) {
                 
                 int iterationRoom = 0;
                 int iterationTest = 0;
+                int iterationJou = 0;
 
                 while(iterationRoom == 0 && iterationByRoom <= NumberOfRoomsInt + 2 && bossRoom == 0 && exit == 0) {
+                    iterationJou++;
+                    if(iterationJou > 100) {
+                        break;
+                    }
       
                     int select = rand() % 3;
 
@@ -221,8 +225,10 @@ void InitialisationGame(Donjon * d, int stageNum) {
 
                     if(t < 2){
 
-                        randomHeight = 1 + rand() % (NumberOfRoomsInt+1);
+                        randomHeight = 1 + rand() % (NumberOfRoomsInt+1) - 1;
                         randomLength = (rand() % (((NumberOfRoomsInt/2)+1) - (NumberOfRoomsInt/2) + 1)) + NumberOfRoomsInt/2;
+
+                        printf("While iteration0");   
 
                     }else{
 
@@ -230,8 +236,10 @@ void InitialisationGame(Donjon * d, int stageNum) {
 
                         if(t == NumberOfRoomsInt-iteration + 1 ){
 
-                        randomHeight = rand() % (NumberOfRoomsInt);
-                        randomLength = rand() % (NumberOfRoomsInt);
+                        randomHeight = 1 + rand() % (NumberOfRoomsInt - 1);
+                        randomLength = 1 + rand() % (NumberOfRoomsInt - 1 );
+
+                        printf("While iteration1");   
 
                         }else{
  
@@ -240,23 +248,22 @@ void InitialisationGame(Donjon * d, int stageNum) {
                          randomHeight = 1 + rand() % (NumberOfRoomsInt-1);
                          randomLength = 1 + rand() % (NumberOfRoomsInt-1);
 
+                          printf("While iteration2");   
+
                         }
                     }
 
                     while(d->stages[stageNum].stage[randomHeight][randomLength] != 'R' && d->stages[stageNum].stage[randomHeight][randomLength] != 'I') {
                         randomHeight = rand() % NumberOfRoomsInt;
-                        randomLength = rand() % NumberOfRoomsInt;           
+                        randomLength = rand() % NumberOfRoomsInt;      
+
+                        printf("While iteration3");   
                     }
+                    
 
                     iterationTest++;
                     printf("Iteration : %d\n", iterationTest);
                     if(iterationTest > 57) {
-                        test = 1;
-                    }
-
-                    if(test == 1){
-                        // t--;
-                        test = 0;
                         break;
                     }
 

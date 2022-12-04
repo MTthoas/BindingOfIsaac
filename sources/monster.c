@@ -33,6 +33,9 @@ void spawnMonster(Donjon * d, Monster * monster, int stage, int id){
     int randomPositionX,randomPositionY;
     int heightRoom = d->stages[stage].rooms[id].height - 1;
     int widthRoom = d->stages[stage].rooms[id].width -2;
+
+    // printf("\nOne\n");
+    // sleep(1);
     while (1){
         randomPositionY = 1 + rand() % (heightRoom - 1);
         randomPositionX = 2 + rand() % (widthRoom - 2);
@@ -42,11 +45,28 @@ void spawnMonster(Donjon * d, Monster * monster, int stage, int id){
             break;
         }   
     } // la lettre doit correspondre au monstre 
+    // printf("\nSecond\n");
+    // sleep(30000);
     char letterForMonster = monster->name[0];
     letterForMonster = toupper(letterForMonster);
     monster->firstLetter = letterForMonster;
     d->stages[stage].rooms[id].room[monster->positionY][monster->positionX] = letterForMonster;        
 
+}
+
+Monster * getMonsterById(Monster * arrayMonster,int id) {
+
+    struct Monster * monster = malloc(sizeof(struct Monster)*1);
+    printf("Heoh\n");
+    
+    for(int i = 0; i < 9; i++) {
+        if(arrayMonster[i].idMonster == (id)) {
+            *monster = arrayMonster[i];
+            return monster;
+        }
+    }
+
+    return NULL;
 }
 
 void monsterShoot(Monster * monster, Player * player) {
@@ -225,18 +245,6 @@ Monster createMonster(int idMonster, char* name, float hpMax, int shoot, int fli
     return monster;
 }
 
-Monster * getMonsterById(Monster * arrayMonster,int id) {
-
-    struct Monster * monster = malloc(sizeof(struct Monster)*1);
-    for(int i = 0; i < 9; i++) {
-        if(arrayMonster[i].idMonster == (id)) {
-            *monster = arrayMonster[i];
-            return monster;
-        }
-    }
-
-    return NULL;
-}
 
 void * BossShoot(void * params){
 

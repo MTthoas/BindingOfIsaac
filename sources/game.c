@@ -425,7 +425,9 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     int itemIsSet = 0;
 
     int iteration = 0;
-    bool condition = true;
+    bool condition = true;  
+    int spawnMonsterVar = 0;
+
 
     Monster * monsterVide = malloc(sizeof(Monster));
     monsterVide->hpMax = 999;
@@ -478,14 +480,14 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
             GestionDoorsForMobRoom(d, stage, id, 1);
 		}
 
-        if (c == 'm') {
+        // if (c == 'm') {
 
-            Monster * monster = getMonsterById(arrayMonster, 1);
+        //     Monster * monster = getMonsterById(arrayMonster, 1);
             
-            spawnMonster(d, monster, stage, id);
-            shootParams->monster = monster;
+        //     spawnMonster(d, monster, stage, id);
+        //     shootParams->monster = monster;
 
-        }
+        // }
 
 		if (c != 'e') {
  
@@ -768,45 +770,75 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
            
             if(changeOfRoom == 1){
-                *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);                  
+                *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);   
+            
                 OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
                 checkName(d, NumberOfRoomsInt, stage, axeX, axeY, id);
 
                 GestionDoorsForMobRoom(d, stage, id, 0);
                 shootParams->id = id;                
                 changeOfRoom = 0;
-                
-                if (d->stages[stage].rooms[id].name == 'R'){
-                    //Créer une liste de monstre aléatoire, d'une taille aléatoire
+                (void)spawnMonsterVar;
+
+                 if (d->stages[stage].rooms[id].name == 'R'){ 
+                   //Créer une liste de monstre aléatoire, d'une taille aléatoire
+                 
+
+                    // //Liste de monstre de la room
+                    // d->stages[stage].rooms[id].newArrayMonster = malloc(sizeof(Monster) *randomNumberMonster +1);
+
+                    // for (int i = 0; i < randomNumberMonster; i++){
+                    //     //pour chaque iteration, on crée un id randomMonsterId
+                    //     int randomMonsterId = 0 + rand() % (9 - 0);
+                    //     //pour chaque iteration randomMonsterId doit être différent de ceux déjà stocké dans le tableau
+                    //     for (int j = 0; j < i; j++){
+                    //         while (randomMonsterId == d->stages[stage].rooms[id].newArrayMonster[j].idMonster){
+                    //             randomMonsterId = 0 + rand() % (9 - 0);
+                    //         }
+                    //     }
+                    //     //ajout du monstre dans le tableau
+                    //     Monster * monster = getMonsterById(arrayMonster,randomMonsterId);
+                    //     d->stages[stage].rooms[id].newArrayMonster[i] = *monster;
+                         
+                    // }
+
+                    // // print the list of monster
+
+                    // for (int i = 0; i < randomNumberMonster; i++){
+                    //     printf("Monster %d : %s", i, d->stages[stage].rooms[id].newArrayMonster[i].name);
+                    // }
+
+                    // // sleep(30000000);
+                    
+                    // // spawn des monstres du tableau newArrayMonster dans la room
+
+                    // Monster * monsterDisplay = getMonsterById( d->stages[stage].rooms[id].newArrayMonster,1);
+                       
+                    // //spawnMonster(d,monsterDisplay,stage,id);
+
                     int randomNumberMonster = 2 + rand() % (5 - 2);
 
-                    //Liste de monstre de la room
-                    d->stages[stage].rooms[id].newArrayMonster = malloc(sizeof(Monster) *randomNumberMonster +1);
+                    d->stages[stage].rooms[id].newArrayMonster = malloc(sizeof(Monster) *randomNumberMonster);
+                    d->stages[stage].rooms[id].newArrayMonster = arrayMonster;
 
-                    for (int i = 0; i < randomNumberMonster; i++){
-                        //pour chaque iteration, on crée un id randomMonsterId
-                        int randomMonsterId = 0 + rand() % (9 - 0);
-                        //pour chaque iteration randomMonsterId doit être différent de ceux déjà stocké dans le tableau
-                        for (int j = 0; j < i; j++){
-                            while (randomMonsterId == d->stages[stage].rooms[id].newArrayMonster[j].idMonster){
-                                randomMonsterId = 0 + rand() % (9 - 0);
-                            }
+                    for(int i = 0; i < randomNumberMonster; i++){
+
+                        int randomMonsterId = 1 + rand() % 9;
+                        while(randomMonsterId == d->stages[stage].rooms[id].newArrayMonster[i].idMonster){
+                            randomMonsterId = 1 + rand() % 9;
                         }
-                        //ajout du monstre dans le tableau
-                        Monster * monster = getMonsterById(arrayMonster,randomMonsterId);
-                        d->stages[stage].rooms[id].newArrayMonster[i] = *monster;
-                         
+                        d->stages[stage].rooms[id].newArrayMonster[i].idMonster = randomMonsterId;
+
+                        Monster * monster = getMonsterById(d->stages[stage].rooms[id].newArrayMonster, randomMonsterId);
+                        spawnMonster(d, monster, stage, id);
+                        shootParams->monster = monster;
+                        
                     }
-                    //spawn des monstres du tableau newArrayMonster dans la room
-                    // for(int y = 0; y < randomNumberMonster; y++ ){
-                       // Monster * monsterDisplay = getMonsterById( d->stages[stage].rooms[id].newArrayMonster,0);
-                      //  spawnMonster(d,monsterDisplay,stage,id);
+                     
+          
 
-                    // }
+                 
                 }
-
-
-                
             }
 
             
