@@ -776,8 +776,6 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 GestionDoorsForMobRoom(d, stage, id, 0);
                 shootParams->id = id;                
                 changeOfRoom = 0;
-
-                (void) arrayMonster;
                 
                 if (d->stages[stage].rooms[id].name == 'R'){
                     //Créer une liste de monstre aléatoire, d'une taille aléatoire
@@ -786,13 +784,21 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     Monster * newArrayMonster = malloc(sizeof(Monster) *randomNumberMonster +1);
 
                     for (int i = 0; i < randomNumberMonster; i++){
+                        //pour chaque iteration, on crée un monstre randomMonsterId
                         int randomMonsterId = 0 + rand() % (9 - 0);
+                        //pour chaque iteration randomMonsterId doit être différent de ceux déjà stocké dans le tableau
+                        for (int j = 0; j < i; j++){
+                            while (randomMonsterId == newArrayMonster[j].idMonster){
+                                randomMonsterId = 0 + rand() % (9 - 0);
+                            }
+                        }
+                        //ajout du monstre dans le tableau
                         Monster * monster = getMonsterById(arrayMonster,randomMonsterId);
                         newArrayMonster[i] = *monster;
-
+                        //attributiopn de tableau de liste de monstre à la room
                         d->stages[stage].rooms[id].newArrayMonster = newArrayMonster;    
                     }
-
+                    //spawn des monstres de la liste la room dans la room
                     for(int y = 0; y < randomNumberMonster; y++ ){
                         Monster * monsterDisplay = getMonsterById(newArrayMonster,y);
                         (void) monsterDisplay;
