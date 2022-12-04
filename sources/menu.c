@@ -457,7 +457,7 @@ void menuGame() {
 
                 // Boucle pour chaque étage
 
-				for(int i = 0; i < 3; i+=1) {
+				for(int i = 0; i < 62; i+=1) {
 
                     Donjon * d = malloc(sizeof(Donjon));
                     Boss * Boss = malloc(sizeof(Monster));

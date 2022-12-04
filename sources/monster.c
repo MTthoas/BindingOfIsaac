@@ -83,8 +83,8 @@ void * bossAthina(void *shootParams) {
     Shoot * shoot = malloc(sizeof(Shoot));
     int reload = 1;    
 
-    for (int i = 0; i < ((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].height; i+=1) {
-        for (int y = 0; y < ((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].width; y+=1) {
+    for (int i = 0; i < ((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].height; i++) {
+        for (int y = 0; y < ((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].width; y++) {
             if (i == ((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].height / 2 && y == ((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].width / 2) {
                 if (y % 2 == 0) {
                     ((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[i][y] = 'A';
@@ -259,8 +259,8 @@ void * BossShoot(void * params){
     int id = ((ShootParams*)params)->id;
     int stage = ((ShootParams*)params)->stage;
 
-     for (int i = 0; i < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].height; i+=1) {
-        for(int y = 0; y < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].width; y+=1){
+     for (int i = 0; i < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].height; i++) {
+        for(int y = 0; y < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].width; y++){
             if(((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[i][y] == letter){
                 boss -> positionX = y;
                 boss -> positionY = i;
@@ -421,8 +421,8 @@ void * Jagger(void *params){
 
     char letter = ((ShootParams*)params)->boss->firstLetter;
 
-    for (int i = 0; i < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].height; i+=1) {
-        for(int y = 0; y < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].width; y+=1){
+    for (int i = 0; i < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].height; i++) {
+        for(int y = 0; y < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].width; y++){
             if(((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[i][y] == letter){
                 ((ShootParams*)params)->boss -> positionX = y;
                 ((ShootParams*)params)->boss -> positionY = i;
@@ -446,9 +446,9 @@ void * Jagger(void *params){
         int shoot = 0;
         
 
-        for (int i = 0; i < ((ShootParams*)params)->d -> stages[stage].rooms[id].height; i+=1) {
+        for (int i = 0; i < ((ShootParams*)params)->d -> stages[stage].rooms[id].height; i++) {
 
-            for(int y = 0; y < ((ShootParams*)params)->d -> stages[stage].rooms[id].width; y+=1){
+            for(int y = 0; y < ((ShootParams*)params)->d -> stages[stage].rooms[id].width; y++){
 
                 if(((ShootParams*)params)->d -> stages[stage].rooms[id].room[i][y] == letter){
 
@@ -491,8 +491,8 @@ void * Jagger(void *params){
 
                 if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->boss ->positionY][((ShootParams*)params)->boss ->positionX-2] == ' '){
 
-                   ((ShootParams*)params)->monster -> positionX+=1;
-                   ((ShootParams*)params)->monster -> positionX+=1;
+                   ((ShootParams*)params)->boss -> positionX++;
+                   ((ShootParams*)params)->boss -> positionX++;
 
                         ((ShootParams*)params) -> directionView = 'R';
 
@@ -529,7 +529,7 @@ void * Jagger(void *params){
 
                 if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->boss ->positionY+1][((ShootParams*)params)->boss ->positionX] == ' '){
 
-                    ((ShootParams*)params)->monster -> positionY+=1;
+                    ((ShootParams*)params)->boss -> positionY++;
                     ((ShootParams*)params) -> directionView = 'B';
 
                 }else{
