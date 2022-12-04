@@ -401,7 +401,7 @@ void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id )
 
 
 
-void GameRecur(Donjon *d, Monster * Boss, ShootParams * shootParams, Player * player, int stage, int * change, int NumberOfRoomsInt, int id, int axeX, int axeY, Monster * arrayMonster){
+void GameRecur(Donjon *d, Boss * Boss, ShootParams * shootParams, Player * player, int stage, int * change, int NumberOfRoomsInt, int id, int axeX, int axeY, Monster * arrayMonster){
 
 	gestionGame(d, shootParams, Boss, stage, change, player, NumberOfRoomsInt, id, axeX, axeY, arrayMonster);
 				
@@ -456,6 +456,9 @@ void menuGame(){
 				stage = 0;
 				change = 0;
 
+                Monster * arrayMonster = fichierMonsterToListeMonster();
+
+
                 Player* player = malloc(sizeof(Player));
                     player->positionX = 1;
                     player->positionY = 1;
@@ -468,11 +471,8 @@ void menuGame(){
 				for(int i = 0; i < 3; i+=1) {
 
                     Donjon * d = malloc(sizeof(Donjon));
-                    Monster * Boss = malloc(sizeof(Monster));
-                    
-                    Monster * arrayMonster = malloc(sizeof(Monster) * 10);
+                    Boss * Boss = malloc(sizeof(Monster));
 
-                    // Monster * arrayMonster = fichierMonsterToListeMonster();
                     
                     int id = 0;
 

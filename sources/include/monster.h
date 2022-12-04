@@ -30,8 +30,21 @@
 
 };
 
+ struct Boss {
+    int idMonster;
+    char firstLetter;
+    char* name;
+    int shoot;
+    float hpMax;
+    int positionX;
+    int positionY;
+    int dead;
+
+};
+
 typedef struct Monster Monster;
 typedef struct Donjon Donjon;
+typedef struct Boss Boss;
 
     /**
      * @brief Fonction creer monsters

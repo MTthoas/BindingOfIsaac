@@ -532,7 +532,6 @@ Monster* fichierMonsterToListeMonster() {
     } // ajout du dernier object
     
     fclose(fichier);
-    sleep(1);
     return arrayMonster;
 }
 

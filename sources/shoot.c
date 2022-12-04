@@ -55,16 +55,28 @@ void * shootUp(void *shootParams){
 				((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] = ' ';
 			}
 		}
+		if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] == ((ShootParams*)shootParams)->boss->firstLetter){
+			((ShootParams*)shootParams)->boss->hpMax = ((ShootParams*)shootParams)->boss->hpMax - ((ShootParams*)shootParams)->player->dmg;
+			if(((ShootParams*)shootParams)->boss->hpMax <= 0){
+				((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] = ' ';
+			}
+		}
 		((ShootParams*)shootParams)->reload = 1; 
 		shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
         shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
 	}
 	if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->player->positionY-1][((ShootParams*)shootParams)->player->positionX] == ((ShootParams*)shootParams)->monster->firstLetter){
-		
 		// Le monstre prends des dégats équivalent aux dmg du Player
 		((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
 		if(((ShootParams*)shootParams)->monster->hpMax <= 0){
 			((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->monster->positionY][((ShootParams*)shootParams)->monster->positionX] = ' ';
+		}
+	}
+	if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->player->positionY-1][((ShootParams*)shootParams)->player->positionX] == ((ShootParams*)shootParams)->boss->firstLetter){
+		// Le boss prends des dégats équivalent aux dmg du Player
+		((ShootParams*)shootParams)->boss->hpMax = ((ShootParams*)shootParams)->boss->hpMax - ((ShootParams*)shootParams)->player->dmg;
+		if(((ShootParams*)shootParams)->boss->hpMax <= 0){
+			((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->boss->positionY][((ShootParams*)shootParams)->boss->positionX] = ' ';
 		}
 	}
 	free(shoot);
@@ -96,6 +108,12 @@ void* shootDown(void *shootParams){
 							((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY + 1][shoot->positionX] = ' ';
 						}
 					}
+					if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY + 1][shoot->positionX] == ((ShootParams*)shootParams)->boss->firstLetter){
+						((ShootParams*)shootParams)->boss->hpMax = ((ShootParams*)shootParams)->boss->hpMax - ((ShootParams*)shootParams)->player->dmg;
+						if(((ShootParams*)shootParams)->boss->hpMax <= 0){
+							((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY + 1][shoot->positionX] = ' ';
+						}
+					}
 					((ShootParams*)shootParams)->reload = 1;
 					shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
 	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
@@ -106,6 +124,14 @@ void* shootDown(void *shootParams){
 					((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
 					if(((ShootParams*)shootParams)->monster->hpMax <= 0){
 						((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->monster->positionY][((ShootParams*)shootParams)->monster->positionX] = ' ';
+					}
+				}
+				if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->player->positionY+1][((ShootParams*)shootParams)->player->positionX] == ((ShootParams*)shootParams)->boss->firstLetter){
+					
+					// Le monstre prends des dégats équivalent aux dmg du Player
+					((ShootParams*)shootParams)->boss->hpMax = ((ShootParams*)shootParams)->boss->hpMax - ((ShootParams*)shootParams)->player->dmg;
+					if(((ShootParams*)shootParams)->boss->hpMax <= 0){
+						((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->boss->positionY][((ShootParams*)shootParams)->boss->positionX] = ' ';
 					}
 				}
 				free(shoot);
@@ -137,6 +163,12 @@ void* shootLeft(void *shootParams){
 							((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY][shoot->positionX - 2] = ' ';
 						}
 					}
+					if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY][shoot->positionX - 2] == ((ShootParams*)shootParams)->boss->firstLetter){
+						((ShootParams*)shootParams)->boss->hpMax = ((ShootParams*)shootParams)->boss->hpMax - ((ShootParams*)shootParams)->player->dmg;
+						if(((ShootParams*)shootParams)->boss->hpMax <= 0){
+							((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY][shoot->positionX - 2] = ' ';
+						}
+					}
 					((ShootParams*)shootParams)->reload = 1;
 					shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
 	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
@@ -147,6 +179,14 @@ void* shootLeft(void *shootParams){
 					((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
 					if(((ShootParams*)shootParams)->monster->hpMax <= 0){
 						((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->monster->positionY][((ShootParams*)shootParams)->monster->positionX] = ' ';
+					}
+				}
+				if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->player->positionY][((ShootParams*)shootParams)->player->positionX-2] == ((ShootParams*)shootParams)->boss->firstLetter){
+					
+					// Le monstre prends des dégats équivalent aux dmg du Player
+					((ShootParams*)shootParams)->boss->hpMax = ((ShootParams*)shootParams)->boss->hpMax - ((ShootParams*)shootParams)->player->dmg;
+					if(((ShootParams*)shootParams)->boss->hpMax <= 0){
+						((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->boss->positionY][((ShootParams*)shootParams)->boss->positionX] = ' ';
 					}
 				}
 				free(shoot);
@@ -178,6 +218,12 @@ void* shootRight(void *shootParams){
 							((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY][shoot->positionX + 2] = ' ';
 						}
 					}
+					if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY][shoot->positionX + 2] == ((ShootParams*)shootParams)->boss->firstLetter){
+						((ShootParams*)shootParams)->boss->hpMax = ((ShootParams*)shootParams)->boss->hpMax - ((ShootParams*)shootParams)->player->dmg;
+						if(((ShootParams*)shootParams)->boss->hpMax <= 0){
+							((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY][shoot->positionX + 2] = ' ';
+						}
+					}
 					((ShootParams*)shootParams)->reload = 1;
 					shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
 	                shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
@@ -188,6 +234,14 @@ void* shootRight(void *shootParams){
 					((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
 					if(((ShootParams*)shootParams)->monster->hpMax <= 0){
 						((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->monster->positionY][((ShootParams*)shootParams)->monster->positionX] = ' ';
+					}
+				}
+				if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->player->positionY][((ShootParams*)shootParams)->player->positionX+2] == ((ShootParams*)shootParams)->boss->firstLetter){
+					
+					// Le monstre prends des dégats équivalent aux dmg du Player
+					((ShootParams*)shootParams)->boss->hpMax = ((ShootParams*)shootParams)->boss->hpMax - ((ShootParams*)shootParams)->player->dmg;
+					if(((ShootParams*)shootParams)->boss->hpMax <= 0){
+						((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->boss->positionY][((ShootParams*)shootParams)->boss->positionX] = ' ';
 					}
 				}
 				free(shoot);

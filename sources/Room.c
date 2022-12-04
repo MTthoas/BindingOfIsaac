@@ -230,8 +230,8 @@ void InitialisationGame(Donjon * d, int stageNum) {
 
                         if(t == NumberOfRoomsInt-iteration + 1 ){
 
-                        randomHeight = rand() % (NumberOfRoomsInt-1);
-                        randomLength = rand() % (NumberOfRoomsInt-1);
+                        randomHeight = rand() % (NumberOfRoomsInt);
+                        randomLength = rand() % (NumberOfRoomsInt);
 
                         }else{
  
