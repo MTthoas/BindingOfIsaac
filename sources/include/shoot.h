@@ -26,6 +26,7 @@ struct ShootParams {
     Donjon *d;
     Player *player;
     Monster *monster;
+    Boss *boss;
     int idMonster;
     int reloadBoss;
     int reload ;

@@ -13,6 +13,7 @@
 
 typedef struct Donjon Donjon;
 typedef struct Monster Monster;
+typedef struct Boss Boss;
 typedef struct Player Player;
 typedef struct ShootParams ShootParams;
 
@@ -35,5 +36,5 @@ void menuControl(void);
 void printGameBanner(void);
 
 void menuGame();
-void GameRecur(Donjon *d, Monster * Boss, ShootParams * shootParams, Player * player, int stage, int * change, int NumberOfRoomsInt, int id, int axeX, int axeY, Monster * arrayMonster);
+void GameRecur(Donjon *d, Boss * Boss, ShootParams * shootParams, Player * player, int stage, int * change, int NumberOfRoomsInt, int id, int axeX, int axeY, Monster * arrayMonster);
 #endif
