@@ -426,6 +426,11 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
     int iteration = 0;
     bool condition = true;
+
+    Monster * monsterVide = malloc(sizeof(Monster));
+    monsterVide->hpMax = 999;
+    struct Boss * bossVide = malloc(sizeof(Boss));
+    bossVide->hpMax = 999;
     
     pthread_t thread;
     int c;
@@ -624,14 +629,18 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 break;
 
                 case '8': ;
-                    // Shoot Up
-                    
+                    // Shoot Up                 
                     if (shootParams->reload == 1){
                         if( shootParams->boss == NULL){
                             if( d->stages[stage].rooms[id].name == 'O'){
                                 shootParams->boss = Boss;
+                            }else {
+                                shootParams->boss = bossVide;
                             }
                            
+                        }
+                        if (shootParams->monster == NULL) {
+                        shootParams->monster = monsterVide;
                         }
 
                     pthread_t t2;
@@ -646,7 +655,12 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         if( shootParams->boss == NULL){
                             if( d->stages[stage].rooms[id].name == 'O'){
                                 shootParams->boss = Boss;
+                            }else {
+                                shootParams->boss = bossVide;
                             }
+                        }
+                        if (shootParams->monster == NULL) {
+                        shootParams->monster = monsterVide;
                         }
                     pthread_t t3;
                     pthread_create(&t3, NULL, shootDown, shootParams);
@@ -660,7 +674,12 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         if( shootParams->boss == NULL){
                             if( d->stages[stage].rooms[id].name == 'O'){
                                 shootParams->boss = Boss;
+                            }else {
+                                shootParams->boss = bossVide;
                             }
+                        }
+                        if (shootParams->monster == NULL) {
+                        shootParams->monster = monsterVide;
                         }
                     pthread_t t4;
                     pthread_create(&t4, NULL, shootLeft, shootParams);
@@ -674,7 +693,12 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         if( shootParams->boss == NULL){
                             if( d->stages[stage].rooms[id].name == 'O'){
                                 shootParams->boss = Boss;
+                            }else {
+                                shootParams->boss = bossVide;
                             }
+                        }
+                        if (shootParams->monster == NULL) {
+                        shootParams->monster = monsterVide;
                         }
                     pthread_create(&t5, NULL, shootRight, shootParams);
                     }
