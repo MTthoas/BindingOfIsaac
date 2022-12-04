@@ -103,7 +103,7 @@ void * bossAthina(void *shootParams) {
 
         }
     }   
-    if (reload == 1){
+    if (reload == 1) {
         reload = 0;
         while(((ShootParams*)shootParams)->boss->hpMax > 0 && ((ShootParams*)shootParams)->player->hpMax > 0){
                 #ifdef _WIN32 
