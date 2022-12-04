@@ -11,7 +11,7 @@
 #define H_ROOM
 
 #define NUMBER_ROOM_MAX 30
-#define NUMBER_STAGES_MAX 10
+#define NUMBER_STAGES_MAX 62
 
 #include "monster.h"
 typedef struct Monster Monster;

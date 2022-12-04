@@ -449,6 +449,8 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
         }
     }
 
+
+
 	while (condition) {
 
         #ifdef _WIN32 
