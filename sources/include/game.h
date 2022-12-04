@@ -16,9 +16,6 @@
 #include "Player.h"
 #include "shoot.h"
 
-typedef struct Monster Monster;
-typedef struct Boss Boss;
-
 void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, int * change, Player* player, int numberOfRoomsInt, int id, int axeX, int axeY, Monster* arrayMonster);
 
 
@@ -36,6 +33,7 @@ void setItemEffects(Object* item, Player* player);
 
 void InitialiseBossLeninaRoom(Donjon * d, int stage, int id, char letter);
 void InitialiseBossRoom(Donjon * d, int stage, int id, char letter);
+//void InitialiseDoorsAfterDeath(Donjon* d);
 
 /**
  * @brief use when the player must lose life
@@ -44,5 +42,10 @@ void InitialiseBossRoom(Donjon * d, int stage, int id, char letter);
  * @param damageTaken 
  */
 void playerLoseLife(Player* player, float damageTaken);
+
+void playerMoveUp(Donjon* donjon, int stage, int roomID, Player* player);
+void playerMoveDown(Donjon* donjon, int stage, int roomID, Player* player);
+void playerMoveLeft(Donjon* donjon, int stage, int roomID, Player* player);
+void playerMoveRight(Donjon* donjon, int stage, int roomID, Player* player);
 
 #endif

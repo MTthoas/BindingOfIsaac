@@ -15,14 +15,13 @@
 #include "monster.h"
 // #include "Player.h"
 
-struct Shoot {
+typedef struct Shoot {
     int positionX;
     int positionY;
     char directionView;
-};
-typedef struct Shoot Shoot;
+} Shoot;
 
-struct ShootParams {
+typedef struct ShootParams {
     Donjon *d;
     Player *player;
     Monster *monster;
@@ -34,8 +33,7 @@ struct ShootParams {
     int condition;
     int id;
     char directionView;
-};
-typedef struct ShootParams ShootParams;
+} ShootParams;
 
 
 void* shootUp(void *shootParams);

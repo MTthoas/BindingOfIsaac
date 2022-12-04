@@ -1,7 +1,7 @@
 #ifndef H_PLAYER
 #define H_PLAYER
 
-struct Player {
+typedef struct Player {
     char * name;
     int positionX;
     int positionY;
@@ -17,8 +17,7 @@ struct Player {
     int stageAxeY;
 
     int canTakeBonusItem; // put to 0 if user loses hp
-};
-typedef struct Player Player;
+} Player;
 
 /**
  * @brief Puts the correct stats to the user depending on the chosen character

@@ -16,14 +16,12 @@
 #include <stdbool.h>
 #include <fcntl.h>
 
-#include "./include/Player.h"
+
 #include "./include/menu.h"
 #include "./include/lectureFichiers.h"
 #include "./include/mystring.h"
 #include "./include/userInput.h"
 #include "./include/game.h"
-#include "./include/Room.h"
-#include "./include/shoot.h"
 
 #define KRED "\x1B[31m"
 #define KNRM "\x1B[0m"
@@ -355,10 +353,32 @@ void printProgress(double percentage) {
     fflush(stdout);
 }
 
-void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id ) {
+void GameRecur(Donjon *d, Boss * boss, ShootParams * shootParams, Player * player, int characterID, int stage, int * change, int NumberOfRoomsInt, int id, int axeX, int axeY, Monster * arrayMonster) {
+    player->canTakeBonusItem = 1;
+	gestionGame(d, shootParams, boss, stage, change, player, NumberOfRoomsInt, id, axeX, axeY, arrayMonster);
+				
+    if(player->hpMax <= 0) { // player dead
+        system("clear");
+        printf("===========================================================\n");
+        printf("=========                YOU ARE DEAD        ==============\n");
+        printf("===========================================================\n");
+        printf("\n");
 
-    for (int i = 0; i < d -> stages[stage].rooms[id].height; i++) {
-        for (int y = 0; y < d -> stages[stage].rooms[id].width; y++) {
+        #ifdef _WIN32 
+        Sleep(10000); 
+        #else 
+        usleep(5000000); 
+        #endif 
+        
+        initialisePlayerStats(player, characterID);
+        GameRecur(d, boss, shootParams, player, characterID, stage, change, NumberOfRoomsInt, id, axeX, axeY, arrayMonster);
+    }
+}
+
+void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id) {
+
+    for (int i = 0; i < d -> stages[stage].rooms[id].height; i+=1) {
+        for (int y = 0; y < d -> stages[stage].rooms[id].width; y+=1) {
             if (i == d -> stages[stage].rooms[id].height / 2 && y == d -> stages[stage].rooms[id].width / 2) {
                 if (y % 2 == 0) {
                     d -> stages[stage].rooms[id].room[i][y] = 'P';
@@ -370,8 +390,8 @@ void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id )
         }
     }
 
-    for (int i = 0; i < d -> stages[stage].rooms[id].height; i++) {
-        for (int y = 0; y < d -> stages[stage].rooms[id].width; y++) {
+    for (int i = 0; i < d -> stages[stage].rooms[id].height; i+=1) {
+        for (int y = 0; y < d -> stages[stage].rooms[id].width; y+=1) {
             if (y % 2 == 0) {
                 if (d -> stages[stage].rooms[id].room[i][y] == 'P') {
                     player -> positionX = y;
@@ -381,54 +401,23 @@ void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id )
         }
     }
 
-    for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
-                for (int y = 0; y < d->stages[stage].rooms[id].width; y++) {
-                    if (y % 2 == 0) {
-                        if(d-> stages[stage].rooms[id].room[i][y] == 'P'){
-                            printf("%s", KRED);
-                            printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
-                            printf("%s", KNRM);
-                        }else{
-                            printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
-                        }
-                    }
+    for (int i = 0; i < d->stages[stage].rooms[id].height; i+=1) {
+        for (int y = 0; y < d->stages[stage].rooms[id].width; y+=1) {
+            if (y % 2 == 0) {
+                if(d-> stages[stage].rooms[id].room[i][y] == 'P'){
+                    printf("%s", KRED);
+                    printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
+                    printf("%s", KNRM);
+                }else{
+                    printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
                 }
-                printf("\n");
-                
             }
-
-}
-
-
-
-void GameRecur(Donjon *d, Boss * Boss, ShootParams * shootParams, Player * player, int stage, int * change, int NumberOfRoomsInt, int id, int axeX, int axeY, Monster * arrayMonster){
-
-	gestionGame(d, shootParams, Boss, stage, change, player, NumberOfRoomsInt, id, axeX, axeY, arrayMonster);
-				
-    if(player->hpMax <= 0){
-        system("clear");
-        printf("===========================================================\n");
-        printf("=========           YOU ARE DEAD             ==============\n");
-        printf("===========================================================\n");
+        }
         printf("\n");
-
-        #ifdef _WIN32 
-        Sleep(10000); 
-        #else 
-        usleep(5000000); 
-        #endif 
-
-        axeX = player->stageAxeX;
-        axeY = player->stageAxeY;
-        player->hpMax = 100;
-        GameRecur(d, Boss, shootParams, player, stage, change, NumberOfRoomsInt, id, axeX, axeY, arrayMonster);
     }
-
-
 }
 
-
-void menuGame(){
+void menuGame() {
 
     bool condition = true, condition2 = true, etape = true;
 	int c,c2;
@@ -500,7 +489,7 @@ void menuGame(){
                     InitialiseOtherRoomsFromArms(d,stage, NumberOfRoomsInt);
                     SetColorAndPositionForPlayer(d, player, stage, id);
 
-                    GameRecur(d, Boss, shootParams, player, stage, &change, NumberOfRoomsInt, id, axeX, axeY, arrayMonster);
+                    GameRecur(d, Boss, shootParams, player, characterID, stage, &change, NumberOfRoomsInt, id, axeX, axeY, arrayMonster);
     
 					free(d -> stages[stage].stage);
 					free(d);
@@ -525,32 +514,32 @@ void menuGame(){
 								
 			
 			case 'i':
-			while (condition2)
-			{
-			etape = false;
-				c2 = 'p';
-				menuCrudItem();
-				if (kbhit()) {
-					c2 = getchar();
-				}
-				switch (c2){
-					case 'a':
-						menuCreateItem();
-						condition2 = false;
-						break;
-					case 'd':
-						menuDeleteItem();
-						condition2 = false;
+                while (condition2)
+                {
+                etape = false;
+                    c2 = 'p';
+                    menuCrudItem();
+                    if (kbhit()) {
+                        c2 = getchar();
+                    }
+                    switch (c2){
+                        case 'a':
+                            menuCreateItem();
+                            condition2 = false;
+                            break;
+                        case 'd':
+                            menuDeleteItem();
+                            condition2 = false;
 
-						break;
-					case 'm':
-						menuModifyItem();
-						condition2 = false;
+                            break;
+                        case 'm':
+                            menuModifyItem();
+                            condition2 = false;
 
-						break;
+                            break;
 
-				}
-			}
+                    }
+                }
 			break;
 				
 

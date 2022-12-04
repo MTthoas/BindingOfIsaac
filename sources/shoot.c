@@ -31,7 +31,7 @@
 #endif 
 
 	
-void * shootUp(void *shootParams){
+void * shootUp(void *shootParams) {
 	    Shoot * shoot = malloc(sizeof(Shoot));
 	if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->player->positionY-1][((ShootParams*)shootParams)->player->positionX] == ' '){
         shoot->positionX = ((ShootParams*)shootParams)->player->positionX;

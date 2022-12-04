@@ -13,11 +13,9 @@
 #define NUMBER_ROOM_MAX 30
 #define NUMBER_STAGES_MAX 62
 
-#include "monster.h"
-typedef struct Monster Monster;
-
 #include "objects.h"
 #include "Player.h"
+#include "monster.h"
 
 struct Door{
     char doorTop;
@@ -27,7 +25,7 @@ struct Door{
 };
 
 // Structure Donjon
-struct Donjon{
+typedef struct Donjon{
 
     char name[256];
     int numberStage;
@@ -72,9 +70,7 @@ struct Donjon{
 
     }stages[NUMBER_STAGES_MAX];
     
-};
-
-typedef struct Donjon Donjon;
+} Donjon;
 
 // Room* newRoom(int number);
 
@@ -83,15 +79,16 @@ typedef struct Donjon Donjon;
 int * RandomArrayForAttribution(int number);
 void InitialisationGame(Donjon * d, int stageNum);
 int numberOfRooms();
-int PickRoomNotUsed(struct Donjon * d, int NumberOfRoomsInt, int stage);
-void newStageByNumber(struct Donjon * d, int stage, int numberOfRooms);
-void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms);
+int PickRoomNotUsed(Donjon * d, int NumberOfRoomsInt, int stage);
+void newStageByNumber(Donjon * d, int stage, int numberOfRooms);
+void InitialiseRoom(Donjon * d, int stage, int numberOfRooms);
 char ** RoomByNumber(int height, int length, int number);
 int NumberOfDoorsByRoom(char ** s, int height, int width);
 int * RandomBetweenRange(int number, int zero);
-int NowRoomIsUsed(struct Donjon *d, int NumberOfRoomsInt, int id);
+int NowRoomIsUsed(Donjon *d, int NumberOfRoomsInt, int id);
 void InitialisationGameByStagesOptionsForArms(Donjon * d, int stage, int numbe);
 void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms);
+void spawnMonster(Donjon * d, Monster * monster, int stage, int id );  
 
 
 #endif

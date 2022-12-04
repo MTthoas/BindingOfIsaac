@@ -416,6 +416,42 @@ void PurgeRoomOfBoss(Donjon *d, int stage, int id){
 
 }
 
+void playerMoveUp(Donjon* donjon, int stage, int roomID, Player* player) {
+    donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = ' ';
+    player->positionY-=1;
+}
+
+void playerMoveDown(Donjon* donjon, int stage, int roomID, Player* player) {
+    donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = ' ';
+    player->positionY+=1;
+}
+
+void playerMoveRight(Donjon* donjon, int stage, int roomID, Player* player) {
+    donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = ' ';
+    player->positionX += 2;
+}
+
+void playerMoveLeft(Donjon* donjon, int stage, int roomID, Player* player) {
+    donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = ' ';
+    player->positionX -= 2;
+}
+
+void playerLoseLife(Player* player, float damageTaken) {
+    if(player->shield > 0) { // player got shield
+        if(damageTaken > player->shield) { // more damage than shield
+            damageTaken -= player->shield;
+            player->shield = 0;
+            player->hpMax -= damageTaken;
+            player->canTakeBonusItem = 0;
+        } else { 
+            player->shield -= damageTaken;
+        }
+    } else { // player does not have shield
+        player->hpMax -= damageTaken;
+        player->canTakeBonusItem = 0;
+    }
+}
+
 void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, int * change, Player* player, int NumberOfRoomsInt, int id, int axeX, int axeY, Monster * arrayMonster) {
 
     int *pId = &id;
@@ -423,6 +459,8 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     int bossActive = 0;
     int BossInfinite = 0;
     int itemIsSet = 0;
+    char FuturPosition = ' ';
+
 
     int iteration = 0;
     bool condition = true;  
@@ -448,8 +486,6 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
             }
         }
     }
-
-
 
 	while (condition) {
 
@@ -503,26 +539,39 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         bossActive = 1;
                     }
 
+                    // Initialisation
                     player->directionView = 'z';
+                    FuturPosition = d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX]; 
 
-                    if(d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] != 'W' && d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] != Boss->firstLetter && d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX] != 'L'){
+                    if(FuturPosition == ' ' 
+                    || FuturPosition == 'D' 
+                    || FuturPosition == 'B' 
+                    || FuturPosition == 'I' 
+                    || FuturPosition == 'J' 
+                    || FuturPosition == 'S'
+                    || FuturPosition == 'N'
+                    || (FuturPosition == 'G' && player->flight)) {
 
-                        d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
-                        player->positionY--;
+                         playerMoveUp(d, stage, id, player);
 
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N'){
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N') {
                             * change = 1;
                             break;
                         }
+
+                        // if run trough spike then lose life
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'S') {
+                            playerLoseLife(player, 1);
+                            break;
+                        }
                         
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I' ){
+                        // if you change room : 
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'V' ) {
                             axeY--;
-
-                            //   int temp2 = gestionRoom(d, stage, id, axeX, axeY);
-
                             player->positionY = d->stages[stage].rooms[id].height - 2;
                             changeOfRoom = 1;   
                         }
+
                     }
 
                     if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
@@ -531,31 +580,46 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
 				break;
 
-				case 's':
+				case 's': // move down
 
                    if( d->stages[stage].rooms[id].name == 'B' ) {
                         bossActive = 1;
                     }
 
                     player->directionView = 's';
+                    FuturPosition = d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX];  
 
-					if (d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] != 'W' && d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] != Boss->firstLetter && d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] != 'L') {
-
-
-						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
-						player->positionY++;
+                    if(FuturPosition == ' ' 
+                    || FuturPosition == 'D' 
+                    || FuturPosition == 'B' 
+                    || FuturPosition == 'I' 
+                    || FuturPosition == 'J' 
+                    || FuturPosition == 'S'
+                    || FuturPosition == 'N'
+                    || (FuturPosition == 'G' && player->flight)) {
                         
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N'){
+                        // move down :
+                        playerMoveDown(d, stage, id, player);
+
+                        // change of stage
+                           if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N') {
                             * change = 1;
                             break;
                         }
 
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I'){
-                                axeY++;
-                                 player->positionY = 1;
-                                 changeOfRoom = 1;   
-                       }
-					}
+                        // if run trough spike then lose life
+                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'S') {
+                            playerLoseLife(player, 1);
+                            break;
+                        }
+                        
+                        // if you change room : 
+                       if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'V' ) {
+                            axeY++;
+                            player->positionY = 1;
+                            changeOfRoom = 1;  
+                        }
+                    }
 
                     if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
                         setItemEffects(d->stages[stage].rooms[id].object, player);            
@@ -563,71 +627,104 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
 				break;
 
-				case 'q':
+				case 'q': // move left
                 
                    if( d->stages[stage].rooms[id].name == 'B' ){
                         bossActive = 1;
                     }
 
                     player->directionView = 'q';
+                    FuturPosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2];
                     
+                        if(FuturPosition == ' ' 
+                        || FuturPosition == 'D' 
+                        || FuturPosition == 'B' 
+                        || FuturPosition == 'I' 
+                        || FuturPosition == 'J' 
+                        || FuturPosition == 'S'
+                        || FuturPosition == 'N'
+                        || (FuturPosition == 'G' && player->flight)) {
+                        
+                            
+                            // move left :
+                            playerMoveLeft(d, stage, id, player);
 
-					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] != 'W' && d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] != Boss->firstLetter && d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2] != 'L') {
-
-						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
-						player->positionX -= 2;
-
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N'){
+                            // change of stage
+                           if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N') {
                             * change = 1;
                             break;
-                        }
-					
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX ] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I'){                                                                
+                            }
+
+                        // if run trough spike then lose life
+                            if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'S') {
+                                playerLoseLife(player, 1);
+                                break;
+                            }
+                        
+                        // if you change room : 
+                            if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'V' ) {
                                 axeX--;
 
-                               if((d->stages[stage].rooms[id].width - 2) % 2 == 0){
+                               if((d->stages[stage].rooms[id].width - 2) % 2 == 0) {
                                     player->positionX = d->stages[stage].rooms[id].width - 4;
-                                }else{
+                                } else {
                                     player->positionX = d->stages[stage].rooms[id].width - 3;
                                 }
                                 
-                                changeOfRoom = 1;
-                        }
+                                changeOfRoom = 1;  
+                            }
+                    }
 
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
-                                setItemEffects(d->stages[stage].rooms[id].object, player);            
-                        }
+                    if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
+                        setItemEffects(d->stages[stage].rooms[id].object, player);            
+                    }
 
-					}
                 break;
                     
-				case 'd':
+				case 'd': // move right
 
-                   if( d->stages[stage].rooms[id].name == 'B' ){
+                   if( d->stages[stage].rooms[id].name == 'B' ) {
                         bossActive = 1;
                     }
 
                     player->directionView = 'd';
+                    FuturPosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2];
 
-					if (d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] != 'W' && d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] != Boss->firstLetter && d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2] != 'L') {
-						d->stages[stage].rooms[id].room[player->positionY][player->positionX] = ' ';
-						player->positionX += 2;
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N'){
+                        if(FuturPosition == ' ' 
+                        || FuturPosition == 'D' 
+                        || FuturPosition == 'B' 
+                        || FuturPosition == 'I' 
+                        || FuturPosition == 'J' 
+                        || FuturPosition == 'S'
+                        || FuturPosition == 'N'
+                        || (FuturPosition == 'G' && player->flight)) {
+                        
+                            // move right :
+                            playerMoveRight(d, stage, id, player);
+
+                            // change of stage
+                           if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'N') {
                             * change = 1;
                             break;
-                        }
-				
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I' ){
-                                axeX++;
-                                player->positionX = 2;
-                                changeOfRoom = 1;             
-                        }
+                            }
 
-                        if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
-                                setItemEffects(d->stages[stage].rooms[id].object, player);            
-                        }
+                        // if run trough spike then lose life
+                            if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'S') {
+                                playerLoseLife(player, 1);
+                                break;
+                            }
                         
-					}
+                        // if you change room : 
+                            if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'D' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'B' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'I' || d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'V' ) {
+                                axeX+=1;
+                                player->positionX = 2;
+                                changeOfRoom = 1;  
+                            }
+                    }
+
+                    if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == 'O' && itemIsSet == 1) {
+                        setItemEffects(d->stages[stage].rooms[id].object, player);            
+                    }
 
                 break;
 
@@ -965,19 +1062,3 @@ void setItemEffects(Object* item, Player* player) {
     player->ss += item->spectralShot;
 }
 
-void playerLoseLife(Player* player, float damageTaken) {
-    if(player->shield > 0) { // player got shield
-        if(damageTaken > player->shield) { // more damage than shield
-            damageTaken -= player->shield;
-            player->shield = 0;
-            player->hpMax -= damageTaken;
-            player->canTakeBonusItem = 0;
-        } else { 
-            player->shield -= damageTaken;
-        }
-    } else { // player does not have shield
-        player->hpMax -= damageTaken;
-        player->canTakeBonusItem = 0;
-    }
-}
-    

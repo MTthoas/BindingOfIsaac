@@ -33,8 +33,8 @@ void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms);
 
 int InitialiseStructureRandomStage(struct Donjon * d, int stageNum, int NumberOfRoomsInt){
 
-        for (int v = 0; v < NumberOfRoomsInt + 1; v++) {
-            for (int y = 0; y < NumberOfRoomsInt + 1; y++) {
+        for (int v = 0; v < NumberOfRoomsInt + 1; v+=1) {
+            for (int y = 0; y < NumberOfRoomsInt + 1; y+=1) {
 
                 // Si on est à la moitié de la boucle, on créer un P, la salle principale.
 
@@ -42,7 +42,7 @@ int InitialiseStructureRandomStage(struct Donjon * d, int stageNum, int NumberOf
                     d->stages[stageNum].stage[v][y] = 'P';     
                     d->stages[stageNum].id = 1;     
 
-                    for(int u = 0; u < NumberOfRoomsInt; u++) {
+                    for(int u = 0; u < NumberOfRoomsInt; u+=1) {
 
                         int NumberOfDoors = NumberOfDoorsByRoom(d->stages[stageNum].rooms[u].room, d->stages[stageNum].rooms[u].height, d->stages[stageNum].rooms[u].width);                     
                             int * array = malloc(sizeof(int *) * NumberOfDoors);
@@ -52,7 +52,7 @@ int InitialiseStructureRandomStage(struct Donjon * d, int stageNum, int NumberOf
 
                                int * randomNumberDoors = RandomBetweenRange(NumberOfDoors, 0);
 
-                               for(int j = 0; j < NumberOfDoors; j++) {
+                               for(int j = 0; j < NumberOfDoors; j+=1) {
 
                                     int random = randomNumberDoors[j];
                                     char s = d->stages[stageNum].rooms[u].Doors[random];
@@ -79,9 +79,9 @@ int InitialiseStructureRandomStage(struct Donjon * d, int stageNum, int NumberOf
         }
 
           int iteration = 0;
-          for (int v = 0; v < NumberOfRoomsInt + 1; v++) {
+          for (int v = 0; v < NumberOfRoomsInt + 1; v+=1) {
 
-                for (int y = 0; y < NumberOfRoomsInt + 1; y++) {
+                for (int y = 0; y < NumberOfRoomsInt + 1; y+=1) {
 
                     // Permet de se placer au centre
                    
@@ -98,7 +98,7 @@ int InitialiseStructureRandomStage(struct Donjon * d, int stageNum, int NumberOf
 
                             printf("Number of Rooms : %d\n", NumberOfRoomsInt);
                              
-                            for (int y = 0; y < NumberOfRoomsInt; y++) {
+                            for (int y = 0; y < NumberOfRoomsInt; y+=1) {
 
                                 d->stages[stageNum].rooms[y].roomUsed = 0;
 
@@ -106,10 +106,10 @@ int InitialiseStructureRandomStage(struct Donjon * d, int stageNum, int NumberOf
 
                             // Permet de placer les salles en dehors des salles initialiser à côté de la BossRoom.
 
-                            for(int j = 0; j+addToVar < 4; j++) {
+                            for(int j = 0; j+addToVar < 4; j+=1) {
 
                                 if(j == 4 && iteration == 2){
-                                    addToVar++;
+                                    addToVar+=1;
                                     continue;
                                 }
 
@@ -123,7 +123,7 @@ int InitialiseStructureRandomStage(struct Donjon * d, int stageNum, int NumberOf
 
                                         d->stages[stageNum].stage[v][y-1] = 'R';
                                         blockA = 1;
-                                        iteration++;
+                                        iteration+=1;
                                         d->stages[stageNum].rooms[numbe].AxeY = 0;
                                         d->stages[stageNum].rooms[numbe].AxeX = -1;
                                }
@@ -134,7 +134,7 @@ int InitialiseStructureRandomStage(struct Donjon * d, int stageNum, int NumberOf
 
                                         d->stages[stageNum].stage[v][y+1] = 'R';
                                         blockB = 1;
-                                        iteration++;
+                                        iteration+=1;
                                          d->stages[stageNum].rooms[numbe].AxeY = 0;
                                          d->stages[stageNum].rooms[numbe].AxeX = 1;
 
@@ -146,7 +146,7 @@ int InitialiseStructureRandomStage(struct Donjon * d, int stageNum, int NumberOf
                                         
                                         d->stages[stageNum].stage[v-1][y] = 'R';
                                         blockC = 1;
-                                        iteration++;
+                                        iteration+=1;
                                          d->stages[stageNum].rooms[numbe].AxeY = -1;
                                          d->stages[stageNum].rooms[numbe].AxeX = 0;
                                }
@@ -157,7 +157,7 @@ int InitialiseStructureRandomStage(struct Donjon * d, int stageNum, int NumberOf
 
                                         d->stages[stageNum].stage[v+1][y] = 'R';
                                         blockD = 1;
-                                        iteration++;
+                                        iteration+=1;
                                         d->stages[stageNum].rooms[numbe].AxeY = 1;
                                         d->stages[stageNum].rooms[numbe].AxeX = 0;
   
@@ -177,7 +177,7 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
             int bossRoom = 0;
             int exit = 0;
 
-            for(int t = 2; t <= NumberOfRoomsInt-iteration + 2; t++) {
+            for(int t = 2; t <= NumberOfRoomsInt-iteration + 2; t+=1) {
 
                 printf("Number of room : %d\n", t);
                 
@@ -229,7 +229,7 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                     }
                     
 
-                    iterationTest++;
+                    iterationTest+=1;
                     printf("Iteration : %d\n", iterationTest);
                     if(iterationTest > 57) {
                         return 1;
@@ -252,8 +252,8 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                                         
                                     
                                     }
-                                        iterationRoom++;
-                                        iterationByRoom++;
+                                        iterationRoom+=1;
+                                        iterationByRoom+=1;
                                     break;
                                 }
                             }else{
@@ -263,8 +263,8 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                                     && d->stages[stageNum].stage[randomHeight+2][randomLength+2] == ' ' && d->stages[stageNum].stage[randomHeight-2][randomLength+2] == ' ' ){
                                         if(t == NumberOfRoomsInt-iteration + 1 ){
                                             d->stages[stageNum].stage[randomHeight][randomLength+1] = 'B';
-                                            iterationRoom++;
-                                            iterationByRoom++;
+                                            iterationRoom+=1;
+                                            iterationByRoom+=1;
                                             bossRoom = 1;
                          
                                         }
@@ -288,8 +288,8 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                                       
         
                                     }
-                                        iterationRoom++;
-                                        iterationByRoom++;
+                                        iterationRoom+=1;
+                                        iterationByRoom+=1;
                                     break;
                                 }
                             }else{
@@ -298,8 +298,8 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                                      && d->stages[stageNum].stage[randomHeight+2][randomLength-2] == ' ' && d->stages[stageNum].stage[randomHeight-2][randomLength-2] == ' ' ){
                                          if(t == NumberOfRoomsInt-iteration + 1  ){
                                             d->stages[stageNum].stage[randomHeight][randomLength-1] = 'B';
-                                             iterationRoom++;
-                                            iterationByRoom++;
+                                             iterationRoom+=1;
+                                            iterationByRoom+=1;
                                             bossRoom = 1;
                                         
                                         }
@@ -323,8 +323,8 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                                             d->stages[stageNum].stage[randomHeight+1][randomLength] = 'R';
                                                                                 
                                         }
-                                            iterationRoom++;
-                                            iterationByRoom++;
+                                            iterationRoom+=1;
+                                            iterationByRoom+=1;
                                         break;
                                 }
                             }else{
@@ -333,8 +333,8 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                                     && d->stages[stageNum].stage[randomHeight+2][randomLength+2] == ' ' && d->stages[stageNum].stage[randomHeight+2][randomLength-2] == ' ' ){
                                         if(t == NumberOfRoomsInt-iteration + 1 ){
                                             d->stages[stageNum].stage[randomHeight+1][randomLength] = 'B';
-                                                iterationRoom++;
-                                                iterationByRoom++;
+                                                iterationRoom+=1;
+                                                iterationByRoom+=1;
                                                 bossRoom = 1;
                                         }
                                     }
@@ -358,8 +358,8 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                                         
                                         
                                     }
-                                        iterationRoom++;
-                                        iterationByRoom++;
+                                        iterationRoom+=1;
+                                        iterationByRoom+=1;
                                     break;
                                 }
                             }else{
@@ -368,8 +368,8 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                                     &&  d->stages[stageNum].stage[randomHeight-2][randomLength+2] == ' ' && d->stages[stageNum].stage[randomHeight-2][randomLength-2] == ' ' ){
                                         if(t == NumberOfRoomsInt-iteration + 1){
                                             d->stages[stageNum].stage[randomHeight-1][randomLength] = 'B';
-                                                iterationRoom++;
-                                                iterationByRoom++;
+                                                iterationRoom+=1;
+                                                iterationByRoom+=1;
                                                 bossRoom = 1;
                                         }
                                     }
@@ -511,12 +511,7 @@ void InitialisationGame(Donjon * d, int stageNum) {
             int iterationRoom = 0;
             for (int v = 0; v < NumberOfRoomsInt + 2; v++) {
                 for (int y = 0; y < NumberOfRoomsInt + 2; y++) {
-
                     printf("%c ", d->stages[stageNum].stage[v][y]);
-                    if(d->stages[stageNum].stage[v][y] == 'R'){
-                        iterationRoom++;
-                    }
-
 
                 }
                 printf("\n");
@@ -544,8 +539,8 @@ void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms){
     int varA = 0;
     int varB = 0;
 
-       for(int i = 0; i < numberOfRooms+2; i++){
-        for (int v = 0; v < numberOfRooms+2; v++) {
+       for(int i = 0; i < numberOfRooms+2; i+=1){
+        for (int v = 0; v < numberOfRooms+2; v+=1) {
             if(d->stages[stage].stage[i][v] == 'P'){
                 varA = i;
                 varB = v;
@@ -556,11 +551,11 @@ void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms){
 
 
 
-    for(int i = 0; i < numberOfRooms+2; i++){
-        for (int v = 0; v < numberOfRooms+2; v++) {
+    for(int i = 0; i < numberOfRooms+2; i+=1){
+        for (int v = 0; v < numberOfRooms+2; v+=1) {
             
             if(d -> stages[stage].stage[i][v] == 'R' && d -> stages[stage].stage[i+1][v] != 'P' && d -> stages[stage].stage[i-1][v] != 'P' && d -> stages[stage].stage[i][v+1] != 'P' && d -> stages[stage].stage[i][v-1] != 'P'){
-                printf("Iteration : %d\n", iteration++);
+                printf("Iteration : %d\n", iteration+=1);
 
                 numbe = PickRoomNotUsed(d, numberOfRooms, stage);
 
@@ -583,8 +578,8 @@ void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms){
 
 void InitialisationGameByStagesOptionsForArms(Donjon *d, int stage, int numbe){
 
-    for (int i = 0; i < d -> stages[stage].rooms[numbe].height; i++) {
-		for (int y = 0; y < d -> stages[stage].rooms[numbe].width; y++) {
+    for (int i = 0; i < d -> stages[stage].rooms[numbe].height; i+=1) {
+		for (int y = 0; y < d -> stages[stage].rooms[numbe].width; y+=1) {
 
 
         }
@@ -645,15 +640,15 @@ int * RandomArrayForAttribution(int number){
 
            // Tant que le nombre est dans tab, on re-génère la variable random.
 
-            for(int i = 0; i < number; i++) {
+            for(int i = 0; i < number; i+=1) {
                 if(tab[i] == newNumber) {
-                    AlreadyInTab++;
+                    AlreadyInTab+=1;
                 }
             }
 
             if(AlreadyInTab == 0) {
                 tab[iteration] = newNumber;
-                iteration++;
+                iteration+=1;
             }else{
                 continue;
             }
@@ -687,15 +682,15 @@ int * RandomBetweenRange(int number, int zero){
 
            // Tant que le nombre est dans tab, on re-génère la variable random.
 
-            for(int i = 0; i < number; i++) {
+            for(int i = 0; i < number; i+=1) {
                 if(tab[i] == newNumber) {
-                    AlreadyInTab++;
+                    AlreadyInTab+=1;
                 }
             }
 
             if(AlreadyInTab == 0) {
                 tab[iteration] = newNumber;
-                iteration++;
+                iteration+=1;
             }else{
                 continue;
             }
@@ -705,7 +700,7 @@ int * RandomBetweenRange(int number, int zero){
             }
         }
 
-        for(int i = 0; i < number; i++) {
+        for(int i = 0; i < number; i+=1) {
             tab[i] = tab[i] - 1;
         }
     
@@ -751,7 +746,7 @@ void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms) {
                 tab = malloc(sizeof(int) * 3);
                 stockPtr = strtok(stockPtr, "|");
 
-                for (int j = 0; stockPtr != NULL; j++) {
+                for (int j = 0; stockPtr != NULL; j+=1) {
                     tab[j] = atoi(stockPtr);
                     stockPtr = strtok(NULL, "|");
                 }
@@ -766,7 +761,7 @@ void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms) {
             d-> stages[stage].rooms[iteration].room = malloc(sizeof(char) * height);
 
         
-            for (int i = 0; i < tab[0]; i++) {
+            for (int i = 0; i < tab[0]; i+=1) {
                 d-> stages[stage].rooms[iteration].room[i] = malloc(sizeof(char) * width);
                 free(d-> stages[stage].rooms[iteration].room[i]);
                 d-> stages[stage].rooms[iteration].room[i] = malloc(sizeof(char) * width);
@@ -787,30 +782,30 @@ void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms) {
 
                 // Permet d'indiquer si y'a une porte, à gauche, à droite, en haut ou en bas.
 
-                for(int i  = 0; i< height; i++){
+                for(int i  = 0; i< height; i+=1){
 
-                    for(int j = 0; j < width; j++){
+                    for(int j = 0; j < width; j+=1){
 
                         if(d-> stages[stage].rooms[iteration].room[i][j] == 'D'){
 
                             if(i == 0){
                                 d-> stages[stage].rooms[iteration].Doors[iterationDoors] = 'T';
-                                    iterationDoors++;
+                                    iterationDoors+=1;
                                     // printf("[%d] [%d]\n", i, j);
                             }
                             if(i == height-1){
                                 d-> stages[stage].rooms[iteration].Doors[iterationDoors] = 'B';
-                                    iterationDoors++;
+                                    iterationDoors+=1;
                                     // printf("[%d] [%d]\n", i, j);
                             }
                             if(j == 0){
                                d-> stages[stage].rooms[iteration].Doors[iterationDoors] = 'L';
-                                   iterationDoors++;
+                                   iterationDoors+=1;
                                 //    printf("[%d] [%d]\n", i, j);
                             }
                             if(j == width-4 || j == width-3 || j == width-2 || j == width-1 || j == width){
                                 d-> stages[stage].rooms[iteration].Doors[iterationDoors] = 'R';
-                                    iterationDoors++;
+                                    iterationDoors+=1;
                                     // printf("[%d] [%d]\n", i, j);
                             }
 
@@ -820,12 +815,12 @@ void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms) {
 
             // // Affichage des portes
 
-            // for(int i = 0; i < iterationMallocDoors; i++){
+            // for(int i = 0; i < iterationMallocDoors; i+=1){
             //     printf("Door %d : %c \n", i+1, d-> stages[stage].rooms[iteration].Doors[i]);
             // }
 
 
-            iteration++;
+            iteration+=1;
             free(tab); 
             free(stockPtr);
 
@@ -870,7 +865,7 @@ char ** RoomByNumber(int height, int length, int number) {
 
 
     while ((read = getline( & line, & len, fp)) != -1) {
-        iteration++;
+        iteration+=1;
 
         /* Permet de cibler la room sélectionné */
 
@@ -889,7 +884,7 @@ char ** RoomByNumber(int height, int length, int number) {
             }
 
             lines[num] = line;
-            num++;
+            num+=1;
 
             line = NULL;
             len = 0;
@@ -922,12 +917,12 @@ void newStageByNumber(struct Donjon * d, int stage, int numberOfRooms) {
 
     d -> stages[stage].stage = malloc(sizeof(char * ) * numberOfRooms + 1);
 
-    for (int i = 0; i < numberOfRooms + 1; i++) {
+    for (int i = 0; i < numberOfRooms + 1; i+=1) {
         d -> stages[stage].stage[i] = malloc(sizeof(char) * numberOfRooms + 1);
     }
 
-    for (int i = 0; i < numberOfRooms + 1; i++) {
-        for (int y = 0; y < numberOfRooms + 1; y++) {
+    for (int i = 0; i < numberOfRooms + 1; i+=1) {
+        for (int y = 0; y < numberOfRooms + 1; y+=1) {
                 d -> stages[stage].stage[i][y] = ' ';
             
         }
@@ -955,7 +950,7 @@ int numberOfRooms() {
 
     while ((read = getline( & line, & len, fp)) != -1) {
         if (strcspn(line, "[") == 0) {
-            iteration++;
+            iteration+=1;
         }
     }
 
@@ -978,8 +973,8 @@ int NumberOfDoorsByRoom(char ** s, int height, int width){
 
     int iteration = 0;
 
-    for(int i  = 0; i< height; i++){
-        for(int y = 0; y < width+1; y++){
+    for(int i  = 0; i< height; i+=1){
+        for(int y = 0; y < width+1; y+=1){
             if(s[i][y] == 'D'){
                 iteration+=1;
             }
