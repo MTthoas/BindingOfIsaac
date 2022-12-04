@@ -28,6 +28,7 @@
 
 
 void spawnMonster(Donjon * d, Monster * monster, int stage, int id){
+
     srand(time(NULL));
     int randomPositionX,randomPositionY;
     int heightRoom = d->stages[stage].rooms[id].height - 1;
@@ -45,6 +46,7 @@ void spawnMonster(Donjon * d, Monster * monster, int stage, int id){
     letterForMonster = toupper(letterForMonster);
     monster->firstLetter = letterForMonster;
     d->stages[stage].rooms[id].room[monster->positionY][monster->positionX] = letterForMonster;        
+    
 }
 
 void monsterShoot(Monster * monster, Player * player) {

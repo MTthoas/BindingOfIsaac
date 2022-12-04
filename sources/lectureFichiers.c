@@ -462,7 +462,6 @@ Monster* fichierMonsterToListeMonster() {
     int nbrMonster = getNomberMonster(fichier);
     Monster * arrayMonster = malloc(sizeof(Monster) * nbrMonster+1);
     
-
     int idMonster = 0;
     char* name = "";
     float hpMax = 0;

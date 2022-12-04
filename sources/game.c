@@ -420,7 +420,6 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Monster * Boss, int stage
 
     int *pId = &id;
     int changeOfRoom = 1;
-    int randomMonsterId = 0, randomNumberMonster = 0;
     int bossActive = 0;
     int BossInfinite = 0;
     int itemIsSet = 0;
@@ -474,15 +473,15 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Monster * Boss, int stage
             GestionDoorsForMobRoom(d, stage, id, 1);
 		}
 
-        if (c == 'm') {
+        // if (c == 'm') {
 
             
-            Monster * monster = getMonsterById(arrayMonster, 0);
+        //     Monster * monster = getMonsterById(arrayMonster, 0);
             
-            spawnMonster(d, monster, stage, id);
-            shootParams->monster = monster;
+        //     spawnMonster(d, monster, stage, id);
+        //     shootParams->monster = monster;
 
-        }
+        // }
 
 		if (c != 'e') {
  
@@ -712,6 +711,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Monster * Boss, int stage
                         Boss->hpMax = 100;
                         Boss->shoot = 1;
                         shootParams->condition = 1;
+
                         if( shootParams->monster == NULL){
                             shootParams->monster = Boss;
                         }
@@ -727,13 +727,14 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Monster * Boss, int stage
                         Boss->idMonster = 1;                         
                         Boss->firstLetter = 'L';                         
                         Boss->name = "Lenina";                       
-                        Boss->hpMax = 300;                         
+                        Boss->hpMax = 300; 
+
                         Boss->shoot = 1;                           
                         shootParams->condition = 1; 
-
+                     
                         if( shootParams->monster == NULL) {                             
                             shootParams->monster = Boss;                         
-                        }                     
+                        }
 
                         pthread_create(&thread, NULL, Lenina, shootParams);   
                     } 
@@ -751,21 +752,6 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Monster * Boss, int stage
 
                         pthread_create(&thread, NULL, bossAthina, shootParams);
                     }
-
-                     if(stage == 2){
-                        InitialiseBossRoom(d, stage, id, 'J');   
-                        Boss->firstLetter = 'A';
-                        Boss->name = "Athina";
-                        Boss->hpMax = 450;
-                        Boss->shoot = 1;
-                        shootParams->condition = 1;
-                        if( shootParams->monster == NULL){
-                            shootParams->monster = Boss;
-                        }
-
-                        pthread_create(&thread, NULL, bossAthina, shootParams);
-                    }
-
                     
                     bossActive = 0;     
                     BossInfinite = 1;    
@@ -782,11 +768,11 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Monster * Boss, int stage
                 GestionDoorsForMobRoom(d, stage, id, 0);
                 shootParams->id = id;                
                 changeOfRoom = 0;
-                (void) randomMonsterId;
-                (void) randomNumberMonster;
+
+                (void) arrayMonster;
                 
                 // if (d->stages[stage].rooms[id].name == 'R'){
-                //     //Créer une liste de monstre aléatoire, d'une taille aléatoire
+                // //     //Créer une liste de monstre aléatoire, d'une taille aléatoire
                 //     randomNumberMonster = 2 + rand() % (5 - 2);
                 //     // To fix
                 //     Monster * newArrayMonster = malloc(sizeof(Monster) *randomNumberMonster +1);
@@ -800,8 +786,9 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Monster * Boss, int stage
                 //     }
 
                 //     for(int y = 0; y < randomNumberMonster; y++ ){
-                //         Monster * monsterDisplay = getMonsterById(newArrayMonster,y);
-                //         spawnMonster(d,monsterDisplay,stage,id);
+                //         // Monster * monsterDisplay = getMonsterById(newArrayMonster,y);
+                //         // spawnMonster(d,monsterDisplay,stage,id);
+
                 //     }
                 // }
 

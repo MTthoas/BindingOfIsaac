@@ -469,8 +469,11 @@ void menuGame(){
 
                     Donjon * d = malloc(sizeof(Donjon));
                     Monster * Boss = malloc(sizeof(Monster));
-                    Monster * arrayMonster = fichierMonsterToListeMonster();
+                    
+                    Monster * arrayMonster = malloc(sizeof(Monster) * 10);
 
+                    // Monster * arrayMonster = fichierMonsterToListeMonster();
+                    
                     int id = 0;
 
                     ShootParams *shootParams = malloc(sizeof(struct ShootParams));
