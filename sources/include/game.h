@@ -43,4 +43,9 @@ void InitialiseBossRoom(Donjon * d, int stage, int id, char letter);
  */
 void playerLoseLife(Player* player, float damageTaken);
 
+void playerMoveUp(Donjon* donjon, int stage, int roomID, Player* player);
+void playerMoveDown(Donjon* donjon, int stage, int roomID, Player* player);
+void playerMoveLeft(Donjon* donjon, int stage, int roomID, Player* player);
+void playerMoveRight(Donjon* donjon, int stage, int roomID, Player* player);
+
 #endif

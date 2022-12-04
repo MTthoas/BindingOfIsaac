@@ -355,14 +355,14 @@ void printProgress(double percentage) {
     fflush(stdout);
 }
 
-void GameRecur(Donjon *d, Monster * Boss, ShootParams * shootParams, Player * player, int stage, int * change, int NumberOfRoomsInt, int id, int axeX, int axeY) {
+void GameRecur(Donjon *d, Monster * Boss, ShootParams * shootParams, Player * player, int characterID, int stage, int * change, int NumberOfRoomsInt, int id, int axeX, int axeY) {
     player->canTakeBonusItem = 1;
 	gestionGame(d, shootParams, Boss, stage, change, player, NumberOfRoomsInt, id, axeX, axeY);
 				
-    if(player->hpMax <= 0){
+    if(player->hpMax <= 0) { // player dead
         system("clear");
         printf("===========================================================\n");
-        printf("=========                YOU ARE DEAD                    ==============\n");
+        printf("=========                YOU ARE DEAD        ==============\n");
         printf("===========================================================\n");
         printf("\n");
 
@@ -371,8 +371,9 @@ void GameRecur(Donjon *d, Monster * Boss, ShootParams * shootParams, Player * pl
         #else 
         usleep(5000000); 
         #endif 
-        player->hpMax = 100;
-        GameRecur(d, Boss, shootParams, player, stage, change, NumberOfRoomsInt, id, axeX, axeY);
+        
+        initialisePlayerStats(player, characterID);
+        GameRecur(d, Boss, shootParams, player, characterID, stage, change, NumberOfRoomsInt, id, axeX, axeY);
     }
 
 
@@ -380,8 +381,8 @@ void GameRecur(Donjon *d, Monster * Boss, ShootParams * shootParams, Player * pl
 
 void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id ) {
 
-    for (int i = 0; i < d -> stages[stage].rooms[id].height; i++) {
-        for (int y = 0; y < d -> stages[stage].rooms[id].width; y++) {
+    for (int i = 0; i < d -> stages[stage].rooms[id].height; i+=1) {
+        for (int y = 0; y < d -> stages[stage].rooms[id].width; y+=1) {
             if (i == d -> stages[stage].rooms[id].height / 2 && y == d -> stages[stage].rooms[id].width / 2) {
                 if (y % 2 == 0) {
                     d -> stages[stage].rooms[id].room[i][y] = 'P';
@@ -393,8 +394,8 @@ void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id )
         }
     }
 
-    for (int i = 0; i < d -> stages[stage].rooms[id].height; i++) {
-        for (int y = 0; y < d -> stages[stage].rooms[id].width; y++) {
+    for (int i = 0; i < d -> stages[stage].rooms[id].height; i+=1) {
+        for (int y = 0; y < d -> stages[stage].rooms[id].width; y+=1) {
             if (y % 2 == 0) {
                 if (d -> stages[stage].rooms[id].room[i][y] == 'P') {
                     player -> positionX = y;
@@ -404,8 +405,8 @@ void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id )
         }
     }
 
-    for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
-				for (int y = 0; y < d->stages[stage].rooms[id].width; y++) {
+    for (int i = 0; i < d->stages[stage].rooms[id].height; i+=1) {
+				for (int y = 0; y < d->stages[stage].rooms[id].width; y+=1) {
 					if (y % 2 == 0) {
 						if(d-> stages[stage].rooms[id].room[i][y] == 'P'){
 							printf("%s", KRED);
@@ -488,7 +489,7 @@ void menuGame(){
                     InitialiseOtherRoomsFromArms(d,stage, NumberOfRoomsInt);
                     SetColorAndPositionForPlayer(d, player, stage, id);
 
-                    GameRecur(d, Boss, shootParams, player, stage, &change, NumberOfRoomsInt, id, axeX, axeY);
+                    GameRecur(d, Boss, shootParams, player, characterID, stage, &change, NumberOfRoomsInt, id, axeX, axeY);
     
 					free(d -> stages[stage].stage);
 					free(d);
