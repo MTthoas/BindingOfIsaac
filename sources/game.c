@@ -20,7 +20,6 @@
 #include "include/mystring.h"
 #include "game.h"
 #include "shoot.h"
-#include "lectureFichiers.h"
 
 
 void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int numberOfRooms) {
@@ -254,6 +253,10 @@ void checkName(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY, int 
                     d->stages[stage].rooms[t].name = 'J';
                 }
 
+                if( d->stages[stage].stage[i + axeY][y + axeX] == 'P'){
+                    d->stages[stage].rooms[t].name = 'P';
+                }
+
             }
         }
     }
@@ -316,8 +319,7 @@ int gestionRoom(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY){
     return 0;
 }
 
-
-void InitialiseBossRoom(Donjon * d, int stage, int id, char letter) {
+void InitialiseBossRoom(Donjon * d, int stage, int id, char letter){
 
      for (int i = 0; i < d -> stages[stage].rooms[id].height; i+=1) {
         for (int y = 0; y < d -> stages[stage].rooms[id].width; y+=1) {
@@ -396,15 +398,25 @@ void GestionDoorsForMobRoom(Donjon *d, int stage, int id, int done){
                             d->stages[stage].rooms[id].room[i][y] = d->stages[stage].rooms[id].Door.doorRight;
                         }
                     }
-
                 }
         }
-
     }
 
 }
 
-void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage, int * change, Player* player, int NumberOfRoomsInt, int id, int axeX, int axeY) {
+void PurgeRoomOfBoss(Donjon *d, int stage, int id){
+
+    for(int i = 0; i<d->stages[stage].rooms[id].height; i++){
+        for(int y = 0; y< d->stages[stage].rooms[id].width; y++){
+            if(d->stages[stage].rooms[id].room[i][y] != 'W' && d->stages[stage].rooms[id].room[i][y] != 'L'){
+                d->stages[stage].rooms[id].room[i][y] = ' ';
+            }
+        }
+    }
+
+}
+
+void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, int * change, Player* player, int NumberOfRoomsInt, int id, int axeX, int axeY, Monster * arrayMonster) {
 
     int *pId = &id;
     int changeOfRoom = 1;
@@ -414,10 +426,19 @@ void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage,
     //int bonusItemIsSet = 0;
 
     int iteration = 0;
-    bool condition = true;
+    bool condition = true;  
+    int spawnMonsterVar = 0;
+
+
+    Monster * monsterVide = malloc(sizeof(Monster));
+    monsterVide->hpMax = 999;
+    struct Boss * bossVide = malloc(sizeof(Boss));
+    bossVide->hpMax = 999;
+    
+    pthread_t thread;
     int c;
 
-    d->stages[stage].rooms[id].name = 'P';
+    //->stages[stage].rooms[id].name = 'P';
     
     for (int i = 0; i < NumberOfRoomsInt; i+=1) {
         printf("ID : %d\n", d-> stages[stage].rooms[i].id);
@@ -442,6 +463,12 @@ void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage,
         if(player->hpMax <= 0){
             *pId = 0;
             condition = false;
+            player->stageAxeX = 0;
+            player->stageAxeY = 0;
+            PurgeRoomOfBoss(d, stage, id);
+            GestionDoorsForMobRoom(d, stage, id, 1);
+            d->stages[stage].rooms[id].name = 'P';
+            pthread_cancel(thread);
             break;
         }
 
@@ -456,16 +483,14 @@ void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage,
             GestionDoorsForMobRoom(d, stage, id, 1);
 		}
 
-        if (c == 'm') {
+        // if (c == 'm') {
 
-            Monster * arrayMonster = fichierMonsterToListeMonster();
+        //     Monster * monster = getMonsterById(arrayMonster, 1);
             
-            Monster * monster = getMonsterById(arrayMonster, 0);
-            
-            spawnMonster(d, monster, stage, id);
-            shootParams->monster = monster;
+        //     spawnMonster(d, monster, stage, id);
+        //     shootParams->monster = monster;
 
-        }
+        // }
 
 		if (c != 'e') {
  
@@ -667,84 +692,85 @@ void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage,
                 break;
 
                 case '8': ;
-                    // Shoot Up
-                    Monster * monsterVide = malloc(sizeof(Monster));
-
+                    // Shoot Up                 
                     if (shootParams->reload == 1){
-                        if( shootParams->monster == NULL){
+                        if( shootParams->boss == NULL){
                             if( d->stages[stage].rooms[id].name == 'O'){
-                                shootParams->monster = Boss;
-                            }else{
-                                shootParams->monster = monsterVide;
+                                shootParams->boss = Boss;
+                            }else {
+                                shootParams->boss = bossVide;
                             }
                            
+                        }
+                        if (shootParams->monster == NULL) {
+                        shootParams->monster = monsterVide;
                         }
 
                     pthread_t t2;
                     pthread_create(&t2, NULL, shootUp, shootParams);
 
                     }
-                    free(monsterVide);
                 break;
                 
                 case '5': ;
                     // Shoot Down
-                    Monster * monsterVide2 = malloc(sizeof(Monster));
                     if (shootParams->reload == 1){
-                        if( shootParams->monster == NULL){
+                        if( shootParams->boss == NULL){
                             if( d->stages[stage].rooms[id].name == 'O'){
-                                shootParams->monster = Boss;
-                            }else{
-                                shootParams->monster = monsterVide2;
+                                shootParams->boss = Boss;
+                            }else {
+                                shootParams->boss = bossVide;
                             }
+                        }
+                        if (shootParams->monster == NULL) {
+                        shootParams->monster = monsterVide;
                         }
                     pthread_t t3;
                     pthread_create(&t3, NULL, shootDown, shootParams);
                     }
-                    free(monsterVide2);
 
                 break;
                 
                 case '4': ;
                     // Shoot Left
-                    Monster * monsterVide3 = malloc(sizeof(Monster));
                     if (shootParams->reload == 1){
-                        if( shootParams->monster == NULL){
+                        if( shootParams->boss == NULL){
                             if( d->stages[stage].rooms[id].name == 'O'){
-                                shootParams->monster = Boss;
-                            }else{
-                                shootParams->monster = monsterVide3;
+                                shootParams->boss = Boss;
+                            }else {
+                                shootParams->boss = bossVide;
                             }
+                        }
+                        if (shootParams->monster == NULL) {
+                        shootParams->monster = monsterVide;
                         }
                     pthread_t t4;
                     pthread_create(&t4, NULL, shootLeft, shootParams);
                     }
-                    free(monsterVide3);
                 break;
 
                 case '6': ;
                     // Shoot Right
                     pthread_t t5;
-                    Monster * monsterVide4 = malloc(sizeof(Monster));
                     if (shootParams->reload == 1){
-                        if( shootParams->monster == NULL){
+                        if( shootParams->boss == NULL){
                             if( d->stages[stage].rooms[id].name == 'O'){
-                                shootParams->monster = Boss;
-                            }else{
-                                shootParams->monster = monsterVide4;
+                                shootParams->boss = Boss;
+                            }else {
+                                shootParams->boss = bossVide;
                             }
+                        }
+                        if (shootParams->monster == NULL) {
+                        shootParams->monster = monsterVide;
                         }
                     pthread_create(&t5, NULL, shootRight, shootParams);
                     }
-                    free(monsterVide4);
                 break;
                 
 
 			}
 
             if(bossActive == 1){
-
-                    pthread_t thread;
 
                     d->stages[stage].rooms[id].name = 'O';
 
@@ -756,11 +782,15 @@ void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage,
                         Boss->hpMax = 100;
                         Boss->shoot = 1;
                         shootParams->condition = 1;
-                        if( shootParams->monster == NULL){
-                            shootParams->monster = Boss;
+
+                        if( shootParams->boss == NULL){
+                            shootParams->boss = Boss;
                         }
 
                         pthread_create(&thread, NULL, Jagger, shootParams);
+                        // if( Boss->dead == 1){
+                        //     pthread_exit(&thread);
+                        // }
                     }
 
                     if(stage == 1) {                         
@@ -768,13 +798,14 @@ void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage,
                         Boss->idMonster = 1;                         
                         Boss->firstLetter = 'L';                         
                         Boss->name = "Lenina";                       
-                        Boss->hpMax = 300;                         
+                        Boss->hpMax = 300; 
+
                         Boss->shoot = 1;                           
                         shootParams->condition = 1; 
-
-                        if( shootParams->monster == NULL) {                             
-                            shootParams->monster = Boss;                         
-                        }                     
+                     
+                        if( shootParams->boss == NULL) {                             
+                            shootParams->boss = Boss;                         
+                        }
 
                         pthread_create(&thread, NULL, Lenina, shootParams);   
                     } 
@@ -786,12 +817,13 @@ void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage,
                         Boss->hpMax = 450;
                         Boss->shoot = 1;
                         shootParams->condition = 1;
-                        if( shootParams->monster == NULL){
-                            shootParams->monster = Boss;
+                        if( shootParams->boss == NULL){
+                            shootParams->boss = Boss;
                         }
 
                         pthread_create(&thread, NULL, bossAthina, shootParams);
-                    }    
+                    }
+                    
                     bossActive = 0;     
                     BossInfinite = 1;    
             }
@@ -800,19 +832,80 @@ void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage,
 
            
             if(changeOfRoom == 1){
-                *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);                  
+                *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);   
+            
                 OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
                 checkName(d, NumberOfRoomsInt, stage, axeX, axeY, id);
-       
+
                 GestionDoorsForMobRoom(d, stage, id, 0);
-                shootParams->id = id;
-                
+                shootParams->id = id;                
                 changeOfRoom = 0;
+                (void)spawnMonsterVar;
+
+                 if (d->stages[stage].rooms[id].name == 'R'){ 
+                   //Créer une liste de monstre aléatoire, d'une taille aléatoire
+                 
+
+                    // //Liste de monstre de la room
+                    // d->stages[stage].rooms[id].newArrayMonster = malloc(sizeof(Monster) *randomNumberMonster +1);
+
+                    // for (int i = 0; i < randomNumberMonster; i++){
+                    //     //pour chaque iteration, on crée un id randomMonsterId
+                    //     int randomMonsterId = 0 + rand() % (9 - 0);
+                    //     //pour chaque iteration randomMonsterId doit être différent de ceux déjà stocké dans le tableau
+                    //     for (int j = 0; j < i; j++){
+                    //         while (randomMonsterId == d->stages[stage].rooms[id].newArrayMonster[j].idMonster){
+                    //             randomMonsterId = 0 + rand() % (9 - 0);
+                    //         }
+                    //     }
+                    //     //ajout du monstre dans le tableau
+                    //     Monster * monster = getMonsterById(arrayMonster,randomMonsterId);
+                    //     d->stages[stage].rooms[id].newArrayMonster[i] = *monster;
+                         
+                    // }
+
+                    // // print the list of monster
+
+                    // for (int i = 0; i < randomNumberMonster; i++){
+                    //     printf("Monster %d : %s", i, d->stages[stage].rooms[id].newArrayMonster[i].name);
+                    // }
+
+                    // // sleep(30000000);
+                    
+                    // // spawn des monstres du tableau newArrayMonster dans la room
+
+                    // Monster * monsterDisplay = getMonsterById( d->stages[stage].rooms[id].newArrayMonster,1);
+                       
+                    // //spawnMonster(d,monsterDisplay,stage,id);
+
+                    int randomNumberMonster = 2 + rand() % (5 - 2);
+
+                    d->stages[stage].rooms[id].newArrayMonster = malloc(sizeof(Monster) *randomNumberMonster);
+                    d->stages[stage].rooms[id].newArrayMonster = arrayMonster;
+
+                    for(int i = 0; i < randomNumberMonster; i++){
+
+                        int randomMonsterId = 1 + rand() % 9;
+                        while(randomMonsterId == d->stages[stage].rooms[id].newArrayMonster[i].idMonster){
+                            randomMonsterId = 1 + rand() % 9;
+                        }
+                        d->stages[stage].rooms[id].newArrayMonster[i].idMonster = randomMonsterId;
+
+                        Monster * monster = getMonsterById(d->stages[stage].rooms[id].newArrayMonster, randomMonsterId);
+                        spawnMonster(d, monster, stage, id);
+                        shootParams->monster = monster;
+                        
+                    }
+                     
+          
+
+                 
+                }
             }
 
             
             if(BossInfinite == 1){
-                if(shootParams->monster->hpMax <=  0){
+                if(shootParams->boss->hpMax <=  0){
 
                     system("clear");
 
@@ -855,10 +948,12 @@ void gestionGame(Donjon * d, ShootParams *shootParams,Monster * Boss, int stage,
             printf("ETAGE : %d\n", stage);
             printf("Name : %c\n",d->stages[stage].rooms[id].name);
             printf("ID : %d\n", id);
+            printf("AXE X : %d\n", axeX);
+            printf("AXE Y : %d\n", axeY);
             // printf("ID : %d\n", id);
             if(d->stages[stage].rooms[id].name == 'O' && BossInfinite == 1){
-                printf("Boss : %s\n", shootParams->monster->name);
-                printf("Boss HP : %.f\n", shootParams->monster->hpMax);
+                printf("Boss : %s\n", shootParams->boss->name);
+                printf("Boss HP : %.f\n", shootParams->boss->hpMax);
             }
             printf("\n");
             printf("HP player: %.2f\n", player->hpMax);

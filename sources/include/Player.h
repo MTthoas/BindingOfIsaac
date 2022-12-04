@@ -13,6 +13,8 @@ struct Player {
     int ps;
     int ss;
     int flight;
+    int stageAxeX;
+    int stageAxeY;
 
     int canTakeBonusItem; // put to 0 if user loses hp
 };

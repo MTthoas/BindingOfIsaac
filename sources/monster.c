@@ -28,10 +28,14 @@
 
 
 void spawnMonster(Donjon * d, Monster * monster, int stage, int id){
+
     srand(time(NULL));
     int randomPositionX,randomPositionY;
     int heightRoom = d->stages[stage].rooms[id].height - 1;
     int widthRoom = d->stages[stage].rooms[id].width -2;
+
+    // printf("\nOne\n");
+    // sleep(1);
     while (1){
         randomPositionY = 1 + rand() % (heightRoom - 1);
         randomPositionX = 2 + rand() % (widthRoom - 2);
@@ -41,10 +45,28 @@ void spawnMonster(Donjon * d, Monster * monster, int stage, int id){
             break;
         }   
     } // la lettre doit correspondre au monstre 
+    // printf("\nSecond\n");
+    // sleep(30000);
     char letterForMonster = monster->name[0];
     letterForMonster = toupper(letterForMonster);
     monster->firstLetter = letterForMonster;
     d->stages[stage].rooms[id].room[monster->positionY][monster->positionX] = letterForMonster;        
+
+}
+
+Monster * getMonsterById(Monster * arrayMonster,int id) {
+
+    struct Monster * monster = malloc(sizeof(struct Monster)*1);
+    printf("Heoh\n");
+    
+    for(int i = 0; i < 9; i++) {
+        if(arrayMonster[i].idMonster == (id)) {
+            *monster = arrayMonster[i];
+            return monster;
+        }
+    }
+
+    return NULL;
 }
 
 void monsterShoot(Monster * monster, Player * player) {
@@ -57,13 +79,7 @@ void monsterShoot(Monster * monster, Player * player) {
 void * bossAthina(void *shootParams) {
     int BossPosX, BossPosY;
     Shoot * shoot = malloc(sizeof(Shoot));
-    int reload = 1;
-    Monster * Athina = malloc(sizeof(Monster));
-    Athina->firstLetter = 'A';
-    Athina->name = "Athina";
-    Athina->hpMax = 450;
-    Athina->shoot = 1;
-    
+    int reload = 1;    
 
     for (int i = 0; i < ((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].height; i+=1) {
         for (int y = 0; y < ((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].width; y+=1) {
@@ -87,7 +103,7 @@ void * bossAthina(void *shootParams) {
     }   
     if (reload == 1){
         reload = 0;
-        while(Athina->hpMax > 0 && ((ShootParams*)shootParams)->player->hpMax > 0){
+        while(((ShootParams*)shootParams)->boss->hpMax > 0 && ((ShootParams*)shootParams)->player->hpMax > 0){
                 #ifdef _WIN32 
     	        Sleep(400); 
     	        #else 
@@ -185,13 +201,8 @@ void * bossAthina(void *shootParams) {
             
         }
         
-    // if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] == ((ShootParams*)shootParams)->monster->firstLetter){
-    // 	((ShootParams*)shootParams)->monster->hpMax = ((ShootParams*)shootParams)->monster->hpMax - ((ShootParams*)shootParams)->player->dmg;
-    // 	if(((ShootParams*)shootParams)->monster->hpMax <= 0){
-    // 		((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] = ' ';
     }
 
-    free(Athina);
     free(shoot);
     return 0;
 }
@@ -234,26 +245,14 @@ Monster createMonster(int idMonster, char* name, float hpMax, int shoot, int fli
     return monster;
 }
 
-Monster * getMonsterById(Monster * arrayMonster,int id) {
-
-    struct Monster * monster = malloc(sizeof(struct Monster)*1);
-    for(int i = 0; i < 9; i+=1) {
-        if(arrayMonster[i].idMonster == (id)) {
-            *monster = arrayMonster[i];
-            return monster;
-        }
-    }
-
-    return NULL;
-}
 
 void * BossShoot(void * params){
 
     Shoot * shoot = malloc(sizeof(Shoot));
-    Monster * monster = malloc(sizeof(Monster));
+    Boss * boss = malloc(sizeof(Boss));
 
     
-    char letter = ((ShootParams*)params)->monster->firstLetter;
+    char letter = ((ShootParams*)params)->boss->firstLetter;
 
     int id = ((ShootParams*)params)->id;
     int stage = ((ShootParams*)params)->stage;
@@ -261,145 +260,145 @@ void * BossShoot(void * params){
      for (int i = 0; i < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].height; i+=1) {
         for(int y = 0; y < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].width; y+=1){
             if(((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[i][y] == letter){
-                monster -> positionX = y;
-                monster -> positionY = i;
+                boss -> positionX = y;
+                boss -> positionY = i;
             }
         }
     }
 
-        shoot -> positionX = monster -> positionX;
-        shoot -> positionY = monster -> positionY;
+        shoot -> positionX = boss -> positionX;
+        shoot -> positionY = boss -> positionY;
 
         if(((ShootParams*)params) -> reload == 1){
 
-                    if(((ShootParams*)params) -> directionView == 'R'){
-
-
-            while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX + 2] == ' ' && ((ShootParams*)params)->reloadBoss  == 0 ){
-
-                     if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 4] == 'P'){
-                        
-                             ((ShootParams*)params)->player->hpMax -= 1;
-                             break;
-    
-                }
-
-                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] = '*';
-
-                #ifdef _WIN32 
-                    Sleep(290); 
-                #else 
-                    usleep(29000); 
-                #endif
-
-
-
-                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] = ' ';
-                
-                shoot -> positionX =  shoot -> positionX + 2;
-
-            }
-    
-            ((ShootParams*)params)->reloadBoss = 1;
-       
-        }
-
-        if(((ShootParams*)params) -> directionView == 'L'){
+            if(((ShootParams*)params) -> directionView == 'R'){
 
                       ((ShootParams*)params)->reloadBoss = 0;
 
-            while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX - 2] == ' ' && ((ShootParams*)params)->reloadBoss  == 0){
+                while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX + 2] == ' ' && ((ShootParams*)params)->reloadBoss  == 0 ){
 
-                if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 4] == 'P'){
-                        
-                    ((ShootParams*)params)->player->hpMax -= 1;
-                    break;
-    
+                        if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 4] == 'P'){
+                            
+                                ((ShootParams*)params)->player->hpMax -= 1;
+                                break;
+        
+                    }
+
+                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] = '*';
+
+                    #ifdef _WIN32 
+                        Sleep(290); 
+                    #else 
+                        usleep(29000); 
+                    #endif
+
+
+
+                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] = ' ';
+                    
+                    shoot -> positionX =  shoot -> positionX + 2;
+
                 }
-
-                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] = '*';
-
-                #ifdef _WIN32 
-                    Sleep(290); 
-                #else 
-                    usleep(29000); 
-                #endif
-
-                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] = ' ';
-                
-                
-                shoot -> positionX = shoot -> positionX - 2;
-
+        
+                ((ShootParams*)params)->reloadBoss = 1;
+        
             }
 
-            
-            ((ShootParams*)params)->reloadBoss = 1;
-       
-        }
+            if(((ShootParams*)params) -> directionView == 'L'){
 
-        if(((ShootParams*)params) -> directionView == 'T'){
+                        ((ShootParams*)params)->reloadBoss = 0;
 
-                      ((ShootParams*)params)->reloadBoss = 0;
+                while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX - 2] == ' ' && ((ShootParams*)params)->reloadBoss  == 0){
 
-            while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY - 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reloadBoss  == 0){
-
-                 if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY - 2][shoot->positionX] == 'P'){
-                        
+                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 4] == 'P'){
+                            
                         ((ShootParams*)params)->player->hpMax -= 1;
                         break;
-    
-                }
-
-
-                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY-1][shoot->positionX] = '*';
-
-                #ifdef _WIN32 
-                    Sleep(290); 
-                #else 
-                    usleep(29000); 
-                #endif
-
-                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY-1][shoot->positionX] = ' ';
-
-                shoot -> positionY--;
-
-            }
-
-            ((ShootParams*)params)->reloadBoss = 1;
-
-        }
-
-        if(((ShootParams*)params) -> directionView == 'B'){
-
-                      ((ShootParams*)params)->reloadBoss = 0;
-
-            while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY + 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reloadBoss  == 0){ 
-
-                  if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY + 2][shoot->positionX] == 'P'){
-                        
-                             ((ShootParams*)params)->player->hpMax -= 1;
-                             break;
-    
-                }
-
         
-                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY + 1][shoot->positionX] = '*';
+                    }
 
-                #ifdef _WIN32 
-                    Sleep(290); 
-                #else 
-                    usleep(29000); 
-                #endif
+                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] = '*';
 
-                ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY + 1][shoot->positionX] = ' ';
+                    #ifdef _WIN32 
+                        Sleep(290); 
+                    #else 
+                        usleep(29000); 
+                    #endif
 
-                shoot -> positionY+=1;
+                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] = ' ';
+                    
+                    
+                    shoot -> positionX = shoot -> positionX - 2;
+
+                }
+
+                
+                ((ShootParams*)params)->reloadBoss = 1;
+        
+            }
+
+            if(((ShootParams*)params) -> directionView == 'T'){
+
+                        ((ShootParams*)params)->reloadBoss = 0;
+
+                while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY - 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reloadBoss  == 0){
+
+                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY - 2][shoot->positionX] == 'P'){
+                            
+                            ((ShootParams*)params)->player->hpMax -= 1;
+                            break;
+        
+                    }
+
+
+                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY-1][shoot->positionX] = '*';
+
+                    #ifdef _WIN32 
+                        Sleep(290); 
+                    #else 
+                        usleep(29000); 
+                    #endif
+
+                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY-1][shoot->positionX] = ' ';
+
+                    shoot -> positionY--;
+
+                }
+
+                ((ShootParams*)params)->reloadBoss = 1;
 
             }
 
-              ((ShootParams*)params)->reloadBoss = 1;
-        }
+            if(((ShootParams*)params) -> directionView == 'B'){
 
+                        ((ShootParams*)params)->reloadBoss = 0;
+
+                while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY + 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reloadBoss  == 0){ 
+
+                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY + 2][shoot->positionX] == 'P'){
+                            
+                                ((ShootParams*)params)->player->hpMax -= 1;
+                                break;
+        
+                    }
+
+            
+                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY + 1][shoot->positionX] = '*';
+
+                    #ifdef _WIN32 
+                        Sleep(290); 
+                    #else 
+                        usleep(29000); 
+                    #endif
+
+                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY + 1][shoot->positionX] = ' ';
+
+                    shoot -> positionY++;
+
+                }
+
+                ((ShootParams*)params)->reloadBoss = 1;
+            }
 
         }
 
@@ -418,13 +417,13 @@ void * Jagger(void *params){
 
     // int condition = 1;
 
-    char letter = ((ShootParams*)params)->monster->firstLetter;
+    char letter = ((ShootParams*)params)->boss->firstLetter;
 
     for (int i = 0; i < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].height; i+=1) {
         for(int y = 0; y < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].width; y+=1){
             if(((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[i][y] == letter){
-                ((ShootParams*)params)->monster -> positionX = y;
-                ((ShootParams*)params)->monster -> positionY = i;
+                ((ShootParams*)params)->boss -> positionX = y;
+                ((ShootParams*)params)->boss -> positionY = i;
             }
         }
     }
@@ -459,18 +458,10 @@ void * Jagger(void *params){
         int positionPlayerX = ((ShootParams*)params)->player -> positionX;
         int positionPlayerY = ((ShootParams*)params)->player -> positionY;
 
-        int DiffPositionX = ((ShootParams*)params)->monster -> positionX - positionPlayerX;
-        int DiffPositionY = ((ShootParams*)params)->monster -> positionY - positionPlayerY;
+        int DiffPositionX = ((ShootParams*)params)->boss -> positionX - positionPlayerX;
+        int DiffPositionY = ((ShootParams*)params)->boss -> positionY - positionPlayerY;
 
         int randMonster = rand() % 2;
-
-    //    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionX-2] == 'P'
-    //    || ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionY-1] == 'P'
-    //    || ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionY+1] == 'P'
-    //    || ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionY+2] == 'P'){
-    //         ((ShootParams*)params)->player->hpMax -= 1;
-    //         continue;
-    //     }
 
         ((ShootParams*)params)->reload = 1;
 
@@ -478,35 +469,40 @@ void * Jagger(void *params){
 
             if(DiffPositionX > 0){
                 
-                if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionX-2] == ' '){
+                if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->boss ->positionY][((ShootParams*)params)->boss ->positionX-2] == ' '){
                     
-                    ((ShootParams*)params)->monster -> positionX--;
-                    ((ShootParams*)params)->monster -> positionX--;
+                    ((ShootParams*)params)->boss -> positionX--;
+                    ((ShootParams*)params)->boss -> positionX--;
 
                     ((ShootParams*)params) -> directionView = 'L';
 
                 }else{
-                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionX-2] == 'P'){
+                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->boss ->positionY][((ShootParams*)params)->boss ->positionX-2] == 'P'){
                             ((ShootParams*)params)->player->hpMax -= 1;
                             ((ShootParams*)params)->reload = 0;
                     }
                 }
 
-            }else if(DiffPositionX < 0){
+            }else{
+            
+                if(DiffPositionX < 0){
 
-                if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionX-2] == ' '){
+                if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->boss ->positionY][((ShootParams*)params)->boss ->positionX-2] == ' '){
 
                    ((ShootParams*)params)->monster -> positionX+=1;
                    ((ShootParams*)params)->monster -> positionX+=1;
 
-                    ((ShootParams*)params) -> directionView = 'R';
+                        ((ShootParams*)params) -> directionView = 'R';
 
                 }else{
-                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionX-2] == 'P'){
+                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->boss ->positionY][((ShootParams*)params)->boss ->positionX-2] == 'P'){
                             ((ShootParams*)params)->player->hpMax -= 1;
                             ((ShootParams*)params)->reload = 0;
                     }
+
                 }
+
+            }
 
             }
         
@@ -515,13 +511,13 @@ void * Jagger(void *params){
 
             if(DiffPositionY > 0){
 
-                if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY-1][((ShootParams*)params)->monster ->positionX] == ' '){
+                if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->boss ->positionY-1][((ShootParams*)params)->boss ->positionX] == ' '){
 
-                    ((ShootParams*)params) -> monster -> positionY--;
+                    ((ShootParams*)params) -> boss -> positionY--;
                     ((ShootParams*)params) -> directionView = 'T';
                     
                 }else{
-                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY-1][((ShootParams*)params)->monster ->positionX] == 'P'){
+                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->boss ->positionY-1][((ShootParams*)params)->boss ->positionX] == 'P'){
                             ((ShootParams*)params)->player->hpMax -= 1;
                               shoot = 1;
                     }
@@ -529,13 +525,13 @@ void * Jagger(void *params){
 
             }else if(DiffPositionY < 0){
 
-                if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY+1][((ShootParams*)params)->monster ->positionX] == ' '){
+                if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->boss ->positionY+1][((ShootParams*)params)->boss ->positionX] == ' '){
 
                     ((ShootParams*)params)->monster -> positionY+=1;
                     ((ShootParams*)params) -> directionView = 'B';
 
                 }else{
-                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY+1][((ShootParams*)params)->monster ->positionX] == 'P'){
+                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->boss ->positionY+1][((ShootParams*)params)->boss ->positionX] == 'P'){
                             ((ShootParams*)params)->player->hpMax -= 1;
                             ((ShootParams*)params)->reload = 0;
                     }
@@ -550,21 +546,22 @@ void * Jagger(void *params){
             pthread_create(&thread, NULL, BossShoot, params);
         }
         
-        if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionX] == ' '){
-            ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionX] = letter;
+        if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->boss ->positionY][((ShootParams*)params)->boss ->positionX] == ' '){
+            ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->boss ->positionY][((ShootParams*)params)->boss ->positionX] = letter;
         }
 
 
     }
 
-    free(((ShootParams*)params)->monster);
+    free(((ShootParams*)params)->boss);
 
     return 0;
 }
 
+
 void * Lenina(void *params) {
 
-    char letter = ((ShootParams*)params)->monster->firstLetter;
+    char letter = ((ShootParams*)params)->boss->firstLetter;
     int height = ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].height;
     int width = ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].width;
 
@@ -572,8 +569,8 @@ void * Lenina(void *params) {
     for (int i = 0; i < height; i+=1) { // set boss position
         for(int y = 0; y < width; y+=1) {
             if(((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[i][y] == letter){
-                ((ShootParams*)params)->monster -> positionX = y;
-                ((ShootParams*)params)->monster -> positionY = i;
+                ((ShootParams*)params)->boss -> positionX = y;
+                ((ShootParams*)params)->boss -> positionY = i;
             }
         }
     }
@@ -613,15 +610,15 @@ void * Lenina(void *params) {
         //int positionPlayerX = ((ShootParams*)params)->player -> positionX;
         //int positionPlayerY = ((ShootParams*)params)->player -> positionY;
 
-        //int randMonster = rand() % 2;
+        //int randBoss = rand() % 2;
 
-        if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionX] == ' '){
-            ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->monster ->positionY][((ShootParams*)params)->monster ->positionX] = letter;
+        if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->boss ->positionY][((ShootParams*)params)->boss ->positionX] == ' '){
+            ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->boss ->positionY][((ShootParams*)params)->boss ->positionX] = letter;
         }
 
     }
 
-    free(((ShootParams*)params)->monster);
+    free(((ShootParams*)params)->boss);
 
     return 0;
 }
@@ -629,7 +626,7 @@ void * Lenina(void *params) {
 void * LeninaShoot(void * params) {
 
     Shoot * shoot = malloc(sizeof(Shoot));
-    Monster * monster = malloc(sizeof(Monster));
+    Boss * boss = malloc(sizeof(Boss));
 
     
     char letter = 'L';
@@ -640,20 +637,20 @@ void * LeninaShoot(void * params) {
     int id = ((ShootParams*)params)->id;
     int stage = ((ShootParams*)params)->stage;
 
-    for (int i = 0; i < height; i+=1) { // set monster position
+    for (int i = 0; i < height; i+=1) { // set boss position
         for(int y = 0; y < width; y+=1) {
             if(((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[i][y] == letter) {
-                monster -> positionX = y;
-                monster -> positionY = i;
+                boss -> positionX = y;
+                boss -> positionY = i;
             }
         }
     }
 
-    shoot -> positionX = monster -> positionX;
-    shoot -> positionY = monster -> positionY;
+    shoot -> positionX = boss -> positionX;
+    shoot -> positionY = boss -> positionY;
 
     // shoot right
-    if(((ShootParams*)params)->player->positionX > monster->positionX) { 
+    if(((ShootParams*)params)->player->positionX > boss->positionX) { 
 
         ((ShootParams*)params)->reloadBoss = 0;
 
@@ -681,7 +678,7 @@ void * LeninaShoot(void * params) {
     }
 
     // shoot left
-    if(((ShootParams*)params)->player->positionX < monster->positionX) {
+    if(((ShootParams*)params)->player->positionX < boss->positionX) {
 
         ((ShootParams*)params)->reloadBoss = 0;
 
@@ -714,7 +711,7 @@ void * LeninaShoot(void * params) {
     }
 
     // shoot BOTTOM
-    if(((ShootParams*)params)->player->positionX == monster->positionX) { 
+    if(((ShootParams*)params)->player->positionX == boss->positionX) { 
 
         ((ShootParams*)params)->reloadBoss = 0;
         

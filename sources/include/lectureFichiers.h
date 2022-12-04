@@ -13,11 +13,19 @@
     #define LECTURE_FICHIERS_H
 
     #include "cheminsFichiers.h"
-    #include "monster.h"
     #include <stdlib.h>
     #include <stdio.h>
     #include "objects.h"
     #include "roomsForCRUD.h"
+    #include "charactersId.h"
+
+    /**
+     * @brief Makes the user choose a player. Returns the id of the player selected. 
+     * @return int 
+     */
+    int choseCharacter();
+
+    typedef struct Monster Monster;
 
     /**
      * @brief Transforme le fichier des objects bonus en structure de type ListeObjects et retourne

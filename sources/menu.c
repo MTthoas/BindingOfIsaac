@@ -355,9 +355,9 @@ void printProgress(double percentage) {
     fflush(stdout);
 }
 
-void GameRecur(Donjon *d, Monster * Boss, ShootParams * shootParams, Player * player, int characterID, int stage, int * change, int NumberOfRoomsInt, int id, int axeX, int axeY) {
+void GameRecur(Donjon *d, Monster * Boss, ShootParams * shootParams, Player * player, int characterID, int stage, int * change, int NumberOfRoomsInt, int id, int axeX, int axeY, Monster * arrayMonster) {
     player->canTakeBonusItem = 1;
-	gestionGame(d, shootParams, Boss, stage, change, player, NumberOfRoomsInt, id, axeX, axeY);
+	gestionGame(d, shootParams, Boss, stage, change, player, NumberOfRoomsInt, id, axeX, axeY, arrayMonster);
 				
     if(player->hpMax <= 0) { // player dead
         system("clear");
@@ -373,13 +373,11 @@ void GameRecur(Donjon *d, Monster * Boss, ShootParams * shootParams, Player * pl
         #endif 
         
         initialisePlayerStats(player, characterID);
-        GameRecur(d, Boss, shootParams, player, characterID, stage, change, NumberOfRoomsInt, id, axeX, axeY);
+        GameRecur(d, Boss, shootParams, player, characterID, stage, change, NumberOfRoomsInt, id, axeX, axeY, arrayMonster);
     }
-
-
 }
 
-void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id ) {
+void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id) {
 
     for (int i = 0; i < d -> stages[stage].rooms[id].height; i+=1) {
         for (int y = 0; y < d -> stages[stage].rooms[id].width; y+=1) {
@@ -406,25 +404,21 @@ void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id )
     }
 
     for (int i = 0; i < d->stages[stage].rooms[id].height; i+=1) {
-				for (int y = 0; y < d->stages[stage].rooms[id].width; y+=1) {
-					if (y % 2 == 0) {
-						if(d-> stages[stage].rooms[id].room[i][y] == 'P'){
-							printf("%s", KRED);
-							printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
-							printf("%s", KNRM);
-						}else{
-							printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
-						}
-					}
-				}
-				printf("\n");
-				
-			}
-
+        for (int y = 0; y < d->stages[stage].rooms[id].width; y+=1) {
+            if (y % 2 == 0) {
+                if(d-> stages[stage].rooms[id].room[i][y] == 'P'){
+                    printf("%s", KRED);
+                    printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
+                    printf("%s", KNRM);
+                }else{
+                    printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
+                }
+            }
+        }
+        printf("\n");
 }
 
-
-void menuGame(){
+void menuGame() {
 
     bool condition = true, condition2 = true, etape = true;
 	int c,c2;
@@ -452,19 +446,24 @@ void menuGame(){
 				stage = 0;
 				change = 0;
 
-                // Boucle pour chaque étage
+                Monster * arrayMonster = fichierMonsterToListeMonster();
 
-				for(int i = 0; i < 3; i+=1) {
 
-                    Donjon * d = malloc(sizeof(Donjon));
-                    Monster * Boss = malloc(sizeof(Monster));
-                    Player* player = malloc(sizeof(Player));
+                Player* player = malloc(sizeof(Player));
                     player->positionX = 1;
                     player->positionY = 1;
                     player->directionView = 'D';
                     int characterID = choseCharacter();
                     initialisePlayerStats(player, characterID);
 
+                // Boucle pour chaque étage
+
+				for(int i = 0; i < 3; i+=1) {
+
+                    Donjon * d = malloc(sizeof(Donjon));
+                    Boss * Boss = malloc(sizeof(Monster));
+
+                    
                     int id = 0;
 
                     ShootParams *shootParams = malloc(sizeof(struct ShootParams));
@@ -484,12 +483,14 @@ void menuGame(){
                     int axeX = 0;
                     int axeY = 0;
 
+                    d->stages[stage].rooms[id].name = 'P';
+
                     int NumberOfRoomsInt = numberOfRooms();
                     InitialisationGame(d, stage);	
                     InitialiseOtherRoomsFromArms(d,stage, NumberOfRoomsInt);
                     SetColorAndPositionForPlayer(d, player, stage, id);
 
-                    GameRecur(d, Boss, shootParams, player, characterID, stage, &change, NumberOfRoomsInt, id, axeX, axeY);
+                    GameRecur(d, Boss, shootParams, player, characterID, stage, &change, NumberOfRoomsInt, id, axeX, axeY, arrayMonster);
     
 					free(d -> stages[stage].stage);
 					free(d);
@@ -514,32 +515,32 @@ void menuGame(){
 								
 			
 			case 'i':
-			while (condition2)
-			{
-			etape = false;
-				c2 = 'p';
-				menuCrudItem();
-				if (kbhit()) {
-					c2 = getchar();
-				}
-				switch (c2){
-					case 'a':
-						menuCreateItem();
-						condition2 = false;
-						break;
-					case 'd':
-						menuDeleteItem();
-						condition2 = false;
+                while (condition2)
+                {
+                etape = false;
+                    c2 = 'p';
+                    menuCrudItem();
+                    if (kbhit()) {
+                        c2 = getchar();
+                    }
+                    switch (c2){
+                        case 'a':
+                            menuCreateItem();
+                            condition2 = false;
+                            break;
+                        case 'd':
+                            menuDeleteItem();
+                            condition2 = false;
 
-						break;
-					case 'm':
-						menuModifyItem();
-						condition2 = false;
+                            break;
+                        case 'm':
+                            menuModifyItem();
+                            condition2 = false;
 
-						break;
+                            break;
 
-				}
-			}
+                    }
+                }
 			break;
 				
 

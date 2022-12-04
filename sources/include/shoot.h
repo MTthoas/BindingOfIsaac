@@ -13,7 +13,7 @@
 
 #include "Room.h"
 #include "monster.h"
-#include "Player.h"
+// #include "Player.h"
 
 struct Shoot {
     int positionX;
@@ -26,6 +26,7 @@ struct ShootParams {
     Donjon *d;
     Player *player;
     Monster *monster;
+    Boss *boss;
     int idMonster;
     int reloadBoss;
     int reload ;
