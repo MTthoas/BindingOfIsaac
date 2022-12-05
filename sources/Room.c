@@ -843,9 +843,9 @@ int setMonstersInsideRoom(Donjon* d, int stage, int roomId) {
     for(int i=1 ; (i < heightRoom && monsterId < numberOfMonsters) ; i+=1) {
         row = (i%2==0) ? i : heightRoom-i;
         for(int j=2 ; (j < widthRoom && monsterId < numberOfMonsters) ; j+=2) {
-            column = (i%2==0) ? j : widthRoom-j;
+            column = (i%2==0) ? j : widthRoom*2-j;
             placeIsFreeAndNotNearPlayer = (map[row][column] == ' ' && map[row][column-2] != 'P' && map[row][column+2] != 'P' && map[row+1][column] != 'P' && map[row-1][column] != 'P'); 
-            if(placeIsFreeAndNotNearPlayer) {
+            if(placeIsFreeAndNotNearPlayer) { // then draw and place monster
                 map[row][column] = d->stages[stage].rooms[roomId].monsters[monsterId].firstLetter;
                 d->stages[stage].rooms[roomId].monsters[monsterId].positionX = column;
                 d->stages[stage].rooms[roomId].monsters[monsterId].positionY = row;
