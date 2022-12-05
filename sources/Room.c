@@ -7,30 +7,15 @@
 
 #include "Room.h"
 #include "lectureFichiers.h"
+#include "myUtils.h"
 
 #define KRED "\x1B[31m"
 #define KNRM "\x1B[0m"
-
-
-/* Prototypes */
-int numberOfRooms();
-int PickRoomNotUsed(struct Donjon * d, int NumberOfRoomsInt, int stage);
-void newStageByNumber(struct Donjon * d, int stage, int numberOfRooms);
-void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms);
-char ** RoomByNumber(int height, int length, int number);
-int NumberOfDoorsByRoom(char ** s, int height, int width);
-int * RandomBetweenRange(int number, int zero);
-int NowRoomIsUsed(struct Donjon *d, int NumberOfRoomsInt, int id);
-void InitialisationGameByStagesOptionsForArms(Donjon * d, int stage, int numbe);
-void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms);
 
 /**
  * @brief Ininitialise le jeu
  * 
  */
-
-
-
 int InitialiseStructureRandomStage(struct Donjon * d, int stageNum, int NumberOfRoomsInt){
 
         for (int v = 0; v < NumberOfRoomsInt + 1; v+=1) {
@@ -469,14 +454,15 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                
 }
 
-void InitialisationGame(Donjon * d, int stageNum) {
+void InitialisationGame(Donjon * d, int stageNum, Monster* arrayMonster) {
 
     srand(time(NULL));
 
         d->headObject = objectsFileToObjectsList();
+
         int NumberOfRoomsInt = numberOfRooms();
         newStageByNumber(d, stageNum, NumberOfRoomsInt+1);
-        InitialiseRoom(d, stageNum, NumberOfRoomsInt);
+        InitialiseRooms(d, stageNum, NumberOfRoomsInt, arrayMonster);
         int * randomNumberRooms = RandomArrayForAttribution(NumberOfRoomsInt);
         d->stages[stageNum].randomNumberRooms = malloc(sizeof(int) * NumberOfRoomsInt);
 
@@ -519,7 +505,7 @@ void InitialisationGame(Donjon * d, int stageNum) {
 
 
             if(iterationRoom >= NumberOfRoomsInt ){
-                InitialisationGame(d, stageNum);
+                InitialisationGame(d, stageNum, arrayMonster);
             }
 
 }
@@ -661,7 +647,7 @@ int * RandomArrayForAttribution(int number){
     return tab;
 }
 
-int * RandomBetweenRange(int number, int zero){
+int * RandomBetweenRange(int number, int zero) {
     
 
     (void)zero;
@@ -708,14 +694,14 @@ int * RandomBetweenRange(int number, int zero){
 }
 
 /**
- * @brief Fonction initialiser une room
+ * @brief Fonction initialiser toutes les room d'un étage
  * 
  * @param d Structure générale
  * @param stage Etage précis
  * @param numberOfRooms Nombre de rooms
  */
 
-void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms) {
+void InitialiseRooms(struct Donjon * d, int stage, int numberOfRooms, Monster* allMonsters) {
 
     FILE * fp;
     char * line = NULL;
@@ -777,8 +763,9 @@ void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms) {
             d-> stages[stage].rooms[iteration].height = height;
             d-> stages[stage].rooms[iteration].numberOfDoors = iterationDoorsReturned;
             d-> stages[stage].rooms[iteration].Doors = malloc(sizeof(char) * iterationDoorsReturned);
-                 
-                int iterationDoors = 0;
+            initialiseMonstersInsideRoom(d, stage, iteration, allMonsters);
+            setMonstersInsideRoom(d, stage, iteration);
+            int iterationDoors = 0;
 
                 // Permet d'indiquer si y'a une porte, à gauche, à droite, en haut ou en bas.
 
@@ -834,7 +821,62 @@ void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms) {
         free(line);
 
     (void)numberOfRooms;   
-                                   
+                       
+}
+
+int setMonstersInsideRoom(Donjon* d, int stage, int roomId) {
+    srand(time(NULL));
+    int randomPositionX,randomPositionY; 
+    int heightRoom = d->stages[stage].rooms[roomId].height - 1;
+    int widthRoom = d->stages[stage].rooms[roomId].width - 2;
+    int numberOfMonsters = d->stages[stage].rooms[roomId].numberOfMonsters;
+    int freeSpace = 0;
+    char** map = d->stages[stage].rooms[roomId].room;
+    if(map == NULL) {
+        return 0;
+    }
+
+    for(int i=0 ; i < numberOfMonsters ; i+=1) {
+        freeSpace = 0;
+        while (!freeSpace) {
+            randomPositionY = getRandomInt(1, heightRoom);
+            randomPositionX = getRandomInt(2, widthRoom);
+
+            // place the monster where there is space and not near the player
+            if (randomPositionX % 2 == 0 && d->stages[stage].rooms[roomId].room[randomPositionY][randomPositionX] == ' ' 
+            && d->stages[stage].rooms[roomId].room[randomPositionY][randomPositionX - 2] != 'P' 
+            && d->stages[stage].rooms[roomId].room[randomPositionY][randomPositionX + 2] != 'P' 
+            && d->stages[stage].rooms[roomId].room[randomPositionY - 1][randomPositionX] != 'P' 
+            && d->stages[stage].rooms[roomId].room[randomPositionY + 1][randomPositionX] != 'P' ) {
+                freeSpace=1;
+                // set monster position : 
+                d->stages[stage].rooms[roomId].monsters[i].positionX = randomPositionX;
+                d->stages[stage].rooms[roomId].monsters[i].positionY = randomPositionY;
+
+                // draw monster inside map
+                map[randomPositionY][randomPositionX] = d->stages[stage].rooms[roomId].monsters[i].firstLetter;
+            }   
+        }
+    }
+
+    return 1;
+}
+
+void initialiseMonstersInsideRoom(Donjon * d, int stage, int roomID, Monster* allMonsters) {
+    int nbMonsters = getRandomInt(2, 5);
+    int* uniqueNumbers = generateUniqueNumbers(nbMonsters-1, nbMonsters);
+    int index = 0;
+
+    Monster* roomMonsters = malloc(sizeof(Monster) * nbMonsters);
+    Monster randomMonster;
+    for(int i=0 ; i < nbMonsters-1 ; i+=1) {
+        index = uniqueNumbers[i];
+        randomMonster = allMonsters[index];
+        roomMonsters[i] = *duplicateMonster(&randomMonster);
+    }
+
+    d->stages[stage].rooms[roomID].monsters = roomMonsters;
+    d->stages[stage].rooms[roomID].numberOfMonsters = nbMonsters;
 }
 
 /**
@@ -845,7 +887,6 @@ void InitialiseRoom(struct Donjon * d, int stage, int numberOfRooms) {
  * @param number Numéro de la room
  * @return char** correspond à la room en question
  */
-
 char ** RoomByNumber(int height, int length, int number) {
 
     int iteration = 0;

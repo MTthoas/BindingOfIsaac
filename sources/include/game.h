@@ -16,7 +16,7 @@
 #include "Player.h"
 #include "shoot.h"
 
-void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, int * change, Player* player, int numberOfRoomsInt, int id, int axeX, int axeY, Monster* arrayMonster);
+void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, int * change, Player* player, int numberOfRoomsInt, int id, int axeX, int axeY);
 
 
 /**

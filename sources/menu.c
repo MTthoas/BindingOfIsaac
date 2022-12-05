@@ -353,9 +353,9 @@ void printProgress(double percentage) {
     fflush(stdout);
 }
 
-void GameRecur(Donjon *d, Boss * boss, ShootParams * shootParams, Player * player, int characterID, int stage, int * change, int NumberOfRoomsInt, int id, int axeX, int axeY, Monster * arrayMonster) {
+void GameRecur(Donjon *d, Boss * boss, ShootParams * shootParams, Player * player, int characterID, int stage, int * change, int NumberOfRoomsInt, int id, int axeX, int axeY) {
     player->canTakeBonusItem = 1;
-	gestionGame(d, shootParams, boss, stage, change, player, NumberOfRoomsInt, id, axeX, axeY, arrayMonster);
+	gestionGame(d, shootParams, boss, stage, change, player, NumberOfRoomsInt, id, axeX, axeY);
 				
     if(player->hpMax <= 0) { // player dead
         system("clear");
@@ -371,7 +371,7 @@ void GameRecur(Donjon *d, Boss * boss, ShootParams * shootParams, Player * playe
         #endif 
         
         initialisePlayerStats(player, characterID);
-        GameRecur(d, boss, shootParams, player, characterID, stage, change, NumberOfRoomsInt, id, axeX, axeY, arrayMonster);
+        GameRecur(d, boss, shootParams, player, characterID, stage, change, NumberOfRoomsInt, id, axeX, axeY);
     }
 }
 
@@ -447,7 +447,6 @@ void menuGame() {
 
                 Monster * arrayMonster = fichierMonsterToListeMonster();
 
-
                 Player* player = malloc(sizeof(Player));
                     player->positionX = 1;
                     player->positionY = 1;
@@ -462,7 +461,6 @@ void menuGame() {
                     Donjon * d = malloc(sizeof(Donjon));
                     Boss * Boss = malloc(sizeof(Monster));
 
-                    
                     int id = 0;
 
                     ShootParams *shootParams = malloc(sizeof(struct ShootParams));
@@ -485,11 +483,11 @@ void menuGame() {
                     d->stages[stage].rooms[id].name = 'P';
 
                     int NumberOfRoomsInt = numberOfRooms();
-                    InitialisationGame(d, stage);	
+                    InitialisationGame(d, stage, arrayMonster);	
                     InitialiseOtherRoomsFromArms(d,stage, NumberOfRoomsInt);
                     SetColorAndPositionForPlayer(d, player, stage, id);
 
-                    GameRecur(d, Boss, shootParams, player, characterID, stage, &change, NumberOfRoomsInt, id, axeX, axeY, arrayMonster);
+                    GameRecur(d, Boss, shootParams, player, characterID, stage, &change, NumberOfRoomsInt, id, axeX, axeY);
     
 					free(d -> stages[stage].stage);
 					free(d);

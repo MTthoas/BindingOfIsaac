@@ -24,7 +24,7 @@
     int positionY;
     int dead;
 
-} Monster ;
+} Monster;
 
 typedef struct Boss {
     int idMonster;
@@ -76,6 +76,14 @@ typedef struct Boss {
     void* LeninaShoot(void* params);
 
     void * Jagger(void *params);
+
+    /**
+     * @brief Returns a pointer to a monster identical to the given monster
+     * 
+     * @param monster 
+     * @return Monster* 
+     */
+    Monster* duplicateMonster(Monster* monster);
 
 
     //void* Lenina(void *params);

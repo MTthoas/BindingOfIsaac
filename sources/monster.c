@@ -33,9 +33,7 @@ void spawnMonster(Donjon * d, Monster * monster, int stage, int id) {
     int randomPositionX,randomPositionY; 
     int heightRoom = d->stages[stage].rooms[id].height - 1;
     int widthRoom = d->stages[stage].rooms[id].width - 2;
-    (void) monster;
-    (void) randomPositionX;
-    (void) randomPositionY;
+ 
     // printf("\nOne\n");
     // sleep(1);
     while (1) {
@@ -755,4 +753,24 @@ void * LeninaShoot(void * params) {
     free(shoot);
     return NULL;
 
+}
+
+Monster* duplicateMonster(Monster* monster) {
+    if(monster == NULL) {
+        return NULL;
+    }
+
+    Monster* newMonster = malloc(sizeof(Monster)* 1);
+    newMonster->idMonster = monster->idMonster;
+    newMonster->name = duplicateString(monster->name);
+    newMonster->firstLetter = newMonster->name[0];
+    newMonster->hpMax = monster->hpMax;
+    newMonster->shoot = monster->shoot;
+    newMonster->ss = monster->ss;
+    newMonster->flight = monster->flight;
+    newMonster->dead = monster->dead;
+    newMonster->positionX = monster->positionX;
+    newMonster->positionX = monster->positionY;
+
+    return newMonster;
 }
