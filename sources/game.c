@@ -56,8 +56,6 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
         }
     }
 
-    condition = false;
-    sleep(1);
 
 	while (condition) {
 
