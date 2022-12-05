@@ -24,7 +24,7 @@ int InitialiseStructureRandomStage(struct Donjon * d, int stageNum, int NumberOf
                 // Si on est à la moitié de la boucle, on créer un P, la salle principale.
 
                 if(v == NumberOfRoomsInt / 2 && y == NumberOfRoomsInt / 2) {
-                    d->stages[stageNum].stage[v][y] = 'P';     
+                    d->stages[stageNum].stage[v][y] = PLAYER;     
                     d->stages[stageNum].id = 1;     
 
                     for(int u = 0; u < NumberOfRoomsInt; u+=1) {
@@ -70,7 +70,7 @@ int InitialiseStructureRandomStage(struct Donjon * d, int stageNum, int NumberOf
 
                     // Permet de se placer au centre
                    
-                    if(d->stages[stageNum].stage[v][y] == 'P') {
+                    if(d->stages[stageNum].stage[v][y] == PLAYER) {
 
                             int * arraySecond = malloc(sizeof(int *) * 100);
                             arraySecond = RandomBetweenRange(100, 0);
@@ -106,7 +106,7 @@ int InitialiseStructureRandomStage(struct Donjon * d, int stageNum, int NumberOf
 
                                     numbe = PickRoomNotUsed(d, NumberOfRoomsInt, stageNum);
 
-                                        d->stages[stageNum].stage[v][y-1] = 'R';
+                                        d->stages[stageNum].stage[v][y-1] = ROCK;
                                         blockA = 1;
                                         iteration+=1;
                                         d->stages[stageNum].rooms[numbe].AxeY = 0;
@@ -117,7 +117,7 @@ int InitialiseStructureRandomStage(struct Donjon * d, int stageNum, int NumberOf
 
                                     numbe = PickRoomNotUsed(d, NumberOfRoomsInt, stageNum);
 
-                                        d->stages[stageNum].stage[v][y+1] = 'R';
+                                        d->stages[stageNum].stage[v][y+1] = ROCK;
                                         blockB = 1;
                                         iteration+=1;
                                          d->stages[stageNum].rooms[numbe].AxeY = 0;
@@ -129,7 +129,7 @@ int InitialiseStructureRandomStage(struct Donjon * d, int stageNum, int NumberOf
 
                                    numbe = PickRoomNotUsed(d, NumberOfRoomsInt, stageNum);
                                         
-                                        d->stages[stageNum].stage[v-1][y] = 'R';
+                                        d->stages[stageNum].stage[v-1][y] = ROCK;
                                         blockC = 1;
                                         iteration+=1;
                                          d->stages[stageNum].rooms[numbe].AxeY = -1;
@@ -140,7 +140,7 @@ int InitialiseStructureRandomStage(struct Donjon * d, int stageNum, int NumberOf
 
                                   numbe = PickRoomNotUsed(d, NumberOfRoomsInt, stageNum);
 
-                                        d->stages[stageNum].stage[v+1][y] = 'R';
+                                        d->stages[stageNum].stage[v+1][y] = ROCK;
                                         blockD = 1;
                                         iteration+=1;
                                         d->stages[stageNum].rooms[numbe].AxeY = 1;
@@ -204,7 +204,7 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                         }
                     }
 
-                    while(d->stages[stageNum].stage[randomHeight][randomLength] != 'R' && d->stages[stageNum].stage[randomHeight][randomLength] != 'I') {
+                    while(d->stages[stageNum].stage[randomHeight][randomLength] != ROCK && d->stages[stageNum].stage[randomHeight][randomLength] != ITEM_ROOM_DOOR) {
                         randomHeight = rand() % NumberOfRoomsInt;
                         randomLength = rand() % NumberOfRoomsInt;    
                         iterationEscape++;
@@ -226,12 +226,12 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                             if(d->stages[stageNum].stage[randomHeight][randomLength+1] == ' ' && itemRoom == 0 ){
                                 if(d->stages[stageNum].stage[randomHeight][randomLength+2] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength+1] == ' ' ){
                                     if(t == NumberOfRoomsInt-iteration ){
-                                        d->stages[stageNum].stage[randomHeight][randomLength+1] = 'I';
+                                        d->stages[stageNum].stage[randomHeight][randomLength+1] = ITEM_ROOM_DOOR;
                                          itemRoom = 1;
                                        
                                     }else{
                                         
-                                        d->stages[stageNum].stage[randomHeight][randomLength+1] = 'R';
+                                        d->stages[stageNum].stage[randomHeight][randomLength+1] = ROCK;
 
                                         
                                         
@@ -243,11 +243,11 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                                 }
                             }else{
 
-                                if(d->stages[stageNum].stage[randomHeight][randomLength+2] == ' ' && d->stages[stageNum].stage[randomHeight][randomLength-1] != 'I' && d->stages[stageNum].stage[randomHeight][randomLength+1] == ' '   &&  d->stages[stageNum].stage[randomHeight][randomLength] != 'I'){
+                                if(d->stages[stageNum].stage[randomHeight][randomLength+2] == ' ' && d->stages[stageNum].stage[randomHeight][randomLength-1] != ITEM_ROOM_DOOR && d->stages[stageNum].stage[randomHeight][randomLength+1] == ' '   &&  d->stages[stageNum].stage[randomHeight][randomLength] != ITEM_ROOM_DOOR){
                                     if(d->stages[stageNum].stage[randomHeight][randomLength+2] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength+1] == ' '
                                     && d->stages[stageNum].stage[randomHeight+2][randomLength+2] == ' ' && d->stages[stageNum].stage[randomHeight-2][randomLength+2] == ' ' ){
                                         if(t == NumberOfRoomsInt-iteration + 1 ){
-                                            d->stages[stageNum].stage[randomHeight][randomLength+1] = 'B';
+                                            d->stages[stageNum].stage[randomHeight][randomLength+1] = BOSS_ROOM_DOOR;
                                             iterationRoom+=1;
                                             iterationByRoom+=1;
                                             bossRoom = 1;
@@ -264,12 +264,12 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                             if(d->stages[stageNum].stage[randomHeight][randomLength-1] == ' ' && itemRoom == 0 && d->stages[stageNum].stage[randomHeight][randomLength-1]){
                                 if(d->stages[stageNum].stage[randomHeight][randomLength-2] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength-1] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength-1] == ' ' ){
                                     if(t == NumberOfRoomsInt-iteration){
-                                        d->stages[stageNum].stage[randomHeight][randomLength-1] = 'I';
+                                        d->stages[stageNum].stage[randomHeight][randomLength-1] = ITEM_ROOM_DOOR;
                                        
                                          itemRoom = 1;
                                     }else{
                                         
-                                        d->stages[stageNum].stage[randomHeight][randomLength-1] = 'R';
+                                        d->stages[stageNum].stage[randomHeight][randomLength-1] = ROCK;
                                       
         
                                     }
@@ -278,11 +278,11 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                                     break;
                                 }
                             }else{
-                                if(d->stages[stageNum].stage[randomHeight][randomLength-1] == ' ' && d->stages[stageNum].stage[randomHeight][randomLength-2] == ' ' &&  d->stages[stageNum].stage[randomHeight][randomLength-1] != 'I'  &&  d->stages[stageNum].stage[randomHeight][randomLength] != 'I'){
+                                if(d->stages[stageNum].stage[randomHeight][randomLength-1] == ' ' && d->stages[stageNum].stage[randomHeight][randomLength-2] == ' ' &&  d->stages[stageNum].stage[randomHeight][randomLength-1] != ITEM_ROOM_DOOR  &&  d->stages[stageNum].stage[randomHeight][randomLength] != ITEM_ROOM_DOOR){
                                     if(d->stages[stageNum].stage[randomHeight][randomLength-2] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength-1] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength-1] == ' '
                                      && d->stages[stageNum].stage[randomHeight+2][randomLength-2] == ' ' && d->stages[stageNum].stage[randomHeight-2][randomLength-2] == ' ' ){
                                          if(t == NumberOfRoomsInt-iteration + 1  ){
-                                            d->stages[stageNum].stage[randomHeight][randomLength-1] = 'B';
+                                            d->stages[stageNum].stage[randomHeight][randomLength-1] = BOSS_ROOM_DOOR;
                                              iterationRoom+=1;
                                             iterationByRoom+=1;
                                             bossRoom = 1;
@@ -300,12 +300,12 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                             if(d->stages[stageNum].stage[randomHeight+1][randomLength] == ' ' && itemRoom == 0 ){
                                     if(d->stages[stageNum].stage[randomHeight+2][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength-1] == ' ' ){
                                         if(t == NumberOfRoomsInt-iteration){
-                                            d->stages[stageNum].stage[randomHeight+1][randomLength] = 'I';
+                                            d->stages[stageNum].stage[randomHeight+1][randomLength] = ITEM_ROOM_DOOR;
                                           
                                             itemRoom = 1;
                                         }else{
                                             
-                                            d->stages[stageNum].stage[randomHeight+1][randomLength] = 'R';
+                                            d->stages[stageNum].stage[randomHeight+1][randomLength] = ROCK;
                                                                                 
                                         }
                                             iterationRoom+=1;
@@ -313,11 +313,11 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                                         break;
                                 }
                             }else{
-                                if(d->stages[stageNum].stage[randomHeight+1][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight+2][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength] != 'I' && d->stages[stageNum].stage[randomHeight][randomLength] != 'I'){
+                                if(d->stages[stageNum].stage[randomHeight+1][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight+2][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength] != ITEM_ROOM_DOOR && d->stages[stageNum].stage[randomHeight][randomLength] != ITEM_ROOM_DOOR){
                                     if(d->stages[stageNum].stage[randomHeight+2][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength-1] == ' ' 
                                     && d->stages[stageNum].stage[randomHeight+2][randomLength+2] == ' ' && d->stages[stageNum].stage[randomHeight+2][randomLength-2] == ' ' ){
                                         if(t == NumberOfRoomsInt-iteration + 1 ){
-                                            d->stages[stageNum].stage[randomHeight+1][randomLength] = 'B';
+                                            d->stages[stageNum].stage[randomHeight+1][randomLength] = BOSS_ROOM_DOOR;
                                                 iterationRoom+=1;
                                                 iterationByRoom+=1;
                                                 bossRoom = 1;
@@ -334,12 +334,12 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                             if(d->stages[stageNum].stage[randomHeight-1][randomLength] == ' ' && itemRoom == 0 ){
                                 if(d->stages[stageNum].stage[randomHeight-2][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength+1] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength-1] == ' ' ){
                                    if(t == NumberOfRoomsInt-iteration ){
-                                        d->stages[stageNum].stage[randomHeight-1][randomLength] = 'I';
+                                        d->stages[stageNum].stage[randomHeight-1][randomLength] = ITEM_ROOM_DOOR;
                                          itemRoom = 1;
                                          
                                     }else{
                                         
-                                        d->stages[stageNum].stage[randomHeight-1][randomLength] = 'R';
+                                        d->stages[stageNum].stage[randomHeight-1][randomLength] = ROCK;
                                         
                                         
                                     }
@@ -348,11 +348,11 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                                     break;
                                 }
                             }else{
-                                if(d->stages[stageNum].stage[randomHeight-1][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight-2][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength] != 'I' && d->stages[stageNum].stage[randomHeight][randomLength] != 'I'){
+                                if(d->stages[stageNum].stage[randomHeight-1][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight-2][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength] != ITEM_ROOM_DOOR && d->stages[stageNum].stage[randomHeight][randomLength] != ITEM_ROOM_DOOR){
                                     if(d->stages[stageNum].stage[randomHeight-2][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength+1] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength-1] == ' ' 
                                     &&  d->stages[stageNum].stage[randomHeight-2][randomLength+2] == ' ' && d->stages[stageNum].stage[randomHeight-2][randomLength-2] == ' ' ){
                                         if(t == NumberOfRoomsInt-iteration + 1){
-                                            d->stages[stageNum].stage[randomHeight-1][randomLength] = 'B';
+                                            d->stages[stageNum].stage[randomHeight-1][randomLength] = BOSS_ROOM_DOOR;
                                                 iterationRoom+=1;
                                                 iterationByRoom+=1;
                                                 bossRoom = 1;
@@ -382,7 +382,7 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                     randomHeight = rand() % NumberOfRoomsInt;
                     randomLength = rand() % NumberOfRoomsInt;
 
-                    while(d->stages[stageNum].stage[randomHeight][randomLength] != 'B') {
+                    while(d->stages[stageNum].stage[randomHeight][randomLength] != BOSS_ROOM_DOOR) {
 
                         randomHeight = rand() % NumberOfRoomsInt;
                         randomLength = rand() % NumberOfRoomsInt;
@@ -400,7 +400,7 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                                 if(d->stages[stageNum].stage[randomHeight][randomLength-1] == ' '){
                                     if(d->stages[stageNum].stage[randomHeight][randomLength-2] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength-1] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength-1] == ' ' ){
                                 
-                                        d->stages[stageNum].stage[randomHeight][randomLength-1] = 'V';
+                                        d->stages[stageNum].stage[randomHeight][randomLength-1] = BONUS_ITEM_ROOM;
                                               
                                         RoomPlaced = 1;
                                     }
@@ -413,7 +413,7 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                                 if(d->stages[stageNum].stage[randomHeight][randomLength+1] == ' '){
                                     if(d->stages[stageNum].stage[randomHeight][randomLength+2] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength+1] == ' ' ){
                                     
-                                        d->stages[stageNum].stage[randomHeight][randomLength+1] = 'V';
+                                        d->stages[stageNum].stage[randomHeight][randomLength+1] = BONUS_ITEM_ROOM;
                                        
                                             RoomPlaced = 1;
                                         
@@ -427,7 +427,7 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                                 if(d->stages[stageNum].stage[randomHeight+1][randomLength] == ' '){
                                         if(d->stages[stageNum].stage[randomHeight+2][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength+1] == ' ' && d->stages[stageNum].stage[randomHeight+1][randomLength-1] == ' ' ){
                                             
-                                                d->stages[stageNum].stage[randomHeight+1][randomLength] = 'V';
+                                                d->stages[stageNum].stage[randomHeight+1][randomLength] = BONUS_ITEM_ROOM;
                                                   
                                                     RoomPlaced = 1;
                                     }
@@ -440,7 +440,7 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                                 if(d->stages[stageNum].stage[randomHeight-1][randomLength] == ' '){
                                     if(d->stages[stageNum].stage[randomHeight-2][randomLength] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength+1] == ' ' && d->stages[stageNum].stage[randomHeight-1][randomLength-1] == ' ' ){
                                     
-                                            d->stages[stageNum].stage[randomHeight+1][randomLength] = 'V';
+                                            d->stages[stageNum].stage[randomHeight+1][randomLength] = BONUS_ITEM_ROOM;
                                                
                                                 RoomPlaced = 1;
                                     }
@@ -527,7 +527,7 @@ void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms){
 
        for(int i = 0; i < numberOfRooms+2; i+=1){
         for (int v = 0; v < numberOfRooms+2; v+=1) {
-            if(d->stages[stage].stage[i][v] == 'P'){
+            if(d->stages[stage].stage[i][v] == PLAYER){
                 varA = i;
                 varB = v;
                 printf("Position of player : %d / %d\n", varA, varB);
@@ -540,7 +540,7 @@ void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms){
     for(int i = 0; i < numberOfRooms+2; i+=1){
         for (int v = 0; v < numberOfRooms+2; v+=1) {
             
-            if(d -> stages[stage].stage[i][v] == 'R' && d -> stages[stage].stage[i+1][v] != 'P' && d -> stages[stage].stage[i-1][v] != 'P' && d -> stages[stage].stage[i][v+1] != 'P' && d -> stages[stage].stage[i][v-1] != 'P'){
+            if(d -> stages[stage].stage[i][v] == ROCK && d -> stages[stage].stage[i+1][v] != PLAYER && d -> stages[stage].stage[i-1][v] != PLAYER && d -> stages[stage].stage[i][v+1] != PLAYER && d -> stages[stage].stage[i][v-1] != PLAYER){
                 printf("Iteration : %d\n", iteration+=1);
 
                 numbe = PickRoomNotUsed(d, numberOfRooms, stage);
@@ -773,7 +773,7 @@ void InitialiseRooms(struct Donjon * d, int stage, int numberOfRooms, Monster* a
 
                     for(int j = 0; j < width; j+=1){
 
-                        if(d-> stages[stage].rooms[iteration].room[i][j] == 'D'){
+                        if(d-> stages[stage].rooms[iteration].room[i][j] == DOOR){
 
                             if(i == 0){
                                 d-> stages[stage].rooms[iteration].Doors[iterationDoors] = 'T';
@@ -781,17 +781,17 @@ void InitialiseRooms(struct Donjon * d, int stage, int numberOfRooms, Monster* a
                                     // printf("[%d] [%d]\n", i, j);
                             }
                             if(i == height-1){
-                                d-> stages[stage].rooms[iteration].Doors[iterationDoors] = 'B';
+                                d-> stages[stage].rooms[iteration].Doors[iterationDoors] = BOSS_ROOM_DOOR;
                                     iterationDoors+=1;
                                     // printf("[%d] [%d]\n", i, j);
                             }
                             if(j == 0){
-                               d-> stages[stage].rooms[iteration].Doors[iterationDoors] = 'L';
+                               d-> stages[stage].rooms[iteration].Doors[iterationDoors] = LOCKED_DOOR;
                                    iterationDoors+=1;
                                 //    printf("[%d] [%d]\n", i, j);
                             }
                             if(j == width-4 || j == width-3 || j == width-2 || j == width-1 || j == width){
-                                d-> stages[stage].rooms[iteration].Doors[iterationDoors] = 'R';
+                                d-> stages[stage].rooms[iteration].Doors[iterationDoors] = ROCK;
                                     iterationDoors+=1;
                                     // printf("[%d] [%d]\n", i, j);
                             }
@@ -844,7 +844,7 @@ int setMonstersInsideRoom(Donjon* d, int stage, int roomId) {
         row = (i%2==0) ? i : heightRoom-i;
         for(int j=2 ; (j < widthRoom && monsterId < numberOfMonsters) ; j+=2) {
             column = (i%2==0) ? j : widthRoom*2-j;
-            placeIsFreeAndNotNearPlayer = (map[row][column] == ' ' && map[row][column-2] != 'P' && map[row][column+2] != 'P' && map[row+1][column] != 'P' && map[row-1][column] != 'P'); 
+            placeIsFreeAndNotNearPlayer = (map[row][column] == ' ' && map[row][column-2] != PLAYER && map[row][column+2] != PLAYER && map[row+1][column] != PLAYER && map[row-1][column] != PLAYER); 
             if(placeIsFreeAndNotNearPlayer) { // then draw and place monster
                 map[row][column] = d->stages[stage].rooms[roomId].monsters[monsterId].firstLetter;
                 d->stages[stage].rooms[roomId].monsters[monsterId].positionX = column;
@@ -854,30 +854,6 @@ int setMonstersInsideRoom(Donjon* d, int stage, int roomId) {
             }
         }
     }
-
-    // for(int i=0 ; i < numberOfMonsters ; i+=1) {
-    //     freeSpace = 0;
-    //     while (!freeSpace) {
-    //         randomPositionY = getRandomInt(1, heightRoom, 100);
-    //         randomPositionX = getRandomInt(2, widthRoom, 100);
-    //         //printf("long. ");
-
-    //         // place the monster where there is space and not near the player
-    //         if (randomPositionX % 2 == 0 && d->stages[stage].rooms[roomId].room[randomPositionY][randomPositionX] == ' ' 
-    //         && d->stages[stage].rooms[roomId].room[randomPositionY][randomPositionX - 2] != 'P' 
-    //         && d->stages[stage].rooms[roomId].room[randomPositionY][randomPositionX + 2] != 'P' 
-    //         && d->stages[stage].rooms[roomId].room[randomPositionY - 1][randomPositionX] != 'P' 
-    //         && d->stages[stage].rooms[roomId].room[randomPositionY + 1][randomPositionX] != 'P' ) {
-    //             freeSpace=1;
-    //             // set monster position : 
-    //             d->stages[stage].rooms[roomId].monsters[i].positionX = randomPositionX;
-    //             d->stages[stage].rooms[roomId].monsters[i].positionY = randomPositionY;
-
-    //             // draw monster inside map
-    //             map[randomPositionY][randomPositionX] = d->stages[stage].rooms[roomId].monsters[i].firstLetter;
-    //         }   
-    //     }
-    // }
 
     return 1;
 }
@@ -1036,7 +1012,7 @@ int NumberOfDoorsByRoom(char ** s, int height, int width){
 
     for(int i  = 0; i< height; i+=1){
         for(int y = 0; y < width+1; y+=1){
-            if(s[i][y] == 'D'){
+            if(s[i][y] == DOOR){
                 iteration+=1;
             }
         }
@@ -1054,7 +1030,7 @@ int clearMonstersInsideRoom(Donjon* d, int stage, int roomID) {
     for(int i = 0 ; i < height ; i+=1) {
         for(int j = 0 ; j < width ; j += 1 ) {
             // if it's a monster, replace it with a space
-            if(map[i][j] != 'W' || map[i][j] != 'G' || map[i][j] != 'S' || map[i][j] != 'J' || map[i][j] != 'R' || map[i][j] != 'D' || map[i][j] != 'L' || map[i][j] != 'A' || map[i][j] != 'J') {
+            if(map[i][j] != WALL || map[i][j] != GAP || map[i][j] != SPIKE || map[i][j] != BONUS_ITEM_DOOR || map[i][j] != ROCK || map[i][j] != DOOR || map[i][j] != LOCKED_DOOR || map[i][j] != 'A') {
                 map[i][j] = ' ';
             }
         }

@@ -43,11 +43,19 @@ void InitialiseBossRoom(Donjon * d, int stage, int id, char letter);
  */
 void playerLoseLife(Player* player, float damageTaken);
 
+/**
+ * @brief use when the player must gain life
+ * 
+ * @param player 
+ * @param damageTaken 
+ */
+void playerGainLife(Player* player);
+
 void playerMoveUp(Donjon* donjon, int stage, int roomID, Player* player);
 void playerMoveDown(Donjon* donjon, int stage, int roomID, Player* player);
 void playerMoveLeft(Donjon* donjon, int stage, int roomID, Player* player);
 void playerMoveRight(Donjon* donjon, int stage, int roomID, Player* player);
-void playerLoseLife(Player* player, float damageTaken);
+
 void playerMoveLeft(Donjon* donjon, int stage, int roomID, Player* player);
 void playerMoveRight(Donjon* donjon, int stage, int roomID, Player* player);
 void playerMoveDown(Donjon* donjon, int stage, int roomID, Player* player);

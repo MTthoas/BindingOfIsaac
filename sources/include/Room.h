@@ -13,6 +13,33 @@
 #define NUMBER_ROOM_MAX 30
 #define NUMBER_STAGES_MAX 62
 
+#define BASE_ROOM_NAME 'O' // room name used for spawn, boss
+#define NORMAL_ROOM_NAME 'R'
+#define ITEM_ROOM_NAME 'I'
+#define BOSS_ROOM_NAME 'B'
+#define BONUS_ITEM_ROOM 'J'
+
+#define JAGGER_FIRST_LETTER 'J'
+#define LENINA_FIRST_LETTER 'L'
+#define ATHINA_FIRST_LETTER 'A'
+
+#define EMPTY ' '
+#define WALL 'W'
+#define ROCK 'R'
+#define GAP 'G'
+#define DOOR 'D'
+#define HEALTH 'H'
+#define SPIKE 'S'
+#define PLAYER 'P'
+#define ITEM 'I'
+#define NEXT_STAGE 'N'
+#define END 'E'
+
+#define LOCKED_DOOR 'L'
+#define ITEM_ROOM_DOOR '$'
+#define BOSS_ROOM_DOOR 'B'
+#define BONUS_ITEM_DOOR 'J'
+
 #include "objects.h"
 #include "Player.h"
 #include "monster.h"
