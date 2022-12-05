@@ -471,11 +471,12 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
             
                 OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
                 checkName(d, NumberOfRoomsInt, stage, axeX, axeY, id);
+                
 
                 GestionDoorsForMobRoom(d, stage, id, 0);
                 
                 if(d->stages[stage].rooms[iteration].name != NORMAL_ROOM_NAME) {
-                    //clearMonstersInsideRoom(d, stage, iteration);
+                    setMonstersInsideRoom(d, stage, iteration);
                 }
 
                 shootParams->id = id;                

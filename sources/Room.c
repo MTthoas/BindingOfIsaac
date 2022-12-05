@@ -764,7 +764,6 @@ void InitialiseRooms(struct Donjon * d, int stage, int numberOfRooms, Monster* a
             d-> stages[stage].rooms[iteration].numberOfDoors = iterationDoorsReturned;
             d-> stages[stage].rooms[iteration].Doors = malloc(sizeof(char) * iterationDoorsReturned);
             initialiseMonstersInsideRoom(d, stage, iteration, allMonsters);
-            setMonstersInsideRoom(d, stage, iteration);
             int iterationDoors = 0;
 
                 // Permet d'indiquer si y'a une porte, à gauche, à droite, en haut ou en bas.
@@ -825,12 +824,10 @@ void InitialiseRooms(struct Donjon * d, int stage, int numberOfRooms, Monster* a
 }
 
 int setMonstersInsideRoom(Donjon* d, int stage, int roomId) {
-    //srand(time(NULL));
-    //int randomPositionX,randomPositionY; 
     int heightRoom = d->stages[stage].rooms[roomId].height - 1;
     int widthRoom = d->stages[stage].rooms[roomId].width - 2;
     int numberOfMonsters = d->stages[stage].rooms[roomId].numberOfMonsters;
-    //int freeSpace = 0;
+
     char** map = d->stages[stage].rooms[roomId].room;
     if(map == NULL) {
         return 0;
@@ -838,14 +835,20 @@ int setMonstersInsideRoom(Donjon* d, int stage, int roomId) {
 
     int monsterId = 0;
     int row;
-    int column;
+    int column=1;
     int placeIsFreeAndNotNearPlayer;
     for(int i=1 ; (i < heightRoom && monsterId < numberOfMonsters) ; i+=1) {
         row = (i%2==0) ? i : heightRoom-i;
         for(int j=2 ; (j < widthRoom && monsterId < numberOfMonsters) ; j+=2) {
-            column = (i%2==0) ? j : widthRoom*2-j;
+            do {
+                column = j + rand() % widthRoom;
+            } while(column%2 != 0 && column >= widthRoom);
+            
             placeIsFreeAndNotNearPlayer = (map[row][column] == ' ' && map[row][column-2] != PLAYER && map[row][column+2] != PLAYER && map[row+1][column] != PLAYER && map[row-1][column] != PLAYER); 
             if(placeIsFreeAndNotNearPlayer) { // then draw and place monster
+                //printf("monster first name : %s\n", d->stages[stage].rooms[roomId].monsters[monsterId].name);
+                //sleep(1);
+                // TODO monster vide corriger
                 map[row][column] = d->stages[stage].rooms[roomId].monsters[monsterId].firstLetter;
                 d->stages[stage].rooms[roomId].monsters[monsterId].positionX = column;
                 d->stages[stage].rooms[roomId].monsters[monsterId].positionY = row;
@@ -854,6 +857,7 @@ int setMonstersInsideRoom(Donjon* d, int stage, int roomId) {
             }
         }
     }
+    printf("\n");
 
     return 1;
 }
@@ -863,7 +867,7 @@ void initialiseMonstersInsideRoom(Donjon * d, int stage, int roomID, Monster* al
     int* uniqueNumbers = generateUniqueNumbers(nbMonsters-1, nbMonsters);
     int index = 0;
 
-    Monster* roomMonsters = malloc(sizeof(Monster) * nbMonsters);
+    Monster* roomMonsters = malloc(sizeof(Monster) * nbMonsters-1);
     Monster randomMonster;
     for(int i=0 ; i < nbMonsters-1 ; i+=1) {
         index = uniqueNumbers[i];
