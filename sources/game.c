@@ -476,7 +476,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 GestionDoorsForMobRoom(d, stage, id, 0);
                 
                 if(d->stages[stage].rooms[iteration].name != NORMAL_ROOM_NAME) {
-                    setMonstersInsideRoom(d, stage, iteration);
+                    //setMonstersInsideRoom(d, stage, iteration);
                 }
 
                 shootParams->id = id;                

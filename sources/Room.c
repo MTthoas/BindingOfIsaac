@@ -764,6 +764,7 @@ void InitialiseRooms(struct Donjon * d, int stage, int numberOfRooms, Monster* a
             d-> stages[stage].rooms[iteration].numberOfDoors = iterationDoorsReturned;
             d-> stages[stage].rooms[iteration].Doors = malloc(sizeof(char) * iterationDoorsReturned);
             initialiseMonstersInsideRoom(d, stage, iteration, allMonsters);
+            setMonstersInsideRoom(d, stage, iteration);
             int iterationDoors = 0;
 
                 // Permet d'indiquer si y'a une porte, à gauche, à droite, en haut ou en bas.
@@ -848,7 +849,6 @@ int setMonstersInsideRoom(Donjon* d, int stage, int roomId) {
             if(placeIsFreeAndNotNearPlayer) { // then draw and place monster
                 //printf("monster first name : %s\n", d->stages[stage].rooms[roomId].monsters[monsterId].name);
                 //sleep(1);
-                // TODO monster vide corriger
                 map[row][column] = d->stages[stage].rooms[roomId].monsters[monsterId].firstLetter;
                 d->stages[stage].rooms[roomId].monsters[monsterId].positionX = column;
                 d->stages[stage].rooms[roomId].monsters[monsterId].positionY = row;
@@ -873,10 +873,10 @@ void initialiseMonstersInsideRoom(Donjon * d, int stage, int roomID, Monster* al
         index = uniqueNumbers[i];
         randomMonster = allMonsters[index];
         roomMonsters[i] = *duplicateMonster(&randomMonster);
-    }
+    }    
 
     d->stages[stage].rooms[roomID].monsters = roomMonsters;
-    d->stages[stage].rooms[roomID].numberOfMonsters = nbMonsters;
+    d->stages[stage].rooms[roomID].numberOfMonsters = nbMonsters-1;
 }
 
 /**
