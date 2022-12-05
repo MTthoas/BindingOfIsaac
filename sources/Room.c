@@ -773,7 +773,7 @@ void InitialiseRooms(struct Donjon * d, int stage, int numberOfRooms, Monster* a
 
                     for(int j = 0; j < width; j+=1){
 
-                        if(d-> stages[stage].rooms[iteration].room[i][j] == DOOR){
+                        if(d-> stages[stage].rooms[iteration].room[i][j] == DOOR) {
 
                             if(i == 0){
                                 d-> stages[stage].rooms[iteration].Doors[iterationDoors] = 'T';
@@ -825,6 +825,7 @@ void InitialiseRooms(struct Donjon * d, int stage, int numberOfRooms, Monster* a
 }
 
 int setMonstersInsideRoom(Donjon* d, int stage, int roomId) {
+
     int heightRoom = d->stages[stage].rooms[roomId].height - 1;
     int widthRoom = d->stages[stage].rooms[roomId].width - 2;
     int numberOfMonsters = d->stages[stage].rooms[roomId].numberOfMonsters;

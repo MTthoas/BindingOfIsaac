@@ -88,14 +88,14 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
             GestionDoorsForMobRoom(d, stage, id, 1);
 		}
 
-        // if (c == 'm') {
-
-        //     Monster * monster = getMonsterById(arrayMonster, 1);
-            
-        //     spawnMonster(d, monster, stage, id);
-        //     shootParams->monster = monster;
-
-        // }
+        if (c == 'm') {
+            printf("number of monsters : %d\n", d->stages[stage].rooms[id].numberOfMonsters);
+            for(int i = 0 ; i < d->stages[stage].rooms[id].numberOfMonsters ; i+=1) {
+                printf("monster : %s", d->stages[stage].rooms[id].monsters[i].name);
+            }
+            printf("\n");
+            sleep(1);
+        }
 
 		if (c != 'e') {
  
