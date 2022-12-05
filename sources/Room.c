@@ -216,7 +216,7 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
 
                     iterationTest+=1;
                     printf("Iteration : %d\n", iterationTest);
-                    if(iterationTest > 57) {
+                    if(iterationTest > 527) {
                         return 1;
                     }
 
@@ -498,13 +498,18 @@ void InitialisationGame(Donjon * d, int stageNum, Monster* arrayMonster) {
             for (int v = 0; v < NumberOfRoomsInt + 2; v++) {
                 for (int y = 0; y < NumberOfRoomsInt + 2; y++) {
                     printf("%c ", d->stages[stageNum].stage[v][y]);
-
+                    if(d->stages[stageNum].stage[v][y] == 'R'){
+                        iterationRoom+=1;
+                    }
                 }
                 printf("\n");
             }
 
+        printf("Iteration Room , %d\n", iterationRoom);
+        printf("NumberOfRoomsInt, %d\n", NumberOfRoomsInt);
 
             if(iterationRoom >= NumberOfRoomsInt ){
+                printf("Nombre de salles limite atteintes, regénération !\n");
                 InitialisationGame(d, stageNum, arrayMonster);
             }
 

@@ -56,6 +56,9 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
         }
     }
 
+    condition = false;
+    sleep(1);
+
 	while (condition) {
 
         #ifdef _WIN32 
@@ -297,7 +300,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
                 break;
 
-                case '8': ;
+                case 'o': ;
                     // Shoot Up                 
                     if (shootParams->reload == 1){
                         if( shootParams->boss == NULL){
@@ -318,7 +321,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     }
                 break;
                 
-                case '5': ;
+                case 'l': ;
                     // Shoot Down
                     if (shootParams->reload == 1){
                         if( shootParams->boss == NULL){
@@ -337,7 +340,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
                 break;
                 
-                case '4': ;
+                case 'k': ;
                     // Shoot Left
                     if (shootParams->reload == 1){
                         if( shootParams->boss == NULL){
@@ -355,7 +358,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     }
                 break;
 
-                case '6': ;
+                case 'm': ;
                     // Shoot Right
                     pthread_t t5;
                     if (shootParams->reload == 1){
