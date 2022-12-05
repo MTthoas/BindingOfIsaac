@@ -825,45 +825,65 @@ void InitialiseRooms(struct Donjon * d, int stage, int numberOfRooms, Monster* a
 }
 
 int setMonstersInsideRoom(Donjon* d, int stage, int roomId) {
-    srand(time(NULL));
-    int randomPositionX,randomPositionY; 
+    //srand(time(NULL));
+    //int randomPositionX,randomPositionY; 
     int heightRoom = d->stages[stage].rooms[roomId].height - 1;
     int widthRoom = d->stages[stage].rooms[roomId].width - 2;
     int numberOfMonsters = d->stages[stage].rooms[roomId].numberOfMonsters;
-    int freeSpace = 0;
+    //int freeSpace = 0;
     char** map = d->stages[stage].rooms[roomId].room;
     if(map == NULL) {
         return 0;
     }
 
-    for(int i=0 ; i < numberOfMonsters ; i+=1) {
-        freeSpace = 0;
-        while (!freeSpace) {
-            randomPositionY = getRandomInt(1, heightRoom);
-            randomPositionX = getRandomInt(2, widthRoom);
-
-            // place the monster where there is space and not near the player
-            if (randomPositionX % 2 == 0 && d->stages[stage].rooms[roomId].room[randomPositionY][randomPositionX] == ' ' 
-            && d->stages[stage].rooms[roomId].room[randomPositionY][randomPositionX - 2] != 'P' 
-            && d->stages[stage].rooms[roomId].room[randomPositionY][randomPositionX + 2] != 'P' 
-            && d->stages[stage].rooms[roomId].room[randomPositionY - 1][randomPositionX] != 'P' 
-            && d->stages[stage].rooms[roomId].room[randomPositionY + 1][randomPositionX] != 'P' ) {
-                freeSpace=1;
-                // set monster position : 
-                d->stages[stage].rooms[roomId].monsters[i].positionX = randomPositionX;
-                d->stages[stage].rooms[roomId].monsters[i].positionY = randomPositionY;
-
-                // draw monster inside map
-                map[randomPositionY][randomPositionX] = d->stages[stage].rooms[roomId].monsters[i].firstLetter;
-            }   
+    int monsterId = 0;
+    int row;
+    int column;
+    int placeIsFreeAndNotNearPlayer;
+    for(int i=1 ; (i < heightRoom && monsterId < numberOfMonsters) ; i+=1) {
+        row = (i%2==0) ? i : heightRoom-i;
+        for(int j=2 ; (j < widthRoom && monsterId < numberOfMonsters) ; j+=2) {
+            column = (i%2==0) ? j : widthRoom-j;
+            placeIsFreeAndNotNearPlayer = (map[row][column] == ' ' && map[row][column-2] != 'P' && map[row][column+2] != 'P' && map[row+1][column] != 'P' && map[row-1][column] != 'P'); 
+            if(placeIsFreeAndNotNearPlayer) {
+                map[row][column] = d->stages[stage].rooms[roomId].monsters[monsterId].firstLetter;
+                d->stages[stage].rooms[roomId].monsters[monsterId].positionX = column;
+                d->stages[stage].rooms[roomId].monsters[monsterId].positionY = row;
+                monsterId += 1;
+                break;
+            }
         }
     }
+
+    // for(int i=0 ; i < numberOfMonsters ; i+=1) {
+    //     freeSpace = 0;
+    //     while (!freeSpace) {
+    //         randomPositionY = getRandomInt(1, heightRoom, 100);
+    //         randomPositionX = getRandomInt(2, widthRoom, 100);
+    //         //printf("long. ");
+
+    //         // place the monster where there is space and not near the player
+    //         if (randomPositionX % 2 == 0 && d->stages[stage].rooms[roomId].room[randomPositionY][randomPositionX] == ' ' 
+    //         && d->stages[stage].rooms[roomId].room[randomPositionY][randomPositionX - 2] != 'P' 
+    //         && d->stages[stage].rooms[roomId].room[randomPositionY][randomPositionX + 2] != 'P' 
+    //         && d->stages[stage].rooms[roomId].room[randomPositionY - 1][randomPositionX] != 'P' 
+    //         && d->stages[stage].rooms[roomId].room[randomPositionY + 1][randomPositionX] != 'P' ) {
+    //             freeSpace=1;
+    //             // set monster position : 
+    //             d->stages[stage].rooms[roomId].monsters[i].positionX = randomPositionX;
+    //             d->stages[stage].rooms[roomId].monsters[i].positionY = randomPositionY;
+
+    //             // draw monster inside map
+    //             map[randomPositionY][randomPositionX] = d->stages[stage].rooms[roomId].monsters[i].firstLetter;
+    //         }   
+    //     }
+    // }
 
     return 1;
 }
 
 void initialiseMonstersInsideRoom(Donjon * d, int stage, int roomID, Monster* allMonsters) {
-    int nbMonsters = getRandomInt(2, 5);
+    int nbMonsters = getRandomInt(2, 5, 20);
     int* uniqueNumbers = generateUniqueNumbers(nbMonsters-1, nbMonsters);
     int index = 0;
 
@@ -1023,4 +1043,25 @@ int NumberOfDoorsByRoom(char ** s, int height, int width){
     }
 
     return iteration;
+}
+
+int clearMonstersInsideRoom(Donjon* d, int stage, int roomID) {
+    char** map = d->stages[stage].rooms[roomID].room;
+    int height = d->stages[stage].rooms[roomID].height;
+    int width = d->stages[stage].rooms[roomID].width;
+
+    // redraw map without the monsters
+    for(int i = 0 ; i < height ; i+=1) {
+        for(int j = 0 ; j < width ; j += 1 ) {
+            // if it's a monster, replace it with a space
+            if(map[i][j] != 'W' || map[i][j] != 'G' || map[i][j] != 'S' || map[i][j] != 'J' || map[i][j] != 'R' || map[i][j] != 'D' || map[i][j] != 'L' || map[i][j] != 'A' || map[i][j] != 'J') {
+                map[i][j] = ' ';
+            }
+        }
+    }
+
+    // clear array of monsters
+    //free(d->stages[stage].rooms[roomID].monsters);
+    //d->stages[stage].rooms[roomID].monsters = NULL;
+    return 1;
 }

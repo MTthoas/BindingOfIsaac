@@ -83,7 +83,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 			c = getchar();
 		}
         
-		if (c == 'x') {
+		if (c == 'x') { // glitch to de-lock doors without beating the monsters
             GestionDoorsForMobRoom(d, stage, id, 1);
 		}
 
@@ -444,6 +444,11 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 checkName(d, NumberOfRoomsInt, stage, axeX, axeY, id);
 
                 GestionDoorsForMobRoom(d, stage, id, 0);
+                
+                if(d->stages[stage].rooms[iteration].name != 'R') {
+                    //clearMonstersInsideRoom(d, stage, iteration);
+                }
+
                 shootParams->id = id;                
                 changeOfRoom = 0;
                 (void)spawnMonsterVar;
@@ -527,7 +532,6 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 			}
 
             printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, iteration);
-            printf("\nHP MAX : %.1f\n", player->hpMax); 
             printf("DAMAGE  : %.1f\n", player->dmg);
             printf("SHIELD : %.1f\n", player->shield);
             printf("PIERCING SHOT : %s\n", (player->ps) ? "Yes" : "No");
@@ -759,7 +763,7 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
     
 }
 
-void checkName(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY, int t){
+void checkName(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY, int t) {
 
     for(int i = 0; i < numberOfRooms+2; i++){
         for(int y = 0; y < numberOfRooms+2; y++){
@@ -767,7 +771,6 @@ void checkName(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY, int 
                 
                 if( d->stages[stage].stage[i + axeY][y + axeX] == 'R'){
                     d->stages[stage].rooms[t].name = 'R';
-                    
                 }
 
                 if( d->stages[stage].stage[i + axeY][y + axeX] == 'I'){

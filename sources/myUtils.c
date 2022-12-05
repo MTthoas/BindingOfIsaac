@@ -2,11 +2,11 @@
 #include <time.h>
 #include <stdlib.h>
 
-int getRandomInt(int min, int max) {
+int getRandomInt(int min, int max, int precision) {
     int random;
 
     srand(time(NULL));
-    for(int i=0; i<100; i+=1) { 
+    for(int i=0; i<precision; i+=1) { 
         random = min+1 + rand() %(max-1);
     }
 

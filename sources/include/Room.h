@@ -124,6 +124,17 @@ void InitialiseRooms(struct Donjon * d, int stage, int numberOfRooms, Monster* m
  */
 int setMonstersInsideRoom(Donjon* d, int stage, int roomID);
 
+/**
+ * @brief 
+ * Clears the monsters and the monster array inside the specified room. Use inside rooms that are not 'R'.
+ * 
+ * @param d 
+ * @param stage 
+ * @param roomID 
+ * @return int 
+ */
+int clearMonstersInsideRoom(Donjon* d, int stage, int roomID);
+
 
 
 #endif

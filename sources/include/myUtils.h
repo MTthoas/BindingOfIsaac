@@ -7,7 +7,15 @@
 #include <unistd.h>
 #endif 
 
-int getRandomInt(int min, int max);
+/**
+ * @brief get a random integer
+ * 
+ * @param min minimum
+ * @param max maximum of the wanted number
+ * @param precision The higher the precision, better the "randomness"
+ * @return int 
+ */
+int getRandomInt(int min, int max, int precision);
 void refresh(void);
 
 
