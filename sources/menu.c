@@ -15,6 +15,10 @@
 #include <sys/select.h>
 #include <stdbool.h>
 #include <fcntl.h>
+#include <ctype.h> 
+#include <string.h>
+#include <stdlib.h>
+
 
 
 #include "./include/menu.h"
@@ -313,7 +317,29 @@ int menuSeeRooms(void){
     }
 }
 
+void printRoom(int height, int length, char arr[height][length]){
+    
+        for(int i = 0; i < height; i++){
+         printf("\n      ");
+        for(int j = 0; j < length; j++){
+            printf("%c", arr[i][j]);
+        }   
+    }
+
+    printf("\n\n\n");
+}
+
 int menuCreateRoom(void) {
+
+    char (*arr)[30] = malloc(sizeof(char[9][30]));
+
+
+      for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 30; j++) {
+            arr[i][j] = ' ';
+        }
+    }
+
     system("clear");
     printGameBanner();
     printf("\n-------------- CREATE ROOM  ----------------\n\n");
@@ -321,39 +347,34 @@ int menuCreateRoom(void) {
 
     printf("          For Size Room of 9x15\n");
 
-    char (*arr)[15] = malloc(sizeof(char[9][15]));
+    int height = 9;
+    int length = 30;
 
-    for (int i = 0; i < 9; i++) {
-        for (int j = 0; j < 15; j++) {
-            arr[i][j] = ' ';
-        }
-    }
-
-
-    for(int i = 0; i < 9; i++){
-        for(int j = 0; j < 15; j++){
-            if(i == 0 || i == 9 - 1){
-                arr[i][j] = 'W';
-            }        
-            if(j == 0 || j == 15 - 1){
-                arr[i][j] = 'W';
+    for(int i = 0; i < height; i++){
+        for(int j = 0; j < length; j++){
+           
+            if(j%2 == 0){
+                
+                if(i == 0 || i == height - 1){
+                    arr[i][j] = 'W';
+                } 
             }      
+
+            if(j%2 == 0 ){
+                if(j == 0 || j == length - 2){
+                    arr[i][j] = 'W';
+                }  
+            }
         }
     }
 
-    for(int i = 0; i < 9; i++){
-         printf("\n             ");
-        for(int j = 0; j < 15; j++){
-            printf("%c", arr[i][j]);
-        }   
-    }
-
-    printf("\n\n\n");
+    printRoom(height, length, arr);
 
     int success = 0;
-    // int axeX = 0;
-    // int axeY = 0;
-    int Obstacles = 0;
+    int axeX = 0;
+    int axeY = 0;
+    int Rock = 0;
+    int condition = true;
 
     while(1){
         printf("Voulez-vous ajoutez des obstacles à la salle ? (Y/N) \n");
@@ -367,24 +388,116 @@ int menuCreateRoom(void) {
                 break;
             }else{
                 continue;
+                condition = false;
             }
         } 
         
     }
 
 
-    while(1){
-        printf("Combien d'obstacles voulez-vous ajoutez ?\n");
-        Obstacles = readInt();
-        if(Obstacles <= 0 ) {
-            printf("DO NOT ENTER 0 OR LESS IDIOT");
+    while(condition){
+        printf("Combien de rochers voulez-vous ajoutez ?\n");
+        Rock = readInt();
+        if(Rock <= 0 ) {
+            printf("DO NOT ENTER 0 OR LESS IDIOT\n\n");
             continue;
         }else{
             break;
         }
     }
 
-    printf("Vous avez choisi d'ajoutez %d obstacle(s)\n", Obstacles);
+    for(int i = 0; i < Rock; i++ ){
+            printf("\n");
+
+            while(1){
+                printf("AXE X pour créer le rocher [%d] :", i+1);
+                axeX = readInt();
+                if (isdigit(axeX)){
+                    continue;
+                }
+                if(axeX % 2 == 0){
+                    break;
+                }else{
+                    printf("AXE X pour créer le rocher [%d] :", i+1);
+                    axeX = readInt();
+                }
+            }
+
+            while(1){
+                printf("AXE Y pour créer un rocher [%d] :", i+1);
+                axeY = readInt();
+                if (isdigit(axeY)){
+                    continue;
+                }
+                break;
+            }
+
+             if(arr[axeX][axeY] != ' '){
+                    printf("Impossible de créer un rocher dans un mur");
+                    i--;
+                    continue;
+            }
+
+            arr[axeY][axeX] = 'R';
+
+            int numberOfRoomsInt = numberOfRooms();
+
+            // const char* str1 = "hello there";
+
+
+            char final[100];
+
+            sprintf(final,"%s%d%s%d%s%d\n","[",height,"|",length/2,"]",numberOfRoomsInt-2);
+            
+                FILE *f = fopen(CHEMIN_FICHIER_PIECES, "a");
+                if (f == NULL)
+                {
+                    printf("Error opening file!\n");
+                }
+
+                // printf("%s\n",final);
+
+             /* Append data to file */
+                fputs(final, f);
+
+               // write final array to file
+
+                for(int i = 0; i < height; i++){
+                    for(int j = 0; j < length; j++){
+                        fputc(arr[i][j], f);
+                    }
+                    fputc('\n', f);
+                }
+
+                fclose(f);
+            
+            
+            // char array[5] = ["[",""]
+
+            
+
+        // for(int x = 0; x < height; x++){
+        //     for(int j = 0; j < length; j++){
+        //         if(axeX - 2 == 'W' && height / 2 == axeY ){
+        //             printf("Impossible de créer un rocher à côté d'une potentiel porte");
+        //             break;
+        //         }
+        //         if(axeX + 2 == 'W' && height / 2 == axeY ){
+        //             printf("Impossible de créer un rocher à côté d'une potentiel porte");
+        //             break;
+        //         }
+        //         // if(x == axeX && j == axeY){
+        //             arr[i][j] = 'R';
+        //         // }
+        //     }
+        // }
+    }
+
+    printRoom(height, length, arr);
+
+
+
+
 
 
     FILE * fp;
