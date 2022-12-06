@@ -146,7 +146,7 @@ void initialiseMonstersInsideRoom(Donjon * d, int stage, int roomID, Monster* al
  * @param stage Etage précis
  * @param numberOfRooms Nombre de rooms
  */
-void InitialiseRooms(struct Donjon * d, int stage, int numberOfRooms, Monster* monster);
+void InitialiseRooms(struct Donjon * d, int stage, int numberOfRooms);
 
 /**
  * @brief Draws and sets the monsters inside the specified room of the dungeon

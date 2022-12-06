@@ -103,7 +103,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 printf("\n");
             }
 
-            sleep(4);
+            sleep(1);
         }
 
         if (c == 'n') { // afficher les monstres de la salle
@@ -112,7 +112,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 printf("monster : %s", d->stages[stage].rooms[id].monsters[i].name);
                  printf("\n");
             }
-            sleep(4); 
+            sleep(1); 
         }
 
 		if (c != 'e') {
