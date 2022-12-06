@@ -15,7 +15,7 @@
 
 #define BASE_ROOM_NAME 'O' // room name used for spawn, boss
 #define NORMAL_ROOM_NAME 'R'
-#define ITEM_ROOM_NAME 'I'
+#define ITEM_ROOM_NAME '$'
 #define BOSS_ROOM_NAME 'B'
 #define BONUS_ITEM_ROOM 'J'
 
