@@ -18,16 +18,16 @@ typedef struct ShootParams ShootParams;
 void menu_init(void);
 
 void menuCrudItem(void);
-void menuSeeItems(void);
-void menuCreateItem(void);
-void menuModifyItem(void);
-void menuDeleteItem(void);
+int menuSeeItems(void);
+int menuCreateItem(void);
+int menuModifyItem(void);
+int menuDeleteItem(void);
 
 void menuCrudRoom(void);
-void menuSeeRooms(void);
-void menuCreateRoom(void);
-void menuModifyRoom(void);
-void menuDeleteRoom(void);
+int menuSeeRooms(void);
+int menuCreateRoom(void);
+int menuModifyRoom(void);
+int menuDeleteRoom(void);
 
 void optionError(void);
 void menuControl(void);

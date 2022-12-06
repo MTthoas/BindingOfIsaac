@@ -724,6 +724,12 @@ void InitialiseRooms(struct Donjon * d, int stage, int numberOfRooms, Monster* a
 
     // Read => Une line par itération. Si on a plus de ligne, renvoi -1
 
+    // Analyse anti-corrupion de fichier
+
+    // while ((read = getline(&line, &len, fp))!= -1) {
+
+    // }
+
     while ((read = getline( & line, & len, fp)) != -1) {
 
         // Si la premier paramètre détient le deuxième paramètre, renvoi 0

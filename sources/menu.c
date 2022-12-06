@@ -47,22 +47,11 @@ void menu_init(void) {
     printf("               Press 'c' for the controls information\n\n");
     printf("               Press 'x' to exit the game\n\n\n\n");
 
-    printf("========   Credit : Dorian-Alexandre-Matthias   ==========\n");
+    printf("========   Credit : Dorian-Alexandre-Matthias   ==========\n\n\n");
 }
 
-void menuCrudItem(void) {
-    system("clear");
-        printGameBanner();
-        printf("-------- ITEMS MENU  --------\n");
-        printf("Press s to see your current items\n");
-        printf("Press a to add an item\n");
-        printf("Press d to delete an item\n");
-        printf("Press m to modify an item\n");
+int menuSeeItems(void) {
 
-        printf("\nPress 'r' to go back\n");
-}
-
-void menuSeeItems(void) {
     system("clear");
     printGameBanner();
     printf("-------- YOUR ITEMS --------\n");
@@ -73,18 +62,20 @@ void menuSeeItems(void) {
 
     printf("\nPress 'r' to go back\n");
 
+    return 0;
+
 }
 
-void menuCreateItem(void){
+int menuCreateItem(void){
     system("clear");
     printGameBanner();
-    printf("-------- CREATE ITEM  --------\n");
+    printf("---------------- CREATE ITEM  ----------------\n\n");
     
     Object* head = objectsFileToObjectsList(); 
     if(head == NULL) {
         printf("Error while loading the head file. Contact the dev team :P.\n");
         printf("Press 'r' to go back.\n");
-        return;
+        return 1;
     }
     
     char name[20];
@@ -121,24 +112,37 @@ void menuCreateItem(void){
         } else {
             printf("Could not add the item.\n");
             freeAllObjects(head);
+            return 2;
         }
     
         printf("New item added.\n");
     }     
-    
-    printf("\nPress 'r' to continue\n");
+
+    printf("\nPress 'R' to go back\n");
+
+    while(1){
+        char c = ' ';
+        if(kbhit()){
+            c = getchar();
+        } 
+            if(c == 'R' || c == 'r') {
+                return 1;
+            }
+        sleep(1);
+    }
 }
 
-void menuDeleteItem(void) {
+int menuDeleteItem(void) {
+
     system("clear");
     printGameBanner();
-    printf("-------- DELETE ITEM  --------\n");
+    printf("------------ DELETE ITEM  ------------\n");
     
     Object* head = objectsFileToObjectsList();
     if(head == NULL) {
         printf("Couldn't load from %s\n.", CHEMIN_FICHIER_OBJECTS);
         printf("Press 'r' to go back\n");
-        return;
+        return 2;
     }
 
     int id;
@@ -155,11 +159,24 @@ void menuDeleteItem(void) {
     listToObjectsFile(head);
     freeAllObjects(head);
 
-    printf("Item deleted.\n");
-    printf("\nPress 'r' to continue\n");
+    printf("Item deleted.\n\n");
+
+    printf("\nPress 'R' to go back\n");
+
+    while(1){
+        char c = ' ';
+        if(kbhit()){
+            c = getchar();
+        } 
+            if(c == 'R' || c == 'r') {
+                return 1;
+            }
+        sleep(1);
+    }
 }
 
-void menuModifyItem(void){
+int menuModifyItem(void){
+
     system("clear");
     printGameBanner();
     printf("-------- UPDATE ITEM  --------\n");
@@ -169,7 +186,7 @@ void menuModifyItem(void){
     if(head == NULL) {
         printf("Couldn't open %s\n.", CHEMIN_FICHIER_OBJECTS);
         printf("Press 'r' to go back\n");
-        return;
+        return 2;
     }
 
     int id;
@@ -185,8 +202,7 @@ void menuModifyItem(void){
     Object* item = getObjectById(head, id);
     if(item == NULL) {
         printf("Couldn't get the item of id : %d\n", id);
-        printf("Press 'r' to continue\n");
-        return;
+        return 2;
     }
 
     success = 0;
@@ -255,60 +271,162 @@ void menuModifyItem(void){
 
     listToObjectsFile(head);
     freeAllObjects(head);
+
+    printf("\nPress 'R' to go back\n");
     
-    printf("\nPress 'r' to continue\n");
+    while(1){
+        char c = ' ';
+        if(kbhit()){
+            c = getchar();
+        } 
+            if(c == 'R' || c == 'r') {
+                return 1;
+            }
+        sleep(1);
+    }
+    
 }
 
-void menuCrudRoom(void){
-    system("clear");
-        printGameBanner();
-        printf("-------- ROOMS MENU  --------\n");
-        printf("Press 's' to see your rooms\n");
-        printf("Press 'a' to add a room\n");
-        printf("Press 'd' to delete a room\n");
-        printf("Press 'm' to modify a room\n");
 
-        printf("\nPress 'b' to go back\n");
-}
+int menuSeeRooms(void){
 
-void menuSeeRooms(void){
     system("clear");
     printGameBanner();
-    printf("-------- YOUR ROOMS --------\n");
-    
+    printf("---------------- YOUR ROOMS ----------------\n\n");
 
     FILE* fichier = fopen(CHEMIN_FICHIER_PIECES, "r");
     afficherFichier(fichier);
     fclose(fichier);
+    sleep(1);
 
-    printf("\nPress 'r' to go back\n");
+    printf("\nPress 'R' to go back\n");
+
+    while(1){
+        char c = ' ';
+        if(kbhit()){
+            c = getchar();
+        } 
+            if(c == 'R' || c == 'r') {
+                return 1;
+            }
+        sleep(1);
+    }
 }
 
-void menuCreateRoom(void) {
+int menuCreateRoom(void) {
     system("clear");
     printGameBanner();
-    printf("-------- CREATE ROOM  --------\n");
-    printf("Not possible for the moment. Contact the dev team :)\n");  
-    printf("\n Press 'r' to continue\n");   
+    printf("\n-------------- CREATE ROOM  ----------------\n\n");
+    // printf("            Not possible for the moment. Contact the dev team :)\n"); 
+
+    printf("          For Size Room of 9x15\n");
+
+    char (*arr)[15] = malloc(sizeof(char[9][15]));
+
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 15; j++) {
+            arr[i][j] = ' ';
+        }
+    }
+
+
+    for(int i = 0; i < 9; i++){
+        for(int j = 0; j < 15; j++){
+            if(i == 0 || i == 9 - 1){
+                arr[i][j] = 'W';
+            }        
+            if(j == 0 || j == 15 - 1){
+                arr[i][j] = 'W';
+            }      
+        }
+    }
+
+    for(int i = 0; i < 9; i++){
+         printf("\n             ");
+        for(int j = 0; j < 15; j++){
+            printf("%c", arr[i][j]);
+        }   
+    }
+
+    printf("\n\n\n");
+
+    int success = 0;
+    // int axeX = 0;
+    // int axeY = 0;
+    int Obstacles = 0;
+
+    while(1){
+        printf("Voulez-vous ajoutez des obstacles à la salle ? (Y/N) \n");
+        success = confirmation();
+        if(success == 1){
+            break;
+        }else{
+            printf("Voulez-vous ajoutez une salle vide ?\n");
+            success = confirmation();
+            if(success == 1){
+                break;
+            }else{
+                continue;
+            }
+        } 
+        
+    }
+
+
+    while(1){
+        printf("Combien d'obstacles voulez-vous ajoutez ?\n");
+        Obstacles = readInt();
+        if(Obstacles <= 0 ) {
+            printf("DO NOT ENTER 0 OR LESS IDIOT");
+            continue;
+        }else{
+            break;
+        }
+    }
+
+    printf("Vous avez choisi d'ajoutez %d obstacle(s)\n", Obstacles);
+
+
+    FILE * fp;
+
+    fp = fopen("../resources/room.rtbob", "r");
+    if (fp == NULL){
+        return 2;
+    }
+    fclose(fp);
+
+    printf("\nPress 'R' to go back\n");
+
+    while(1){
+        char c = ' ';
+        if(kbhit()){
+            c = getchar();
+        } 
+            if(c == 'R' || c == 'r') {
+                return 1;
+            }
+        sleep(1);
+    }
 
 }
 
-void menuDeleteRoom(void){
+int menuDeleteRoom(void){
+
     system("clear");
     printGameBanner();
-    printf("-------- DELETE ROOM  --------\n");
+    printf("---------------- DELETE ROOM  ----------------\n\n");
 
     CRUD_Room* head = roomsFileToRoomsList();
     if(head == NULL) {
         printf("Couldn't load from %s\n.", CHEMIN_FICHIER_PIECES);
         printf("Press 'r' to go back\n");
-        return;
+        return 2;
     }
 
     int id;
     int success = 0;
     displayAllRooms(head);
-    printf("Enter the id of the room you want to delete (see above) : \n");
+    printf("\n\nEnter the id of the room you want to delete (see above) : \n");
     do {
         id = readInt();
         printf("id = %d. Is it correct ? (y/n) \n", id);
@@ -319,29 +437,70 @@ void menuDeleteRoom(void){
     listToRoomsFile(head);
     freeAllRooms(head);
 
-    printf("Room deleted.\n");
-    printf("\nPress 'r' to continue\n");
+    printf("Room deleted.\n\n");
+
+
+    printf("\nPress 'R' to go back\n");
+
+    while(1){
+        char c = ' ';
+        if(kbhit()){
+            c = getchar();
+        } 
+            if(c == 'R' || c == 'r') {
+                return 1;
+            }
+        sleep(1);
+    }
 }
 
-void menuModifyRoom(void){
+int menuModifyRoom(void){
    system("clear");
     printGameBanner();
     printf("-------- UPDATE ROOM  --------\n");
     printf("Not possible for the moment. Contact the dev team :)\n");
     printf("\nPress 'b' to continue ...\n");
 
+    return 0;
+
 }
+
+void menuCrudRoom(void){
+
+        system("clear");
+        printGameBanner();
+        printf("-------------------- ROOMS MENU  -------------------\n\n");
+        printf("            Press 's' to see your rooms\n");
+        printf("            Press 'a' to add a room\n");
+        printf("            Press 'd' to delete a room\n");
+        printf("            Press 'm' to modify a room\n\n");
+
+        printf("            Press 'b' to go back \n\n");
+}
+
+
+void menuCrudItem(void) {
+    system("clear");
+        printGameBanner();
+        printf("-------------------- ITEMS MENU  -------------------- \n\n");
+        printf("            Press s to see your current items\n");
+        printf("            Press a to add an item\n");
+        printf("            Press d to delete an item\n");
+        printf("            Press m to modify an item\n\n");
+
+        printf("            Press 'b' to go back\n\n");
+}
+
 
 void menuControl(void){
     system("clear");
     printGameBanner();
-    printf("--------------- Info control  ----------------\n");
-    printf("Use z,q,s,d to move\n");
-    printf("Use 8,4,5,6 to attack\n");
-    printf("Use x to quit the game\n");
+    printf("-------------------- Info control  --------------------\n\n");
+    printf("                 Use z,q,s,d to move\n");
+    printf("                 Use 8,4,5,6 to attack\n");
+    printf("                 Use x to quit the game\n\n");
 
-    printf("\nPress 'b' to continue ...\n");
-    return;
+    printf("                 Press 'b' to go back \n\n");
 }
 
 void printProgress(double percentage) {
@@ -419,11 +578,14 @@ void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id) 
 
 void menuGame() {
 
-    bool condition = true, condition2 = true, etape = true;
+    bool condition = true, condition2 = true, condition3 = true, condition4 = true, etape = true;
 	int c,c2;
 		
     int stage;
     int change;
+    
+    int statusRoom = 0;
+    int statusItem = 0;
 
     menu_init();
 
@@ -509,66 +671,122 @@ void menuGame() {
 						#endif 
 					}
 				}
-								
-			
+
+            break;
 			case 'i':
                 while (condition2)
                 {
-                etape = false;
+                    etape = false;
                     c2 = 'p';
                     menuCrudItem();
+                    statusItem = 0;
                     if (kbhit()) {
                         c2 = getchar();
                     }
                     switch (c2){
                         case 'a':
-                            menuCreateItem();
-                            condition2 = false;
+                            while(statusItem == 0){
+                                statusItem = menuCreateItem();
+                            }
                             break;
                         case 'd':
-                            menuDeleteItem();
-                            condition2 = false;
-
+                            while(statusItem == 0){
+                                statusItem = menuDeleteItem();
+                            }
                             break;
                         case 'm':
-                            menuModifyItem();
-                            condition2 = false;
-
-                            break;
-
+                            while(statusItem == 0){
+                                statusItem = menuModifyItem();
+                            }
+                        break;
+                        case 'b':
+                            menuGame();
+                        break;
                     }
+
+                    if(statusItem == 1){
+                        continue;
+                    }
+                    if(statusItem == 2){
+                         // Ecrire dans logs qu'il y'a une erreur
+                        system("clear");
+                        printf("Erreur");
+                        sleep(2);
+                        continue;
+                    }
+                    sleep(1);
                 }
 			break;
 				
 
 			case 'r':
-			 while (condition2)
-			 {
+			while (condition3){
 				etape = false;
 				c2 = 'p';
 				menuCrudRoom();
+                sleep(1);
+                statusRoom = 0;
 				if (kbhit()) {
 					c2 = getchar();
 				}
 				switch (c2){
+                    case 's':
+                        while(statusRoom == 0){
+                            statusRoom = menuSeeRooms();
+                        }
+                    break;
 					case 'a':
-						menuCreateRoom();
-						condition2 = false;
-						break;
+                        while(statusRoom == 0){
+						    statusRoom = menuCreateRoom();
+                        }
+					break;
 					case 'd':
-						menuDeleteRoom();
-						condition2 = false;
-						break;
+                        while(statusRoom == 0){
+						    statusRoom = menuDeleteRoom();
+						}
+					break;
 					case 'm':
-						menuModifyRoom();
-						condition2 = false;
-						break;
+                        while(statusRoom == 0){
+						    statusRoom = menuModifyRoom();
+						}
+					break;
+                    case 'b':
+                        menuGame();
+                    break;
 				}
-			 }
-				break;
+
+                if(statusItem == 1){
+                    continue;
+                }
+
+                if(statusItem == 2){
+                // Ecrire dans logs qu'il y'a une erreur
+                    system("clear");
+                    printf("Erreur");
+                    sleep(2);
+                    continue;
+                }
+                sleep(1);
+
+                (void)statusRoom;
+			}
+			break;
 
 			case 'c':
-				menuControl();
+                while(condition4 == true){
+                    menuControl();
+                    sleep(1);
+                    statusRoom = 0;
+                    if (kbhit()) {
+                        c2 = getchar();
+                    }
+                    switch (c2){
+                        case 'b':
+                            condition4 = false;
+                            menuGame();
+                        break;
+                    }
+                }
 		}
 	}
 }
