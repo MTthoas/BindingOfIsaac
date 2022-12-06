@@ -24,13 +24,16 @@
 void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, int * change, Player* player, int NumberOfRoomsInt, int id, int axeX, int axeY) {
 
     int *pId = &id;
-    int idRoomForMonster = 0;
     int changeOfRoom = 1;
     int bossActive = 0;
     int BossInfinite = 0;
     int itemIsSet = 0;
-    char FuturPosition = EMPTY;
+    // char erasedObstacle;
+    char elementAtFuturePosition = EMPTY;
     char actualPosition = EMPTY;
+    // int oldObstaclePositionY; (void)oldObstaclePositionY;
+    // int oldObstaclePositionX; (void)oldObstaclePositionX;
+    // int obstacleGotErased;
 
     int iteration = 0;
     bool condition = true;  
@@ -91,7 +94,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
             GestionDoorsForMobRoom(d, stage, id, 1);
 		}
 
-        if (c == 'm') {
+        if (c == 'm') { // afficher tous les monstres
             for(int room=0 ; room < NumberOfRoomsInt ; room+=1) {
                 printf("room : %d\nnumber of monsters : %d\n", room, d->stages[stage].rooms[room].numberOfMonsters);
                 for(int i = 0 ; i < d->stages[stage].rooms[room].numberOfMonsters ; i+=1) {
@@ -103,10 +106,10 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
             sleep(4);
         }
 
-        if (c == 'n') {
-            printf("id: %d, number of monsters : %d\n", idRoomForMonster, d->stages[stage].rooms[idRoomForMonster].numberOfMonsters);
-            for(int i = 0 ; i < d->stages[stage].rooms[idRoomForMonster].numberOfMonsters ; i+=1) {
-                printf("monster : %s", d->stages[stage].rooms[idRoomForMonster].monsters[i].name);
+        if (c == 'n') { // afficher les monstres de la salle
+            printf("id: %d, number of monsters : %d\n", id, d->stages[stage].rooms[id].numberOfMonsters);
+            for(int i = 0 ; i < d->stages[stage].rooms[id].numberOfMonsters ; i+=1) {
+                printf("monster : %s", d->stages[stage].rooms[id].monsters[i].name);
                  printf("\n");
             }
             sleep(4); 
@@ -126,24 +129,40 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
                     // Initialisation
                     player->directionView = 'z';
-                    FuturPosition = d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX]; 
+                    elementAtFuturePosition = d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX]; 
                     
-                    if(FuturPosition == EMPTY 
-                    || FuturPosition == DOOR 
-                    || FuturPosition == BOSS_ROOM_DOOR 
-                    || FuturPosition == ITEM_ROOM_DOOR 
-                    || FuturPosition == BONUS_ITEM_DOOR 
-                    || FuturPosition == SPIKE
-                    || FuturPosition == NEXT_STAGE
-                    || FuturPosition == HEALTH
-                    || FuturPosition == ITEM
-                    || (FuturPosition == ROCK && player->flight)
-                    || (FuturPosition == GAP && player->flight)) {
+                    // int futurePositionIsObstacle = (elementAtFuturePosition == SPIKE || elementAtFuturePosition == ROCK || elementAtFuturePosition == GAP);
+                    // // save obstacle position if we are going to erase it
+                    // if(futurePositionIsObstacle) { 
+                    //     erasedObstacle = elementAtFuturePosition;
+                    //     oldObstaclePositionY = player->positionY - 1;
+                    //     oldObstaclePositionX = player->positionX;
+                    // }
 
+                    // // redraw erased obstacle
+                    // if(obstacleGotErased) {
+                    //     d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] = erasedObstacle;
+                    //     obstacleGotErased = 0;
+                    // }
+                    
+                    if(elementAtFuturePosition == EMPTY 
+                    || elementAtFuturePosition == DOOR 
+                    || elementAtFuturePosition == BOSS_ROOM_DOOR 
+                    || elementAtFuturePosition == ITEM_ROOM_DOOR 
+                    || elementAtFuturePosition == BONUS_ITEM_DOOR 
+                    || elementAtFuturePosition == SPIKE
+                    || elementAtFuturePosition == NEXT_STAGE
+                    || elementAtFuturePosition == HEALTH
+                    || elementAtFuturePosition == ITEM
+                    || (elementAtFuturePosition == ROCK && player->flight)
+                    || (elementAtFuturePosition == GAP && player->flight)) {
+                        
                         playerMoveUp(d, stage, id, player);
+                        // if(futurePositionIsObstacle) {
+                        //     obstacleGotErased = 1;
+                        // }
+
                         actualPosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX];
-
-
 
                         if(actualPosition == NEXT_STAGE) {
                             * change = 1;
@@ -186,19 +205,19 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     }
 
                     player->directionView = 's';
-                    FuturPosition = d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX];  
+                    elementAtFuturePosition = d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX];  
 
-                    if(FuturPosition == EMPTY 
-                    || FuturPosition == DOOR 
-                    || FuturPosition == BOSS_ROOM_DOOR 
-                    || FuturPosition == ITEM_ROOM_DOOR 
-                    || FuturPosition == BONUS_ITEM_DOOR 
-                    || FuturPosition == SPIKE
-                    || FuturPosition == NEXT_STAGE
-                    || FuturPosition == HEALTH
-                    || FuturPosition == ITEM
-                    || (FuturPosition == ROCK && player->flight)
-                    || (FuturPosition == GAP && player->flight)) {
+                    if(elementAtFuturePosition == EMPTY 
+                    || elementAtFuturePosition == DOOR 
+                    || elementAtFuturePosition == BOSS_ROOM_DOOR 
+                    || elementAtFuturePosition == ITEM_ROOM_DOOR 
+                    || elementAtFuturePosition == BONUS_ITEM_DOOR 
+                    || elementAtFuturePosition == SPIKE
+                    || elementAtFuturePosition == NEXT_STAGE
+                    || elementAtFuturePosition == HEALTH
+                    || elementAtFuturePosition == ITEM
+                    || (elementAtFuturePosition == ROCK && player->flight)
+                    || (elementAtFuturePosition == GAP && player->flight)) {
                         
                         // move down :
                         playerMoveDown(d, stage, id, player);
@@ -248,19 +267,19 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     }
 
                     player->directionView = 'q';
-                    FuturPosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2];
+                    elementAtFuturePosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2];
                     
-                    if(FuturPosition == EMPTY 
-                    || FuturPosition == DOOR 
-                    || FuturPosition == BOSS_ROOM_DOOR 
-                    || FuturPosition == ITEM_ROOM_DOOR 
-                    || FuturPosition == BONUS_ITEM_DOOR
-                    || FuturPosition == SPIKE
-                    || FuturPosition == NEXT_STAGE
-                    || FuturPosition == HEALTH
-                    || FuturPosition == ITEM
-                    || (FuturPosition == ROCK && player->flight)
-                    || (FuturPosition == GAP && player->flight)) {
+                    if(elementAtFuturePosition == EMPTY 
+                    || elementAtFuturePosition == DOOR 
+                    || elementAtFuturePosition == BOSS_ROOM_DOOR 
+                    || elementAtFuturePosition == ITEM_ROOM_DOOR 
+                    || elementAtFuturePosition == BONUS_ITEM_DOOR
+                    || elementAtFuturePosition == SPIKE
+                    || elementAtFuturePosition == NEXT_STAGE
+                    || elementAtFuturePosition == HEALTH
+                    || elementAtFuturePosition == ITEM
+                    || (elementAtFuturePosition == ROCK && player->flight)
+                    || (elementAtFuturePosition == GAP && player->flight)) {
                         
                             
                         // move left :
@@ -317,19 +336,19 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     }
 
                     player->directionView = 'd';
-                    FuturPosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2];
+                    elementAtFuturePosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2];
 
-                    if(FuturPosition == EMPTY 
-                    || FuturPosition == DOOR 
-                    || FuturPosition == BOSS_ROOM_DOOR 
-                    || FuturPosition == ITEM_ROOM_DOOR 
-                    || FuturPosition == BONUS_ITEM_DOOR
-                    || FuturPosition == SPIKE
-                    || FuturPosition == NEXT_STAGE
-                    || FuturPosition == HEALTH
-                    || FuturPosition == ITEM
-                    || (FuturPosition == ROCK && player->flight)
-                    || (FuturPosition == GAP && player->flight)) {
+                    if(elementAtFuturePosition == EMPTY 
+                    || elementAtFuturePosition == DOOR 
+                    || elementAtFuturePosition == BOSS_ROOM_DOOR 
+                    || elementAtFuturePosition == ITEM_ROOM_DOOR 
+                    || elementAtFuturePosition == BONUS_ITEM_DOOR
+                    || elementAtFuturePosition == SPIKE
+                    || elementAtFuturePosition == NEXT_STAGE
+                    || elementAtFuturePosition == HEALTH
+                    || elementAtFuturePosition == ITEM
+                    || (elementAtFuturePosition == ROCK && player->flight)
+                    || (elementAtFuturePosition == GAP && player->flight)) {
                         
                         // move right :
                         playerMoveRight(d, stage, id, player);
@@ -517,17 +536,12 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 checkName(d, NumberOfRoomsInt, stage, axeX, axeY, id);
                 
                 GestionDoorsForMobRoom(d, stage, id, 0);
-                
-                if(d->stages[stage].rooms[iteration].name == NORMAL_ROOM_NAME) {
-                    printf("NORMAL ROOM\n");sleep(2);
-                    setMonstersInsideRoom(d, stage, idRoomForMonster);
-                }
-
+            
                 shootParams->id = id;                
                 changeOfRoom = 0;
                 (void)spawnMonsterVar;
 
-                idRoomForMonster = changeIdRoomForMonsters(idRoomForMonster, NumberOfRoomsInt);
+                //changeRoomMonsterArray(idRoomForMonster, NumberOfRoomsInt, id);
             }
 
             
@@ -594,7 +608,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 				for (int y = 0; y < d->stages[stage].rooms[id].width - 1; y++) {
 					if (y % 2 == 0) {
 						if(d-> stages[stage].rooms[id].room[i][y] == PLAYER){
-					
+
 							printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
 		
 						}else{
@@ -607,7 +621,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 			}
 
             printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, iteration);
-            printf("HP: %.1f\n", player->hpMax);
+            printf("\nHP: %.1f\n", player->hpMax);
             printf("DAMAGE  : %.1f\n", player->dmg);
             printf("SHIELD : %.1f\n", player->shield);
             printf("PIERCING SHOT : %s\n", (player->ps) ? "Yes" : "No");
@@ -1094,6 +1108,7 @@ void setItemEffects(Object* item, Player* player) {
     player->ss += item->spectralShot;
 }
 
+/*
 int changeIdRoomForMonsters(int idRoomForMonster, int numberOfRooms) {
     //printf("number of rooms : %d\n", numberOfRooms);
     if(idRoomForMonster < numberOfRooms-1) {
@@ -1106,11 +1121,12 @@ int changeIdRoomForMonsters(int idRoomForMonster, int numberOfRooms) {
         return idRoomForMonster;
     }
 }
+*/
 
-void changeRoomMonsterArray(Donjon* d, int stage, int roomID, int numberOfRooms) {
-    if(d->stages[stage].rooms[roomID].monsterArrayID < numberOfRooms-1) {
-        d->stages[stage].rooms[roomID].monsterArrayID++;
-    } else {
-        d->stages[stage].rooms[roomID].monsterArrayID--;
-    }
-}
+// void changeRoomMonsterArray(Donjon* d, int stage, int roomID) {
+//     if(d->stages[stage].rooms[roomID].idForMonsterArray < numberOfRooms-1) {
+//         d->stages[stage].rooms[roomID].idForMonsterArray++;
+//     } else {
+//         d->stages[stage].rooms[roomID].idForMonsterArray--;
+//     }
+// }

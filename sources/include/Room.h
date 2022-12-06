@@ -102,7 +102,7 @@ typedef struct Donjon{
 
             int numberOfMonsters; // number of monsters inside this room
             Monster * monsters; // array of monsters in this room
-            int monsterArrayID; // to select a unique array of monsters for every room
+            int idForMonsterArray; // to select a unique array of monsters for every room
          
             struct Door Door;
 

@@ -51,10 +51,13 @@ void playerLoseLife(Player* player, float damageTaken);
  */
 void playerGainLife(Player* player);
 
-/**
- * @brief change the id in order to target another monster array
- */
-int changeIdRoomForMonsters(int idRoomForMonster, int numberOfRoom);
+
+// int changeIdRoomForMonsters(int idRoomForMonster, int numberOfRoom);
+
+// /**
+//  * @brief to target 1 order array by room
+//  */
+// void changeRoomMonsterArray(Donjon* d, int stage, int roomID);
 
 void playerMoveUp(Donjon* donjon, int stage, int roomID, Player* player);
 void playerMoveDown(Donjon* donjon, int stage, int roomID, Player* player);

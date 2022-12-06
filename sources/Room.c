@@ -478,9 +478,11 @@ void InitialisationGame(Donjon * d, int stageNum, Monster* arrayMonster) {
                 if(d->stages[stageNum].randomNumberRooms[y] != 0){
                     d->stages[stageNum].rooms[y].roomUsed = 0;
                     d->stages[stageNum].rooms[y].id = d->stages[stageNum].randomNumberRooms[y];
+                    setMonstersInsideRoom(d, stageNum, y);
                 }
             }
         }
+        
 
         free(randomNumberRooms);
         printf("\n");    
@@ -836,7 +838,12 @@ void InitialiseRooms(struct Donjon * d, int stage, int numberOfRooms, Monster* a
 
 
 int setMonstersInsideRoom(Donjon* d, int stage, int roomId) {
-    printf("placing monsters ! \n");sleep(1);
+    if(d->stages[stage].rooms[roomId].id == 0) { // spawn / boss / item
+        return 0;
+    }
+
+    printf("placing monsters ! \n");
+    sleep(1);
 
     int heightRoom = d->stages[stage].rooms[roomId].height - 1;
     int widthRoom = d->stages[stage].rooms[roomId].width - 2;
@@ -863,6 +870,7 @@ int setMonstersInsideRoom(Donjon* d, int stage, int roomId) {
                 //printf("monster first name : %s\n", d->stages[stage].rooms[roomId].monsters[monsterId].name);
                 //sleep(1);
                 map[row][column] = d->stages[stage].rooms[roomId].monsters[monsterId].firstLetter;
+                printf("placing monster : %s\n", d->stages[stage].rooms[roomId].monsters[monsterId].name);
                 d->stages[stage].rooms[roomId].monsters[monsterId].positionX = column;
                 d->stages[stage].rooms[roomId].monsters[monsterId].positionY = row;
                 monsterId += 1;
