@@ -62,7 +62,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
     //stats pour cheater :
     player->hpMax = 100;
-    player->flight = 1;
+    // player->flight = 1;
 	while (condition) {
 
         #ifdef _WIN32 
@@ -542,8 +542,11 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 (void)spawnMonsterVar;
 
                 //changeRoomMonsterArray(idRoomForMonster, NumberOfRoomsInt, id);
-            }
 
+                if( d->stages[stage].rooms[id].name == NORMAL_ROOM_NAME){
+                    monsterActivity(shootParams);
+                }   
+            }
             
             if(BossInfinite == 1) {
                 if(shootParams->boss->hpMax <=  0){

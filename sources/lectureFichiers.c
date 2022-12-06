@@ -513,7 +513,6 @@ Monster* fichierMonsterToListeMonster() {
             }
 
             if(firstLetter == '-' && creatingMonster == 1) { // ajout object
-            //TODO faire une fonction simple qui malloc un monster et qui le retourne
                 arrayMonster[idMonster] = createMonster(idMonster, name, hpMax, shoot,flight,ss);
                 idMonster = idMonster + 1;
                 creatingMonster = (creatingMonster) ? 0 : 1;

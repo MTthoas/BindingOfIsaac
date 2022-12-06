@@ -547,7 +547,7 @@ void InitialisationGame(Donjon *d, int stageNum, Monster *arrayMonster)
                 if (d->stages[stageNum].rooms[y].id != 0) {
                     initialiseMonstersInsideRoom(d, stageNum, y, arrayMonster);
                     setMonstersInsideRoom(d, stageNum, y);
-                    //displayWaitMonsters();
+                    displayWaitMonsters();
                     #ifdef _WIN32
                     Sleep(1000);
                     #else
@@ -933,7 +933,6 @@ void InitialiseRooms(struct Donjon *d, int stage, int numberOfRooms) {
 
 int setMonstersInsideRoom(Donjon *d, int stage, int roomId)
 {
-    //printf("1e fdp\n"); sleep(1);
     srand(time(NULL));
     int randomPositionX,randomPositionY;
     int heightRoom = d->stages[stage].rooms[roomId].height - 1;
@@ -942,19 +941,18 @@ int setMonstersInsideRoom(Donjon *d, int stage, int roomId)
     char **map = d->stages[stage].rooms[roomId].room; (void)map;
     int numberOfMonsters = d->stages[stage].rooms[roomId].numberOfMonsters;
     int placeIsFreeAndNotNearPlayer;
+    int letter;
 
     while (monsterId < numberOfMonsters) {
         randomPositionY = 1 + rand() % (heightRoom - 1);
         randomPositionX = 2 + rand() % (widthRoom - 2);
         placeIsFreeAndNotNearPlayer = randomPositionX % 2 == 0 && d->stages[stage].rooms[roomId].room[randomPositionY][randomPositionX] == ' ' && d->stages[stage].rooms[roomId].room[randomPositionY][randomPositionX - 2] != 'P' && d->stages[stage].rooms[roomId].room[randomPositionY][randomPositionX + 2] != 'P' && d->stages[stage].rooms[roomId].room[randomPositionY - 1][randomPositionX] != 'P' && d->stages[stage].rooms[roomId].room[randomPositionY + 1][randomPositionX] != 'P';
-        //printf("FDP\n"); sleep(1);
         if (placeIsFreeAndNotNearPlayer) {
             d->stages[stage].rooms[roomId].monsters[monsterId].positionX = randomPositionX;
             d->stages[stage].rooms[roomId].monsters[monsterId].positionY = randomPositionY;
-            map[randomPositionY][randomPositionX] = d->stages[stage].rooms[roomId].monsters[monsterId].firstLetter;
-            printf("monsters placed for room id : %d and monster : %c! \n", d->stages[stage].rooms[roomId].id, d->stages[stage].rooms[roomId].monsters[monsterId].firstLetter);
+            letter = tolower(d->stages[stage].rooms[roomId].monsters[monsterId].firstLetter);
+            map[randomPositionY][randomPositionX] = letter;
             monsterId += 1;
-            //sleep(3);
         }   
     }
 
