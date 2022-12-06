@@ -56,7 +56,10 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
             }
         }
     }
+
+    //stats pour cheater :
     player->hpMax = 100;
+    player->flight = 1;
 	while (condition) {
 
         #ifdef _WIN32 
@@ -134,6 +137,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     || FuturPosition == NEXT_STAGE
                     || FuturPosition == HEALTH
                     || FuturPosition == ITEM
+                    || (FuturPosition == ROCK && player->flight)
                     || (FuturPosition == GAP && player->flight)) {
 
                         playerMoveUp(d, stage, id, player);
@@ -147,7 +151,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         }
 
                         // if run trough spike then lose life
-                        if(actualPosition == SPIKE) {
+                        if(!(player->flight) && actualPosition == SPIKE) {
                             playerLoseLife(player, 1);
                             break;
                         }
@@ -193,6 +197,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     || FuturPosition == NEXT_STAGE
                     || FuturPosition == HEALTH
                     || FuturPosition == ITEM
+                    || (FuturPosition == ROCK && player->flight)
                     || (FuturPosition == GAP && player->flight)) {
                         
                         // move down :
@@ -205,7 +210,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         }
 
                         // if run trough spike then lose life
-                        if(actualPosition == SPIKE) {
+                        if(!(player->flight) && actualPosition == SPIKE) {
                             playerLoseLife(player, 1);
                             break;
                         }
@@ -254,6 +259,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     || FuturPosition == NEXT_STAGE
                     || FuturPosition == HEALTH
                     || FuturPosition == ITEM
+                    || (FuturPosition == ROCK && player->flight)
                     || (FuturPosition == GAP && player->flight)) {
                         
                             
@@ -273,7 +279,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         }
 
                         // if run trough spike then lose life
-                        if(actualPosition == SPIKE) {
+                        if(!(player->flight) && actualPosition == SPIKE) {
                             playerLoseLife(player, 1);
                             break;
                         }
@@ -322,11 +328,12 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     || FuturPosition == NEXT_STAGE
                     || FuturPosition == HEALTH
                     || FuturPosition == ITEM
+                    || (FuturPosition == ROCK && player->flight)
                     || (FuturPosition == GAP && player->flight)) {
                         
-                            // move right :
-                            playerMoveRight(d, stage, id, player);
-                            actualPosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX];
+                        // move right :
+                        playerMoveRight(d, stage, id, player);
+                        actualPosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX];
                     
                         if(actualPosition == NEXT_STAGE) {
                             * change = 1;
@@ -340,7 +347,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         }
 
                         // if run trough spike then lose life
-                        if(actualPosition == SPIKE) {
+                        if(!(player->flight) && actualPosition == SPIKE) {
                             playerLoseLife(player, 1);
                             break;
                         }
