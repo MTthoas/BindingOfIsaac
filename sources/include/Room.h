@@ -162,6 +162,11 @@ int setMonstersInsideRoom(Donjon* d, int stage, int roomID);
  */
 int clearMonstersInsideRoom(Donjon* d, int stage, int roomID);
 
+/**
+ * @brief Display formatted "loading monsters" on the terminal
+ */
+void displayWaitMonsters();
+
 
 
 #endif

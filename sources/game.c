@@ -24,13 +24,13 @@
 void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, int * change, Player* player, int NumberOfRoomsInt, int id, int axeX, int axeY) {
 
     int *pId = &id;
+    int idRoomForMonster = 0;
     int changeOfRoom = 1;
     int bossActive = 0;
     int BossInfinite = 0;
     int itemIsSet = 0;
     char FuturPosition = EMPTY;
     char actualPosition = EMPTY;
-
 
     int iteration = 0;
     bool condition = true;  
@@ -89,12 +89,24 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 		}
 
         if (c == 'm') {
-            printf("number of monsters : %d\n", d->stages[stage].rooms[id].numberOfMonsters);
-            for(int i = 0 ; i < d->stages[stage].rooms[id].numberOfMonsters ; i+=1) {
-                printf("monster : %s", d->stages[stage].rooms[id].monsters[i].name);
+            for(int room=0 ; room < NumberOfRoomsInt ; room+=1) {
+                printf("room : %d\nnumber of monsters : %d\n", room, d->stages[stage].rooms[room].numberOfMonsters);
+                for(int i = 0 ; i < d->stages[stage].rooms[room].numberOfMonsters ; i+=1) {
+                    printf("monster : %s", d->stages[stage].rooms[room].monsters[i].name);
+                }
+                printf("\n");
             }
-            printf("\n");
-            sleep(1);
+
+            sleep(4);
+        }
+
+        if (c == 'n') {
+            printf("id: %d, number of monsters : %d\n", idRoomForMonster, d->stages[stage].rooms[idRoomForMonster].numberOfMonsters);
+            for(int i = 0 ; i < d->stages[stage].rooms[idRoomForMonster].numberOfMonsters ; i+=1) {
+                printf("monster : %s", d->stages[stage].rooms[idRoomForMonster].monsters[i].name);
+                 printf("\n");
+            }
+            sleep(4); 
         }
 
 		if (c != 'e') {
@@ -233,9 +245,9 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     || (FuturPosition == GAP && player->flight)) {
                         
                             
-                            // move left :
-                            playerMoveLeft(d, stage, id, player);
-                            actualPosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX];
+                        // move left :
+                        playerMoveLeft(d, stage, id, player);
+                        actualPosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX];
                     
                         if(actualPosition == NEXT_STAGE) {
                             * change = 1;
@@ -472,17 +484,18 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
                 checkName(d, NumberOfRoomsInt, stage, axeX, axeY, id);
                 
-
                 GestionDoorsForMobRoom(d, stage, id, 0);
                 
-                if(d->stages[stage].rooms[iteration].name != NORMAL_ROOM_NAME) {
-                    //setMonstersInsideRoom(d, stage, iteration);
+                if(d->stages[stage].rooms[iteration].name == NORMAL_ROOM_NAME) {
+                    printf("NORMAL ROOM\n");sleep(2);
+                    setMonstersInsideRoom(d, stage, idRoomForMonster);
                 }
 
                 shootParams->id = id;                
                 changeOfRoom = 0;
                 (void)spawnMonsterVar;
 
+                idRoomForMonster = changeIdRoomForMonsters(idRoomForMonster, NumberOfRoomsInt);
             }
 
             
@@ -626,40 +639,40 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
 
                         if(d->stages[stage].stage[i + axeY][w + axeX - 1] != EMPTY){
                             DoorLeft = 1;
-                            if(d->stages[stage].stage[i + axeY][w + axeX + 1] == BONUS_ITEM_DOOR) {
-                                Vr = 1;
+                            if(d->stages[stage].stage[i + axeY][w + axeX - 1] == BONUS_ITEM_DOOR) {
+                                Vl = 1;
                             }
-                            if(d->stages[stage].stage[i + axeY][w + axeX + 1] == ITEM_ROOM_DOOR) {
-                                Ir = 1;
+                            if(d->stages[stage].stage[i + axeY][w + axeX - 1] == ITEM_ROOM_DOOR) {
+                                Il = 1;
                             }
-                            if(d->stages[stage].stage[i + axeY][w + axeX + 1] == BOSS_ROOM_DOOR) {
-                                Br = 1;
+                            if(d->stages[stage].stage[i + axeY][w + axeX - 1] == BOSS_ROOM_DOOR) {
+                                Bl = 1;
                             }
                         }
 
-                        if(d->stages[stage].stage[i + axeY - 1][w + axeX - 1] != EMPTY){
+                        if(d->stages[stage].stage[i + axeY - 1 ][w + axeX] != EMPTY) {
                             DoorTop = 1;
-                            if(d->stages[stage].stage[i + axeY][w + axeX + 1] == BONUS_ITEM_DOOR) {
-                                Vr = 1;
+                            if(d->stages[stage].stage[i + axeY - 1][w + axeX] == BONUS_ITEM_DOOR) {
+                                Vt = 1;
                             }
-                            if(d->stages[stage].stage[i + axeY][w + axeX + 1] == ITEM_ROOM_DOOR) {
-                                Ir = 1;
+                            if(d->stages[stage].stage[i + axeY - 1][w + axeX] == ITEM_ROOM_DOOR) {
+                                It = 1;
                             }
-                            if(d->stages[stage].stage[i + axeY][w + axeX + 1] == BOSS_ROOM_DOOR) {
-                                Br = 1;
+                            if(d->stages[stage].stage[i + axeY - 1][w + axeX] == BOSS_ROOM_DOOR) {
+                                Bt = 1;
                             }
                         }
 
-                        if(d->stages[stage].stage[i + axeY + 1][w + axeX - 1] != EMPTY){
+                        if(d->stages[stage].stage[i + axeY + 1][w + axeX] != EMPTY) {
                             DoorBottom = 1;
-                            if(d->stages[stage].stage[i + axeY][w + axeX + 1] == BONUS_ITEM_DOOR) {
-                                Vr = 1;
+                            if(d->stages[stage].stage[i + axeY + 1][w + axeX] == BONUS_ITEM_DOOR) {
+                                Vb = 1;
                             }
-                            if(d->stages[stage].stage[i + axeY][w + axeX + 1] == ITEM_ROOM_DOOR) {
-                                Ir = 1;
+                            if(d->stages[stage].stage[i + axeY + 1][w + axeX] == ITEM_ROOM_DOOR) {
+                                Ib = 1;
                             }
-                            if(d->stages[stage].stage[i + axeY][w + axeX + 1] == BOSS_ROOM_DOOR) {
-                                Br = 1;
+                            if(d->stages[stage].stage[i + axeY + 1][w + axeX] == BOSS_ROOM_DOOR) {
+                                Bb = 1;
                             }
                         }
                          
@@ -669,24 +682,25 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
         }
     }
     
-    char actualPosition;
-    int roomHeight = d->stages[stage].rooms[t].height;
-    int roomWidth = d->stages[stage].rooms[t].width;
-    for(int i = 0; i < roomHeight; i++){
-        for(int y = 0; y < roomWidth; y++){
-            actualPosition = d->stages[stage].rooms[t].room[i][y];
-            if(actualPosition == DOOR || actualPosition == BONUS_ITEM_DOOR || d->stages[stage].rooms[t].room[i][y] == ITEM_ROOM_DOOR || d->stages[stage].rooms[t].room[i][y] == BOSS_ROOM_DOOR){
+    for(int i = 0; i < d->stages[stage].rooms[t].height; i++){
+        for(int y = 0; y < d->stages[stage].rooms[t].width; y++){
+            if(d->stages[stage].rooms[t].room[i][y] == DOOR 
+            || d->stages[stage].rooms[t].room[i][y] == BONUS_ITEM_DOOR 
+            || d->stages[stage].rooms[t].room[i][y] == ITEM_ROOM_DOOR 
+            || d->stages[stage].rooms[t].room[i][y] == BOSS_ROOM_DOOR){
                 d->stages[stage].rooms[t].room[i][y] = WALL;
             }
         }
     }
 
-    if(axeX == 0 && axeY == 0 ){
-        for(int i = 0; i < roomHeight; i++){
-            for(int y = 0; y < roomWidth; y++){
-                actualPosition = d->stages[stage].rooms[t].room[i][y];
+    if(axeX == 0 && axeY == 0){
+        for(int i = 0; i < d->stages[stage].rooms[t].height; i++){
+            for(int y = 0; y < d->stages[stage].rooms[t].width; y++){
                 if(i != 0 && i < d->stages[stage].rooms[t].height - 1 && y != 0 && y < d->stages[stage].rooms[t].width - 2){
-                    if(actualPosition== DOOR || actualPosition == BONUS_ITEM_DOOR || actualPosition == ITEM_ROOM_DOOR || actualPosition == BOSS_ROOM_DOOR){
+                    if(d->stages[stage].rooms[t].room[i][y] == DOOR 
+                    || d->stages[stage].rooms[t].room[i][y] == BONUS_ITEM_DOOR 
+                    || d->stages[stage].rooms[t].room[i][y] == HEALTH
+                    || d->stages[stage].rooms[t].room[i][y] == ITEM_ROOM_DOOR){
                         d->stages[stage].rooms[t].room[i][y] = EMPTY;
                     }
                 }
@@ -695,11 +709,11 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
     }
 
 
-    for(int i = 0; i < roomHeight-1; i++){
-        for(int y = 0; y < roomWidth; y++){
+    for(int i = 0; i < d->stages[stage].rooms[t].height-1; i++){
+        for(int y = 0; y < d->stages[stage].rooms[t].width; y++){
 
             // DoorLeft
-            if( y < width/2 && d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] == WALL && DoorLeft == 1){
+            if( y < d->stages[stage].rooms[t].width/2 && d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] == WALL && DoorLeft == 1){
                 
 
                 if(Vl == 1){
@@ -715,12 +729,10 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = DOOR;
                     d->stages[stage].rooms[t].Door.doorLeft = DOOR;
                 }
-
-                
             }
 
             // DoorRight
-            if(y > width/2 && d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] == WALL && DoorRight == 1){
+            if(y > d->stages[stage].rooms[t].width/2 && d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] == WALL && DoorRight == 1){
      
                 if(Vr == 1){
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = BONUS_ITEM_DOOR;
@@ -742,7 +754,7 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
 
             if(d->stages[stage].rooms[t].width/2 % 2 == 0){
                 width = d->stages[stage].rooms[t].width/2;
-            }else{
+            } else{
                 width = d->stages[stage].rooms[t].width/2-1;
             }
 
@@ -763,6 +775,7 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
                 }
                                                                                        
             }
+
 
             // DoorBottom
              if(d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height-1][width] == WALL && DoorBottom == 1){
@@ -1025,7 +1038,6 @@ void playerGainLife(Player* player) {
     }
 }
 
-
 void setItemInsideRoom(Donjon* d, int stage, int id) {
     int roomHeight =  d -> stages[stage].rooms[id].height;
     int roomWidth =  d -> stages[stage].rooms[id].width;
@@ -1047,3 +1059,15 @@ void setItemEffects(Object* item, Player* player) {
     player->ss += item->spectralShot;
 }
 
+int changeIdRoomForMonsters(int idRoomForMonster, int numberOfRooms) {
+    //printf("number of rooms : %d\n", numberOfRooms);
+    if(idRoomForMonster < numberOfRooms-1) {
+        idRoomForMonster+=1;
+        // printf("id : %d\n", idRoomForMonster); sleep(2);
+        return idRoomForMonster;
+    } else {
+        idRoomForMonster-=1;
+        // printf("id : %d\n", idRoomForMonster); sleep(2);
+        return idRoomForMonster;
+    }
+}
