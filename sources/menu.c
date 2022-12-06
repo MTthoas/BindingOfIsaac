@@ -472,12 +472,6 @@ void menuGame() {
                     shootParams->id = id;
                     Boss->firstLetter = 'X';
 
-                    if(stage == 0){
-                        player->dmg = 3.5;
-                        player->hpMax = 3;
-                        player->shield = 0;
-                    }
-
                     int axeX = 0;
                     int axeY = 0;
 

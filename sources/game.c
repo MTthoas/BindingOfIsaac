@@ -56,7 +56,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
             }
         }
     }
-
+    player->hpMax = 100;
 	while (condition) {
 
         #ifdef _WIN32 
@@ -129,16 +129,17 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     || FuturPosition == DOOR 
                     || FuturPosition == BOSS_ROOM_DOOR 
                     || FuturPosition == ITEM_ROOM_DOOR 
-                    || FuturPosition == BONUS_ITEM_DOOR
+                    || FuturPosition == BONUS_ITEM_DOOR 
                     || FuturPosition == SPIKE
                     || FuturPosition == NEXT_STAGE
                     || FuturPosition == HEALTH
                     || FuturPosition == ITEM
                     || (FuturPosition == GAP && player->flight)) {
 
-                         playerMoveUp(d, stage, id, player);
-                         actualPosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX];
-                    
+                        playerMoveUp(d, stage, id, player);
+                        actualPosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX];
+
+
 
                         if(actualPosition == NEXT_STAGE) {
                             * change = 1;
@@ -187,7 +188,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     || FuturPosition == DOOR 
                     || FuturPosition == BOSS_ROOM_DOOR 
                     || FuturPosition == ITEM_ROOM_DOOR 
-                    || FuturPosition == BONUS_ITEM_DOOR
+                    || FuturPosition == BONUS_ITEM_DOOR 
                     || FuturPosition == SPIKE
                     || FuturPosition == NEXT_STAGE
                     || FuturPosition == HEALTH
@@ -599,6 +600,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 			}
 
             printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, iteration);
+            printf("HP: %.1f\n", player->hpMax);
             printf("DAMAGE  : %.1f\n", player->dmg);
             printf("SHIELD : %.1f\n", player->shield);
             printf("PIERCING SHOT : %s\n", (player->ps) ? "Yes" : "No");
@@ -1095,5 +1097,13 @@ int changeIdRoomForMonsters(int idRoomForMonster, int numberOfRooms) {
         idRoomForMonster-=1;
         // printf("id : %d\n", idRoomForMonster); sleep(2);
         return idRoomForMonster;
+    }
+}
+
+void changeRoomMonsterArray(Donjon* d, int stage, int roomID, int numberOfRooms) {
+    if(d->stages[stage].rooms[roomID].monsterArrayID < numberOfRooms-1) {
+        d->stages[stage].rooms[roomID].monsterArrayID++;
+    } else {
+        d->stages[stage].rooms[roomID].monsterArrayID--;
     }
 }

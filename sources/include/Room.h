@@ -17,7 +17,7 @@
 #define NORMAL_ROOM_NAME 'R'
 #define ITEM_ROOM_NAME '$'
 #define BOSS_ROOM_NAME 'B'
-#define BONUS_ITEM_ROOM 'J'
+#define BONUS_ITEM_ROOM '@'
 
 #define JAGGER_FIRST_LETTER 'J'
 #define LENINA_FIRST_LETTER 'L'
@@ -38,7 +38,7 @@
 #define LOCKED_DOOR 'L'
 #define ITEM_ROOM_DOOR '$'
 #define BOSS_ROOM_DOOR 'B'
-#define BONUS_ITEM_DOOR 'J'
+#define BONUS_ITEM_DOOR '@'
 
 #include "objects.h"
 #include "Player.h"
@@ -97,9 +97,12 @@ typedef struct Donjon{
             int doorRight;
             int numberOfRoomsReturned;
             int roomUsed;
+
+            Object * object; // an object of the donjon objects linked list
+
             int numberOfMonsters; // number of monsters inside this room
             Monster * monsters; // array of monsters in this room
-            Object * object; // an object of the donjon objects linked list
+            int monsterArrayID; // to select a unique array of monsters for every room
          
             struct Door Door;
 

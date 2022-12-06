@@ -443,12 +443,12 @@ void * Jagger(void *params){
 
         int shoot = 0;
         
-
+        int atJaggerPosition;
         for (int i = 0; i < ((ShootParams*)params)->d -> stages[stage].rooms[id].height; i++) {
 
             for(int y = 0; y < ((ShootParams*)params)->d -> stages[stage].rooms[id].width; y++){
-
-                if(((ShootParams*)params)->d -> stages[stage].rooms[id].room[i][y] == letter){
+                atJaggerPosition = ((ShootParams*)params)->d -> stages[stage].rooms[id].room[i][y];
+                if(atJaggerPosition == letter){
 
                         (((ShootParams*)params)->d -> stages[stage].rooms[id].room[i][y] = ' ');
                 }
