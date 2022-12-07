@@ -97,5 +97,14 @@ void redrawPlayer(Donjon *d, Player * player, int stage, int id, int NumberOfRoo
 void checkName(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY, int t);
 void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int numberOfRooms);
 
+/**
+ * @brief Displays the map
+ * 
+ * @param d 
+ * @param stage 
+ * @param numberOfRooms 
+ */
+void printMap(Donjon* d, int stage, int numberOfRooms);
+
 
 #endif
