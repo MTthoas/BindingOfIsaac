@@ -38,13 +38,11 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
     int elementIsObstacle = 0; (void) elementIsObstacle;  
     char erasedObstacle; (void)erasedObstacle;
-    int playerIsOnObstacle = 0; (void) playerIsOnObstacle;
     int futurePositionIsObstacle = EMPTY;
 
     int iteration = 0;
     bool condition = true;  
     int spawnMonsterVar = 0;
-
 
     Monster * monsterVide = malloc(sizeof(Monster));
     monsterVide->hpMax = 999;
@@ -54,14 +52,14 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     pthread_t thread;
     int c;
 
-    printMap(d, stage, NumberOfRoomsInt);
-
+    // printMap(d, stage, NumberOfRoomsInt);
 
     //stats pour cheater :
     player->hpMax = 100;
     player->flight = 1;
+
+
 	while (condition) {
-        //d->stages[stage].rooms[id].room[2][2] = 'X';
 
         #ifdef _WIN32 
 		Sleep(25); 
@@ -589,50 +587,14 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 setItemInsideRoom(d, stage, id);
                 itemIsSet = 1;
             }
-    
 
-            // printf("Axe Position X : %d / and Position Y : %d\n", axeX, axeY);
-            printf("ETAGE : %d\n", stage);
-            printf("Name : %c\n",d->stages[stage].rooms[id].name);
-            printf("ID : %d\n", id);
-            printf("AXE X : %d\n", axeX);
-            printf("AXE Y : %d\n", axeY);
-            // printf("ID : %d\n", id);
-            if(d->stages[stage].rooms[id].name == BASE_ROOM_NAME && BossInfinite == 1){
-                printf("Boss : %s\n", shootParams->boss->name);
-                printf("Boss HP : %.f\n", shootParams->boss->hpMax);
-            }
-            printf("\n");
-            printf("HP player: %.2f\n", player->hpMax);
-
-            if(d->stages[stage].rooms[id].name == ITEM_ROOM_NAME) {
-                printf("Room item : \n");
-                displayObject(d->stages[stage].rooms[id].object);
-            }
-
-			for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
-				for (int y = 0; y < d->stages[stage].rooms[id].width - 1; y++) {
-					if (y % 2 == 0) {
-						printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
-					}
-				}
-				printf("\n");
-			}
-
-            printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, iteration);
-            printf("\nHP: %.1f\n", player->hpMax);
-            printf("DAMAGE  : %.1f\n", player->dmg);
-            printf("SHIELD : %.1f\n", player->shield);
-            printf("PIERCING SHOT : %s\n", (player->ps) ? "Yes" : "No");
-            printf("SPECTRAL SHOT: %s\n", (player->ss) ? "Yes" : "No");
-            printf("FLIGHT: %s\n\n", (player->flight) ? "Yes" : "No");
+            displayGame(d, player, stage, NumberOfRoomsInt, iteration, id, axeX, axeY, shootParams, BossInfinite);
 
             if( * change == 1) {
                 condition = false;
             }
 
             //printf("stepped on obstacle : %c at (%d,%d)\n", obs, oldObstaclePositionX, oldObstaclePositionY);
-            printf("reload : %d\n",shootParams->reload);
 
             continue;
         }
@@ -903,14 +865,7 @@ void redrawPlayer(Donjon *d, Player * player, int stage, int id, int NumberOfRoo
 
     // draw the player
     d->stages[stage].rooms[id].room[player->positionY][player->positionX] = PLAYER;
-
-    // redraws the minimap
-    for (int v = 0; v < NumberOfRoomsInt + 2; v++) {
-        for (int y = 0; y < NumberOfRoomsInt + 2; y++) {
-            printf("%c ", d->stages[stage].stage[v][y]);
-        }
-        printf("\n");
-    }
+    (void)NumberOfRoomsInt;
            
 }
 
@@ -1016,7 +971,7 @@ void GestionDoorsForMobRoom(Donjon *d, int stage, int id, int done){
                     if(d->stages[stage].rooms[id].room[i][y] == LOCKED_DOOR  && i  == 0){
                         d->stages[stage].rooms[id].room[i][y] = d->stages[stage].rooms[id].Door.doorTop;
                     }
-                    if( i == d->stages[stage].rooms[id].height - 1 || d->stages[stage].rooms[id].height == LOCKED_DOOR){ // WTF ??
+                    if( i == d->stages[stage].rooms[id].height - 1 || d->stages[stage].rooms[id].height == LOCKED_DOOR){ 
                         if( d->stages[stage].rooms[id].room[i][y] == LOCKED_DOOR){
                             d->stages[stage].rooms[id].room[i][y] = d->stages[stage].rooms[id].Door.doorBottom;
                         }
@@ -1117,20 +1072,71 @@ void setItemEffects(Object* item, Player* player) {
     player->ss += item->spectralShot;
 }
 
-void printMap(Donjon* d, int stage, int numberOfRooms) {
-        for (int i = 0; i < numberOfRooms; i++) {
-        printf("ID : %d\n", d-> stages[stage].rooms[i].id);
-        printf("AxeX : %d\n", d-> stages[stage].rooms[i].AxeX);
-        printf("AxeY : %d\n", d-> stages[stage].rooms[i].AxeY);
-        
-        for(int y = 0; y < d-> stages[stage].rooms[i].height; y++) {
-            for(int v = 0; v < d-> stages[stage].rooms[i].width; v++) {
-                printf("%c", d-> stages[stage].rooms[i].room[y][v]);
-            }
+void printMap(Donjon* d, int stage, int roomId) {
+    int height = d-> stages[stage].rooms[roomId].height;
+    int width = d-> stages[stage].rooms[roomId].width;
+    for(int y = 0; y < height; y++) {
+        for(int v = 0; v < width; v++) {
+            printf("%c", d-> stages[stage].rooms[roomId].room[y][v]);
         }
     }
-
+    
 }
+
+void printMinimap(Donjon* d, int stage, int numberOfRooms) {
+    // redraws the minimap
+    for (int v = 0; v < numberOfRooms + 2; v++) {
+        for (int y = 0; y < numberOfRooms + 2; y++) {
+            printf("%c ", d->stages[stage].stage[v][y]);
+        }
+        printf("\n");
+    }
+}
+
+void printRoomsInfo(Donjon* d, int stage, int roomID, int axeX, int axeY) {
+    // printf("Axe Position X : %d / and Position Y : %d\n", axeX, axeY);
+    printf("ETAGE : %d\n", stage);
+    printf("Name : %c\n",d->stages[stage].rooms[roomID].name);
+    printf("ID : %d\n", roomID);
+    printf("AXE X : %d\n", axeX);
+    printf("AXE Y : %d\n\n", axeY);
+}
+
+void printPlayerInfos(Player* player, int frame, ShootParams* shootParams) {
+    printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, frame);
+    printf("\nHP: %.1f\n", player->hpMax);
+    printf("DAMAGE  : %.1f\n", player->dmg);
+    printf("SHIELD : %.1f\n", player->shield);
+    printf("PIERCING SHOT : %s\n", (player->ps) ? "Yes" : "No");
+    printf("SPECTRAL SHOT: %s\n", (player->ss) ? "Yes" : "No");
+    printf("FLIGHT: %s\n\n", (player->flight) ? "Yes" : "No");
+
+    printf("reload : %d\n",shootParams->reload);
+}
+
+void displayGame(Donjon* d, Player* player, int stage, int numberOfRooms, int iteration, int roomID, int axeX, int axeY, ShootParams* shootParams, int BossInfinite) {
+
+        // if you are in the boss room, print his info
+        int playerInBossRoom = d->stages[stage].rooms[roomID].name == BASE_ROOM_NAME && BossInfinite == 1;
+        if(playerInBossRoom) {
+            printf("Boss : %s\n", shootParams->boss->name);
+            printf("Boss HP : %.f\n", shootParams->boss->hpMax);
+        }
+        printf("\n");
+
+        // if you are in the item room print the item
+        int playerInItemRoom = d->stages[stage].rooms[roomID].name == ITEM_ROOM_NAME;
+        if(playerInItemRoom) {
+            printf("Room item : \n");
+            displayObject(d->stages[stage].rooms[roomID].object);
+        }
+
+        printMinimap(d, stage, numberOfRooms);            
+        printRoomsInfo(d, stage, roomID, axeX, axeY);
+        printMap(d, stage, roomID);
+        printPlayerInfos(player, iteration, shootParams);
+}
+
 /*
 int changeIdRoomForMonsters(int idRoomForMonster, int numberOfRooms) {
     //printf("number of rooms : %d\n", numberOfRooms);

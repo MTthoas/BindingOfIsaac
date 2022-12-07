@@ -106,5 +106,19 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
  */
 void printMap(Donjon* d, int stage, int numberOfRooms);
 
+/**
+ * @brief Prints the minimap
+ * 
+ * @param d 
+ * @param stage 
+ * @param numberOfRooms 
+ */
+void printMinimap(Donjon* d, int stage, int numberOfRooms);
+
+void printRoomsInfo(Donjon* d, int stage, int roomID, int axeX, int axeY);
+
+void printPlayerInfos(Player* player, int frame, ShootParams* shootParams);
+
+void displayGame(Donjon* d, Player* player, int stage, int numberOfRooms, int iteration, int roomID, int axeX, int axeY, ShootParams* shootParams, int BossInfinite);
 
 #endif
