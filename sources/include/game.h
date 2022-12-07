@@ -16,6 +16,20 @@
 #include "Player.h"
 #include "shoot.h"
 
+
+
+/**
+ * @brief To save an obstacle, it's position, and if it got erased
+ * 
+ */
+typedef struct Obstacle {
+    char type; // SPIKE, ROCK, GAP
+    int positionX; // position on an X axis
+    int positionY; // position on a Y axis
+    int isErased; // 
+} Obstacle;
+
+
 void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, int * change, Player* player, int numberOfRoomsInt, int id, int axeX, int axeY);
 
 
@@ -64,16 +78,22 @@ void playerMoveDown(Donjon* donjon, int stage, int roomID, Player* player);
 void playerMoveLeft(Donjon* donjon, int stage, int roomID, Player* player);
 void playerMoveRight(Donjon* donjon, int stage, int roomID, Player* player);
 
-void playerMoveLeft(Donjon* donjon, int stage, int roomID, Player* player);
-void playerMoveRight(Donjon* donjon, int stage, int roomID, Player* player);
-void playerMoveDown(Donjon* donjon, int stage, int roomID, Player* player);
-void playerMoveUp(Donjon* donjon, int stage, int roomID, Player* player);
 void PurgeRoomOfBoss(Donjon *d, int stage, int id);
 void GestionDoorsForMobRoom(Donjon *d, int stage, int id, int done);
 void InitialiseBossLeninaRoom(Donjon * d, int stage, int id, char letter);
 void InitialiseBossRoom(Donjon * d, int stage, int id, char letter);
 int gestionRoom(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY);
-void gestionPassing(Donjon *d, Player * player, int stage, int id, int NumberOfRoomsInt);
+
+/**
+ * @brief Redraws the player at his new position
+ * 
+ * @param d 
+ * @param player 
+ * @param stage 
+ * @param id 
+ * @param NumberOfRoomsInt 
+ */
+void redrawPlayer(Donjon *d, Player * player, int stage, int id, int NumberOfRoomsInt);
 void checkName(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY, int t);
 void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int numberOfRooms);
 
