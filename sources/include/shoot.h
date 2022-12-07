@@ -31,7 +31,7 @@ typedef struct ShootParams {
     int reload, reloadMonster;
     int stage;
     int condition;
-    int id,i;
+    int id;
     char directionView;
 } ShootParams;
 

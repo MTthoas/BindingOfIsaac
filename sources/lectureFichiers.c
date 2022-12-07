@@ -497,7 +497,7 @@ Monster* fichierMonsterToListeMonster() {
                 } else if((strcmp(stat, "HPMAX") == 0)) {
                     hpMax = atof(value);
                 }  else if((strcmp(stat, "SHOOT") == 0)) {
-                    if ((strcmp(value, "TRUE\n") == 0)){   
+                    if ((strcmp(value, "TRUE\n") == 0)){  
                     shoot = 1;
                     }  
                 } else if((strcmp(stat, "SS") == 0)) {
