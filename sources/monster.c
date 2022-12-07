@@ -329,10 +329,6 @@ void * monsterAttackPlayer(void *params) {
 
                 int randMonster = rand() % 2;
 
-                ((ShootParams*)params)->reload = 1;
-
-
-
                 if(randMonster == 0){
                 
                     if(DiffPositionX > 0){
@@ -464,115 +460,120 @@ void * monsterAttackPlayer(void *params) {
                 }
 
         }
-
         }
 
-        // if (((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].shoot == 1){
-        //     pthread_t threadM;
-        //     while(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].hpMax > 0){
-        //         //Le monstre se depalce se déplacent aléatoirement dans la salle tout en visant le joueur. 
-        //         //Le projectile part dans la direction jusqu’à entrer en contact avec un élément (mur, joueur ou rocher) sauf cas exceptionnel (tir spectral). 
-        //         //Le monstre ne peut tirer qu’un seul projectile à la fois
-        //         #ifdef _WIN32 
-	    //         Sleep(25); 
-	    //         #else 
-	    //         usleep(25000); 
-	    //         #endif
-        //         #ifdef _WIN32 
-	    //         Sleep(1000); 
-	    //         #else 
-	    //         usleep(1000000); 
-	    //         #endif 
+        if (((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].shoot == 1){
+            pthread_t threadM;
+            while(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].hpMax > 0){
+                //Le monstre se depalce se déplacent aléatoirement dans la salle tout en visant le joueur. 
+                //Le projectile part dans la direction jusqu’à entrer en contact avec un élément (mur, joueur ou rocher) sauf cas exceptionnel (tir spectral). 
+                //Le monstre ne peut tirer qu’un seul projectile à la fois
+                #ifdef _WIN32 
+	            Sleep(25); 
+	            #else 
+	            usleep(25000); 
+	            #endif
+                #ifdef _WIN32 
+	            Sleep(888); 
+	            #else 
+	            usleep(888000); 
+	            #endif 
 
-        //         char letter = tolower(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].firstLetter);
+                char letter = tolower(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].firstLetter);
 
-        //          for (int i = 0; i < ((ShootParams*)params)->d -> stages[stage].rooms[id].height; i++) {
+                 for (int i = 0; i < ((ShootParams*)params)->d -> stages[stage].rooms[id].height; i++) {
 
-        //             for(int y = 0; y < ((ShootParams*)params)->d -> stages[stage].rooms[id].width; y++){
+                    for(int y = 0; y < ((ShootParams*)params)->d -> stages[stage].rooms[id].width; y++){
 
-        //                 if(((ShootParams*)params)->d -> stages[stage].rooms[id].room[i][y] == letter){
+                        if(((ShootParams*)params)->d -> stages[stage].rooms[id].room[i][y] == letter){
 
-        //                         (((ShootParams*)params)->d -> stages[stage].rooms[id].room[i][y] = ' ');
-        //                 }
-        //             }
-        //         }
+                                (((ShootParams*)params)->d -> stages[stage].rooms[id].room[i][y] = ' ');
+                        }
+                    }
+                }
 
-        //         ((ShootParams*)params)->reload = 1;
-        //         int direction = rand() % 4;
+                int direction = rand() % 8;
 
-        //         if(direction == 0){
-        //             if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY-1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == ' '){
-        //                 ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY--;
-        //                 ((ShootParams*)params) -> directionView = 'T';
-        //             }
-        //             if(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].flight == 1){
-        //                 if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY-1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == 'G'
-        //                 || ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY-1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == 'R'
-        //                 || ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY-1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == 'S'
-        //                 ){
-        //                     ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY--;
-        //                     ((ShootParams*)params) -> directionView = 'T';
-        //                 } 
-        //             }
+                if(direction == 0){
+                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY-1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == ' '){
+                        ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY--;
+                        ((ShootParams*)params) -> directionView = 'T';
+                    }
+                    if(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].flight == 1){
+                        if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY-1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == 'G'
+                        || ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY-1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == 'R'
+                        || ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY-1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == 'S'
+                        ){
+                            ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY--;
+                            ((ShootParams*)params) -> directionView = 'T';
+                        } 
+                    }
 
-        //         }else if(direction == 1){
-        //             if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY+1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == ' '){
-        //                 ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY++;
-        //                 ((ShootParams*)params) -> directionView = 'B';
-        //             }
-        //             if(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].flight == 1){
-        //                 if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY+1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == 'G'
-        //                 || ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY+1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == 'R'
-        //                 || ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY+1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == 'S'
-        //                 ){
-        //                     ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY++;
-        //                     ((ShootParams*)params) -> directionView = 'B';
-        //                 } 
-        //             }
+                }else if(direction == 1){
+                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY+1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == ' '){
+                        ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY++;
+                        ((ShootParams*)params) -> directionView = 'B';
+                    }
+                    if(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].flight == 1){
+                        if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY+1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == 'G'
+                        || ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY+1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == 'R'
+                        || ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY+1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == 'S'
+                        ){
+                            ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY++;
+                            ((ShootParams*)params) -> directionView = 'B';
+                        } 
+                    }
 
-        //         }else if(direction == 2){
-        //             if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX-2] == ' '){
-        //                 ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX --;
-        //                 ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX --;
-        //                 ((ShootParams*)params) -> directionView = 'L';
-        //             }
-        //             if(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].flight == 1){
-        //                 if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX-2] == 'G'
-        //                 || ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX-2] == 'R'
-        //                 || ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX-2] == 'S'
-        //                 ){
-        //                     ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX --;
-        //                     ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX --;
-        //                     ((ShootParams*)params) -> directionView = 'L';
-        //                 } 
-        //             }
+                }else if(direction == 2){
+                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX-2] == ' '){
+                        ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX --;
+                        ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX --;
+                        ((ShootParams*)params) -> directionView = 'L';
+                    }
+                    if(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].flight == 1){
+                        if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX-2] == 'G'
+                        || ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX-2] == 'R'
+                        || ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX-2] == 'S'
+                        ){
+                            ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX --;
+                            ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX --;
+                            ((ShootParams*)params) -> directionView = 'L';
+                        } 
+                    }
 
-        //         }else if(direction == 3){
-        //             if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX+2] == ' '){
-        //                 ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX ++;
-        //                 ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX ++;
-        //                 ((ShootParams*)params) -> directionView = 'R';
-        //             }
-        //             if(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].flight == 1){
-        //                 if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX+2] == 'G'
-        //                 || ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX+2] == 'R'
-        //                 || ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX+2] == 'S'
-        //                 ){
-        //                     ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX ++;
-        //                     ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX ++;
-        //                     ((ShootParams*)params) -> directionView = 'R';
-        //                 } 
-        //             }
+                }else if(direction == 3){
+                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX+2] == ' '){
+                        ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX ++;
+                        ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX ++;
+                        ((ShootParams*)params) -> directionView = 'R';
+                    }
+                    if(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].flight == 1){
+                        if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX+2] == 'G'
+                        || ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX+2] == 'R'
+                        || ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX+2] == 'S'
+                        ){
+                            ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX ++;
+                            ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX ++;
+                            ((ShootParams*)params) -> directionView = 'R';
+                        } 
+                    }
 
-        //         }
+                }
 
-        //         int shoot = rand() % 2;
-        //         if(shoot == 0){
-        //             pthread_create(&threadM, NULL, MonsterShoot, params);
-        //         }
+                int shoot = rand() % 2;
 
-        //     }
-        // }
+                if(shoot == 0){
+                    pthread_create(&threadM, NULL, MonsterShoot, params);
+                }
+
+                if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == ' '){
+                   ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] = letter;
+                }
+
+                
+
+            }
+        }
     return NULL;
 
 }
@@ -763,10 +764,12 @@ void * MonsterShoot(void * params){
     Shoot * shoot = malloc(sizeof(Shoot));
     Monster * monster = malloc(sizeof(Monster));
 
-    char letter = ((ShootParams*)params)->monster->firstLetter;
 
     int id = ((ShootParams*)params)->id;
     int stage = ((ShootParams*)params)->stage;
+    int idMonster = ((ShootParams*)params)->idMonster;
+
+    char letter = ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].firstLetter;
 
      for (int i = 0; i < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].height; i++) {
         for(int y = 0; y < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].width; y++){
@@ -780,160 +783,157 @@ void * MonsterShoot(void * params){
         shoot -> positionX = monster -> positionX;
         shoot -> positionY = monster -> positionY;
 
-        if(((ShootParams*)params) -> reload == 1){
-
-            if(((ShootParams*)params) -> directionView == 'R'){
-
-                ((ShootParams*)params)->reloadMonster = 0;
-
-                while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX + 2] == ' ' && ((ShootParams*)params)->reloadMonster  == 0 ){
-
-                        if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 4] == 'P'){
-                            
-                                if(((ShootParams*)params)->player->shield <= 0){
-                                    ((ShootParams*)params)->player->hpMax -= 1;
-                                } else {
-                                    ((ShootParams*)params)->player->shield -= 1;
-                                }
-                                break;
         
-                    }
 
-                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] = '*';
+    // if(((ShootParams*)params) -> directionView == 'R'){
 
-                    #ifdef _WIN32 
-                        Sleep(290); 
-                    #else 
-                        usleep(29000); 
-                    #endif
+    //     ((ShootParams*)params)->reloadMonster = 0;
 
+    //     while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX + 2] == ' ' && ((ShootParams*)params)->reloadMonster  == 0 ){
 
-
-                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] = ' ';
+    //             if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 4] == 'P'){
                     
-                    shoot -> positionX =  shoot -> positionX + 2;
-
-                }
+    //                     if(((ShootParams*)params)->player->shield <= 0){
+    //                         ((ShootParams*)params)->player->hpMax -= 1;
+    //                     } else {
+    //                         ((ShootParams*)params)->player->shield -= 1;
+    //                     }
+    //                     break;
         
-                ((ShootParams*)params)->reloadMonster = 1;
-        
-            }
+    //         }
 
-            if(((ShootParams*)params) -> directionView == 'L'){
+    //         ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] = '*';
 
-                        ((ShootParams*)params)->reloadMonster = 0;
-
-                while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX - 2] == ' ' && ((ShootParams*)params)->reloadMonster  == 0){
-
-                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 4] == 'P'){
-                            
-                        if(((ShootParams*)params)->player->shield <= 0){
-                            ((ShootParams*)params)->player->hpMax -= 1;
-                        } else {
-                            ((ShootParams*)params)->player->shield -= 1;
-                        }
-                        break;
-        
-                    }
-
-                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] = '*';
-
-                    #ifdef _WIN32 
-                        Sleep(290); 
-                    #else 
-                        usleep(29000); 
-                    #endif
-
-                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] = ' ';
-                    
-                    
-                    shoot -> positionX = shoot -> positionX - 2;
-
-                }
-
-                
-                ((ShootParams*)params)->reloadMonster = 1;
-        
-            }
-
-            if(((ShootParams*)params) -> directionView == 'T'){
-
-                        ((ShootParams*)params)->reloadMonster = 0;
-
-                while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY - 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reloadMonster  == 0){
-
-                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY - 2][shoot->positionX] == 'P'){
-                            
-                            if(((ShootParams*)params)->player->shield <= 0){
-                                ((ShootParams*)params)->player->hpMax -= 1;
-                            } else {
-                                ((ShootParams*)params)->player->shield -= 1;
-                            }
-                            break;
-        
-                    }
+    //         #ifdef _WIN32 
+    //             Sleep(290); 
+    //         #else 
+    //             usleep(29000); 
+    //         #endif
 
 
-                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY-1][shoot->positionX] = '*';
 
-                    #ifdef _WIN32 
-                        Sleep(290); 
-                    #else 
-                        usleep(29000); 
-                    #endif
-
-                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY-1][shoot->positionX] = ' ';
-
-                    shoot -> positionY--;
-
-                }
-
-                ((ShootParams*)params)->reloadMonster = 1;
-
-            }
-
-            if(((ShootParams*)params) -> directionView == 'B'){
-
-                        ((ShootParams*)params)->reloadMonster = 0;
-
-                while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY + 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reloadMonster  == 0){ 
-
-                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY + 2][shoot->positionX] == 'P'){
-                            
-                                if(((ShootParams*)params)->player->shield <= 0){
-                                    ((ShootParams*)params)->player->hpMax -= 1;
-                                } else {
-                                    ((ShootParams*)params)->player->shield -= 1;
-                                }
-                                break;
-        
-                    }
-
+    //         ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] = ' ';
             
-                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY + 1][shoot->positionX] = '*';
+    //         shoot -> positionX =  shoot -> positionX + 2;
 
-                    #ifdef _WIN32 
-                        Sleep(290); 
-                    #else 
-                        usleep(29000); 
-                    #endif
+    //     }
+        
+    //     ((ShootParams*)params)->reloadMonster = 1;
+        
+    // }
 
-                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY + 1][shoot->positionX] = ' ';
+    // if(((ShootParams*)params) -> directionView == 'L'){
 
-                    shoot -> positionY++;
+    //             ((ShootParams*)params)->reloadMonster = 0;
 
-                }
+    //     while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX - 2] == ' ' && ((ShootParams*)params)->reloadMonster  == 0){
 
-                ((ShootParams*)params)->reloadMonster = 1;
-            }
+    //         if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 4] == 'P'){
+                    
+    //             if(((ShootParams*)params)->player->shield <= 0){
+    //                 ((ShootParams*)params)->player->hpMax -= 1;
+    //             } else {
+    //                 ((ShootParams*)params)->player->shield -= 1;
+    //             }
+    //             break;
+        
+    //         }
 
-        }
+    //         ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] = '*';
+
+    //         #ifdef _WIN32 
+    //             Sleep(290); 
+    //         #else 
+    //             usleep(29000); 
+    //         #endif
+
+    //         ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] = ' ';
+            
+            
+    //         shoot -> positionX = shoot -> positionX - 2;
+
+    //     }
+
+        
+    //     ((ShootParams*)params)->reloadMonster = 1;
+        
+    // }
+
+    // if(((ShootParams*)params) -> directionView == 'T'){
+
+    //             ((ShootParams*)params)->reloadMonster = 0;
+
+    //     while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY - 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reloadMonster  == 0){
+
+    //         if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY - 2][shoot->positionX] == 'P'){
+                    
+    //                 if(((ShootParams*)params)->player->shield <= 0){
+    //                     ((ShootParams*)params)->player->hpMax -= 1;
+    //                 } else {
+    //                     ((ShootParams*)params)->player->shield -= 1;
+    //                 }
+    //                 break;
+        
+    //         }
 
 
+    //         ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY-1][shoot->positionX] = '*';
+
+    //         #ifdef _WIN32 
+    //             Sleep(290); 
+    //         #else 
+    //             usleep(29000); 
+    //         #endif
+
+    //         ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY-1][shoot->positionX] = ' ';
+
+    //         shoot -> positionY--;
+
+    //     }
+
+    //     ((ShootParams*)params)->reloadMonster = 1;
+
+    // }
+
+    // if(((ShootParams*)params) -> directionView == 'B'){
+
+    //             ((ShootParams*)params)->reloadMonster = 0;
+
+    //     while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY + 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reloadMonster  == 0){ 
+
+    //         if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY + 2][shoot->positionX] == 'P'){
+                    
+    //                     if(((ShootParams*)params)->player->shield <= 0){
+    //                         ((ShootParams*)params)->player->hpMax -= 1;
+    //                     } else {
+    //                         ((ShootParams*)params)->player->shield -= 1;
+    //                     }
+    //                     break;
+        
+    //         }
+
+    
+    //         ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY + 1][shoot->positionX] = '*';
+
+    //         #ifdef _WIN32 
+    //             Sleep(290); 
+    //         #else 
+    //             usleep(29000); 
+    //         #endif
+
+    //         ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY + 1][shoot->positionX] = ' ';
+
+    //         shoot -> positionY++;
+
+    //     }
+
+    //     ((ShootParams*)params)->reloadMonster = 1;
+    // }
 
     (void)params;
 
     free(shoot);
+    free(monster);
     return NULL;
 
 }

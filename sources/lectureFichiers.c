@@ -356,7 +356,6 @@ int getNbLignesFichier(char* chemin_fichier) {
 }
 
 Object* objectsFileToObjectsList() {
-    
     char* filepath = CHEMIN_FICHIER_OBJECTS;
     FILE* fichier = fopen(filepath, "r"); // ouverture fichier
     if(fichier == NULL) { 
@@ -424,7 +423,7 @@ Object* objectsFileToObjectsList() {
                 } else {
                     addObject(head, createObject(id, name, hpMax, shield, damage, piercingShot, spectralShot, flight));
                 }
-
+                
                 id += 1;
             
                 name = "";
@@ -476,8 +475,6 @@ Monster* fichierMonsterToListeMonster() {
     int creatingMonster = 1;
     char firstLetter;
 
-  
-
     while(fgets(buffer, 255, fichier)) { // lecture fichier ligne par ligne
         firstLetter = buffer[0];
         // printf("firstLetter %d\n", firstLetter);
@@ -493,24 +490,34 @@ Monster* fichierMonsterToListeMonster() {
                 value = strtok(NULL, "="); //ex : 1 (depuis "hpMax=1")
                 uppercase(stat);
                 uppercase(value);
-
+                
+                if(strcmp(stat, "NAME") == 0) {
+                    shoot = 0;
+                    ss = 0;
+                    flight = 0;
+                }
+             
                 if(strcmp(stat, "NAME") == 0) {
                     name = duplicateString(value);
                 } else if((strcmp(stat, "HPMAX") == 0)) {
                     hpMax = atof(value);
-                    printf("hpMax %f \n", hpMax);
                 }  else if((strcmp(stat, "SHOOT") == 0)) {
-                    printf("value %s", value);
-                    activated = (strcmp(value, "TRUE") == 0);
-                    printf("activated %d \n", activated);
-                    shoot = activated;
-                    sleep(1);
+                    if((strstr(value, "TRUE") != NULL)){
+                        activated = 1;  
+                        shoot = activated;  
+                    }
+                    
                 } else if((strcmp(stat, "SS") == 0)) {
-                    activated = (strcmp(value, "TRUE\n") == 0);
-                    ss = activated;
+                    if((strstr(value, "TRUE") != NULL)){
+                        activated = 1;  
+                        ss = activated;  
+                    }
+                   
                 } else if((strcmp(stat, "FLIGHT") == 0)) {
-                    activated = (strcmp(value, "TRUE\n") == 0);
-                    flight = activated;
+                    if((strstr(value, "TRUE") != NULL)){
+                        activated = 1;  
+                        flight = activated;  
+                    }
                 }
             }
 
