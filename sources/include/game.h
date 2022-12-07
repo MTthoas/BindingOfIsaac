@@ -73,10 +73,10 @@ void playerGainLife(Player* player);
 //  */
 // void changeRoomMonsterArray(Donjon* d, int stage, int roomID);
 
-void playerMoveUp(Donjon* donjon, int stage, int roomID, Player* player);
-void playerMoveDown(Donjon* donjon, int stage, int roomID, Player* player);
-void playerMoveLeft(Donjon* donjon, int stage, int roomID, Player* player);
-void playerMoveRight(Donjon* donjon, int stage, int roomID, Player* player);
+void playerMoveUp(Donjon* donjon, int stage, int roomID, Player* player, Obstacle* obstacle);
+void playerMoveDown(Donjon* donjon, int stage, int roomID, Player* player, Obstacle* obstacle);
+void playerMoveLeft(Donjon* donjon, int stage, int roomID, Player* player, Obstacle* obstacle);
+void playerMoveRight(Donjon* donjon, int stage, int roomID, Player* player, Obstacle* obstacle);
 
 void PurgeRoomOfBoss(Donjon *d, int stage, int id);
 void GestionDoorsForMobRoom(Donjon *d, int stage, int id, int done);
