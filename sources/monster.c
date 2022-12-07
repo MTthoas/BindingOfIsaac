@@ -218,45 +218,69 @@ Monster createMonster(int idMonster, char* name, float hpMax, int shoot, int fli
 void monsterActivity(void *params){
     int id = ((ShootParams*)params)->id;
     int stage = ((ShootParams*)params)->stage;
+    pthread_t tZero;
+    pthread_t tUn;
+    pthread_t tDeux;
+    pthread_t tTrois;
+    pthread_t tQuatre;
+    pthread_t tCinq;
 
-    if (((ShootParams*)params)->d -> stages[stage].rooms[id].numberOfMonsters > 0){       
+    if (((ShootParams*)params)->d -> stages[stage].rooms[id].numberOfMonsters != 0){       
         for (int i = 0; i < ((ShootParams*)params)->d -> stages[stage].rooms[id].numberOfMonsters ; i++){
 
             if (i == 0){
                 ((ShootParams*)params)->idMonster = i;
-                pthread_t tZero;
                 pthread_create(&tZero, NULL, monsterAttackPlayer, params);
-                printf("Thread 0 créé !\n");         
+                #ifdef _WIN32 
+	            Sleep(25); 
+	            #else 
+	            usleep(25000); 
+	            #endif
             }
             if (i == 1){
                 ((ShootParams*)params)->idMonster = i;
-                pthread_t tUn;
                 pthread_create(&tUn, NULL, monsterAttackPlayer, params);
-                printf("Thread 1 créé !\n");
+                #ifdef _WIN32 
+	            Sleep(25); 
+	            #else 
+	            usleep(25000); 
+	            #endif
             }
             if (i == 2){
                 ((ShootParams*)params)->idMonster = i;
-                pthread_t tDeux;
                 pthread_create(&tDeux, NULL, monsterAttackPlayer, params);
-                printf("Thread 2 créé !\n");
+                #ifdef _WIN32 
+	            Sleep(25); 
+	            #else 
+	            usleep(25000); 
+	            #endif
             }
             if (i == 3){
                 ((ShootParams*)params)->idMonster = i;
-                pthread_t tTrois;
                 pthread_create(&tTrois, NULL, monsterAttackPlayer, params);
-                printf("Thread 3 créé !\n");
+                #ifdef _WIN32 
+	            Sleep(25); 
+	            #else 
+	            usleep(25000); 
+	            #endif
             }
             if (i == 4){
                 ((ShootParams*)params)->idMonster = i;
-                pthread_t tQuatre;
                 pthread_create(&tQuatre, NULL, monsterAttackPlayer, params);
-                printf("Thread 4 créé !\n");
+                #ifdef _WIN32 
+	            Sleep(25); 
+	            #else 
+	            usleep(25000); 
+	            #endif
             }
             if (i == 5){
                 ((ShootParams*)params)->idMonster = i;
-                pthread_t tCinq;
                 pthread_create(&tCinq, NULL, monsterAttackPlayer, params);
-                printf("Thread 5 créé !\n");
+                #ifdef _WIN32 
+	            Sleep(25); 
+	            #else 
+	            usleep(25000); 
+	            #endif
             }
         }
     }
@@ -280,9 +304,9 @@ void * monsterAttackPlayer(void *params) {
 	            usleep(25000); 
 	            #endif
                 #ifdef _WIN32 
-	            Sleep(1000); 
+	            Sleep(888); 
 	            #else 
-	            usleep(1000000); 
+	            usleep(888000); 
 	            #endif       
                 char letter = tolower(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].firstLetter);
 
