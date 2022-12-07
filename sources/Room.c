@@ -961,7 +961,7 @@ int setMonstersInsideRoom(Donjon *d, int stage, int roomId)
 
 void initialiseMonstersInsideRoom(Donjon *d, int stage, int roomID, Monster *allMonsters)
 {
-    int nbMonsters = getRandomInt(2, 5, 20);
+    int nbMonsters = getRandomInt(0, 6, 20);
     int *uniqueNumbers = generateUniqueNumbers(nbMonsters - 1, 8);
     int index = 0;
 
