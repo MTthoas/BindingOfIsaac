@@ -351,19 +351,32 @@ int menuCreateRoom(void) {
     int length = 30;
 
     for(int i = 0; i < height; i++){
-        for(int j = 0; j < length; j++){
+        for(int j = 0; j < length-1; j++){
            
             if(j%2 == 0){
-                
                 if(i == 0 || i == height - 1){
-                    arr[i][j] = 'W';
-                } 
+                    if(arr[i][j] != 'D'){
+                        arr[i][j] = 'W';
+                    }
+                    if(j == length / 2){
+                        arr[i][j] = 'D';
+                    }
+                }
+            }else{
+                if(i == 0 || i == height - 1){
+                    if(j == length / 2  ){
+                        arr[i][j-1] = 'D';
+                    }
+                }
             }      
 
             if(j%2 == 0 ){
                 if(j == 0 || j == length - 2){
                     arr[i][j] = 'W';
-                }  
+                    if(i == height / 2){
+                        arr[i][j] = 'D';
+                    }
+                }        
             }
         }
     }
@@ -374,48 +387,49 @@ int menuCreateRoom(void) {
     int axeX = 0;
     int axeY = 0;
     int Rock = 0;
+    int Spikes = 0;
+    int Gap = 0;
     int condition = true;
+
+    // TO ADD ROCKS
 
     while(1){
         printf("Voulez-vous ajoutez des obstacles à la salle ? (Y/N) \n");
-        success = confirmation();
-        if(success == 1){
-            break;
-        }else{
-            printf("Voulez-vous ajoutez une salle vide ?\n");
             success = confirmation();
             if(success == 1){
                 break;
             }else{
-                continue;
                 condition = false;
+                break;
+            }      
+    }
+
+        while(condition){
+            printf("Combien de rochers voulez-vous ajoutez ?\n");
+            Rock = readInt();
+            if(Rock <= 0 ) {
+                printf("DO NOT ENTER 0 OR LESS IDIOT\n\n");
+                continue;
+            }else{
+                break;
             }
-        } 
-        
-    }
-
-
-    while(condition){
-        printf("Combien de rochers voulez-vous ajoutez ?\n");
-        Rock = readInt();
-        if(Rock <= 0 ) {
-            printf("DO NOT ENTER 0 OR LESS IDIOT\n\n");
-            continue;
-        }else{
-            break;
         }
-    }
 
-    for(int i = 0; i < Rock; i++ ){
+        for(int i = 0; i < Rock; i++ ){
             printf("\n");
 
             while(1){
                 printf("AXE X pour créer le rocher [%d] :", i+1);
                 axeX = readInt();
+                axeX = axeX * 2;
                 if (isdigit(axeX)){
                     continue;
                 }
-                if(axeX % 2 == 0){
+                if(axeX > length){
+                    printf("AXE X trop grand\n");
+                    continue;
+                }
+                if(axeX % 2 == 0 ){
                     break;
                 }else{
                     printf("AXE X pour créer le rocher [%d] :", i+1);
@@ -429,97 +443,203 @@ int menuCreateRoom(void) {
                 if (isdigit(axeY)){
                     continue;
                 }
+                if(axeY > height){
+                    printf("AXE Y trop grand\n");
+                    continue;
+                }
                 break;
             }
 
-             if(arr[axeX][axeY] != ' '){
+             if(arr[axeY][axeX] != ' '){
                     printf("Impossible de créer un rocher dans un mur");
                     i--;
                     continue;
             }
+    }
 
+        printf("\n");
+        printf("          Room after rocks instructions \n");
+        if(condition == true){
             arr[axeY][axeX] = 'R';
+        }  
+        printRoom(height, length, arr);
+        condition = true;
 
-            int numberOfRoomsInt = numberOfRooms();
-
-            // const char* str1 = "hello there";
-
-
-            char final[100];
-
-            sprintf(final,"%s%d%s%d%s%d\n","[",height,"|",length/2,"]",numberOfRoomsInt-2);
-            
-                FILE *f = fopen(CHEMIN_FICHIER_PIECES, "a");
-                if (f == NULL)
-                {
-                    printf("Error opening file!\n");
-                }
-
-                // printf("%s\n",final);
-
-             /* Append data to file */
-                fputs(final, f);
-
-               // write final array to file
-
-                for(int i = 0; i < height; i++){
-                    for(int j = 0; j < length; j++){
-                        fputc(arr[i][j], f);
-                    }
-                    fputc('\n', f);
-                }
-
-                fclose(f);
-            
-            
-            // char array[5] = ["[",""]
-
-            
-
-        // for(int x = 0; x < height; x++){
-        //     for(int j = 0; j < length; j++){
-        //         if(axeX - 2 == 'W' && height / 2 == axeY ){
-        //             printf("Impossible de créer un rocher à côté d'une potentiel porte");
-        //             break;
-        //         }
-        //         if(axeX + 2 == 'W' && height / 2 == axeY ){
-        //             printf("Impossible de créer un rocher à côté d'une potentiel porte");
-        //             break;
-        //         }
-        //         // if(x == axeX && j == axeY){
-        //             arr[i][j] = 'R';
-        //         // }
-        //     }
-        // }
-    }
-
-    printRoom(height, length, arr);
-
-
-
-
-
-
-    FILE * fp;
-
-    fp = fopen("../resources/room.rtbob", "r");
-    if (fp == NULL){
-        return 2;
-    }
-    fclose(fp);
-
-    printf("\nPress 'R' to go back\n");
+    // TO ADD SPIKES
 
     while(1){
-        char c = ' ';
-        if(kbhit()){
-            c = getchar();
+        printf("Voulez-vous ajoutez des piques à la salle ? (Y/N) \n");
+            success = confirmation();
+            if(success == 1){
+                break;
+            }else{
+                condition = false;
+                break;
         } 
-            if(c == 'R' || c == 'r') {
-                return 1;
-            }
-        sleep(1);
     }
+
+        while(condition){
+            printf("Combien de piques voulez-vous ajoutez ?\n");
+            Spikes = readInt();
+            if(Spikes <= 0 ) {
+                printf("DO NOT ENTER 0 OR LESS IDIOT\n\n");
+                continue;
+            }else{
+                break;
+            }
+        }
+
+        for(int i = 0; i < Spikes; i++ ){
+            printf("\n");
+
+            while(1){
+                printf("AXE X pour créer la pique [%d] :", i+1);
+                axeX = readInt();
+                axeX = axeX * 2;
+                if (isdigit(axeX)){
+                    continue;
+                }
+                if(axeX > length){
+                    printf("AXE X trop grand\n");
+                    continue;
+                }
+                if(axeX % 2 == 0){
+                    break;
+                }else{
+                    printf("AXE X pour créer la pique [%d] :", i+1);
+                    axeX = readInt();
+                }
+            }
+
+            while(1){
+                printf("AXE Y pour créer une pique [%d] :", i+1);
+                axeY = readInt();
+                if (isdigit(axeY)){
+                    continue;
+                }
+                if(axeY > height){
+                    printf("AXE Y trop grand\n");
+                    continue;
+                }
+                break;
+            }
+
+             if(arr[axeY][axeX] != ' '){
+                    printf("Impossible de créer une pique dans un mur");
+                    i--;
+                    continue;
+            }
+
+        }
+
+        printf("\n");
+        printf("          Room after spikes instructions \n");
+        if(condition == true){
+            arr[axeY][axeX] = 'S';
+        }  
+        printRoom(height, length, arr);
+        condition = true;
+
+    // TO ADD GAP
+
+    while(1){
+        printf("Voulez-vous ajoutez des trous à la salle ? (Y/N) \n");
+            success = confirmation();
+            if(success == 1){
+                break;
+            }else{
+                condition = false;
+                break;
+        } 
+    }
+
+        while(condition){
+            printf("Combien de trous voulez-vous ajoutez ?\n");
+            Gap = readInt();
+            if(Gap <= 0 ) {
+                printf("DO NOT ENTER 0 OR LESS IDIOT\n\n");
+                continue;
+            }else{
+                break;
+            }
+        }
+
+        for(int i = 0; i < Gap; i++ ){
+            printf("\n");
+
+            while(1){
+                printf("AXE X pour créer le trou [%d] :", i+1);
+                axeX = readInt();
+                axeX = axeX * 2;
+                if (isdigit(axeX)){
+                    continue;
+                }
+                if(axeX > length){
+                    printf("AXE X trop grand\n");
+                    continue;
+                }
+                if(axeX % 2 == 0){
+                    break;
+                }else{
+                    printf("AXE X pour créer le trou [%d] :", i+1);
+                    axeX = readInt();
+                }
+            }
+
+            while(1){
+                printf("AXE Y pour créer un trou [%d] :", i+1);
+                axeY = readInt();
+                if (isdigit(axeY)){
+                    continue;
+                }
+                if(axeY > height){
+                    printf("AXE Y trop grand\n");
+                    continue;
+                }
+                break;
+            }
+
+             if(arr[axeY][axeX] != ' '){
+                    printf("Impossible de créer un trou dans un mur");
+                    i--;
+                    continue;
+            }
+        }
+
+        printf("\n");
+        printf("          Room after gaps instructions \n");
+        if(condition == true){
+            arr[axeY][axeX] = 'G';
+        }  
+        printRoom(height, length, arr);
+        condition = true;
+
+
+    
+    int numberOfRoomsInt = numberOfRooms();
+    char final[100];
+
+    sprintf(final,"%s%d%s%d%s%d\n","[",height,"|",length/2,"]",numberOfRoomsInt-1);
+            
+        FILE *f = fopen(CHEMIN_FICHIER_PIECES, "a");
+        if (f == NULL)
+        {
+            printf("Error opening file!\n");
+            return 1;
+        }
+
+        fputs(final, f);
+
+        for(int i = 0; i < height; i++){
+            for(int j = 0; j < length-1; j++){
+                fputc(arr[i][j], f);
+            }
+            fputc('\n', f);
+        }
+        fclose(f);
+        
+        return 0;
+
 
 }
 
@@ -530,6 +650,9 @@ int menuDeleteRoom(void){
     printf("---------------- DELETE ROOM  ----------------\n\n");
 
     CRUD_Room* head = roomsFileToRoomsList();
+
+    int numberOfRooms = getRoomsListSize(head);
+
     if(head == NULL) {
         printf("Couldn't load from %s\n.", CHEMIN_FICHIER_PIECES);
         printf("Press 'r' to go back\n");
@@ -539,11 +662,14 @@ int menuDeleteRoom(void){
     int id;
     int success = 0;
     displayAllRooms(head);
-    printf("\n\nEnter the id of the room you want to delete (see above) : \n");
     do {
+        printf("\n\nEnter the id of the room you want to delete (see above) : \n");
         id = readInt();
-        printf("id = %d. Is it correct ? (y/n) \n", id);
-        success = confirmation();
+        if(id < 0 || id >= numberOfRooms) {
+            printf("Invalid id. Please try again.\n");
+            continue;
+        }
+        break;
     } while(!success);
 
     removeCRUD_Room(&head, id);
@@ -571,7 +697,167 @@ int menuModifyRoom(void){
    system("clear");
     printGameBanner();
     printf("-------- UPDATE ROOM  --------\n");
-    printf("Not possible for the moment. Contact the dev team :)\n");
+    
+    CRUD_Room* head = roomsFileToRoomsList();
+    int numberOfRooms = getRoomsListSize(head);
+
+    if(head == NULL) {
+        printf("Couldn't load from %s\n.", CHEMIN_FICHIER_PIECES);
+        printf("Press 'r' to go back\n");
+        return 2;
+    }
+
+    int id;
+    int success = 0;
+    displayAllRooms(head);
+    do {
+        printf("\n\nEnter the id of the room you want to modif (see above) : \n");
+        id = readInt();
+        if(id <= 0 || id > numberOfRooms) {
+            continue;
+        }else{
+            success = 1;
+        }
+    } while(!success);
+
+    CRUD_Room* room = getCRUD_RoomById(head, id);
+
+    // // print room
+    printf("\n\n");
+
+    for(int i = 0 ; i < room->lines ; i += 1) {
+        for(int j = 0 ; j < room->columns ; j += 1) {
+            printf("%c",room->map[i][j]);
+        }
+        printf("\n");
+    }
+
+        int condition = true;
+        int axeX = 2;
+        int axeY = 2;
+        char character = 'X';
+
+        while (condition) {
+
+            int c = ' ';
+
+            if (kbhit()) {
+                c = getchar();
+            }
+
+            if(c != 'x'){
+
+                system("clear");
+                printGameBanner();  
+                printf("-------- UPDATE ROOM  --------\n");
+
+                for(int i = 0 ; i < room->lines ; i += 1) {
+                    for(int j = 0 ; j < room->columns ; j += 1) {
+                        if(i == axeY && j == axeX){
+                            printf("%s", KRED);
+                            room->map[i][j] = character;
+                            printf("%c",room->map[i][j]);
+                            printf("%s", KNRM);
+                        }else{
+                            printf("%c",room->map[i][j]);
+                        }
+                    }
+                printf("\n");
+                }
+
+                #ifdef _WIN32 
+                Sleep(1); 
+                #else 
+                usleep(70000); 
+                #endif 
+
+                if(character == 'G'){
+                    room->map[axeY][axeX] = 'G';
+                }else{
+                    room->map[axeY][axeX] = ' ';
+                }
+
+                switch (c){
+
+                    case 'z':
+
+                        if(room->map[axeY-1][axeX] != 'D' && room->map[axeY-1][axeX] != 'W'){
+                            axeY--;
+
+                            if(room->map[axeY][axeX] == 'G'){
+                                character = 'G';
+                            }else{
+                                character = 'X';
+                                room->map[axeY][axeX] = 'X';
+                            }
+                        }
+
+                    break;
+
+                    case 's':
+
+                        if(room->map[axeY+1][axeX] != 'D' && room->map[axeY+1][axeX] != 'W'){
+                            axeY++;
+
+                            if(room->map[axeY][axeX] == 'G'){
+                                character = 'G';
+                            }else{
+                                character = 'X';
+                                room->map[axeY][axeX] = 'X';
+                            }
+
+                        }
+
+                        
+
+                    break;
+                    
+                    case 'd':
+                        
+                        if(room->map[axeY][axeX+2] != 'D' && room->map[axeY][axeX+2] != 'W'){
+                            axeX++;
+                            axeX++;
+
+                            if(room->map[axeY][axeX] == 'G'){
+                                character = 'G';
+                            }else{
+                                character = 'X';
+                                room->map[axeY][axeX] = 'X';
+                            }
+                        }
+
+                    break;
+
+                    case 'q':
+
+                        if(room->map[axeY][axeX-2] != 'D' && room->map[axeY][axeX-2] != 'W'){
+                            axeX--;
+                            axeX--;
+
+                            if(room->map[axeY][axeX] == 'G'){
+                               character = 'G';
+                            }else{
+                                character = 'X';
+                                room->map[axeY][axeX] = 'X';
+                            }
+
+                        }
+                                     
+                    break;
+
+                    case 'X':
+                        condition = false;
+                    break;
+
+                }
+
+
+
+            }
+
+
+    }
+
     printf("\nPress 'b' to continue ...\n");
 
     return 0;
@@ -591,7 +877,6 @@ void menuCrudRoom(void){
         printf("            Press 'b' to go back \n\n");
 }
 
-
 void menuCrudItem(void) {
     system("clear");
         printGameBanner();
@@ -603,7 +888,6 @@ void menuCrudItem(void) {
 
         printf("            Press 'b' to go back\n\n");
 }
-
 
 void menuControl(void){
     system("clear");
@@ -837,7 +1121,6 @@ void menuGame() {
 				etape = false;
 				c2 = 'p';
 				menuCrudRoom();
-                sleep(1);
                 statusRoom = 0;
 				if (kbhit()) {
 					c2 = getchar();

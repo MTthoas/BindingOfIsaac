@@ -95,13 +95,14 @@ void displayCRUD_Room(CRUD_Room* room) {
         return;
     }
 
-    printf("[%d|%d]%d\n", room->lines, room->columns/2, room->id); // columns / 2 because of spaces
+    printf("\n");
+    printf("       [%d|%d]%d", room->lines, room->columns/2, room->id); // columns / 2 because of spaces
 
     for(int i = 0 ; i < room->lines ; i += 1) {
+        printf("\n       ");
         for(int j = 0 ; j < room->columns ; j += 1) {
             printf("%c",room->map[i][j]);
         }
-        printf("\n");
     }
 }
 
