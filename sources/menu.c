@@ -24,6 +24,7 @@
 #include "./include/menu.h"
 #include "./include/lectureFichiers.h"
 #include "./include/mystring.h"
+#include "myUtils.h"
 #include "./include/userInput.h"
 #include "./include/game.h"
 
@@ -1145,12 +1146,6 @@ void menuGame() {
                     shootParams->id = id;
                     Boss->firstLetter = 'X';
 
-                    if(stage == 0){
-                        player->dmg = 3.5;
-                        player->hpMax = 3;
-                        player->shield = 0;
-                    }
-
                     int axeX = 0;
                     int axeY = 0;
 
@@ -1300,4 +1295,27 @@ void menuGame() {
                 }
 		}
 	}
+}
+
+void displayWaitMonsters() {
+    int randMessage = getRandomInt(0, 6, 20);
+    system("clear");
+    printf("===========================================================\n");
+    printf("=========      THE BINDING OF BRIATTE        ==============\n");
+    printf("===========================================================\n");
+    printf("\n");
+    if(randMessage == 0) {
+        printf("=========         Loading monsters ...       ==============\n");
+    } else if(randMessage == 1) {
+        printf("=========         Building the dungeon ...   ==============\n");
+    } else if(randMessage == 2) {
+        printf("=========         Placing the mobs ...       ==============\n");
+    } else if(randMessage == 3) {
+        printf("=========         Calming Athina ...         ==============\n");
+    } else if(randMessage == 4) {
+        printf("=========         Prepare for hell ...       ==============\n");
+    } else if(randMessage == 5) {
+        printf("=========         Do not forget Jesus !      ==============\n");
+    }     
+
 }

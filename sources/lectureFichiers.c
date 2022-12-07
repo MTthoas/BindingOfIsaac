@@ -468,6 +468,7 @@ Monster* fichierMonsterToListeMonster() {
     int shoot = 0;
     int ss = 0;
     int flight = 0;
+    int activated = 0;
 
     char buffer[255];
     char* stat = malloc(sizeof(char) * 255); 
@@ -483,7 +484,7 @@ Monster* fichierMonsterToListeMonster() {
 
         //printf("%s", buffer);
 
-        if(firstLetter == 'n' || firstLetter == '-' || firstLetter == 'h' || firstLetter == 's' || firstLetter == 's' || firstLetter == 'f' || firstLetter == EOF) {
+        if(firstLetter == 'n' || firstLetter == '-' || firstLetter == 'h' || firstLetter == 's' || firstLetter == 'f' || firstLetter == EOF) {
             if(firstLetter == '-') { 
                 creatingMonster = (creatingMonster) ? 0 : 1;
 
@@ -492,28 +493,29 @@ Monster* fichierMonsterToListeMonster() {
                 value = strtok(NULL, "="); //ex : 1 (depuis "hpMax=1")
                 uppercase(stat);
                 uppercase(value);
+
                 if(strcmp(stat, "NAME") == 0) {
                     name = duplicateString(value);
                 } else if((strcmp(stat, "HPMAX") == 0)) {
                     hpMax = atof(value);
+                    // printf("hpMax %f \n", hpMax);
                 }  else if((strcmp(stat, "SHOOT") == 0)) {
-                    if ((strcmp(value, "TRUE\n") == 0)){   
-                    shoot = 1;
-                    }  
+                    // printf("value %s", value);
+                    activated = (strcmp(value, "TRUE") == 0);
+                    // printf("activated %d \n", activated);
+                    shoot = activated;
                 } else if((strcmp(stat, "SS") == 0)) {
-                    if((strcmp(value, "TRUE\n") == 0)){
-                    ss = 1;
-                    }
+                    activated = (strcmp(value, "TRUE\n") == 0);
+                    ss = activated;
                 } else if((strcmp(stat, "FLIGHT") == 0)) {
-                    if((strcmp(value, "TRUE\n") == 0)){
-                    flight = 1;
-                    }
+                    activated = (strcmp(value, "TRUE\n") == 0);
+                    flight = activated;
                 }
-
             }
 
+            } 
+
             if(firstLetter == '-' && creatingMonster == 1) { // ajout object
-            //TODO faire une fonction simple qui malloc un monster et qui le retourne
                 arrayMonster[idMonster] = createMonster(idMonster, name, hpMax, shoot,flight,ss);
                 idMonster = idMonster + 1;
                 creatingMonster = (creatingMonster) ? 0 : 1;
@@ -521,7 +523,7 @@ Monster* fichierMonsterToListeMonster() {
                 // printf("%s", name);
             }   
         }
-    }
+    
 
     if(feof(fichier)) { 
         if(strcmp(name, "") != 0) {
@@ -534,5 +536,6 @@ Monster* fichierMonsterToListeMonster() {
     fclose(fichier);
     return arrayMonster;
 }
+
 
 

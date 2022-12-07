@@ -13,6 +13,33 @@
 #define NUMBER_ROOM_MAX 30
 #define NUMBER_STAGES_MAX 62
 
+#define BASE_ROOM_NAME 'O' // room name used for spawn, boss
+#define NORMAL_ROOM_NAME 'R'
+#define ITEM_ROOM_NAME '$'
+#define BOSS_ROOM_NAME 'B'
+#define BONUS_ITEM_ROOM '@'
+
+#define JAGGER_FIRST_LETTER 'J'
+#define LENINA_FIRST_LETTER 'L'
+#define ATHINA_FIRST_LETTER 'A'
+
+#define EMPTY ' '
+#define WALL 'W'
+#define ROCK 'R'
+#define GAP 'G'
+#define DOOR 'D'
+#define HEALTH 'H'
+#define SPIKE 'S'
+#define PLAYER 'P'
+#define ITEM 'I'
+#define NEXT_STAGE 'N'
+#define END 'E'
+
+#define LOCKED_DOOR 'L'
+#define ITEM_ROOM_DOOR '$'
+#define BOSS_ROOM_DOOR 'B'
+#define BONUS_ITEM_DOOR '@'
+
 #include "objects.h"
 #include "Player.h"
 #include "monster.h"
@@ -70,9 +97,12 @@ typedef struct Donjon{
             int doorRight;
             int numberOfRoomsReturned;
             int roomUsed;
+
+            Object * object; // an object of the donjon objects linked list
+
             int numberOfMonsters; // number of monsters inside this room
             Monster * monsters; // array of monsters in this room
-            Object * object; // an object of the donjon objects linked list
+            int idForMonsterArray; // to select a unique array of monsters for every room
          
             struct Door Door;
 
@@ -116,7 +146,7 @@ void initialiseMonstersInsideRoom(Donjon * d, int stage, int roomID, Monster* al
  * @param stage Etage précis
  * @param numberOfRooms Nombre de rooms
  */
-void InitialiseRooms(struct Donjon * d, int stage, int numberOfRooms, Monster* monster);
+void InitialiseRooms(struct Donjon * d, int stage, int numberOfRooms);
 
 /**
  * @brief Draws and sets the monsters inside the specified room of the dungeon
@@ -134,6 +164,11 @@ int setMonstersInsideRoom(Donjon* d, int stage, int roomID);
  * @return int 
  */
 int clearMonstersInsideRoom(Donjon* d, int stage, int roomID);
+
+/**
+ * @brief Display formatted "loading monsters" on the terminal
+ */
+void displayWaitMonsters();
 
 
 

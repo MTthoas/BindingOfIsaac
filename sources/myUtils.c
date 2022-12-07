@@ -55,3 +55,4 @@ int isUnique(int* res, int nb, int size) {
     }
     return 1;
 }
+

@@ -61,8 +61,6 @@ typedef struct Boss {
 
     Monster * getMonsterById(Monster * arrayMonster, int id);
 
-    void monsterShoot(Monster * monster, Player * player);
-
     void monsterRandomMove(Monster * monster, Player * player);
 
     void monsterFollowPlayerAndAttack(Monster * monster, Player * player);
@@ -72,6 +70,12 @@ typedef struct Boss {
    void * bossLenina(void *params); 
 
     void * BossShoot(void * params);
+
+    void * MonsterShoot(void * params);
+
+    void * monsterAttackPlayer(void *params);
+
+    void monsterActivity(void *params);
     
     void* LeninaShoot(void* params);
 
