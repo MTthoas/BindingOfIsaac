@@ -455,13 +455,15 @@ int menuCreateRoom(void) {
                     i--;
                     continue;
             }
+
+            arr[axeY][axeX] = 'R';
     }
 
         printf("\n");
         printf("          Room after rocks instructions \n");
-        if(condition == true){
-            arr[axeY][axeX] = 'R';
-        }  
+        // if(condition == true){
+        //     arr[axeY][axeX] = 'R';
+        // }  
         printRoom(height, length, arr);
         condition = true;
 
@@ -530,13 +532,15 @@ int menuCreateRoom(void) {
                     continue;
             }
 
+        arr[axeY][axeX] = 'R';
+
         }
 
         printf("\n");
         printf("          Room after spikes instructions \n");
-        if(condition == true){
-            arr[axeY][axeX] = 'S';
-        }  
+        // if(condition == true){
+        //     arr[axeY][axeX] = 'S';
+        // }  
         printRoom(height, length, arr);
         condition = true;
 
@@ -560,6 +564,7 @@ int menuCreateRoom(void) {
                 printf("DO NOT ENTER 0 OR LESS IDIOT\n\n");
                 continue;
             }else{
+                 arr[axeY][axeX] = 'R';
                 break;
             }
         }
@@ -579,6 +584,7 @@ int menuCreateRoom(void) {
                     continue;
                 }
                 if(axeX % 2 == 0){
+                     arr[axeY][axeX] = 'R';
                     break;
                 }else{
                     printf("AXE X pour créer le trou [%d] :", i+1);
@@ -608,9 +614,9 @@ int menuCreateRoom(void) {
 
         printf("\n");
         printf("          Room after gaps instructions \n");
-        if(condition == true){
-            arr[axeY][axeX] = 'G';
-        }  
+        // if(condition == true){
+        //     arr[axeY][axeX] = 'G';
+        // }  
         printRoom(height, length, arr);
         condition = true;
 
@@ -619,7 +625,7 @@ int menuCreateRoom(void) {
     int numberOfRoomsInt = numberOfRooms();
     char final[100];
 
-    sprintf(final,"%s%d%s%d%s%d\n","[",height,"|",length/2,"]",numberOfRoomsInt-1);
+    sprintf(final,"%s%d%s%d%s%d\n","[",height,"|",length/2,"]",numberOfRoomsInt+1);
             
         FILE *f = fopen(CHEMIN_FICHIER_PIECES, "a");
         if (f == NULL)
@@ -638,7 +644,7 @@ int menuCreateRoom(void) {
         }
         fclose(f);
         
-        return 0;
+        return 1;
 
 
 }
@@ -736,6 +742,7 @@ int menuModifyRoom(void){
         int axeX = 2;
         int axeY = 2;
         char character = 'X';
+        int placement = 0;
 
         while (condition) {
 
@@ -749,9 +756,10 @@ int menuModifyRoom(void){
 
                 system("clear");
                 printGameBanner();  
-                printf("-------- UPDATE ROOM  --------\n");
+                printf("           -------- UPDATE ROOM  --------\n");
 
                 for(int i = 0 ; i < room->lines ; i += 1) {
+                    printf("\n            ");
                     for(int j = 0 ; j < room->columns ; j += 1) {
                         if(i == axeY && j == axeX){
                             printf("%s", KRED);
@@ -762,8 +770,17 @@ int menuModifyRoom(void){
                             printf("%c",room->map[i][j]);
                         }
                     }
-                printf("\n");
                 }
+
+                printf("\n\n");
+                printf("           Press R to place a rock\n");
+                printf("           Press G to place a gap\n");
+                printf("           Press S to place a spike\n");
+                printf("           Press Space remove an element\n\n");
+
+                printf("           Press b to save and exit\n");
+
+                printf("\n\n");
 
                 #ifdef _WIN32 
                 Sleep(1); 
@@ -771,24 +788,76 @@ int menuModifyRoom(void){
                 usleep(70000); 
                 #endif 
 
-                if(character == 'G'){
+                if(character == 'G' && placement == 0){
                     room->map[axeY][axeX] = 'G';
+                    placement = 0;
                 }else{
-                    room->map[axeY][axeX] = ' ';
+                        if(character == 'R' && placement == 0){
+                            room->map[axeY][axeX] = 'R';
+                            placement = 0;
+                        }else{
+                            if(character == 'S' && placement == 0){
+                            room->map[axeY][axeX] = 'S';
+                            placement = 0;
+                            }else{
+                                if(character == 'V' && placement == 0){
+                                    room->map[axeY][axeX] = ' ';
+                                    placement = 0;
+                                }else{
+                                    room->map[axeY][axeX] = ' ';
+                                    placement = 0;
+                                }
+                            }
+                        }
                 }
 
                 switch (c){
 
+                    case 'G':
+                        placement = 1;
+                        character = 'G'; 
+                        room->map[axeY][axeX] = 'G';
+                    break;
+
+                    case 'R':
+                        placement = 1;
+                        character = 'R'; 
+                        room->map[axeY][axeX] = 'R';  
+                    break;
+
+                    case 'S':
+                        placement = 1;
+                        character = 'S'; 
+                        room->map[axeY][axeX] = 'S';  
+                    break;
+
+                    case 'V':
+
+                        room->map[axeY][axeX] = ' ';
+                        character = 'V'; 
+                        placement = 1;
+
+                    break;
+
+
                     case 'z':
 
-                        if(room->map[axeY-1][axeX] != 'D' && room->map[axeY-1][axeX] != 'W'){
+                        if(room->map[axeY-1][axeX] != 'D' && room->map[axeY-1][axeX] != 'W' && room->map[axeY-1][axeX] != 'S'){
                             axeY--;
 
                             if(room->map[axeY][axeX] == 'G'){
                                 character = 'G';
                             }else{
-                                character = 'X';
-                                room->map[axeY][axeX] = 'X';
+                                if(room->map[axeY][axeX] == 'R'){
+                                    character = 'R';
+                                }else{
+                                    if(room->map[axeY][axeX] == 'S'){
+                                        character = 'S';
+                                    }else{
+                                    character = 'X';
+                                    room->map[axeY][axeX] = 'X';
+                                    }
+                                }
                             }
                         }
 
@@ -796,19 +865,24 @@ int menuModifyRoom(void){
 
                     case 's':
 
-                        if(room->map[axeY+1][axeX] != 'D' && room->map[axeY+1][axeX] != 'W'){
+                        if(room->map[axeY+1][axeX] != 'D' && room->map[axeY+1][axeX] != 'W' ){
                             axeY++;
 
-                            if(room->map[axeY][axeX] == 'G'){
+                             if(room->map[axeY][axeX] == 'G'){
                                 character = 'G';
                             }else{
-                                character = 'X';
-                                room->map[axeY][axeX] = 'X';
+                                if(room->map[axeY][axeX] == 'R'){
+                                    character = 'R';
+                                }else{
+                                    if(room->map[axeY][axeX] == 'S'){
+                                        character = 'S';
+                                    }else{
+                                    character = 'X';
+                                    room->map[axeY][axeX] = 'X';
+                                    }
+                                }
                             }
-
-                        }
-
-                        
+                        }                   
 
                     break;
                     
@@ -818,11 +892,19 @@ int menuModifyRoom(void){
                             axeX++;
                             axeX++;
 
-                            if(room->map[axeY][axeX] == 'G'){
+                             if(room->map[axeY][axeX] == 'G'){
                                 character = 'G';
                             }else{
-                                character = 'X';
-                                room->map[axeY][axeX] = 'X';
+                                if(room->map[axeY][axeX] == 'R'){
+                                    character = 'R';
+                                }else{
+                                    if(room->map[axeY][axeX] == 'S'){
+                                        character = 'S';
+                                    }else{
+                                    character = 'X';
+                                    room->map[axeY][axeX] = 'X';
+                                    }
+                                }
                             }
                         }
 
@@ -834,19 +916,55 @@ int menuModifyRoom(void){
                             axeX--;
                             axeX--;
 
-                            if(room->map[axeY][axeX] == 'G'){
-                               character = 'G';
+                             if(room->map[axeY][axeX] == 'G'){
+                                character = 'G';
                             }else{
-                                character = 'X';
-                                room->map[axeY][axeX] = 'X';
+                                if(room->map[axeY][axeX] == 'R'){
+                                    character = 'R';
+                                }else{
+                                    if(room->map[axeY][axeX] == 'S'){
+                                        character = 'S';
+                                    }else{
+                                    character = 'X';
+                                    room->map[axeY][axeX] = 'X';
+                                    }
+                                }
                             }
 
                         }
                                      
                     break;
 
-                    case 'X':
-                        condition = false;
+                    case 'b':
+
+                        removeCRUD_Room(&head, id);
+                        listToRoomsFile(head);
+                        freeAllRooms(head);
+
+                        char final[100];
+                        int height = room->lines;
+                        int length = room->columns;
+
+                            sprintf(final,"%s%d%s%d%s%d\n","[",height,"|",length/2,"]",id+1);
+                                    
+                                FILE *f = fopen(CHEMIN_FICHIER_PIECES, "a");
+                                if (f == NULL)
+                                {
+                                    printf("Error opening file!\n");
+                                    return 1;
+                                }
+
+                                fputs(final, f);
+
+                                for(int i = 0; i < height; i++){
+                                    for(int j = 0; j < length-1; j++){
+                                        fputc(room->map[i][j], f);
+                                    }
+                                    fputc('\n', f);
+                                }
+                                fclose(f);
+                        
+                        return 1;
                     break;
 
                 }
@@ -858,10 +976,7 @@ int menuModifyRoom(void){
 
     }
 
-    printf("\nPress 'b' to continue ...\n");
-
     return 0;
-
 }
 
 void menuCrudRoom(void){

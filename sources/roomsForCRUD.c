@@ -158,6 +158,22 @@ void arrangeRoomsIds(CRUD_Room* head) {
     }
 }
 
+// Void deleteSpecificRoom(CRUD_Room* head, int id) {
+//     CRUD_Room* current = head;
+//     CRUD_Room* previous;
+
+//     if(head == NULL || head->id != 1) { // fail if null or not first
+//         return;
+//     }
+
+//     if(current->id == id) { // supprimer premier element
+//         head = current->next;
+//         free(current);
+//         return;
+//     }
+
+
+
 void removeCRUD_Room(CRUD_Room** ptr_head, int id) {
     CRUD_Room* tmp = *ptr_head;
     CRUD_Room* previous;
