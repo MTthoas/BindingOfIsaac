@@ -192,6 +192,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         if(elementAtFuturePosition == DOOR || elementAtFuturePosition == BOSS_ROOM_DOOR || elementAtFuturePosition == BONUS_ITEM_DOOR || elementAtFuturePosition == ITEM_ROOM_DOOR ) {
                             axeY--;
                             player->positionY = d->stages[stage].rooms[id].height - 2;
+                            //d->stages[stage].rooms[id].room[player->positionY][player->positionX] = PLAYER;
                             changeOfRoom = 1;   
                         }
 
@@ -554,7 +555,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     BossInfinite = 1;    
             }
 
-            //redrawPlayer(d, player, stage, id, NumberOfRoomsInt);
+            redrawPlayer(d, player, stage, id, NumberOfRoomsInt);
            
             if(changeOfRoom == 1) {
                 *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);   
@@ -741,14 +742,13 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
             // DoorLeft
             if( y < d->stages[stage].rooms[t].width/2 && d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] == WALL && DoorLeft == 1){
                 
-
-                if(Vl == 1){
+                if(Vl == 1) {
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = BONUS_ITEM_DOOR;
                     d->stages[stage].rooms[t].Door.doorLeft = BONUS_ITEM_DOOR;
-                }else  if(Il == 1){
+                }else  if(Il == 1) {
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = ITEM_ROOM_DOOR;
                     d->stages[stage].rooms[t].Door.doorLeft = ITEM_ROOM_DOOR;
-                }else if(Bl == 1){
+                }else if(Bl == 1) {
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = BOSS_ROOM_DOOR;
                     d->stages[stage].rooms[t].Door.doorLeft = BOSS_ROOM_DOOR;
                 }else{
@@ -773,7 +773,6 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = DOOR;
                     d->stages[stage].rooms[t].Door.doorRight = DOOR;
                 }
-
             }
 
             // DoorTop
@@ -802,7 +801,6 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
                                                                                        
             }
 
-
             // DoorBottom
              if(d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height-1][width] == WALL && DoorBottom == 1){
 
@@ -818,13 +816,8 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
                 }else{
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height-1][width] = DOOR;
                     d->stages[stage].rooms[t].Door.doorBottom = DOOR;
-                }
-                
-                                                                                                     
+                }                                                                                        
             }
-
-
-           
         }
     }
     
@@ -1026,7 +1019,7 @@ void playerMoveUp(Donjon* donjon, int stage, int roomID, Player* player, Obstacl
     // erases and redraws the actual position of the player
     donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = EMPTY; 
     player->positionY-=1;
-    donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = PLAYER; 
+    //donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = PLAYER; 
 
     // if previously stepped on obstacle, redraw it
     if(obstacle->isErased) {
@@ -1037,16 +1030,14 @@ void playerMoveUp(Donjon* donjon, int stage, int roomID, Player* player, Obstacl
     // player steps on obstacle
     if(obstacle->positionX == player->positionX && obstacle->positionY == player->positionY) {
         obstacle->isErased = 1;
-    }
-
-    
+    }    
 }
 
 void playerMoveDown(Donjon* donjon, int stage, int roomID, Player* player, Obstacle* obstacle) {
     // erases and redraws the actual position of the player
     donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = EMPTY; 
     player->positionY+=1;
-    donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = PLAYER; 
+    //donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = PLAYER; 
 
     // if previously stepped on obstacle, redraw it
     if(obstacle->isErased) {
@@ -1065,7 +1056,7 @@ void playerMoveRight(Donjon* donjon, int stage, int roomID, Player* player, Obst
     // erases and redraws the actual position of the player
     donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = EMPTY; 
     player->positionX+=2;
-    donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = PLAYER; 
+    //donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = PLAYER; 
 
     // if previously stepped on obstacle, redraw it
     if(obstacle->isErased) {
@@ -1083,7 +1074,7 @@ void playerMoveLeft(Donjon* donjon, int stage, int roomID, Player* player, Obsta
     // erases and redraws the actual position of the player
     donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = EMPTY; 
     player->positionX-=2;
-    donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = PLAYER; 
+    //donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = PLAYER; 
 
     // if previously stepped on obstacle, redraw it
     if(obstacle->isErased) {
@@ -1148,21 +1139,21 @@ void setItemEffects(Object* item, Player* player) {
 void printMap(Donjon* d, int stage, int roomId) {
     int height = d-> stages[stage].rooms[roomId].height;
     int width = d-> stages[stage].rooms[roomId].width;
-    char actualElement;
+    //char actualElement;
 
     for(int y = 0; y < height; y++) {
         for(int v = 0; v < width; v++) {
 
-            actualElement = d-> stages[stage].rooms[roomId].room[y][v];
-            if(y==0 && actualElement == PLAYER) { // door bug
-                d-> stages[stage].rooms[roomId].room[y][v] = '#';
-            } else if(y==height-1 && actualElement == PLAYER) {
-                d-> stages[stage].rooms[roomId].room[y][v] = '#';
-            } else if(v==width-1 && actualElement == PLAYER) {
-                d-> stages[stage].rooms[roomId].room[y][v] = '#';
-            } else if(v==0 && actualElement == PLAYER) {
-                d-> stages[stage].rooms[roomId].room[y][v] = '#';
-            }
+            // actualElement = d-> stages[stage].rooms[roomId].room[y][v];
+            // if(y==0 && actualElement == PLAYER) { // door bug
+            //     d-> stages[stage].rooms[roomId].room[y][v] = '#';
+            // } else if(y==height-1 && actualElement == PLAYER) {
+            //     d-> stages[stage].rooms[roomId].room[y][v] = '#';
+            // } else if(v==width-1 && actualElement == PLAYER) {
+            //     d-> stages[stage].rooms[roomId].room[y][v] = '#';
+            // } else if(v==0 && actualElement == PLAYER) {
+            //     d-> stages[stage].rooms[roomId].room[y][v] = '#';
+            // }
 
             printf("%c", d-> stages[stage].rooms[roomId].room[y][v]);
         }
@@ -1203,13 +1194,6 @@ void printPlayerInfos(Player* player, int frame, ShootParams* shootParams, Obsta
 }
 
 void displayGame(Donjon* d, Player* player, int stage, int numberOfRooms, int iteration, int roomID, int axeX, int axeY, ShootParams* shootParams, int BossInfinite, Obstacle* obstacle) {
-        // if you are in the item room print the item
-        int playerInItemRoom = d->stages[stage].rooms[roomID].name == ITEM_ROOM_NAME;
-        if(playerInItemRoom) {
-            printf("Room item : \n");
-            displayObject(d->stages[stage].rooms[roomID].object);
-        }
-
         printMinimap(d, stage, numberOfRooms);  
 
         // if you are in the boss room, print his info
@@ -1217,6 +1201,14 @@ void displayGame(Donjon* d, Player* player, int stage, int numberOfRooms, int it
         if(playerInBossRoom) {
             printf("Boss : %s\n", shootParams->boss->name);
             printf("Boss HP : %.f\n", shootParams->boss->hpMax);
+        }
+        printf("\n");
+
+                // if you are in the item room print the item
+        int playerInItemRoom = d->stages[stage].rooms[roomID].name == ITEM_ROOM_NAME;
+        if(playerInItemRoom) {
+            printf("Room item : \n");
+            displayObject(d->stages[stage].rooms[roomID].object);
         }
         printf("\n");
 
