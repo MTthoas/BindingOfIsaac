@@ -1191,6 +1191,7 @@ void playerGainLife(Player* player) {
 
     if(healthOrShield) {
         player->hp += amountLife;
+        player->hp = (player->hp > player->hpMax) ? player->hpMax : player->hp;
     } else {
         player->shield += amountLife;
     }
