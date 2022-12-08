@@ -459,7 +459,21 @@ void * monsterAttackPlayer(void *params) {
                     ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] = letter;
                 }
 
-        }
+            }
+            //Le monstre est mort, 5% de chance de drop un shield ou un health sur sa position de mort
+            if(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].hpMax <= 0){
+                int random = rand() % 100;
+                if(random < 5){
+                    //Prendre un objet qui health ou shield dans d->headObject
+                    
+
+                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] = 'H';
+                } else if(random < 10){
+                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] = 'G';
+                }
+            }
+
+
         }
 
         if (((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].shoot == 1){
@@ -573,7 +587,10 @@ void * monsterAttackPlayer(void *params) {
                 
 
             }
+            //Le monstre est mort, 5% de chance de drop un shield ou un health sur sa position de mort
+
         }
+
     return NULL;
 
 }
