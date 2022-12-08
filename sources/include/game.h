@@ -132,4 +132,5 @@ void resetObstacle(Obstacle* obstacle);
  */
 void setBonusItemInsideRoom(Donjon* d, int stage, int roomId);
 
+void openItemRoomBonusDoor(Donjon* d, int stage, int roomId);
 #endif

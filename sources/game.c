@@ -36,6 +36,8 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     obstacle->positionX=999;
     obstacle->positionY=999;
 
+    Boss->dead=0; // alive
+
     int elementIsObstacle = 0; (void) elementIsObstacle;  
     char erasedObstacle; (void)erasedObstacle;
     int futurePositionIsObstacle = EMPTY;
@@ -122,11 +124,9 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
 				case 'z':
 
-                    if( d->stages[stage].rooms[id].name == BASE_ROOM_NAME ){
+                    if( d->stages[stage].rooms[id].name == BOSS_ROOM_NAME ){
                         bossActive = 1;
-                    } else {
-                        bossActive = 0;
-                    }
+                    } 
 
                     // Initialisation
                     player->directionView = 'z';
@@ -212,9 +212,9 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
 				case 's': // move down
 
-                   if( d->stages[stage].rooms[id].name == BASE_ROOM_NAME ) {
+                    if( d->stages[stage].rooms[id].name == BOSS_ROOM_NAME ){
                         bossActive = 1;
-                    }
+                    } 
 
                     player->directionView = 's';
                     elementAtFuturePosition = d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX];  
@@ -286,9 +286,9 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
 				case 'q': // move left
                 
-                   if( d->stages[stage].rooms[id].name == BASE_ROOM_NAME){
+                    if( d->stages[stage].rooms[id].name == BOSS_ROOM_NAME ){
                         bossActive = 1;
-                    }
+                    } 
 
                     player->directionView = 'q';
                     elementAtFuturePosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2];
@@ -366,9 +366,9 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     
 				case 'd': // move right
 
-                   if( d->stages[stage].rooms[id].name == BASE_ROOM_NAME) {
+                    if( d->stages[stage].rooms[id].name == BOSS_ROOM_NAME ){
                         bossActive = 1;
-                    }
+                    } 
 
                     player->directionView = 'd';
                     elementAtFuturePosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2];
@@ -520,6 +520,8 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
                     d->stages[stage].rooms[id].name = BASE_ROOM_NAME;
 
+
+
                     if(stage == 0){
                         InitialiseBossRoom(d, stage, id, 'J');   
                         Boss->idMonster = 0;
@@ -535,12 +537,13 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         }
 
                         pthread_create(&thread, NULL, Jagger, shootParams);
+                        printf("Nouveau boss !\n");sleep(2);
                         // if( Boss->dead == 1){
                         //     pthread_exit(&thread);
                         // }
                     }
 
-                    if(stage == 1) {                         
+                    else if(stage == 1){          
                         InitialiseBossLeninaRoom(d, stage, id, 'L');                            
                         Boss->idMonster = 1;                         
                         Boss->firstLetter = LENINA_FIRST_LETTER;                         
@@ -557,7 +560,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         pthread_create(&thread, NULL, Lenina, shootParams);   
                     } 
 
-                    if(stage == 2) {
+                    else if(stage == 2){
                         InitialiseBossRoom(d, stage, id, 'J');   
                         Boss->firstLetter = ATHINA_FIRST_LETTER;
                         Boss->name = "Athina";
@@ -571,9 +574,10 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
                         pthread_create(&thread, NULL, bossAthina, shootParams);
                     }
-                    
+
                     bossActive = 0;     
-                    BossInfinite = 1;    
+                    BossInfinite = 1;  
+                           
             }
 
             redrawPlayer(d, player, stage, id, NumberOfRoomsInt);
@@ -594,7 +598,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
                 //changeRoomMonsterArray(idRoomForMonster, NumberOfRoomsInt, id);
 
-                if( d->stages[stage].rooms[id].name == NORMAL_ROOM_NAME){
+                if( d->stages[stage].rooms[id].name == NORMAL_ROOM_NAME && player->hpMax >= 0){
                     monsterActivity(shootParams);
                 }   
             }
@@ -603,7 +607,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 if(shootParams->boss->hpMax <=  0){
 
                     system("clear");
-
+                    player->canTakeBonusItem=1;
 
 
                     if(player->canTakeBonusItem) {
@@ -935,7 +939,7 @@ void checkName(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY, int 
                 }
 
                 if( d->stages[stage].stage[i + axeY][y + axeX] == BOSS_ROOM_DOOR){
-                    d->stages[stage].rooms[t].name = BASE_ROOM_NAME;
+                    d->stages[stage].rooms[t].name = BOSS_ROOM_DOOR;
                 }
 
                 if( d->stages[stage].stage[i + axeY][y + axeX] == BONUS_ITEM_DOOR){
@@ -1329,6 +1333,20 @@ void resetObstacle(Obstacle* obstacle) {
     obstacle->positionY=999;
 }
 
+
+void openItemRoomBonusDoor(Donjon* d, int stage, int roomId) {
+    int height = d->stages[stage].rooms[roomId].height;
+    int width = d->stages[stage].rooms[roomId].width;
+    char actualElement;
+    for(int i = 0 ; i < height ; i+=1) {
+        for(int j = 0 ; j < width ; j+=1) {
+            actualElement = d->stages[stage].rooms[roomId].room[i][j];
+            if(actualElement == LOCKED_DOOR) {
+                d->stages[stage].rooms[roomId].room[i][j] = BONUS_ITEM_DOOR;
+            }
+        }
+    }
+}
 /*
 int changeIdRoomForMonsters(int idRoomForMonster, int numberOfRooms) {
     //printf("number of rooms : %d\n", numberOfRooms);
