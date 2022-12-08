@@ -28,7 +28,7 @@ typedef struct ShootParams {
     Boss *boss;
     int idMonster;
     int reloadBoss;
-    int reload ;
+    int reload, reloadMonster;
     int stage;
     int condition;
     int id;

@@ -477,6 +477,15 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                 }
             }
 
+            int iterationRoom = 0;
+            for (int v = 0; v < NumberOfRoomsInt + 2; v++) {
+                for (int y = 0; y < NumberOfRoomsInt + 2; y++) {
+                    printf("%c ", d->stages[stageNum].stage[v][y]);
+                    if(d->stages[stageNum].stage[v][y] == 'R'){
+                        iterationRoom+=1;
+                    }
+                }
+            }
             break;
 
         case 2:
@@ -491,6 +500,14 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                     RoomPlaced = 1;
                 }
             }
+
+        printf("Iteration Room , %d\n", iterationRoom);
+        printf("NumberOfRoomsInt, %d\n", NumberOfRoomsInt);
+
+            // if(iterationRoom >= NumberOfRoomsInt ){
+            //     printf("Nombre de salles limite atteintes, regénération !\n");
+            //     InitialisationGame(d, stageNum, arrayMonster);
+            // }
 
             break;
 
@@ -507,7 +524,7 @@ int createRandomStageAroundSpawn(struct Donjon *d, int stageNum, int NumberOfRoo
                 }
             }
 
-            break;
+        break;
         }
     }
 
@@ -824,8 +841,13 @@ void InitialiseRooms(struct Donjon *d, int stage, int numberOfRooms) {
 
     // Read => Une line par itération. Si on a plus de ligne, renvoi -1
 
-    while ((read = getline(&line, &len, fp)) != -1)
-    {
+    // Analyse anti-corrupion de fichier
+
+    // while ((read = getline(&line, &len, fp))!= -1) {
+
+    // }
+
+    while ((read = getline( & line, & len, fp)) != -1) {
 
         // Si la premier paramètre détient le deuxième paramètre, renvoi 0
 
@@ -861,6 +883,7 @@ void InitialiseRooms(struct Donjon *d, int stage, int numberOfRooms) {
                 d->stages[stage].rooms[iteration].room[i] = malloc(sizeof(char) * width);
             }
 
+
             // printf("\nSTAGE %d / Room %d \n", stage, iteration+1);
 
             int iterationDoorsReturned = NumberOfDoorsByRoom(d->stages[stage].rooms[iteration].room, height, width);
@@ -871,7 +894,6 @@ void InitialiseRooms(struct Donjon *d, int stage, int numberOfRooms) {
             d->stages[stage].rooms[iteration].height = height;
             d->stages[stage].rooms[iteration].numberOfDoors = iterationDoorsReturned;
             d->stages[stage].rooms[iteration].Doors = malloc(sizeof(char) * iterationDoorsReturned);
-
             int iterationDoors = 0;
 
             // Permet d'indiquer si y'a une porte, à gauche, à droite, en haut ou en bas.
@@ -925,17 +947,17 @@ void InitialiseRooms(struct Donjon *d, int stage, int numberOfRooms) {
         }
     }
 
-    fclose(fp);
-
+    // sleep(1000);
     if (line)
         free(line);
+
+    // fclose(fp);
 
     (void)numberOfRooms;
 }
 
 int setMonstersInsideRoom(Donjon *d, int stage, int roomId)
 {
-    //printf("1e fdp\n"); sleep(1);
     srand(time(NULL));
     int randomPositionX,randomPositionY;
     int heightRoom = d->stages[stage].rooms[roomId].height - 1;
@@ -956,7 +978,6 @@ int setMonstersInsideRoom(Donjon *d, int stage, int roomId)
             letter = tolower(d->stages[stage].rooms[roomId].monsters[monsterId].firstLetter);
             map[randomPositionY][randomPositionX] = letter;
             monsterId += 1;
-            //sleep(3);
         }   
     }
 
@@ -965,7 +986,7 @@ int setMonstersInsideRoom(Donjon *d, int stage, int roomId)
 
 void initialiseMonstersInsideRoom(Donjon *d, int stage, int roomID, Monster *allMonsters)
 {
-    int nbMonsters = getRandomInt(2, 5, 20);
+    int nbMonsters = getRandomInt(0, 6, 20);
     int *uniqueNumbers = generateUniqueNumbers(nbMonsters - 1, 8);
     int index = 0;
 
