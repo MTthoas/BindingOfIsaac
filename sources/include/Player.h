@@ -8,6 +8,8 @@ typedef struct Player {
     char directionView;
     
     float hpMax;
+    float hp;
+    
     float dmg;
     float shield;
     int ps;

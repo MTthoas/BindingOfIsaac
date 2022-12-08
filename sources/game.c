@@ -68,7 +68,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
             condition = false;
             player->stageAxeX = 0;
             player->stageAxeY = 0;
-            if(d->stages[stage].rooms[id].name == BOSS_ROOM_NAME){
+            if(d->stages[stage].rooms[id].name == BASE_ROOM_NAME){
                 PurgeRoomOfBoss(d, stage, id);
                 GestionDoorsForMobRoom(d, stage, id, 1);
                 player->hpMax = 3;
@@ -118,7 +118,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
 				case 'z':
 
-                    if( d->stages[stage].rooms[id].name == BOSS_ROOM_NAME ){
+                    if( d->stages[stage].rooms[id].name == BASE_ROOM_NAME ){
                         bossActive = 1;
                     } else {
                         bossActive = 0;
@@ -202,7 +202,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
 				case 's': // move down
 
-                   if( d->stages[stage].rooms[id].name == BOSS_ROOM_NAME ) {
+                   if( d->stages[stage].rooms[id].name == BASE_ROOM_NAME ) {
                         bossActive = 1;
                     }
 
@@ -273,7 +273,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
 				case 'q': // move left
                 
-                   if( d->stages[stage].rooms[id].name == BOSS_ROOM_NAME){
+                   if( d->stages[stage].rooms[id].name == BASE_ROOM_NAME){
                         bossActive = 1;
                     }
 
@@ -350,7 +350,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     
 				case 'd': // move right
 
-                   if( d->stages[stage].rooms[id].name == BOSS_ROOM_NAME) {
+                   if( d->stages[stage].rooms[id].name == BASE_ROOM_NAME) {
                         bossActive = 1;
                     }
 
@@ -636,6 +636,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
             }
             printf("      \n");
             printf("        HP player: %.2f\n", player->hpMax);
+                printf("Name : %c\n",d->stages[stage].rooms[id].name);
 
             if(d->stages[stage].rooms[id].name == ITEM_ROOM_NAME) {
                 printf("      Room item : \n");
@@ -890,7 +891,7 @@ void checkName(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY, int 
                 }
 
                 if( d->stages[stage].stage[i + axeY][y + axeX] == BOSS_ROOM_DOOR){
-                    d->stages[stage].rooms[t].name = BOSS_ROOM_NAME;
+                    d->stages[stage].rooms[t].name = BASE_ROOM_NAME;
                 }
 
                 if( d->stages[stage].stage[i + axeY][y + axeX] == BONUS_ITEM_DOOR){
@@ -1145,13 +1146,13 @@ void playerLoseLife(Player* player, float damageTaken) {
         if(damageTaken > player->shield) { // more damage than shield
             damageTaken -= player->shield;
             player->shield = 0;
-            player->hpMax -= damageTaken;
+            player->hp -= damageTaken;
             player->canTakeBonusItem = 0;
         } else { 
             player->shield -= damageTaken;
         }
     } else { // player does not have shield
-        player->hpMax -= damageTaken;
+        player->hp -= damageTaken;
         player->canTakeBonusItem = 0;
     }
 }
@@ -1161,7 +1162,7 @@ void playerGainLife(Player* player) {
     int amountLife = 1 + rand() % 2;
 
     if(healthOrShield) {
-        player->hpMax += amountLife;
+        player->hp += amountLife;
     } else {
         player->shield += amountLife;
     }

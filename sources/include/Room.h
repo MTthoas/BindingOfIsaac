@@ -16,7 +16,6 @@
 #define BASE_ROOM_NAME 'O' // room name used for spawn, boss
 #define NORMAL_ROOM_NAME 'R'
 #define ITEM_ROOM_NAME '$'
-#define BOSS_ROOM_NAME 'B'
 #define BONUS_ITEM_ROOM '@'
 
 #define JAGGER_FIRST_LETTER 'J'
@@ -99,6 +98,7 @@ typedef struct Donjon{
             int roomUsed;
 
             Object * object; // an object of the donjon objects linked list
+            Object * bonusObject; // a random object only
 
             int numberOfMonsters; // number of monsters inside this room
             Monster * monsters; // array of monsters in this room
