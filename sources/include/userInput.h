@@ -116,4 +116,5 @@ void askRoomElement(char* element);
 
 void askPosition(int* x, int* y, CRUD_Room* room);
 
+void askNumberOfObstacles(int* nRooms);
 #endif // USER_INPUT_H

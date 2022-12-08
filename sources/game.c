@@ -28,17 +28,23 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     int bossActive = 0;
     int BossInfinite = 0;
     int itemIsSet = 0;
-    // char erasedObstacle;
+    int bonusItemIsSet = 0;
     char elementAtFuturePosition = EMPTY;
-    char actualPosition = EMPTY;
-    // int oldObstaclePositionY; (void)oldObstaclePositionY;
-    // int oldObstaclePositionX; (void)oldObstaclePositionX;
-    // int obstacleGotErased;
+
+    Obstacle* obstacle = malloc(sizeof(Obstacle));
+    obstacle->isErased=0;
+    obstacle->positionX=999;
+    obstacle->positionY=999;
+
+    Boss->dead=0; // alive
+
+    int elementIsObstacle = 0; (void) elementIsObstacle;  
+    char erasedObstacle; (void)erasedObstacle;
+    int futurePositionIsObstacle = EMPTY;
 
     int iteration = 0;
     bool condition = true;  
     int spawnMonsterVar = 0;
-
 
     Monster * monsterVide = malloc(sizeof(Monster));
     monsterVide->hpMax = 999;
@@ -48,21 +54,13 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     pthread_t thread;
     int c;
 
-    for (int i = 0; i < NumberOfRoomsInt; i++) {
-        printf("ID : %d\n", d-> stages[stage].rooms[i].id);
-        printf("AxeX : %d\n", d-> stages[stage].rooms[i].AxeX);
-        printf("AxeY : %d\n", d-> stages[stage].rooms[i].AxeY);
-        
-        for(int y = 0; y < d-> stages[stage].rooms[i].height; y++) {
-            for(int v = 0; v < d-> stages[stage].rooms[i].width; v++) {
-                printf("%c", d-> stages[stage].rooms[i].room[y][v]);
-            }
-        }
-    }
-
+    // printMap(d, stage, NumberOfRoomsInt);
     //stats pour cheater :
-    player->hpMax = 100;
+    // player->hpMax = 10;
     // player->flight = 1;
+    player->hp = 1000;
+    player->hpMax = 1000;
+
 	while (condition) {
 
         #ifdef _WIN32 
@@ -71,13 +69,16 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 		usleep(25000); 
 		#endif 
 
-        if(player->hpMax <= 0){
+        if(player->hp <= 0){
             *pId = 0;
             condition = false;
             player->stageAxeX = 0;
             player->stageAxeY = 0;
-            PurgeRoomOfBoss(d, stage, id);
-            GestionDoorsForMobRoom(d, stage, id, 1);
+            if(d->stages[stage].rooms[id].name == BASE_ROOM_NAME){
+                PurgeRoomOfBoss(d, stage, id);
+                GestionDoorsForMobRoom(d, stage, id, 1);
+                player->hp = 3;
+            }
             d->stages[stage].rooms[id].name = PLAYER;
             pthread_cancel(thread);
             break;
@@ -125,26 +126,25 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
                     if( d->stages[stage].rooms[id].name == BOSS_ROOM_NAME ){
                         bossActive = 1;
-                    }
+                    } 
 
                     // Initialisation
                     player->directionView = 'z';
                     elementAtFuturePosition = d->stages[stage].rooms[id].room[player->positionY - 1][player->positionX]; 
                     
-                    // int futurePositionIsObstacle = (elementAtFuturePosition == SPIKE || elementAtFuturePosition == ROCK || elementAtFuturePosition == GAP);
-                    // // save obstacle position if we are going to erase it
-                    // if(futurePositionIsObstacle) { 
-                    //     erasedObstacle = elementAtFuturePosition;
-                    //     oldObstaclePositionY = player->positionY - 1;
-                    //     oldObstaclePositionX = player->positionX;
+                    // if(obstacle->isErased) {
+                    //     printf("erase %c, (%d, %d)\n", obstacle->type, obstacle->positionX, obstacle->positionY); sleep(2);
+                    //     d->stages[stage].rooms[id].room[obstacle->positionY][obstacle->positionX] = obstacle->type;
+                    //     for(int i = 0 ; i < d->stages[stage].rooms[id].height ; i+=1) {
+                    //         for(int j = 0 ; j < d->stages[stage].rooms[id].width ; j+=1) {
+                    //             printf("%c ", d->stages[stage].rooms[id].room[i][j]);
+                    //         }
+                    //     }
+                    //     sleep(5);
+                    //     obstacle->isErased = 0;
+                        
                     // }
 
-                    // // redraw erased obstacle
-                    // if(obstacleGotErased) {
-                    //     d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX] = erasedObstacle;
-                    //     obstacleGotErased = 0;
-                    // }
-                    
                     if(elementAtFuturePosition == EMPTY 
                     || elementAtFuturePosition == DOOR 
                     || elementAtFuturePosition == BOSS_ROOM_DOOR 
@@ -157,40 +157,52 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     || (elementAtFuturePosition == ROCK && player->flight)
                     || (elementAtFuturePosition == GAP && player->flight)) {
                         
-                        playerMoveUp(d, stage, id, player);
-                        // if(futurePositionIsObstacle) {
-                        //     obstacleGotErased = 1;
-                        // }
+                        // save obstacle and its position before stepping on it
+                        futurePositionIsObstacle = (elementAtFuturePosition == SPIKE || elementAtFuturePosition == ROCK || elementAtFuturePosition == GAP);
 
-                        actualPosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX];
+                        if(futurePositionIsObstacle) { 
+                            erasedObstacle = (elementAtFuturePosition == SPIKE) ? SPIKE : (elementAtFuturePosition == ROCK) ? ROCK : GAP;
+                            obstacle->positionX = player->positionX;
+                            obstacle->positionY = player->positionY - 1;
+                            obstacle->type = elementAtFuturePosition;
+                        }
 
-                        if(actualPosition == NEXT_STAGE) {
+                        playerMoveUp(d, stage, id, player, obstacle);
+
+                        if(elementAtFuturePosition == NEXT_STAGE) {
                             * change = 1;
                             break;
                         }
 
                         // if run trough spike then lose life
-                        if(!(player->flight) && actualPosition == SPIKE) {
+                        if(!(player->flight) && elementAtFuturePosition == SPIKE) {
                             playerLoseLife(player, 1);
                             break;
                         }
 
-                        // if run trough spike then lose life
-                        if(actualPosition == ITEM && itemIsSet == 1) {
-                            setItemEffects(d->stages[stage].rooms[id].object, player); 
+                        // if run trough item then take advantage
+                        if(elementAtFuturePosition == ITEM && itemIsSet == 1 && d->stages[stage].rooms[id].name == ITEM_ROOM_NAME) {
+                            setItemEffects(d->stages[stage].rooms[id].object, player, 0); 
+                            break;
+                        }
+
+                        // if run trough item then take advantage
+                        if(elementAtFuturePosition == ITEM && bonusItemIsSet == 1 && d->stages[stage].rooms[id].name == BONUS_ITEM_ROOM) {
+                            setItemEffects(d->stages[stage].rooms[id].bonusObject, player, 1); 
                             break;
                         }
 
                         // if run trough Health then gain life
-                        if(actualPosition == HEALTH) {
+                        if(elementAtFuturePosition == HEALTH) {
                             playerGainLife(player);
                             break;
                         }
                         
                         // if you change room : 
-                        if(actualPosition == DOOR || actualPosition == BOSS_ROOM_DOOR || actualPosition == BONUS_ITEM_DOOR || actualPosition == ITEM_ROOM_DOOR ) {
+                        if(elementAtFuturePosition == DOOR || elementAtFuturePosition == BOSS_ROOM_DOOR || elementAtFuturePosition == BONUS_ITEM_DOOR || elementAtFuturePosition == ITEM_ROOM_DOOR ) {
                             axeY--;
                             player->positionY = d->stages[stage].rooms[id].height - 2;
+                            //d->stages[stage].rooms[id].room[player->positionY][player->positionX] = PLAYER;
                             changeOfRoom = 1;   
                         }
 
@@ -200,9 +212,9 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
 				case 's': // move down
 
-                   if( d->stages[stage].rooms[id].name == BOSS_ROOM_NAME ) {
+                    if( d->stages[stage].rooms[id].name == BOSS_ROOM_NAME ){
                         bossActive = 1;
-                    }
+                    } 
 
                     player->directionView = 's';
                     elementAtFuturePosition = d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX];  
@@ -219,52 +231,64 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     || (elementAtFuturePosition == ROCK && player->flight)
                     || (elementAtFuturePosition == GAP && player->flight)) {
                         
+                        // save obstacle and its position before stepping on it
+                        futurePositionIsObstacle = (elementAtFuturePosition == SPIKE || elementAtFuturePosition == ROCK || elementAtFuturePosition == GAP);
+
+                        if(futurePositionIsObstacle) { 
+                            erasedObstacle = (elementAtFuturePosition == SPIKE) ? SPIKE : (elementAtFuturePosition == ROCK) ? ROCK : GAP;
+                            obstacle->positionX = player->positionX;
+                            obstacle->positionY = player->positionY + 1;
+                            obstacle->type = elementAtFuturePosition;
+                        } 
+
                         // move down :
-                        playerMoveDown(d, stage, id, player);
-                        actualPosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX];
+                        playerMoveDown(d, stage, id, player, obstacle);
                     
-                        if(actualPosition == NEXT_STAGE) {
+                        if(elementAtFuturePosition == NEXT_STAGE) {
                             * change = 1;
                             break;
                         }
 
                         // if run trough spike then lose life
-                        if(!(player->flight) && actualPosition == SPIKE) {
+                        if(!(player->flight) && elementAtFuturePosition == SPIKE) {
                             playerLoseLife(player, 1);
                             break;
                         }
 
-                        // if run trough spike then lose life
-                        if(actualPosition == ITEM && itemIsSet == 1) {
-                            setItemEffects(d->stages[stage].rooms[id].object, player); 
-                            break;
-                        }
-
                         // if run trough Health then gain life
-                        if(actualPosition == HEALTH) {
+                        if(elementAtFuturePosition == HEALTH) {
                             playerGainLife(player);
                             break;
                         }
+
+                        // if run trough item then take advantage
+                        if(elementAtFuturePosition == ITEM && itemIsSet == 1 && d->stages[stage].rooms[id].name == ITEM_ROOM_NAME) {
+                            setItemEffects(d->stages[stage].rooms[id].object, player, 0); 
+                            break;
+                        }
+
+                        // if run trough item then take advantage
+                        if(elementAtFuturePosition == ITEM && bonusItemIsSet == 1 && d->stages[stage].rooms[id].name == BONUS_ITEM_ROOM) {
+                            setItemEffects(d->stages[stage].rooms[id].bonusObject, player, 1); 
+                            break;
+                        }
+
                         
                         // if you change room : 
-                        if(actualPosition == DOOR || actualPosition == BOSS_ROOM_DOOR || actualPosition == BONUS_ITEM_DOOR || actualPosition == ITEM_ROOM_DOOR ) {
+                        if(elementAtFuturePosition == DOOR || elementAtFuturePosition == BOSS_ROOM_DOOR || elementAtFuturePosition == BONUS_ITEM_DOOR || elementAtFuturePosition == ITEM_ROOM_DOOR ) {
                             axeY++;
                             player->positionY = 1;
                             changeOfRoom = 1;  
                         }
                     }
 
-                    if(actualPosition == ITEM && itemIsSet == 1) {
-                        setItemEffects(d->stages[stage].rooms[id].object, player);            
-                    }
-
 				break;
 
 				case 'q': // move left
                 
-                   if( d->stages[stage].rooms[id].name == BOSS_ROOM_NAME){
+                    if( d->stages[stage].rooms[id].name == BOSS_ROOM_NAME ){
                         bossActive = 1;
-                    }
+                    } 
 
                     player->directionView = 'q';
                     elementAtFuturePosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2];
@@ -281,36 +305,51 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     || (elementAtFuturePosition == ROCK && player->flight)
                     || (elementAtFuturePosition == GAP && player->flight)) {
                         
-                            
+                        // save obstacle and its position before stepping on it
+                        futurePositionIsObstacle = (elementAtFuturePosition == SPIKE || elementAtFuturePosition == ROCK || elementAtFuturePosition == GAP);
+
+                        if(futurePositionIsObstacle) { 
+                            erasedObstacle = (elementAtFuturePosition == SPIKE) ? SPIKE : (elementAtFuturePosition == ROCK) ? ROCK : GAP;
+                            obstacle->positionX = player->positionX - 2;
+                            obstacle->positionY = player->positionY;
+                            obstacle->type = elementAtFuturePosition;
+                        } 
+
                         // move left :
-                        playerMoveLeft(d, stage, id, player);
-                        actualPosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX];
+                        playerMoveLeft(d, stage, id, player, obstacle);
                     
-                        if(actualPosition == NEXT_STAGE) {
+                        if(elementAtFuturePosition == NEXT_STAGE) {
                             * change = 1;
                             break;
                         }
 
-                        // if run trough spike then lose life
-                        if(actualPosition == ITEM && itemIsSet == 1) {
-                            setItemEffects(d->stages[stage].rooms[id].object, player); 
+                        // if run trough item then take advantage
+                        if(elementAtFuturePosition == ITEM && itemIsSet == 1 && d->stages[stage].rooms[id].name == ITEM_ROOM_NAME) {
+                            setItemEffects(d->stages[stage].rooms[id].object, player, 0); 
                             break;
                         }
 
+                        // if run trough item then take advantage
+                        if(elementAtFuturePosition == ITEM && bonusItemIsSet == 1 && d->stages[stage].rooms[id].name == BONUS_ITEM_ROOM) {
+                            setItemEffects(d->stages[stage].rooms[id].bonusObject, player, 1); 
+                            break;
+                        }
+
+
                         // if run trough spike then lose life
-                        if(!(player->flight) && actualPosition == SPIKE) {
+                        if(!(player->flight) && elementAtFuturePosition == SPIKE) {
                             playerLoseLife(player, 1);
                             break;
                         }
 
                         // if run trough Health then gain life
-                        if(actualPosition == HEALTH) {
+                        if(elementAtFuturePosition == HEALTH) {
                             playerGainLife(player);
                             break;
                         }
                         
                         // if you change room : 
-                        if(actualPosition == DOOR || actualPosition == BOSS_ROOM_DOOR || actualPosition == BONUS_ITEM_DOOR || actualPosition == ITEM_ROOM_DOOR ) {
+                        if(elementAtFuturePosition == DOOR || elementAtFuturePosition == BOSS_ROOM_DOOR || elementAtFuturePosition == BONUS_ITEM_DOOR || elementAtFuturePosition == ITEM_ROOM_DOOR ) {
                                 axeX--;
 
                                if((d->stages[stage].rooms[id].width - 2) % 2 == 0) {
@@ -323,17 +362,13 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                             }
                     }
 
-                    if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == ITEM && itemIsSet == 1) {
-                        setItemEffects(d->stages[stage].rooms[id].object, player);            
-                    }
-
                 break;
                     
 				case 'd': // move right
 
-                   if( d->stages[stage].rooms[id].name == BOSS_ROOM_NAME ) {
+                    if( d->stages[stage].rooms[id].name == BOSS_ROOM_NAME ){
                         bossActive = 1;
-                    }
+                    } 
 
                     player->directionView = 'd';
                     elementAtFuturePosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2];
@@ -350,52 +385,63 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     || (elementAtFuturePosition == ROCK && player->flight)
                     || (elementAtFuturePosition == GAP && player->flight)) {
                         
+                        // save obstacle and its position before stepping on it
+                        futurePositionIsObstacle = (elementAtFuturePosition == SPIKE || elementAtFuturePosition == ROCK || elementAtFuturePosition == GAP);
+
+                        if(futurePositionIsObstacle) { 
+                            erasedObstacle = (elementAtFuturePosition == SPIKE) ? SPIKE : (elementAtFuturePosition == ROCK) ? ROCK : GAP;
+                            obstacle->positionX = player->positionX + 2;
+                            obstacle->positionY = player->positionY;
+                            obstacle->type = elementAtFuturePosition;
+                        }
+
                         // move right :
-                        playerMoveRight(d, stage, id, player);
-                        actualPosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX];
+                        playerMoveRight(d, stage, id, player, obstacle);
                     
-                        if(actualPosition == NEXT_STAGE) {
+                        if(elementAtFuturePosition == NEXT_STAGE) {
                             * change = 1;
                             break;
                         }
 
-                        // if run trough spike then lose life
-                        if(actualPosition == ITEM && itemIsSet == 1) {
-                            setItemEffects(d->stages[stage].rooms[id].object, player); 
+                        // if run trough item then take advantage
+                        if(elementAtFuturePosition == ITEM && itemIsSet == 1 && d->stages[stage].rooms[id].name == ITEM_ROOM_NAME) {
+                            setItemEffects(d->stages[stage].rooms[id].object, player, 0); 
+                            break;
+                        }
+
+                        // if run trough item then take advantage
+                        if(elementAtFuturePosition == ITEM && bonusItemIsSet == 1 && d->stages[stage].rooms[id].name == BONUS_ITEM_ROOM) {
+                            setItemEffects(d->stages[stage].rooms[id].bonusObject, player, 1); 
                             break;
                         }
 
                         // if run trough spike then lose life
-                        if(!(player->flight) && actualPosition == SPIKE) {
+                        if(!(player->flight) && elementAtFuturePosition == SPIKE) {
                             playerLoseLife(player, 1);
                             break;
                         }
 
                         // if run trough Health then gain life
-                        if(actualPosition == HEALTH) {
+                        if(elementAtFuturePosition == HEALTH) {
                             playerGainLife(player);
                             break;
                         }
                         
                         // if you change room : 
-                        if(actualPosition == DOOR || actualPosition == BOSS_ROOM_DOOR || actualPosition == BONUS_ITEM_DOOR || actualPosition == ITEM_ROOM_DOOR ) {
-                                axeX+=1;
-                                player->positionX = 2;
-                                changeOfRoom = 1;  
-                            }
-                    }
-
-                    if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == ITEM && itemIsSet == 1) {
-                        setItemEffects(d->stages[stage].rooms[id].object, player);            
+                        if(elementAtFuturePosition == DOOR || elementAtFuturePosition == BOSS_ROOM_DOOR || elementAtFuturePosition == BONUS_ITEM_DOOR || elementAtFuturePosition == ITEM_ROOM_DOOR ) {
+                            axeX+=1;
+                            player->positionX = 2;
+                            changeOfRoom = 1;
+                        }
                     }
 
                 break;
 
-                case '8': ;
+                case 'o': ;
                     // Shoot Up                 
                     if (shootParams->reload == 1){
                         if( shootParams->boss == NULL){
-                            if( d->stages[stage].rooms[id].name == BASE_ROOM_NAME){
+                            if(d->stages[stage].rooms[id].name == BASE_ROOM_NAME) {
                                 shootParams->boss = Boss;
                             }else {
                                 shootParams->boss = bossVide;
@@ -412,7 +458,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     }
                 break;
                 
-                case '5': ;
+                case 'l': ;
                     // Shoot Down
                     if (shootParams->reload == 1){
                         if( shootParams->boss == NULL){
@@ -431,37 +477,37 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
                 break;
                 
-                case '4': ;
+                case 'k': ;
                     // Shoot Left
-                    if (shootParams->reload == 1){
-                        if( shootParams->boss == NULL){
-                            if( d->stages[stage].rooms[id].name == BASE_ROOM_NAME){
+                    if (shootParams->reload == 1) {
+                        if( shootParams->boss == NULL) {
+                            if( d->stages[stage].rooms[id].name == BASE_ROOM_NAME) {
                                 shootParams->boss = Boss;
                             }else {
                                 shootParams->boss = bossVide;
                             }
                         }
                         if (shootParams->monster == NULL) {
-                        shootParams->monster = monsterVide;
+                            shootParams->monster = monsterVide;
                         }
-                    pthread_t t4;
-                    pthread_create(&t4, NULL, shootLeft, shootParams);
+                        pthread_t t4;
+                        pthread_create(&t4, NULL, shootLeft, shootParams);
                     }
                 break;
 
-                case '6': ;
+                case 'm': ;
                     // Shoot Right
                     pthread_t t5;
                     if (shootParams->reload == 1){
                         if( shootParams->boss == NULL){
-                            if( d->stages[stage].rooms[id].name == BASE_ROOM_NAME){
+                            if( d->stages[stage].rooms[id].name == BASE_ROOM_NAME) {
                                 shootParams->boss = Boss;
-                            }else {
+                            } else {
                                 shootParams->boss = bossVide;
                             }
                         }
                         if (shootParams->monster == NULL) {
-                        shootParams->monster = monsterVide;
+                            shootParams->monster = monsterVide;
                         }
                     pthread_create(&t5, NULL, shootRight, shootParams);
                     }
@@ -474,6 +520,8 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
                     d->stages[stage].rooms[id].name = BASE_ROOM_NAME;
 
+
+
                     if(stage == 0){
                         InitialiseBossRoom(d, stage, id, 'J');   
                         Boss->idMonster = 0;
@@ -481,6 +529,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         Boss->name = "Jagger";
                         Boss->hpMax = 100;
                         Boss->shoot = 1;
+                        Boss->dead = 0; // alive
                         shootParams->condition = 1;
 
                         if( shootParams->boss == NULL){
@@ -488,18 +537,22 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         }
 
                         pthread_create(&thread, NULL, Jagger, shootParams);
+                        printf("Nouveau boss !\n");sleep(2);
+                        //shootParams->boss->hpMax = 0;
+                        //shootParams->boss->dead = 1;
                         // if( Boss->dead == 1){
                         //     pthread_exit(&thread);
                         // }
                     }
 
-                    if(stage == 1) {                         
+                    else if(stage == 1){          
                         InitialiseBossLeninaRoom(d, stage, id, 'L');                            
                         Boss->idMonster = 1;                         
                         Boss->firstLetter = LENINA_FIRST_LETTER;                         
                         Boss->name = "Lenina";                       
                         Boss->hpMax = 300; 
-                        Boss->shoot = 1;                           
+                        Boss->shoot = 1;           
+                        Boss->dead = 0; // alive                                        
                         shootParams->condition = 1; 
                      
                         if( shootParams->boss == NULL) {                             
@@ -509,12 +562,13 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         pthread_create(&thread, NULL, Lenina, shootParams);   
                     } 
 
-                    if(stage == 2) {
+                    else if(stage == 2){
                         InitialiseBossRoom(d, stage, id, 'J');   
                         Boss->firstLetter = ATHINA_FIRST_LETTER;
                         Boss->name = "Athina";
                         Boss->hpMax = 450;
                         Boss->shoot = 1;
+                        Boss->dead = 0; // alive
                         shootParams->condition = 1;
                         if( shootParams->boss == NULL){
                             shootParams->boss = Boss;
@@ -522,12 +576,13 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
                         pthread_create(&thread, NULL, bossAthina, shootParams);
                     }
-                    
+
                     bossActive = 0;     
-                    BossInfinite = 1;    
+                    BossInfinite = 1;  
+                           
             }
 
-            gestionPassing(d, player, stage, id, NumberOfRoomsInt);
+            redrawPlayer(d, player, stage, id, NumberOfRoomsInt);
            
             if(changeOfRoom == 1) {
                 *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);   
@@ -537,13 +592,15 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 
                 GestionDoorsForMobRoom(d, stage, id, 0);
             
+                resetObstacle(obstacle);
+
                 shootParams->id = id;                
                 changeOfRoom = 0;
                 (void)spawnMonsterVar;
 
                 //changeRoomMonsterArray(idRoomForMonster, NumberOfRoomsInt, id);
 
-                if( d->stages[stage].rooms[id].name == NORMAL_ROOM_NAME){
+                if( d->stages[stage].rooms[id].name == NORMAL_ROOM_NAME && player->hpMax >= 0){
                     monsterActivity(shootParams);
                 }   
             }
@@ -552,18 +609,32 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 if(shootParams->boss->hpMax <=  0){
 
                     system("clear");
+                    player->canTakeBonusItem=1;
 
-                    printf("-----------------------------------------------------------\n");
-                    printf("\n");
-                    printf("You killed the boss, you can now go to the next stage ( n )\n");
-                    printf("\n");
-                    printf("------------------------------------------------------------\n");
+
+                    if(player->canTakeBonusItem) {
+                        GestionDoorsForMobRoom(d, stage, id, 1);
+                        //openItemRoomBonusDoor(d, stage, id);
+                        printf("----------------------------------------------------------------------\n");
+                        printf("\n");
+                        printf("You killed the boss, you can now go to the next stage ( N )\n");
+                        printf("Because of your amazing performance, you can access the bonus room !\n");
+                        printf("\n");
+                        printf("----------------------------------------------------------------------\n");
+                    } else {
+                        printf("-----------------------------------------------------------\n");
+                        printf("\n");
+                        printf("You killed the boss, you can now go to the next stage ( N )\n");
+                        printf("\n");
+                        printf("------------------------------------------------------------\n");
+                    }
      
                     #ifdef _WIN32 
                     Sleep(25); 
                     #else 
                     usleep(3000000); 
                     #endif 
+                    
 
                     while(1){
 
@@ -574,7 +645,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                             d->stages[stage].rooms[id].room[positionY_N][positionX_N] = NEXT_STAGE;
                             shootParams->condition = 0;
                             break;
-                        }else{
+                        } else{
                             continue;
                         }
                     }  
@@ -586,66 +657,80 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 setItemInsideRoom(d, stage, id);
                 itemIsSet = 1;
             }
-    
+
+            if(d->stages[stage].rooms[id].name == BONUS_ITEM_ROOM && bonusItemIsSet == 0) {
+                setBonusItemInsideRoom(d, stage, id);
+                bonusItemIsSet = 1;
+            }
+
+            //displayGame(d, player, stage, NumberOfRoomsInt, iteration, id, axeX, axeY, shootParams, BossInfinite, obstacle);
+
+            if( * change == 1) {
+                condition = false;
+            }
 
             // printf("Axe Position X : %d / and Position Y : %d\n", axeX, axeY);
-            printf("ETAGE : %d\n", stage);
-            printf("Name : %c\n",d->stages[stage].rooms[id].name);
-            printf("ID : %d\n", id);
-            printf("AXE X : %d\n", axeX);
-            printf("AXE Y : %d\n", axeY);
+            // printf("ETAGE : %d\n", stage);
+            // printf("Name : %c\n",d->stages[stage].rooms[id].name);
             // printf("ID : %d\n", id);
+            // printf("AXE X : %d\n", axeX);
+            // printf("AXE Y : %d\n", axeY);
+            // printf("ID : %d\n", id);
+
+            printMinimap(d, stage, NumberOfRoomsInt);
+
             if(d->stages[stage].rooms[id].name == BASE_ROOM_NAME && BossInfinite == 1){
-                printf("Boss : %s\n", shootParams->boss->name);
                 printf("Boss HP : %.f\n", shootParams->boss->hpMax);
             }
-            printf("\n");
-            printf("HP player: %.2f\n", player->hpMax);
+            printf("      \n");
+            printf("        HP player: %.2f / %.2f\n", player->hp, player->hpMax);
+                printf("Name : %c\n",d->stages[stage].rooms[id].name);
 
             if(d->stages[stage].rooms[id].name == ITEM_ROOM_NAME) {
-                printf("Room item : \n");
+                printf("      Room item : \n");
                 displayObject(d->stages[stage].rooms[id].object);
             }
 
 			for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
+                printf("\n       ");
 				for (int y = 0; y < d->stages[stage].rooms[id].width - 1; y++) {
 					if (y % 2 == 0) {
 						if(d-> stages[stage].rooms[id].room[i][y] == PLAYER){
-
-							printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
-		
-						}else{
-							printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
+							printf("%c  ", d-> stages[stage].rooms[id].room[i][y]);
 						}
+                        // do not print 'N' inside bonus item room
+                        else if(d->stages[stage].rooms[id].name == BONUS_ITEM_ROOM && d-> stages[stage].rooms[id].room[i][y] == NEXT_STAGE) {
+							printf("   ");
+						} else {
+                            printf("%c  ", d-> stages[stage].rooms[id].room[i][y]);
+                        }
 					}
 				}
-				printf("\n");
-				
 			}
 
-            printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, iteration);
-            printf("\nHP: %.1f\n", player->hpMax);
-            printf("DAMAGE  : %.1f\n", player->dmg);
-            printf("SHIELD : %.1f\n", player->shield);
-            printf("PIERCING SHOT : %s\n", (player->ps) ? "Yes" : "No");
-            printf("SPECTRAL SHOT: %s\n", (player->ss) ? "Yes" : "No");
-            printf("FLIGHT: %s\n\n", (player->flight) ? "Yes" : "No");
+
+            printPlayerInfos(player, iteration, shootParams, obstacle);
+            printf("\n");
+
+
+            // printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, iteration);
+            // printf("\nHP: %.1f\n", player->hpMax);
+            // printf("DAMAGE  : %.1f\n", player->dmg);
+            // printf("SHIELD : %.1f\n", player->shield);
+            // printf("PIERCING SHOT : %s\n", (player->ps) ? "Yes" : "No");
+            // printf("SPECTRAL SHOT: %s\n", (player->ss) ? "Yes" : "No");
+            // printf("FLIGHT: %s\n\n", (player->flight) ? "Yes" : "No");
 
             if( * change == 1){
                 condition = false;
             }
 
-            printf("reload : %d\n",shootParams->reload);
+            // printf("reload : %d\n",shootParams->reload);
 
 
             continue;
         }
-
     }
-
-    // free(player);
-    //free(shootParams);
-
 }
 
 void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int numberOfRooms) {
@@ -737,7 +822,7 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
             if(d->stages[stage].rooms[t].room[i][y] == DOOR 
             || d->stages[stage].rooms[t].room[i][y] == BONUS_ITEM_DOOR 
             || d->stages[stage].rooms[t].room[i][y] == ITEM_ROOM_DOOR 
-            || d->stages[stage].rooms[t].room[i][y] == BOSS_ROOM_DOOR){
+            || d->stages[stage].rooms[t].room[i][y] == BOSS_ROOM_DOOR) {
                 d->stages[stage].rooms[t].room[i][y] = WALL;
             }
         }
@@ -765,14 +850,13 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
             // DoorLeft
             if( y < d->stages[stage].rooms[t].width/2 && d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] == WALL && DoorLeft == 1){
                 
-
-                if(Vl == 1){
+                if(Vl == 1) {
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = BONUS_ITEM_DOOR;
                     d->stages[stage].rooms[t].Door.doorLeft = BONUS_ITEM_DOOR;
-                }else  if(Il == 1){
+                }else  if(Il == 1) {
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = ITEM_ROOM_DOOR;
                     d->stages[stage].rooms[t].Door.doorLeft = ITEM_ROOM_DOOR;
-                }else if(Bl == 1){
+                }else if(Bl == 1) {
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = BOSS_ROOM_DOOR;
                     d->stages[stage].rooms[t].Door.doorLeft = BOSS_ROOM_DOOR;
                 }else{
@@ -797,7 +881,6 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height/2][y] = DOOR;
                     d->stages[stage].rooms[t].Door.doorRight = DOOR;
                 }
-
             }
 
             // DoorTop
@@ -826,7 +909,6 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
                                                                                        
             }
 
-
             // DoorBottom
              if(d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height-1][width] == WALL && DoorBottom == 1){
 
@@ -842,13 +924,8 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
                 }else{
                     d->stages[stage].rooms[t].room[d->stages[stage].rooms[t].height-1][width] = DOOR;
                     d->stages[stage].rooms[t].Door.doorBottom = DOOR;
-                }
-                
-                                                                                                     
+                }                                                                                        
             }
-
-
-           
         }
     }
     
@@ -869,7 +946,7 @@ void checkName(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY, int 
                 }
 
                 if( d->stages[stage].stage[i + axeY][y + axeX] == BOSS_ROOM_DOOR){
-                    d->stages[stage].rooms[t].name = BOSS_ROOM_NAME;
+                    d->stages[stage].rooms[t].name = BOSS_ROOM_DOOR;
                 }
 
                 if( d->stages[stage].stage[i + axeY][y + axeX] == BONUS_ITEM_DOOR){
@@ -885,26 +962,29 @@ void checkName(Donjon *d, int numberOfRooms, int stage, int axeX, int axeY, int 
     }
 }
 
-void gestionPassing(Donjon *d, Player * player, int stage, int id, int NumberOfRoomsInt){
+void redrawPlayer(Donjon *d, Player * player, int stage, int id, int NumberOfRoomsInt){
+    int height = d->stages[stage].rooms[id].height;
+    int width = d->stages[stage].rooms[id].width;
 
-           for(int i = 0; i < d->stages[stage].rooms[id].height; i++){
-                for(int y = 0; y < d->stages[stage].rooms[id].width; y++){
-                    if(d->stages[stage].rooms[id].room[i][y] == PLAYER){
-                        d->stages[stage].rooms[id].room[i][y] = EMPTY;
-                    }
+     // erases the old player position
+    for(int i = 0; i < height; i+=1){
+        for(int y = 0; y < width; y+=1) {
+            if(d->stages[stage].rooms[id].room[i][y] == PLAYER) {
+                // if(obstacle->isErased) {
+                //     printf("redraw obstacle : %c at (%d,%d) / (%d,%d)\n", obstacle->type, obstacle->positionX, obstacle->positionY, y, i); sleep(2);
+   
+                //     d->stages[stage].rooms[id].room[i][y] = obstacle->type;
+                //     obstacle->isErased = 0;
+                // } else {
+                    d->stages[stage].rooms[id].room[i][y] = EMPTY;
+                // }
                 }
-            }
+        }
+    }
 
-            d->stages[stage].rooms[id].room[player->positionY][player->positionX] = PLAYER;
-
-            for (int v = 0; v < NumberOfRoomsInt + 2; v++) {
-                for (int y = 0; y < NumberOfRoomsInt + 2; y++) {
-
-                    printf("%c ", d->stages[stage].stage[v][y]);
-
-                }
-                printf("\n");
-            }
+    // draw the player
+    d->stages[stage].rooms[id].room[player->positionY][player->positionX] = PLAYER;
+    (void)NumberOfRoomsInt;
            
 }
 
@@ -973,7 +1053,7 @@ void InitialiseBossLeninaRoom(Donjon * d, int stage, int id, char letter) {
 }
 
 void GestionDoorsForMobRoom(Donjon *d, int stage, int id, int done){
-    char actualPosition;
+    char elementAtActualPosition;
     if(done == 0 ){
 
             // lock the doors inside boss and normal rooms
@@ -982,17 +1062,17 @@ void GestionDoorsForMobRoom(Donjon *d, int stage, int id, int done){
             && d->stages[stage].rooms[id].name != BONUS_ITEM_DOOR ){
                 for(int i = 0; i<d->stages[stage].rooms[id].height; i++){
                     for(int y = 0; y< d->stages[stage].rooms[id].width; y++){
-                        actualPosition = d->stages[stage].rooms[id].room[i][y];
-                        if( actualPosition == DOOR ){
+                        elementAtActualPosition = d->stages[stage].rooms[id].room[i][y];
+                        if( elementAtActualPosition == DOOR ){
                             d->stages[stage].rooms[id].room[i][y] = LOCKED_DOOR;
                         }
-                        if(actualPosition == BONUS_ITEM_DOOR ){
+                        if(elementAtActualPosition == BONUS_ITEM_DOOR ){
                             d->stages[stage].rooms[id].room[i][y] = LOCKED_DOOR;
                         }
-                        if(actualPosition == ITEM_ROOM_DOOR ){
+                        if(elementAtActualPosition == ITEM_ROOM_DOOR ){
                             d->stages[stage].rooms[id].room[i][y] = LOCKED_DOOR;
                         }
-                        if(actualPosition == BOSS_ROOM_DOOR ){
+                        if(elementAtActualPosition == BOSS_ROOM_DOOR ){
                             d->stages[stage].rooms[id].room[i][y] = LOCKED_DOOR;
                         }
 
@@ -1010,7 +1090,7 @@ void GestionDoorsForMobRoom(Donjon *d, int stage, int id, int done){
                     if(d->stages[stage].rooms[id].room[i][y] == LOCKED_DOOR  && i  == 0){
                         d->stages[stage].rooms[id].room[i][y] = d->stages[stage].rooms[id].Door.doorTop;
                     }
-                    if( i == d->stages[stage].rooms[id].height - 1 || d->stages[stage].rooms[id].height == LOCKED_DOOR){ // WTF ??
+                    if( i == d->stages[stage].rooms[id].height - 1 || d->stages[stage].rooms[id].height == LOCKED_DOOR){ 
                         if( d->stages[stage].rooms[id].room[i][y] == LOCKED_DOOR){
                             d->stages[stage].rooms[id].room[i][y] = d->stages[stage].rooms[id].Door.doorBottom;
                         }
@@ -1031,7 +1111,7 @@ void GestionDoorsForMobRoom(Donjon *d, int stage, int id, int done){
 
 }
 
-void PurgeRoomOfBoss(Donjon *d, int stage, int id){
+void PurgeRoomOfBoss(Donjon *d, int stage, int id) {
 
     for(int i = 0; i<d->stages[stage].rooms[id].height; i++){
         for(int y = 0; y< d->stages[stage].rooms[id].width; y++){
@@ -1043,24 +1123,77 @@ void PurgeRoomOfBoss(Donjon *d, int stage, int id){
 
 }
 
-void playerMoveUp(Donjon* donjon, int stage, int roomID, Player* player) {
-    donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = EMPTY;
+void playerMoveUp(Donjon* donjon, int stage, int roomID, Player* player, Obstacle* obstacle) {
+    // erases and redraws the actual position of the player
+    donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = EMPTY; 
     player->positionY-=1;
+    //donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = PLAYER; 
+
+    // if previously stepped on obstacle, redraw it
+    if(obstacle->isErased) {
+        obstacle->isErased = 0;
+        donjon->stages[stage].rooms[roomID].room[obstacle->positionY][obstacle->positionX] = obstacle->type;
+    }
+
+    // player steps on obstacle
+    if(obstacle->positionX == player->positionX && obstacle->positionY == player->positionY) {
+        obstacle->isErased = 1;
+    }    
 }
 
-void playerMoveDown(Donjon* donjon, int stage, int roomID, Player* player) {
-    donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = EMPTY;
+void playerMoveDown(Donjon* donjon, int stage, int roomID, Player* player, Obstacle* obstacle) {
+    // erases and redraws the actual position of the player
+    donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = EMPTY; 
     player->positionY+=1;
+    //donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = PLAYER; 
+
+    // if previously stepped on obstacle, redraw it
+    if(obstacle->isErased) {
+        obstacle->isErased = 0;
+        donjon->stages[stage].rooms[roomID].room[obstacle->positionY][obstacle->positionX] = obstacle->type;
+    }
+
+    // player steps on obstacle
+    if(obstacle->positionX == player->positionX && obstacle->positionY == player->positionY) {
+        obstacle->isErased = 1;
+    }
+
 }
 
-void playerMoveRight(Donjon* donjon, int stage, int roomID, Player* player) {
-    donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = EMPTY;
-    player->positionX += 2;
+void playerMoveRight(Donjon* donjon, int stage, int roomID, Player* player, Obstacle* obstacle) {
+    // erases and redraws the actual position of the player
+    donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = EMPTY; 
+    player->positionX+=2;
+    //donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = PLAYER; 
+
+    // if previously stepped on obstacle, redraw it
+    if(obstacle->isErased) {
+        obstacle->isErased = 0;
+        donjon->stages[stage].rooms[roomID].room[obstacle->positionY][obstacle->positionX] = obstacle->type;
+    }
+
+    // player steps on obstacle
+    if(obstacle->positionX == player->positionX && obstacle->positionY == player->positionY) {
+        obstacle->isErased = 1;
+    }
 }
 
-void playerMoveLeft(Donjon* donjon, int stage, int roomID, Player* player) {
-    donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = EMPTY;
-    player->positionX -= 2;
+void playerMoveLeft(Donjon* donjon, int stage, int roomID, Player* player, Obstacle* obstacle) {
+    // erases and redraws the actual position of the player
+    donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = EMPTY; 
+    player->positionX-=2;
+    //donjon->stages[stage].rooms[roomID].room[player->positionY][player->positionX] = PLAYER; 
+
+    // if previously stepped on obstacle, redraw it
+    if(obstacle->isErased) {
+        obstacle->isErased = 0;
+        donjon->stages[stage].rooms[roomID].room[obstacle->positionY][obstacle->positionX] = obstacle->type;
+    }
+
+    // player steps on obstacle
+    if(obstacle->positionX == player->positionX && obstacle->positionY == player->positionY) {
+        obstacle->isErased = 1;
+    }
 }
 
 void playerLoseLife(Player* player, float damageTaken) {
@@ -1068,13 +1201,13 @@ void playerLoseLife(Player* player, float damageTaken) {
         if(damageTaken > player->shield) { // more damage than shield
             damageTaken -= player->shield;
             player->shield = 0;
-            player->hpMax -= damageTaken;
+            player->hp -= damageTaken;
             player->canTakeBonusItem = 0;
         } else { 
             player->shield -= damageTaken;
         }
     } else { // player does not have shield
-        player->hpMax -= damageTaken;
+        player->hp -= damageTaken;
         player->canTakeBonusItem = 0;
     }
 }
@@ -1084,7 +1217,8 @@ void playerGainLife(Player* player) {
     int amountLife = 1 + rand() % 2;
 
     if(healthOrShield) {
-        player->hpMax += amountLife;
+        player->hp += amountLife;
+        player->hp = (player->hp > player->hpMax) ? player->hpMax : player->hp;
     } else {
         player->shield += amountLife;
     }
@@ -1101,16 +1235,125 @@ void setItemInsideRoom(Donjon* d, int stage, int id) {
     d -> stages[stage].rooms[id].room[itemPosX][itemPosY] = ITEM;
 }
 
-void setItemEffects(Object* item, Player* player) {
+void setBonusItemInsideRoom(Donjon* d, int stage, int roomId) {
+    int roomHeight =  d -> stages[stage].rooms[roomId].height;
+    int roomWidth =  d -> stages[stage].rooms[roomId].width;
+    int itemPosX = roomHeight / 2;
+    int itemPosY = roomWidth / 2;
+    itemPosY = (itemPosY % 2 == 0) ? itemPosY : itemPosY-1;
+    
+    d -> stages[stage].rooms[roomId].bonusObject = getRandomObject(d->headObject);
+    d -> stages[stage].rooms[roomId].room[itemPosX][itemPosY] = ITEM;
+}
+
+void setItemEffects(Object* item, Player* player, int isBonusItem) {
     player->dmg += item->damage;
-    player->hpMax += item->hpMax;
+    player->hp += item->hpMax;
     player->shield += item->shield;
 
     player->flight += item->flight;
     player->ps += item->piercingShot;
     player->ss += item->spectralShot;
+
+    if(isBonusItem) {
+        player->hpMax -= 1;
+    }
 }
 
+void printMap(Donjon* d, int stage, int roomId) {
+    int height = d-> stages[stage].rooms[roomId].height;
+    int width = d-> stages[stage].rooms[roomId].width;
+    //char actualElement;
+
+    for(int y = 0; y < height; y++) {
+        for(int v = 0; v < width; v++) {
+
+            printf("%c", d-> stages[stage].rooms[roomId].room[y][v]);
+        }
+    }
+    
+}
+
+void printMinimap(Donjon* d, int stage, int numberOfRooms) {
+    // redraws the minimap
+    for (int v = 0; v < numberOfRooms + 2; v++) {
+        for (int y = 0; y < numberOfRooms + 2; y++) {
+            printf("%c ", d->stages[stage].stage[v][y]);
+        }
+        printf("\n");
+    }
+}
+
+void printRoomsInfo(Donjon* d, int stage, int roomID, int axeX, int axeY) {
+    // printf("Axe Position X : %d / and Position Y : %d\n", axeX, axeY);
+    printf("ETAGE : %d\n", stage);
+    printf("Name : %c\n",d->stages[stage].rooms[roomID].name);
+    printf("ID : %d\n", roomID);
+    printf("AXE X : %d\n", axeX);
+    printf("AXE Y : %d\n\n", axeY);
+}
+
+void printPlayerInfos(Player* player, int frame, ShootParams* shootParams, Obstacle* obstacle) {
+    printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, frame);
+    printf("\nHP: %.1f / %.1f\n", player->hp, player->hpMax);
+    printf("DAMAGE  : %.1f\n", player->dmg);
+    printf("SHIELD : %.1f\n", player->shield);
+    printf("PIERCING SHOT : %s\n", (player->ps) ? "Yes" : "No");
+    printf("SPECTRAL SHOT: %s\n", (player->ss) ? "Yes" : "No");
+    printf("FLIGHT: %s\n\n", (player->flight) ? "Yes" : "No");
+
+    printf("reload : %d\n",shootParams->reload);
+    printf("erased obstacle : %c at (%d,%d)\n", obstacle->type, obstacle->positionX, obstacle->positionY);
+}
+
+void displayGame(Donjon* d, Player* player, int stage, int numberOfRooms, int iteration, int roomID, int axeX, int axeY, ShootParams* shootParams, int BossInfinite, Obstacle* obstacle) {
+        printMinimap(d, stage, numberOfRooms);  
+
+        // if you are in the boss room, print his info
+        int playerInBossRoom = d->stages[stage].rooms[roomID].name == BASE_ROOM_NAME && BossInfinite == 1;
+        if(playerInBossRoom) {
+            printf("Boss : %s\n", shootParams->boss->name);
+            printf("Boss HP : %.f\n", shootParams->boss->hpMax);
+        }
+        printf("\n");
+
+                // if you are in the item room print the item
+        int playerInItemRoom = d->stages[stage].rooms[roomID].name == ITEM_ROOM_NAME;
+        int playerInBonusItemRoom = d->stages[stage].rooms[roomID].name == BONUS_ITEM_ROOM;
+        if(playerInItemRoom) {
+            printf("Room item : \n");
+            displayObject(d->stages[stage].rooms[roomID].object);
+        } else if(playerInBonusItemRoom) {
+            printf("Room item : \n");
+            displayObject(d->stages[stage].rooms[roomID].bonusObject);
+        }
+        printf("\n");
+
+        printRoomsInfo(d, stage, roomID, axeX, axeY);
+        printMap(d, stage, roomID);
+        printPlayerInfos(player, iteration, shootParams, obstacle);
+}
+
+void resetObstacle(Obstacle* obstacle) {
+    obstacle->isErased=0;
+    obstacle->positionX=999;
+    obstacle->positionY=999;
+}
+
+
+void openItemRoomBonusDoor(Donjon* d, int stage, int roomId) {
+    int height = d->stages[stage].rooms[roomId].height;
+    int width = d->stages[stage].rooms[roomId].width;
+    char actualElement;
+    for(int i = 0 ; i < height ; i+=1) {
+        for(int j = 0 ; j < width ; j+=1) {
+            actualElement = d->stages[stage].rooms[roomId].room[i][j];
+            if(actualElement == LOCKED_DOOR) {
+                d->stages[stage].rooms[roomId].room[i][j] = BONUS_ITEM_DOOR;
+            }
+        }
+    }
+}
 /*
 int changeIdRoomForMonsters(int idRoomForMonster, int numberOfRooms) {
     //printf("number of rooms : %d\n", numberOfRooms);

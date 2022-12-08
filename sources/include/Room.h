@@ -14,9 +14,9 @@
 #define NUMBER_STAGES_MAX 62
 
 #define BASE_ROOM_NAME 'O' // room name used for spawn, boss
+#define BOSS_ROOM_NAME 'B' // only before entering, then it becomes 'O'
 #define NORMAL_ROOM_NAME 'R'
 #define ITEM_ROOM_NAME '$'
-#define BOSS_ROOM_NAME 'B'
 #define BONUS_ITEM_ROOM '@'
 
 #define JAGGER_FIRST_LETTER 'J'
@@ -43,14 +43,6 @@
 #include "objects.h"
 #include "Player.h"
 #include "monster.h"
-
-/**
- * @brief To save coordinates of an element inside a double array / a map ...
- */
-typedef struct Coordinates { 
-        int x; // abscisses
-        int y; // ordonnees
-} Coordinates;
 
 struct Door{
     char doorTop;
@@ -99,6 +91,7 @@ typedef struct Donjon{
             int roomUsed;
 
             Object * object; // an object of the donjon objects linked list
+            Object * bonusObject; // a random object only
 
             int numberOfMonsters; // number of monsters inside this room
             Monster * monsters; // array of monsters in this room

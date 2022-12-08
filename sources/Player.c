@@ -70,6 +70,7 @@ void initialisePlayerStats(Player* player, int character) {
 		player->flight = 1;
 	}
 	
+	player->hp = player->hpMax;
 	player->ps = 0;
 	player->ss = 0;
 }

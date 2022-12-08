@@ -108,7 +108,6 @@ void * bossAthina(void *shootParams) {
             //ShootUp
             while(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] == ' '){ 
                
-
     	        ((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] = '*';
     	        #ifdef _WIN32 
     	        Sleep(40); 
@@ -181,7 +180,7 @@ void * bossAthina(void *shootParams) {
 				shoot->positionX = shoot->positionX + 2;
 							
 			}
-            if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY][shoot->positionX + 2] == 'P'){
+            if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY][shoot->positionX + 2] == 'P') {
 				((ShootParams*)shootParams)->player->hpMax = ((ShootParams*)shootParams)->player->hpMax - 1;
 				if(((ShootParams*)shootParams)->player->hpMax <= 0){
                     //Le joueur est mort, fin partie 
@@ -196,6 +195,10 @@ void * bossAthina(void *shootParams) {
             
         }
         
+    }
+
+    if(((ShootParams*)shootParams)->boss->hpMax > 0) {
+        ((ShootParams*)shootParams)->boss->dead=1;
     }
 
     free(shoot);
@@ -957,7 +960,8 @@ void * MonsterShoot(void * params){
 
 
 void * Jagger(void *params){
-
+    ((ShootParams*)params)->boss->hpMax=0;
+    return NULL;
     // Shoot * shoot = malloc(sizeof(Shoot));
 
     // int condition = 1;
@@ -978,7 +982,7 @@ void * Jagger(void *params){
         int stage = ((ShootParams*)params)->stage;
                     pthread_t thread;
 
-    while(((ShootParams*)params)->condition){
+    while(((ShootParams*)params)->condition && ((ShootParams*)params)->boss->hpMax > 0 && ((ShootParams*)params)->boss->dead==0) {
 
         #ifdef _WIN32 
 		Sleep(9090); 
@@ -1114,6 +1118,10 @@ void * Jagger(void *params){
 
     }
 
+    if(((ShootParams*)params)->boss->hpMax > 0) {
+        ((ShootParams*)params)->boss->dead=1;
+    }
+    
     free(((ShootParams*)params)->boss);
 
     return 0;
@@ -1142,7 +1150,7 @@ void * Lenina(void *params) {
         int stage = ((ShootParams*)params)->stage;
                     pthread_t thread;
 
-    while(((ShootParams*)params)->condition) {
+    while(((ShootParams*)params)->condition && ((ShootParams*)params)->boss->hpMax > 0 && ((ShootParams*)params)->boss->dead==0) {
 
         int random = rand() % 3;
 
@@ -1178,6 +1186,11 @@ void * Lenina(void *params) {
         }
 
     }
+
+    if(((ShootParams*)params)->boss->hpMax > 0) {
+        ((ShootParams*)params)->boss->dead=1;
+    }
+    
 
     free(((ShootParams*)params)->boss);
 

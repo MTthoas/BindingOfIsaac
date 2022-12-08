@@ -55,16 +55,19 @@ int choseCharacter() {
     }
 
     system("clear");
-    printf("\n\n\n\n==========================================================================\n");
-    printf("|%50s", "CHOSE A CHARACTER");
-    printf("%22s|\n", " ");
     printf("==========================================================================\n");
+    printf("|%40s", "CHOOSE A CHARACTER");
+    printf("%32s|\n", " ");
+    printf("==========================================================================\n");
+    printf("\n");
+    printf("\n");
     
     for(int i = 0 ; i < 3 ; i+=1) {
-        printf("                   ");
+        printf("                        ");
         printf("%d.%s %s\n\n", i+1, characters[i].name, (characters[i].usable) ? " " : "(locked)");
     }
 
+    printf("\nSelect your character : ");
     int choice = 0;
     do {
         choice = readInt();
@@ -501,12 +504,12 @@ Monster* fichierMonsterToListeMonster() {
                     name = duplicateString(value);
                 } else if((strcmp(stat, "HPMAX") == 0)) {
                     hpMax = atof(value);
+                    // printf("hpMax %f \n", hpMax);
                 }  else if((strcmp(stat, "SHOOT") == 0)) {
-                    if((strstr(value, "TRUE") != NULL)){
-                        activated = 1;  
-                        shoot = activated;  
-                    }
-                    
+                    // printf("value %s", value);
+                    activated = (strcmp(value, "TRUE") == 0);
+                    // printf("activated %d \n", activated);
+                    shoot = activated;
                 } else if((strcmp(stat, "SS") == 0)) {
                     if((strstr(value, "TRUE") != NULL)){
                         activated = 1;  

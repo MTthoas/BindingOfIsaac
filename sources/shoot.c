@@ -42,8 +42,8 @@ void * shootUp(void *shootParams) {
         shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
         shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
 		((ShootParams*)shootParams)->reload = 0; 
+
 		while(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] == ' '){ 
-			
 			((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] = '*';
 			#ifdef _WIN32 
 			Sleep(90); 
@@ -52,7 +52,6 @@ void * shootUp(void *shootParams) {
 			#endif
 			((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] = ' ';
 			shoot->positionY = shoot->positionY - 1;
-				
 		}
 		for (int j = 0; j < ((ShootParams*)shootParams)->d->stages[stage].rooms[id].numberOfMonsters; j++){
 			char letter = tolower(((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].firstLetter);
@@ -64,12 +63,14 @@ void * shootUp(void *shootParams) {
 				}
 			}
 		}
+
 		if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] == ((ShootParams*)shootParams)->boss->firstLetter){
 			((ShootParams*)shootParams)->boss->hpMax = ((ShootParams*)shootParams)->boss->hpMax - ((ShootParams*)shootParams)->player->dmg;
 			if(((ShootParams*)shootParams)->boss->hpMax <= 0){
 				((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] = ' ';
 			}
 		}
+
 		((ShootParams*)shootParams)->reload = 1; 
 		shoot->positionX = ((ShootParams*)shootParams)->player->positionX;
         shoot->positionY = ((ShootParams*)shootParams)->player->positionY;
@@ -83,6 +84,7 @@ void * shootUp(void *shootParams) {
 			}
 		}
 	}
+	
 	if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->player->positionY-1][((ShootParams*)shootParams)->player->positionX] == ((ShootParams*)shootParams)->boss->firstLetter){
 		// Le boss prends des dégats équivalent aux dmg du Player
 		((ShootParams*)shootParams)->boss->hpMax = ((ShootParams*)shootParams)->boss->hpMax - ((ShootParams*)shootParams)->player->dmg;
@@ -95,7 +97,7 @@ void * shootUp(void *shootParams) {
 }
 				
 				
-void* shootDown(void *shootParams){
+void* shootDown(void *shootParams) {
 	    Shoot * shoot = malloc(sizeof(Shoot));
 		int id = ((ShootParams*)shootParams)->id;
 		int stage = ((ShootParams*)shootParams)->stage;
