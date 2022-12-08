@@ -100,7 +100,7 @@ void displayCRUD_Room(CRUD_Room* room) {
 
     for(int i = 0 ; i < room->lines ; i += 1) {
         printf("\n       ");
-        for(int j = 0 ; j < room->columns ; j += 1) {
+        for(int j = 0 ; j < room->columns ; j += 1){
             printf("%c",room->map[i][j]);
         }
     }

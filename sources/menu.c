@@ -52,7 +52,7 @@ void menu_init(void) {
     printf("               Press 'c' for the controls information\n\n");
     printf("               Press 'x' to exit the game\n\n\n\n");
 
-    printf("========   Credit : Dorian-Alexandre-Matthias   ==========\n\n\n");
+    printf("========   Credit : Dorian-Alexandre-Matthias   ==========\n\n");
 }
 
 int menuSeeItems(void) {
@@ -1032,7 +1032,7 @@ void GameRecur(Donjon *d, Boss * boss, ShootParams * shootParams, Player * playe
     if(player->hpMax <= 0) { // player dead
         system("clear");
         printf("===========================================================\n");
-        printf("=========                YOU ARE DEAD        ==============\n");
+        printf("=========            YOU ARE DEAD            ==============\n");
         printf("===========================================================\n");
         printf("\n");
 

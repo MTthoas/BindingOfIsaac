@@ -55,16 +55,19 @@ int choseCharacter() {
     }
 
     system("clear");
-    printf("\n\n\n\n==========================================================================\n");
-    printf("|%50s", "CHOSE A CHARACTER");
-    printf("%22s|\n", " ");
     printf("==========================================================================\n");
+    printf("|%40s", "CHOOSE A CHARACTER");
+    printf("%32s|\n", " ");
+    printf("==========================================================================\n");
+    printf("\n");
+    printf("\n");
     
     for(int i = 0 ; i < 3 ; i+=1) {
-        printf("                   ");
+        printf("                        ");
         printf("%d.%s %s\n\n", i+1, characters[i].name, (characters[i].usable) ? " " : "(locked)");
     }
 
+    printf("\nSelect your character : ");
     int choice = 0;
     do {
         choice = readInt();

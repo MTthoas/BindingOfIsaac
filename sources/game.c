@@ -61,7 +61,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     }
 
     //stats pour cheater :
-    player->hpMax = 100;
+    // player->hpMax = 10;
     // player->flight = 1;
 	while (condition) {
 
@@ -76,8 +76,11 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
             condition = false;
             player->stageAxeX = 0;
             player->stageAxeY = 0;
-            PurgeRoomOfBoss(d, stage, id);
-            GestionDoorsForMobRoom(d, stage, id, 1);
+            if(d->stages[stage].rooms[id].name == BOSS_ROOM_NAME){
+                PurgeRoomOfBoss(d, stage, id);
+                GestionDoorsForMobRoom(d, stage, id, 1);
+                player->hpMax = 3;
+            }
             d->stages[stage].rooms[id].name = PLAYER;
             pthread_cancel(thread);
             break;
@@ -589,53 +592,52 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     
 
             // printf("Axe Position X : %d / and Position Y : %d\n", axeX, axeY);
-            printf("ETAGE : %d\n", stage);
-            printf("Name : %c\n",d->stages[stage].rooms[id].name);
-            printf("ID : %d\n", id);
-            printf("AXE X : %d\n", axeX);
-            printf("AXE Y : %d\n", axeY);
+            // printf("ETAGE : %d\n", stage);
+            // printf("Name : %c\n",d->stages[stage].rooms[id].name);
             // printf("ID : %d\n", id);
+            // printf("AXE X : %d\n", axeX);
+            // printf("AXE Y : %d\n", axeY);
+            // printf("ID : %d\n", id);
+
             if(d->stages[stage].rooms[id].name == BASE_ROOM_NAME && BossInfinite == 1){
-                printf("Boss : %s\n", shootParams->boss->name);
                 printf("Boss HP : %.f\n", shootParams->boss->hpMax);
             }
-            printf("\n");
-            printf("HP player: %.2f\n", player->hpMax);
+            printf("      \n");
+            printf("        HP player: %.2f\n", player->hpMax);
 
             if(d->stages[stage].rooms[id].name == ITEM_ROOM_NAME) {
-                printf("Room item : \n");
+                printf("      Room item : \n");
                 displayObject(d->stages[stage].rooms[id].object);
             }
 
 			for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
+                printf("\n       ");
 				for (int y = 0; y < d->stages[stage].rooms[id].width - 1; y++) {
 					if (y % 2 == 0) {
 						if(d-> stages[stage].rooms[id].room[i][y] == PLAYER){
-
-							printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
-		
+							printf("%c  ", d-> stages[stage].rooms[id].room[i][y]);
 						}else{
-							printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
+							printf("%c  ", d-> stages[stage].rooms[id].room[i][y]);
 						}
 					}
 				}
-				printf("\n");
-				
 			}
 
-            printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, iteration);
-            printf("\nHP: %.1f\n", player->hpMax);
-            printf("DAMAGE  : %.1f\n", player->dmg);
-            printf("SHIELD : %.1f\n", player->shield);
-            printf("PIERCING SHOT : %s\n", (player->ps) ? "Yes" : "No");
-            printf("SPECTRAL SHOT: %s\n", (player->ss) ? "Yes" : "No");
-            printf("FLIGHT: %s\n\n", (player->flight) ? "Yes" : "No");
+            printf("\n");
+
+            // printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, iteration);
+            // printf("\nHP: %.1f\n", player->hpMax);
+            // printf("DAMAGE  : %.1f\n", player->dmg);
+            // printf("SHIELD : %.1f\n", player->shield);
+            // printf("PIERCING SHOT : %s\n", (player->ps) ? "Yes" : "No");
+            // printf("SPECTRAL SHOT: %s\n", (player->ss) ? "Yes" : "No");
+            // printf("FLIGHT: %s\n\n", (player->flight) ? "Yes" : "No");
 
             if( * change == 1){
                 condition = false;
             }
 
-            printf("reload : %d\n",shootParams->reload);
+            // printf("reload : %d\n",shootParams->reload);
 
 
             continue;
