@@ -604,17 +604,30 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
                     system("clear");
 
-                    printf("-----------------------------------------------------------\n");
-                    printf("\n");
-                    printf("You killed the boss, you can now go to the next stage ( N )\n");
-                    printf("\n");
-                    printf("------------------------------------------------------------\n");
+
+
+                    if(player->canTakeBonusItem) {
+                        openItemRoomBonusDoor(d, stage, id);
+                        printf("----------------------------------------------------------------------\n");
+                        printf("\n");
+                        printf("You killed the boss, you can now go to the next stage ( N )\n");
+                        printf("Because of your amazing performance, you can access the bonus room !\n");
+                        printf("\n");
+                        printf("----------------------------------------------------------------------\n");
+                    } else {
+                        printf("-----------------------------------------------------------\n");
+                        printf("\n");
+                        printf("You killed the boss, you can now go to the next stage ( N )\n");
+                        printf("\n");
+                        printf("------------------------------------------------------------\n");
+                    }
      
                     #ifdef _WIN32 
                     Sleep(25); 
                     #else 
                     usleep(3000000); 
                     #endif 
+                    
 
                     while(1){
 
