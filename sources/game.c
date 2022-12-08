@@ -527,6 +527,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         Boss->name = "Jagger";
                         Boss->hpMax = 100;
                         Boss->shoot = 1;
+                        Boss->dead = 0; // alive
                         shootParams->condition = 1;
 
                         if( shootParams->boss == NULL){
@@ -545,7 +546,8 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         Boss->firstLetter = LENINA_FIRST_LETTER;                         
                         Boss->name = "Lenina";                       
                         Boss->hpMax = 300; 
-                        Boss->shoot = 1;                           
+                        Boss->shoot = 1;           
+                        Boss->dead = 0; // alive                                        
                         shootParams->condition = 1; 
                      
                         if( shootParams->boss == NULL) {                             
@@ -561,6 +563,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         Boss->name = "Athina";
                         Boss->hpMax = 450;
                         Boss->shoot = 1;
+                        Boss->dead = 0; // alive
                         shootParams->condition = 1;
                         if( shootParams->boss == NULL){
                             shootParams->boss = Boss;
