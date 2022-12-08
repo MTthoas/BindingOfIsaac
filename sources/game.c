@@ -52,11 +52,9 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     int c;
 
     // printMap(d, stage, NumberOfRoomsInt);
-
     //stats pour cheater :
-    player->hpMax = 100;
-    player->flight = 1;
-
+    // player->hpMax = 100;
+    // player->flight = 1;
 
 	while (condition) {
 
