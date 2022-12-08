@@ -43,14 +43,6 @@
 #include "Player.h"
 #include "monster.h"
 
-/**
- * @brief To save coordinates of an element inside a double array / a map ...
- */
-typedef struct Coordinates { 
-        int x; // abscisses
-        int y; // ordonnees
-} Coordinates;
-
 struct Door{
     char doorTop;
     char doorBottom; 

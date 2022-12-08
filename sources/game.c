@@ -28,6 +28,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     int bossActive = 0;
     int BossInfinite = 0;
     int itemIsSet = 0;
+    int bonusItemIsSet = 0;
     char elementAtFuturePosition = EMPTY;
 
     Obstacle* obstacle = malloc(sizeof(Obstacle));
@@ -55,6 +56,9 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     //stats pour cheater :
     // player->hpMax = 10;
     // player->flight = 1;
+    player->hp = 1000;
+    player->hpMax = 1000;
+
 	while (condition) {
 
         #ifdef _WIN32 
@@ -176,9 +180,15 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                             break;
                         }
 
-                        // if run trough spike then lose life
-                        if(elementAtFuturePosition == ITEM && itemIsSet == 1) {
-                            setItemEffects(d->stages[stage].rooms[id].object, player); 
+                        // if run trough item then take advantage
+                        if(elementAtFuturePosition == ITEM && itemIsSet == 1 && d->stages[stage].rooms[id].name == ITEM_ROOM_NAME) {
+                            setItemEffects(d->stages[stage].rooms[id].object, player, 0); 
+                            break;
+                        }
+
+                        // if run trough item then take advantage
+                        if(elementAtFuturePosition == ITEM && bonusItemIsSet == 1 && d->stages[stage].rooms[id].name == BONUS_ITEM_ROOM) {
+                            setItemEffects(d->stages[stage].rooms[id].bonusObject, player, 1); 
                             break;
                         }
 
@@ -245,17 +255,24 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                             break;
                         }
 
-                        // if run trough spike then lose life
-                        if(elementAtFuturePosition == ITEM && itemIsSet == 1) {
-                            setItemEffects(d->stages[stage].rooms[id].object, player); 
-                            break;
-                        }
-
                         // if run trough Health then gain life
                         if(elementAtFuturePosition == HEALTH) {
                             playerGainLife(player);
                             break;
                         }
+
+                        // if run trough item then take advantage
+                        if(elementAtFuturePosition == ITEM && itemIsSet == 1 && d->stages[stage].rooms[id].name == ITEM_ROOM_NAME) {
+                            setItemEffects(d->stages[stage].rooms[id].object, player, 0); 
+                            break;
+                        }
+
+                        // if run trough item then take advantage
+                        if(elementAtFuturePosition == ITEM && bonusItemIsSet == 1 && d->stages[stage].rooms[id].name == BONUS_ITEM_ROOM) {
+                            setItemEffects(d->stages[stage].rooms[id].bonusObject, player, 1); 
+                            break;
+                        }
+
                         
                         // if you change room : 
                         if(elementAtFuturePosition == DOOR || elementAtFuturePosition == BOSS_ROOM_DOOR || elementAtFuturePosition == BONUS_ITEM_DOOR || elementAtFuturePosition == ITEM_ROOM_DOOR ) {
@@ -263,10 +280,6 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                             player->positionY = 1;
                             changeOfRoom = 1;  
                         }
-                    }
-
-                    if(elementAtFuturePosition == ITEM && itemIsSet == 1) {
-                        setItemEffects(d->stages[stage].rooms[id].object, player);            
                     }
 
 				break;
@@ -310,11 +323,18 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                             break;
                         }
 
-                        // if run trough spike then lose life
-                        if(elementAtFuturePosition == ITEM && itemIsSet == 1) {
-                            setItemEffects(d->stages[stage].rooms[id].object, player); 
+                        // if run trough item then take advantage
+                        if(elementAtFuturePosition == ITEM && itemIsSet == 1 && d->stages[stage].rooms[id].name == ITEM_ROOM_NAME) {
+                            setItemEffects(d->stages[stage].rooms[id].object, player, 0); 
                             break;
                         }
+
+                        // if run trough item then take advantage
+                        if(elementAtFuturePosition == ITEM && bonusItemIsSet == 1 && d->stages[stage].rooms[id].name == BONUS_ITEM_ROOM) {
+                            setItemEffects(d->stages[stage].rooms[id].bonusObject, player, 1); 
+                            break;
+                        }
+
 
                         // if run trough spike then lose life
                         if(!(player->flight) && elementAtFuturePosition == SPIKE) {
@@ -340,10 +360,6 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                                 
                                 changeOfRoom = 1;  
                             }
-                    }
-
-                    if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == ITEM && itemIsSet == 1) {
-                        setItemEffects(d->stages[stage].rooms[id].object, player);            
                     }
 
                 break;
@@ -387,9 +403,15 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                             break;
                         }
 
-                        // if run trough spike then lose life
-                        if(elementAtFuturePosition == ITEM && itemIsSet == 1) {
-                            setItemEffects(d->stages[stage].rooms[id].object, player); 
+                        // if run trough item then take advantage
+                        if(elementAtFuturePosition == ITEM && itemIsSet == 1 && d->stages[stage].rooms[id].name == ITEM_ROOM_NAME) {
+                            setItemEffects(d->stages[stage].rooms[id].object, player, 0); 
+                            break;
+                        }
+
+                        // if run trough item then take advantage
+                        if(elementAtFuturePosition == ITEM && bonusItemIsSet == 1 && d->stages[stage].rooms[id].name == BONUS_ITEM_ROOM) {
+                            setItemEffects(d->stages[stage].rooms[id].bonusObject, player, 1); 
                             break;
                         }
 
@@ -411,10 +433,6 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                             player->positionX = 2;
                             changeOfRoom = 1;
                         }
-                    }
-
-                    if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == ITEM && itemIsSet == 1) {
-                        setItemEffects(d->stages[stage].rooms[id].object, player);            
                     }
 
                 break;
@@ -617,6 +635,11 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 itemIsSet = 1;
             }
 
+            if(d->stages[stage].rooms[id].name == BONUS_ITEM_ROOM && bonusItemIsSet == 0) {
+                setBonusItemInsideRoom(d, stage, id);
+                bonusItemIsSet = 1;
+            }
+
             //displayGame(d, player, stage, NumberOfRoomsInt, iteration, id, axeX, axeY, shootParams, BossInfinite, obstacle);
 
             if( * change == 1) {
@@ -630,6 +653,8 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
             // printf("AXE X : %d\n", axeX);
             // printf("AXE Y : %d\n", axeY);
             // printf("ID : %d\n", id);
+
+            printMinimap(d, stage, NumberOfRoomsInt);
 
             if(d->stages[stage].rooms[id].name == BASE_ROOM_NAME && BossInfinite == 1){
                 printf("Boss HP : %.f\n", shootParams->boss->hpMax);
@@ -656,7 +681,10 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 				}
 			}
 
+
+            printPlayerInfos(player, iteration, shootParams, obstacle);
             printf("\n");
+
 
             // printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, iteration);
             // printf("\nHP: %.1f\n", player->hpMax);
@@ -1179,7 +1207,18 @@ void setItemInsideRoom(Donjon* d, int stage, int id) {
     d -> stages[stage].rooms[id].room[itemPosX][itemPosY] = ITEM;
 }
 
-void setItemEffects(Object* item, Player* player) {
+void setBonusItemInsideRoom(Donjon* d, int stage, int roomId) {
+    int roomHeight =  d -> stages[stage].rooms[roomId].height;
+    int roomWidth =  d -> stages[stage].rooms[roomId].width;
+    int itemPosX = roomHeight / 2;
+    int itemPosY = roomWidth / 2;
+    itemPosY = (itemPosY % 2 == 0) ? itemPosY : itemPosY-1;
+    
+    d -> stages[stage].rooms[roomId].bonusObject = getRandomObject(d->headObject);
+    d -> stages[stage].rooms[roomId].room[itemPosX][itemPosY] = ITEM;
+}
+
+void setItemEffects(Object* item, Player* player, int isBonusItem) {
     player->dmg += item->damage;
     player->hp += item->hpMax;
     player->shield += item->shield;
@@ -1187,6 +1226,10 @@ void setItemEffects(Object* item, Player* player) {
     player->flight += item->flight;
     player->ps += item->piercingShot;
     player->ss += item->spectralShot;
+
+    if(isBonusItem) {
+        player->hpMax -= 1;
+    }
 }
 
 void printMap(Donjon* d, int stage, int roomId) {
@@ -1248,9 +1291,13 @@ void displayGame(Donjon* d, Player* player, int stage, int numberOfRooms, int it
 
                 // if you are in the item room print the item
         int playerInItemRoom = d->stages[stage].rooms[roomID].name == ITEM_ROOM_NAME;
+        int playerInBonusItemRoom = d->stages[stage].rooms[roomID].name == BONUS_ITEM_ROOM;
         if(playerInItemRoom) {
             printf("Room item : \n");
             displayObject(d->stages[stage].rooms[roomID].object);
+        } else if(playerInBonusItemRoom) {
+            printf("Room item : \n");
+            displayObject(d->stages[stage].rooms[roomID].bonusObject);
         }
         printf("\n");
 

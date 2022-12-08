@@ -43,7 +43,7 @@ void setItemInsideRoom(Donjon* d, int stage, int id);
  * @param item 
  * @param player 
  */
-void setItemEffects(Object* item, Player* player);
+void setItemEffects(Object* item, Player* player, int isBonusItem);
 
 void InitialiseBossLeninaRoom(Donjon * d, int stage, int id, char letter);
 void InitialiseBossRoom(Donjon * d, int stage, int id, char letter);
@@ -122,5 +122,14 @@ void printPlayerInfos(Player* player, int frame, ShootParams* shootParams, Obsta
 void displayGame(Donjon* d, Player* player, int stage, int numberOfRooms, int iteration, int roomID, int axeX, int axeY, ShootParams* shootParams, int BossInfinite, Obstacle* obstacle);
 
 void resetObstacle(Obstacle* obstacle);
+
+/**
+ * @brief Set the Bonus Item Inside Room object
+ * 
+ * @param d 
+ * @param stage 
+ * @param roomId 
+ */
+void setBonusItemInsideRoom(Donjon* d, int stage, int roomId);
 
 #endif

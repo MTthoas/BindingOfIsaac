@@ -108,7 +108,6 @@ void * bossAthina(void *shootParams) {
             //ShootUp
             while(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] == ' '){ 
                
-
     	        ((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] = '*';
     	        #ifdef _WIN32 
     	        Sleep(40); 
