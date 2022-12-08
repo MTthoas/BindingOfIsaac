@@ -63,7 +63,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 		usleep(25000); 
 		#endif 
 
-        if(player->hpMax <= 0){
+        if(player->hp <= 0){
             *pId = 0;
             condition = false;
             player->stageAxeX = 0;
@@ -71,7 +71,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
             if(d->stages[stage].rooms[id].name == BASE_ROOM_NAME){
                 PurgeRoomOfBoss(d, stage, id);
                 GestionDoorsForMobRoom(d, stage, id, 1);
-                player->hpMax = 3;
+                player->hp = 3;
             }
             d->stages[stage].rooms[id].name = PLAYER;
             pthread_cancel(thread);
@@ -635,7 +635,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 printf("Boss HP : %.f\n", shootParams->boss->hpMax);
             }
             printf("      \n");
-            printf("        HP player: %.2f\n", player->hpMax);
+            printf("        HP player: %.2f / %.2f\n", player->hp, player->hpMax);
                 printf("Name : %c\n",d->stages[stage].rooms[id].name);
 
             if(d->stages[stage].rooms[id].name == ITEM_ROOM_NAME) {
@@ -1181,7 +1181,7 @@ void setItemInsideRoom(Donjon* d, int stage, int id) {
 
 void setItemEffects(Object* item, Player* player) {
     player->dmg += item->damage;
-    player->hpMax += item->hpMax;
+    player->hp += item->hpMax;
     player->shield += item->shield;
 
     player->flight += item->flight;
@@ -1224,7 +1224,7 @@ void printRoomsInfo(Donjon* d, int stage, int roomID, int axeX, int axeY) {
 
 void printPlayerInfos(Player* player, int frame, ShootParams* shootParams, Obstacle* obstacle) {
     printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, frame);
-    printf("\nHP: %.1f\n", player->hpMax);
+    printf("\nHP: %.1f / %.1f\n", player->hp, player->hpMax);
     printf("DAMAGE  : %.1f\n", player->dmg);
     printf("SHIELD : %.1f\n", player->shield);
     printf("PIERCING SHOT : %s\n", (player->ps) ? "Yes" : "No");
