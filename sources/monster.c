@@ -943,7 +943,8 @@ void * MonsterShoot(void * params){
 
 
 void * Jagger(void *params){
-
+    ((ShootParams*)params)->boss->hpMax=0;
+    return NULL;
     // Shoot * shoot = malloc(sizeof(Shoot));
 
     // int condition = 1;

@@ -538,6 +538,8 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
                         pthread_create(&thread, NULL, Jagger, shootParams);
                         printf("Nouveau boss !\n");sleep(2);
+                        //shootParams->boss->hpMax = 0;
+                        //shootParams->boss->dead = 1;
                         // if( Boss->dead == 1){
                         //     pthread_exit(&thread);
                         // }
@@ -611,7 +613,8 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
 
                     if(player->canTakeBonusItem) {
-                        openItemRoomBonusDoor(d, stage, id);
+                        GestionDoorsForMobRoom(d, stage, id, 1);
+                        //openItemRoomBonusDoor(d, stage, id);
                         printf("----------------------------------------------------------------------\n");
                         printf("\n");
                         printf("You killed the boss, you can now go to the next stage ( N )\n");
@@ -694,9 +697,13 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 					if (y % 2 == 0) {
 						if(d-> stages[stage].rooms[id].room[i][y] == PLAYER){
 							printf("%c  ", d-> stages[stage].rooms[id].room[i][y]);
-						}else{
-							printf("%c  ", d-> stages[stage].rooms[id].room[i][y]);
 						}
+                        // do not print 'N' inside bonus item room
+                        else if(d->stages[stage].rooms[id].name == BONUS_ITEM_ROOM && d-> stages[stage].rooms[id].room[i][y] == NEXT_STAGE) {
+							printf("   ");
+						} else {
+                            printf("%c  ", d-> stages[stage].rooms[id].room[i][y]);
+                        }
 					}
 				}
 			}
