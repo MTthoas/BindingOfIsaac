@@ -117,8 +117,10 @@ void printMinimap(Donjon* d, int stage, int numberOfRooms);
 
 void printRoomsInfo(Donjon* d, int stage, int roomID, int axeX, int axeY);
 
-void printPlayerInfos(Player* player, int frame, ShootParams* shootParams);
+void printPlayerInfos(Player* player, int frame, ShootParams* shootParams, Obstacle* obstacle);
 
-void displayGame(Donjon* d, Player* player, int stage, int numberOfRooms, int iteration, int roomID, int axeX, int axeY, ShootParams* shootParams, int BossInfinite);
+void displayGame(Donjon* d, Player* player, int stage, int numberOfRooms, int iteration, int roomID, int axeX, int axeY, ShootParams* shootParams, int BossInfinite, Obstacle* obstacle);
+
+void resetObstacle(Obstacle* obstacle);
 
 #endif

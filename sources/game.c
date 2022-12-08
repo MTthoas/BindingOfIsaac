@@ -29,12 +29,11 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     int BossInfinite = 0;
     int itemIsSet = 0;
     char elementAtFuturePosition = EMPTY;
-    char elementAtActualPosition = EMPTY;
 
-    Obstacle* obstacle = malloc(sizeof(Obstacle)*1);
+    Obstacle* obstacle = malloc(sizeof(Obstacle));
+    obstacle->isErased=0;
     obstacle->positionX=999;
     obstacle->positionY=999;
-    obstacle->isErased=0; 
 
     int elementIsObstacle = 0; (void) elementIsObstacle;  
     char erasedObstacle; (void)erasedObstacle;
@@ -229,7 +228,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                             obstacle->positionX = player->positionX;
                             obstacle->positionY = player->positionY + 1;
                             obstacle->type = elementAtFuturePosition;
-                        }
+                        } 
 
                         // move down :
                         playerMoveDown(d, stage, id, player, obstacle);
@@ -300,7 +299,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                             obstacle->positionX = player->positionX - 2;
                             obstacle->positionY = player->positionY;
                             obstacle->type = elementAtFuturePosition;
-                        }
+                        } 
 
                         // move left :
                         playerMoveLeft(d, stage, id, player, obstacle);
@@ -382,7 +381,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         // move right :
                         playerMoveRight(d, stage, id, player, obstacle);
                     
-                        if(elementAtActualPosition == NEXT_STAGE) {
+                        if(elementAtFuturePosition == NEXT_STAGE) {
                             * change = 1;
                             break;
                         }
@@ -407,10 +406,10 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         
                         // if you change room : 
                         if(elementAtFuturePosition == DOOR || elementAtFuturePosition == BOSS_ROOM_DOOR || elementAtFuturePosition == BONUS_ITEM_DOOR || elementAtFuturePosition == ITEM_ROOM_DOOR ) {
-                                axeX+=1;
-                                player->positionX = 2;
-                                changeOfRoom = 1;  
-                            }
+                            axeX+=1;
+                            player->positionX = 2;
+                            changeOfRoom = 1;
+                        }
                     }
 
                     if(d->stages[stage].rooms[id].room[player->positionY][player->positionX] == ITEM && itemIsSet == 1) {
@@ -565,6 +564,8 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 
                 GestionDoorsForMobRoom(d, stage, id, 0);
             
+                resetObstacle(obstacle);
+
                 shootParams->id = id;                
                 changeOfRoom = 0;
                 (void)spawnMonsterVar;
@@ -612,22 +613,15 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 itemIsSet = 1;
             }
 
-            displayGame(d, player, stage, NumberOfRoomsInt, iteration, id, axeX, axeY, shootParams, BossInfinite);
+            displayGame(d, player, stage, NumberOfRoomsInt, iteration, id, axeX, axeY, shootParams, BossInfinite, obstacle);
 
             if( * change == 1) {
                 condition = false;
             }
 
-            //printf("stepped on obstacle : %c at (%d,%d)\n", obs, oldObstaclePositionX, oldObstaclePositionY);
-
             continue;
         }
-
     }
-
-    // free(player);
-    //free(shootParams);
-
 }
 
 void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int numberOfRooms) {
@@ -719,7 +713,7 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
             if(d->stages[stage].rooms[t].room[i][y] == DOOR 
             || d->stages[stage].rooms[t].room[i][y] == BONUS_ITEM_DOOR 
             || d->stages[stage].rooms[t].room[i][y] == ITEM_ROOM_DOOR 
-            || d->stages[stage].rooms[t].room[i][y] == BOSS_ROOM_DOOR){
+            || d->stages[stage].rooms[t].room[i][y] == BOSS_ROOM_DOOR) {
                 d->stages[stage].rooms[t].room[i][y] = WALL;
             }
         }
@@ -1154,8 +1148,22 @@ void setItemEffects(Object* item, Player* player) {
 void printMap(Donjon* d, int stage, int roomId) {
     int height = d-> stages[stage].rooms[roomId].height;
     int width = d-> stages[stage].rooms[roomId].width;
+    char actualElement;
+
     for(int y = 0; y < height; y++) {
         for(int v = 0; v < width; v++) {
+
+            actualElement = d-> stages[stage].rooms[roomId].room[y][v];
+            if(y==0 && actualElement == PLAYER) { // door bug
+                d-> stages[stage].rooms[roomId].room[y][v] = '#';
+            } else if(y==height-1 && actualElement == PLAYER) {
+                d-> stages[stage].rooms[roomId].room[y][v] = '#';
+            } else if(v==width-1 && actualElement == PLAYER) {
+                d-> stages[stage].rooms[roomId].room[y][v] = '#';
+            } else if(v==0 && actualElement == PLAYER) {
+                d-> stages[stage].rooms[roomId].room[y][v] = '#';
+            }
+
             printf("%c", d-> stages[stage].rooms[roomId].room[y][v]);
         }
     }
@@ -1181,7 +1189,7 @@ void printRoomsInfo(Donjon* d, int stage, int roomID, int axeX, int axeY) {
     printf("AXE Y : %d\n\n", axeY);
 }
 
-void printPlayerInfos(Player* player, int frame, ShootParams* shootParams) {
+void printPlayerInfos(Player* player, int frame, ShootParams* shootParams, Obstacle* obstacle) {
     printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, frame);
     printf("\nHP: %.1f\n", player->hpMax);
     printf("DAMAGE  : %.1f\n", player->dmg);
@@ -1191,9 +1199,18 @@ void printPlayerInfos(Player* player, int frame, ShootParams* shootParams) {
     printf("FLIGHT: %s\n\n", (player->flight) ? "Yes" : "No");
 
     printf("reload : %d\n",shootParams->reload);
+    printf("erased obstacle : %c at (%d,%d)\n", obstacle->type, obstacle->positionX, obstacle->positionY);
 }
 
-void displayGame(Donjon* d, Player* player, int stage, int numberOfRooms, int iteration, int roomID, int axeX, int axeY, ShootParams* shootParams, int BossInfinite) {
+void displayGame(Donjon* d, Player* player, int stage, int numberOfRooms, int iteration, int roomID, int axeX, int axeY, ShootParams* shootParams, int BossInfinite, Obstacle* obstacle) {
+        // if you are in the item room print the item
+        int playerInItemRoom = d->stages[stage].rooms[roomID].name == ITEM_ROOM_NAME;
+        if(playerInItemRoom) {
+            printf("Room item : \n");
+            displayObject(d->stages[stage].rooms[roomID].object);
+        }
+
+        printMinimap(d, stage, numberOfRooms);  
 
         // if you are in the boss room, print his info
         int playerInBossRoom = d->stages[stage].rooms[roomID].name == BASE_ROOM_NAME && BossInfinite == 1;
@@ -1203,17 +1220,15 @@ void displayGame(Donjon* d, Player* player, int stage, int numberOfRooms, int it
         }
         printf("\n");
 
-        // if you are in the item room print the item
-        int playerInItemRoom = d->stages[stage].rooms[roomID].name == ITEM_ROOM_NAME;
-        if(playerInItemRoom) {
-            printf("Room item : \n");
-            displayObject(d->stages[stage].rooms[roomID].object);
-        }
-
-        printMinimap(d, stage, numberOfRooms);            
         printRoomsInfo(d, stage, roomID, axeX, axeY);
         printMap(d, stage, roomID);
-        printPlayerInfos(player, iteration, shootParams);
+        printPlayerInfos(player, iteration, shootParams, obstacle);
+}
+
+void resetObstacle(Obstacle* obstacle) {
+    obstacle->isErased=0;
+    obstacle->positionX=999;
+    obstacle->positionY=999;
 }
 
 /*
