@@ -1091,7 +1091,6 @@ void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id) 
 }
 
 void menuGame() {
-    displayEndGame();
 
     bool condition = true, condition2 = true, condition3 = true, condition4 = true, etape = true;
 	int c,c2;
@@ -1306,7 +1305,7 @@ void menuGame() {
 }
 
 void displayWaitMonsters() {
-    int randMessage = getRandomInt(0, 5);
+    int randMessage = getRandomInt(0, 6);
     system("clear");
     printf("===========================================================\n");
     printf("=========      THE BINDING OF BRIATTE        ==============\n");
@@ -1324,7 +1323,9 @@ void displayWaitMonsters() {
         printf("=========         Prepare for hell ...       ==============\n");
     } else if(randMessage == 5) {
         printf("=========         Do not forget Jesus !      ==============\n");
-    }     
+    }  else if(randMessage == 6) {
+        printf("=========      Maoa, Marxisma, Lenina ...    ==============\n");
+    }    
 
 }
 
@@ -1336,7 +1337,7 @@ void displayEndGame() {
     printf("\n");
     printf("=========   You beat Athina, the last boss !   ==============\n");
     sleep(4);
-    printf("\n========   Congratulations for your courage ! ==============\n");
+    printf("\n========   Congratulations for your courage ! ===============\n");
 
     //unlockChevailler();
 

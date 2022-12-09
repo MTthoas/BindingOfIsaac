@@ -76,6 +76,16 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     player->dmg=300;
 	while (condition) {
 
+        int allMonstersAreDead = 0;
+        for (int i = 0; i < d->stages[stage].rooms[id].numberOfMonsters ; i++) {
+                if (d->stages[stage].rooms[id].monsters[i].hpMax >= 0) {
+                    allMonstersAreDead = 1;
+                }   
+        }
+        if(!allMonstersAreDead) {
+            GestionDoorsForMobRoom(d, stage, id, 1);
+        }
+
         #ifdef _WIN32 
 		Sleep(25); 
 		#else 
