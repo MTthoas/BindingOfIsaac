@@ -1346,6 +1346,7 @@ Monster* duplicateMonster(Monster* monster) {
     newMonster->dead = monster->dead;
     newMonster->positionX = monster->positionX;
     newMonster->positionX = monster->positionY;
+    newMonster->damage = monster->damage;
 
     return newMonster;
 }

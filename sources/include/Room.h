@@ -128,9 +128,10 @@ void InitialiseOtherRoomsFromArms(Donjon * d, int stage, int numberOfRooms);
  * @param d 
  * @param stage 
  * @param roomID 
+ * @param allowChampion
  * @param allMonsters 
  */
-void initialiseMonstersInsideRoom(Donjon * d, int stage, int roomID, Monster* allMonsters);
+void initialiseMonstersInsideRoom(Donjon * d, int stage, int roomID, Monster* allMonsters, int allowChampion);
 
 /**
  * @brief Fonction initialiser toutes les room d'un étage

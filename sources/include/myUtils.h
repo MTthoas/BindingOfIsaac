@@ -11,23 +11,34 @@
  * @brief get a random integer
  * 
  * @param min minimum
- * @param max maximum of the wanted number
- * @param precision The higher the precision, better the "randomness"
+ * @param max maximum included
  * @return int 
  */
-int getRandomInt(int min, int max, int precision);
+int getRandomInt(int min, int max);
 void refresh(void);
 
-
+/**
+ * @brief Cross-platform way to wait for x microseconds
+ * 
+ * @param microseconds 
+ */
+void wait(int microseconds);
 
 /**
- * @brief Get an array with x numbers that are all unique
+ * @brief Get an array with x numbers that are all unique. From 0 to size.
  * 
- * @param number 
- * @param zero 
+ * @param size of the wanted array
  * @return int* array of unique numbers
  */
-int* generateUniqueNumbers(int size, int limit); // renvoie null si impossible à cause de la taille
+int* generateUniqueNumbers(int size);
+
+/**
+ * @brief shuffle an array of int
+ * 
+ * @param array 
+ * @param n 
+ */
+void shuffle(int *array, size_t n);
 
 /**
  * @brief Checks if a number is unique inside an array
