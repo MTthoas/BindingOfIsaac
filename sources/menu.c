@@ -1095,16 +1095,17 @@ void menuGame() {
     bool condition = true, condition2 = true, condition3 = true, condition4 = true, etape = true;
 	int c,c2;
 		
-    int stage;
+    //int stage;
     int change;
     
     int statusRoom = 0;
     int statusItem = 0;
+    int numberOfStages; 
+    numberOfStages = getUnlockedStage();
 
     menu_init();
-
+    
 	while (condition) {
-
 		c = 'p';
 
 		if (etape == true && kbhit()) {
@@ -1117,29 +1118,29 @@ void menuGame() {
 		switch (c) {
 
 			case 'g':
-
-				stage = 0;
+				//stage = 0;
 				change = 0;
 
                 Monster * arrayMonster = fichierMonsterToListeMonster();
 
                 Player* player = malloc(sizeof(Player));
-                    player->positionX = 1;
-                    player->positionY = 1;
-                    player->directionView = 'D';
-                    int characterID = choseCharacter();
-                    initialisePlayerStats(player, characterID);
+                player->positionX = 1;
+                player->positionY = 1;
+                player->directionView = 'D';
+                int characterID = choseCharacter();
+                initialisePlayerStats(player, characterID);
 
                 // Boucle pour chaque étage
-
-				for(int i = 0; i < 3; i+=1) {
+				for(int stage = 0; stage < numberOfStages ; stage+=1) {  
 
                     Donjon * d = malloc(sizeof(Donjon));
+                    d->numberOfStages = numberOfStages;
+
                     Boss * Boss = malloc(sizeof(Monster));
 
                     int id = 0;
 
-                    ShootParams *shootParams = malloc(sizeof(struct ShootParams));
+                    ShootParams* shootParams = malloc(sizeof(struct ShootParams));
                     shootParams->reload = 1;
                     shootParams->player = player;
                     shootParams->d = d;
@@ -1162,7 +1163,6 @@ void menuGame() {
 					free(d -> stages[stage].stage);
 					free(d);
 
-					stage+=1;
 					// printf("CHANGE : %d", change);
 					change = 0;
 
@@ -1178,12 +1178,13 @@ void menuGame() {
 						usleep(30000); 
 						#endif 
 					}
-
-                    // printf("TEST");
-                    // sleep(3);
 				}
 
+                displayEndGame(numberOfStages);
+                condition=false;
+
             break;
+
 			case 'i':
                 while (condition2)
                 {
@@ -1302,7 +1303,7 @@ void menuGame() {
 }
 
 void displayWaitMonsters() {
-    int randMessage = getRandomInt(0, 5);
+    int randMessage = getRandomInt(0, 6);
     system("clear");
     printf("===========================================================\n");
     printf("=========      THE BINDING OF BRIATTE        ==============\n");
@@ -1320,6 +1321,37 @@ void displayWaitMonsters() {
         printf("=========         Prepare for hell ...       ==============\n");
     } else if(randMessage == 5) {
         printf("=========         Do not forget Jesus !      ==============\n");
-    }     
+    }  else if(randMessage == 6) {
+        printf("=========      Maoa, Marxisma, Lenina ...    ==============\n");
+    }    
 
+}
+
+void displayEndGame(int run) {
+    system("clear");
+    printf("=============================================================\n");
+    printf("=========        THE BINDING OF BRIATTE        ==============\n");
+    printf("=============================================================\n");
+    printf("\n");
+    
+    if(run == 1) {
+        printf("=========        You beat Jagger !             ==============\n");
+        printf("========         You unlocked stage : %d !     ===============\n", 2);
+        unlockStage(run);
+    } else if(run == 2) {
+        printf("=========        You beat Lenina !             ==============\n");
+        printf("========         You unlocked stage : %d !     ===============\n", 3);
+        unlockStage(run);
+    } else if(run == 3) {
+        printf("=========        You beat Athina !             ==============\n");
+        printf("========         You finished the game !      ===============\n");
+        //unlockStage(run);
+    }
+   
+    //unlockChevailler();
+
+    printf("\n Click ENTER to quit...\n");
+
+    read(1, stdin, 255);
+    exit(EXIT_SUCCESS);
 }

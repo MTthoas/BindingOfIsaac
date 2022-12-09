@@ -80,6 +80,16 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     player->dmg=300;
 	while (condition) {
 
+        int allMonstersAreDead = 0;
+        for (int i = 0; i < d->stages[stage].rooms[id].numberOfMonsters ; i++) {
+                if (d->stages[stage].rooms[id].monsters[i].hpMax >= 0) {
+                    allMonstersAreDead = 1;
+                }   
+        }
+        if(!allMonstersAreDead) {
+            GestionDoorsForMobRoom(d, stage, id, 1);
+        }
+
         #ifdef _WIN32 
 		Sleep(25); 
 		#else 
@@ -157,6 +167,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     || elementAtFuturePosition == BONUS_ITEM_DOOR 
                     || elementAtFuturePosition == SPIKE
                     || elementAtFuturePosition == NEXT_STAGE
+                    || elementAtFuturePosition == END
                     || elementAtFuturePosition == HEALTH
                     || elementAtFuturePosition == ITEM
                     || (elementAtFuturePosition == ROCK && player->flight)
@@ -174,7 +185,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
                         playerMoveUp(d, stage, id, player, obstacle);
 
-                        if(elementAtFuturePosition == NEXT_STAGE) {
+                        if(elementAtFuturePosition == NEXT_STAGE || elementAtFuturePosition == END) {
                             * change = 1;
                             break;
                         }
@@ -228,6 +239,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     || elementAtFuturePosition == BONUS_ITEM_DOOR 
                     || elementAtFuturePosition == SPIKE
                     || elementAtFuturePosition == NEXT_STAGE
+                    || elementAtFuturePosition == END
                     || elementAtFuturePosition == HEALTH
                     || elementAtFuturePosition == ITEM
                     || (elementAtFuturePosition == ROCK && player->flight)
@@ -246,7 +258,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         // move down :
                         playerMoveDown(d, stage, id, player, obstacle);
                     
-                        if(elementAtFuturePosition == NEXT_STAGE) {
+                        if(elementAtFuturePosition == NEXT_STAGE || elementAtFuturePosition == END) {
                             * change = 1;
                             break;
                         }
@@ -300,6 +312,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     || elementAtFuturePosition == SPIKE
                     || elementAtFuturePosition == NEXT_STAGE
                     || elementAtFuturePosition == HEALTH
+                    || elementAtFuturePosition == END
                     || elementAtFuturePosition == ITEM
                     || (elementAtFuturePosition == ROCK && player->flight)
                     || (elementAtFuturePosition == GAP && player->flight)) {
@@ -317,7 +330,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         // move left :
                         playerMoveLeft(d, stage, id, player, obstacle);
                     
-                        if(elementAtFuturePosition == NEXT_STAGE) {
+                        if(elementAtFuturePosition == NEXT_STAGE || elementAtFuturePosition == END) {
                             * change = 1;
                             break;
                         }
@@ -376,6 +389,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     || elementAtFuturePosition == BONUS_ITEM_DOOR
                     || elementAtFuturePosition == SPIKE
                     || elementAtFuturePosition == NEXT_STAGE
+                    || elementAtFuturePosition == END
                     || elementAtFuturePosition == HEALTH
                     || elementAtFuturePosition == ITEM
                     || (elementAtFuturePosition == ROCK && player->flight)
@@ -394,14 +408,16 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         // move right :
                         playerMoveRight(d, stage, id, player, obstacle);
                     
-                        if(elementAtFuturePosition == NEXT_STAGE) {
-                            * change = 1;
-                            break;
-                        }
 
                         // if run trough item then take advantage
                         if(elementAtFuturePosition == ITEM && itemIsSet == 1 && d->stages[stage].rooms[id].name == ITEM_ROOM_NAME) {
                             setItemEffects(d->stages[stage].rooms[id].object, player, 0); 
+                            break;
+                        }
+
+                        
+                        if(elementAtFuturePosition == NEXT_STAGE || elementAtFuturePosition == END) {
+                            * change = 1;
                             break;
                         }
 
@@ -707,11 +723,16 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         int positionX_N = rand() % (d->stages[stage].rooms[id].width - 2) + 2;
                         int positionY_N = rand() % (d->stages[stage].rooms[id].height - 2) + 2;
 
-                        if(d->stages[stage].rooms[id].room[positionY_N][positionX_N] == EMPTY && positionX_N % 2 == 0){
-                            d->stages[stage].rooms[id].room[positionY_N][positionX_N] = NEXT_STAGE;
+                        if(d->stages[stage].rooms[id].room[positionY_N][positionX_N] == EMPTY && positionX_N % 2 == 0) {
+                            if(stage == (d->numberOfStages)-1) {
+                                d->stages[stage].rooms[id].room[positionY_N][positionX_N] = END;
+                            } else {
+                                d->stages[stage].rooms[id].room[positionY_N][positionX_N] = NEXT_STAGE;
+                            }
+                            
                             shootParams->condition = 0;
                             break;
-                        } else{
+                        } else {
                             continue;
                         }
                     }  
