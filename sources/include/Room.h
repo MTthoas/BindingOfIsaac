@@ -58,6 +58,8 @@ typedef struct Donjon{
     int numberStage;
     Object* headObject; // first object of object linked list
     Monster* monsters;
+    
+    int numberOfStages;
 
     // Structure Etages
     struct Stage{

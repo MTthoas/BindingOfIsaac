@@ -77,6 +77,9 @@
      */
     int extensionType(char* filename);
 
+    int getUnlockedStage();
+    void unlockStage(int stage);
+
     /**
      * @brief Ajoute "---" à la toute fin du fichier pour permettre à fichierObjectsToListeObjects() 
      * de parser le dernier object. 

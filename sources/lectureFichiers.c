@@ -20,6 +20,46 @@
 #include <string.h>
 #include <unistd.h>
 
+
+void unlockStage(int stage) {
+    FILE* file = fopen(CHEMIN_FICHIER_SAUVEGARDE, "w+");
+    if(file == NULL) {  
+        return;
+    }
+    stage+=1;
+    fprintf(file, "%d", stage);
+    fclose(file);
+}
+
+
+void unlockChevaillier() {
+    FILE* file = fopen(CHEMIN_FICHIER_PERSONNAGES, "rw");
+    if(file == NULL) {  
+        return;
+    }
+    fclose(file);
+
+    // to do
+}
+
+int getUnlockedStage() {
+    FILE* file = fopen(CHEMIN_FICHIER_SAUVEGARDE, "r");
+    if(file == NULL) { 
+        printf("Could not open load last game's data.\n");
+        sleep(2);  
+        return 1;
+    }
+    
+    char buffer[255];
+    int stage;
+    for(int i=0 ; i < 2 ; i +=1) { // stage at line 2
+        fgets(buffer, 255, file);
+    }
+    stage = atoi(buffer);
+    fclose(file);
+    return (stage>3) ? 3 : stage; // no more than 3 stages
+}
+
 int choseCharacter() {
     char* filepath = CHEMIN_FICHIER_PERSONNAGES ;
     FILE* file = fopen(filepath, "r"); // ouverture fichier

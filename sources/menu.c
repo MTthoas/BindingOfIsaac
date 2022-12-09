@@ -1100,11 +1100,12 @@ void menuGame() {
     
     int statusRoom = 0;
     int statusItem = 0;
+    int numberOfStages; 
+    numberOfStages = getUnlockedStage();
 
     menu_init();
-
+    
 	while (condition) {
-
 		c = 'p';
 
 		if (etape == true && kbhit()) {
@@ -1117,29 +1118,29 @@ void menuGame() {
 		switch (c) {
 
 			case 'g':
-
 				//stage = 0;
 				change = 0;
 
                 Monster * arrayMonster = fichierMonsterToListeMonster();
 
                 Player* player = malloc(sizeof(Player));
-                    player->positionX = 1;
-                    player->positionY = 1;
-                    player->directionView = 'D';
-                    int characterID = choseCharacter();
-                    initialisePlayerStats(player, characterID);
+                player->positionX = 1;
+                player->positionY = 1;
+                player->directionView = 'D';
+                int characterID = choseCharacter();
+                initialisePlayerStats(player, characterID);
 
                 // Boucle pour chaque étage
+				for(int stage = 0; stage < numberOfStages ; stage+=1) {  
 
-				for(int stage = 0; stage < 3; stage+=1) {
-                    stage = 2;  
                     Donjon * d = malloc(sizeof(Donjon));
+                    d->numberOfStages = numberOfStages;
+
                     Boss * Boss = malloc(sizeof(Monster));
 
                     int id = 0;
 
-                    ShootParams *shootParams = malloc(sizeof(struct ShootParams));
+                    ShootParams* shootParams = malloc(sizeof(struct ShootParams));
                     shootParams->reload = 1;
                     shootParams->player = player;
                     shootParams->d = d;
@@ -1177,12 +1178,9 @@ void menuGame() {
 						usleep(30000); 
 						#endif 
 					}
-
-                    // printf("TEST");
-                    // sleep(3);
 				}
 
-                displayEndGame();
+                displayEndGame(numberOfStages);
                 condition=false;
 
             break;
@@ -1329,20 +1327,31 @@ void displayWaitMonsters() {
 
 }
 
-void displayEndGame() {
+void displayEndGame(int run) {
     system("clear");
     printf("=============================================================\n");
     printf("=========        THE BINDING OF BRIATTE        ==============\n");
     printf("=============================================================\n");
     printf("\n");
-    printf("=========   You beat Athina, the last boss !   ==============\n");
-    sleep(4);
-    printf("\n========   Congratulations for your courage ! ===============\n");
-
+    
+    if(run == 1) {
+        printf("=========        You beat Jagger !             ==============\n");
+        printf("========         You unlocked stage : %d !     ===============\n", 2);
+        unlockStage(run);
+    } else if(run == 2) {
+        printf("=========        You beat Lenina !             ==============\n");
+        printf("========         You unlocked stage : %d !     ===============\n", 3);
+        unlockStage(run);
+    } else if(run == 3) {
+        printf("=========        You beat Athina !             ==============\n");
+        printf("========         You finished the game !      ===============\n");
+        //unlockStage(run);
+    }
+   
     //unlockChevailler();
 
     printf("\n Click ENTER to quit...\n");
-    read(1, stdin, 255);
 
+    read(1, stdin, 255);
     exit(EXIT_SUCCESS);
 }

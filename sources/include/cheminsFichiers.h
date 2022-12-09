@@ -16,6 +16,7 @@
     #define CHEMIN_FICHIER_MONSTRES "../resources/mob.mtbob"
     #define CHEMIN_FICHIER_PIECES "../resources/room.rtbob"
     #define CHEMIN_FICHIER_PERSONNAGES "../resources/characters.ctbob"
+    #define CHEMIN_FICHIER_SAUVEGARDE "../resources/run.bob"
 
 #endif
 
