@@ -1030,7 +1030,7 @@ void GameRecur(Donjon *d, Boss * boss, ShootParams * shootParams, Player * playe
     player->canTakeBonusItem = 1;
 	gestionGame(d, shootParams, boss, stage, change, player, NumberOfRoomsInt, id, axeX, axeY);
 				
-    if(player->hpMax <= 0) { // player dead
+    if(player->hp <= 0) { // player dead
         system("clear");
         printf("===========================================================\n");
         printf("=========            YOU ARE DEAD            ==============\n");

@@ -94,7 +94,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 				}
 			}
 
-        if(player->hpMax <= 0 && verifyIfBossIsThere == 1){
+        if(player->hp <= 0 && verifyIfBossIsThere == 1){
             verifyIfBossIsThere = 0;
             *pId = 0;
             condition = false;
@@ -106,7 +106,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
             pthread_cancel(thread);
             break;
         }else{
-            if(player->hpMax <= 0 ){
+            if(player->hp <= 0 ){
                 *pId = 0;
                 condition = false;
                 player->stageAxeX = 0;
@@ -617,7 +617,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
                 //changeRoomMonsterArray(idRoomForMonster, NumberOfRoomsInt, id);
 
-                if( d->stages[stage].rooms[id].name == NORMAL_ROOM_NAME && player->hpMax >= 0){
+                if( d->stages[stage].rooms[id].name == NORMAL_ROOM_NAME && player->hp >= 0){
                     monsterActivity(shootParams);
                 }   
 
@@ -687,6 +687,8 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 condition = false;
             }
 
+            printMinimap(d, stage, NumberOfRoomsInt);
+
             // printf("Axe Position X : %d / and Position Y : %d\n", axeX, axeY);
             printf("ETAGE : %d\n", stage);
             printf("Name : %c\n",d->stages[stage].rooms[id].name);
@@ -734,6 +736,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 				}
 			}
 
+            printf("\n");
 
             if( * change == 1){
                 condition = false;
@@ -1311,7 +1314,7 @@ void printRoomsInfo(Donjon* d, int stage, int roomID, int axeX, int axeY) {
 
 void printPlayerInfos(Player* player, int frame, ShootParams* shootParams, Obstacle* obstacle) {
     printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, frame);
-    printf("\nHP: %.1f / %.1f\n", player->hp, player->hpMax);
+    printf("\nHP: %.1f / %.1f\n", player->hp, player->hp);
     printf("DAMAGE  : %.1f\n", player->dmg);
     printf("SHIELD : %.1f\n", player->shield);
     printf("PIERCING SHOT : %s\n", (player->ps) ? "Yes" : "No");

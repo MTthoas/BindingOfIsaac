@@ -579,9 +579,7 @@ void * monsterAttackPlayer(void *params) {
             }
 
 
-        }
-
-        if (((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].shoot == 1){
+        }else if (((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].shoot == 1){
             while(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].hpMax > 0){
                 if (((ShootParams*)params)->player->hpMax <= 0){
                     break;
@@ -613,7 +611,6 @@ void * monsterAttackPlayer(void *params) {
                     }
                 }
 
-                ((ShootParams*)params)->reload = 1;
                 int direction = rand() % 4;
 
                 if(direction == 0){
@@ -759,7 +756,6 @@ void * BossShoot(void * params){
         shoot -> positionX = boss -> positionX;
         shoot -> positionY = boss -> positionY;
 
-        if(((ShootParams*)params) -> reload == 1){
 
             if(((ShootParams*)params) -> directionView == 'R'){
 
@@ -890,7 +886,7 @@ void * BossShoot(void * params){
                 ((ShootParams*)params)->reloadBoss = 1;
             }
 
-        }
+        
 
 
 
@@ -928,9 +924,6 @@ void * MonsterShoot(void * params){
 
         shoot -> positionX = monster -> positionX;
         shoot -> positionY = monster -> positionY;
-
-
-         if(((ShootParams*)params) -> reload == 1){
 
                 if(randMonster == 0){
                 
@@ -1076,7 +1069,7 @@ void * MonsterShoot(void * params){
 
                 }         
 
-        }
+        
     free(shoot);
     free(monster);
     return NULL;
@@ -1136,7 +1129,6 @@ void * Jagger(void *params){
 
         int randMonster = rand() % 2;
 
-        ((ShootParams*)params)->reload = 1;
 
         if(randMonster == 0){
 
@@ -1151,12 +1143,7 @@ void * Jagger(void *params){
 
                 }else{
                     if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->boss ->positionY][((ShootParams*)params)->boss ->positionX-2] == 'P'){
-                            if(((ShootParams*)params)->player->shield <= 0){
-                                ((ShootParams*)params)->player->hpMax -= 1;
-                            } else {
-                                ((ShootParams*)params)->player->shield -= 1;
-                            }
-                            ((ShootParams*)params)->reload = 0;
+                           playerLoseLife(((ShootParams*)params)->player, 1);
                     }
                 }
 
@@ -1173,12 +1160,7 @@ void * Jagger(void *params){
 
                 }else{
                     if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->boss ->positionY][((ShootParams*)params)->boss ->positionX+2] == 'P'){
-                            if(((ShootParams*)params)->player->shield <= 0){
-                                ((ShootParams*)params)->player->hpMax -= 1;
-                            } else {
-                                ((ShootParams*)params)->player->shield -= 1;
-                            }
-                            ((ShootParams*)params)->reload = 0;
+                           playerLoseLife(((ShootParams*)params)->player, 1);
                     }
 
                 }
@@ -1199,11 +1181,7 @@ void * Jagger(void *params){
                     
                 }else{
                     if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->boss ->positionY-1][((ShootParams*)params)->boss ->positionX] == 'P'){
-                            if(((ShootParams*)params)->player->shield <= 0){
-                                ((ShootParams*)params)->player->hpMax -= 1;
-                            } else {
-                                ((ShootParams*)params)->player->shield -= 1;
-                            }
+                            playerLoseLife(((ShootParams*)params)->player, 1);
                               shoot = 1;
                     }
                 }
@@ -1217,12 +1195,7 @@ void * Jagger(void *params){
 
                 }else{
                     if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->boss ->positionY+1][((ShootParams*)params)->boss ->positionX] == 'P'){
-                            if(((ShootParams*)params)->player->shield <= 0){
-                                ((ShootParams*)params)->player->hpMax -= 1;
-                            } else {
-                                ((ShootParams*)params)->player->shield -= 1;
-                            }
-                            ((ShootParams*)params)->reload = 0;
+                           playerLoseLife(((ShootParams*)params)->player, 1);
                     }
                 }
 

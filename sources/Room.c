@@ -570,7 +570,7 @@ void InitialisationGame(Donjon *d, int stageNum, Monster *arrayMonster)
                     #ifdef _WIN32
                     Sleep(1000);
                     #else
-                    //usleep(1000000);
+                    usleep(1000000);
                     #endif
                 }
             }
