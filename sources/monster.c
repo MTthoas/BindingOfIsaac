@@ -299,10 +299,9 @@ void * monsterAttackPlayer(void *params) {
 
         if(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].shoot != 1 ){
             while(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].hpMax > 0){
-                if (((ShootParams*)params)->player->hpMax <= 0){
-                    break;
+                if (((ShootParams*)params)->player->hp <= 0){
+                    pthread_exit(NULL);
                 }
-            
                 //Le monstre se déplace vers la position du joueur pour lui infliger des dégâts de corps à corps ( hpMax - 1) dès qu’ils arrivent au niveau d’une case adjacente au player
 
                 #ifdef _WIN32 
@@ -582,8 +581,8 @@ void * monsterAttackPlayer(void *params) {
 
         }else if (((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].shoot == 1){
             while(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].hpMax > 0){
-                if (((ShootParams*)params)->player->hpMax <= 0){
-                    break;
+                if (((ShootParams*)params)->player->hp <= 0){
+                    pthread_exit(NULL);
                 }
                 //Le monstre se depalce se déplacent aléatoirement dans la salle tout en visant le joueur. 
                 //Le projectile part dans la direction jusqu’à entrer en contact avec un élément (mur, joueur ou rocher) sauf cas exceptionnel (tir spectral). 
@@ -899,7 +898,7 @@ void * BossShoot(void * params){
 }
 
 void * MonsterShoot(void * params){
-
+    return NULL;
     Shoot * shoot = malloc(sizeof(Shoot));
     Monster * monster = malloc(sizeof(Monster));
     int id = ((ShootParams*)params)->id;

@@ -553,7 +553,6 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         }
 
                         pthread_create(&thread, NULL, Jagger, shootParams);
-                        printf("Nouveau boss !\n");sleep(2);
                         //shootParams->boss->hpMax = 0;
                         //shootParams->boss->dead = 1;
                         // if( Boss->dead == 1){
@@ -627,8 +626,6 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 if(shootParams->boss->hpMax <=  0){
 
                     system("clear");
-                    player->canTakeBonusItem=1;
-
 
                     if(player->canTakeBonusItem) {
                         GestionDoorsForMobRoom(d, stage, id, 1);
