@@ -293,8 +293,11 @@ void * monsterAttackPlayer(void *params) {
     int stage = ((ShootParams*)params)->stage;
     int idMonster = ((ShootParams*)params)->idMonster;
 
-        if(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].shoot != 1){
+        if(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].shoot != 1 ){
             while(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].hpMax > 0){
+                if (((ShootParams*)params)->player->hpMax <= 0){
+                    break;
+                }
             
                 //Le monstre se déplace vers la position du joueur pour lui infliger des dégâts de corps à corps ( hpMax - 1) dès qu’ils arrivent au niveau d’une case adjacente au player
 
@@ -341,12 +344,38 @@ void * monsterAttackPlayer(void *params) {
 
                             ((ShootParams*)params) -> directionView = 'L';
 
+                        }else if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX-2] != ' '
+                         && ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX-2] != 'P'
+                         && ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].flight != 1)
+                        {
+                            if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX-2] == ' '){
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX--;
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX--;
+
+                                ((ShootParams*)params) -> directionView = 'L';                                
+
+                            }else if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX+2] == ' '){
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX++;
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX++;
+
+                                ((ShootParams*)params) -> directionView = 'R';                                
+
+                            }else if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY-1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == ' '){
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY--;
+                    
+                                ((ShootParams*)params) -> directionView = 'T';                                
+
+                            }else if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY+1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == ' '){
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY++;
+                    
+                                ((ShootParams*)params) -> directionView = 'B';                                
+
+                            }
                         }
+
                         if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX-2] == 'P'){
-                            if(((ShootParams*)params)->player->shield <= 0){
-                                ((ShootParams*)params)->player->hpMax -= 1;
-                            } else {
-                                ((ShootParams*)params)->player->shield -= 1;
+                            if(((ShootParams*)params)->d->stages[stage].rooms[id].name == 'R'){
+                               playerLoseLife(((ShootParams*)params)->player, 1);   
                             }
                         }
                         if(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].flight == 1){
@@ -361,6 +390,7 @@ void * monsterAttackPlayer(void *params) {
                             } 
                         }
 
+                    
 
 
                     }else{
@@ -374,12 +404,37 @@ void * monsterAttackPlayer(void *params) {
 
                             ((ShootParams*)params) -> directionView = 'R';
 
+                        }else if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX-2] != ' '
+                         && ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX-2] != 'P'
+                         && ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].flight != 1)
+                        {
+                            if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX-2] == ' '){
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX--;
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX--;
+
+                                ((ShootParams*)params) -> directionView = 'L';                                
+
+                            }else if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX+2] == ' '){
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX++;
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX++;
+
+                                ((ShootParams*)params) -> directionView = 'R';                                
+
+                            }else if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY-1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == ' '){
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY--;
+                    
+                                ((ShootParams*)params) -> directionView = 'T';                                
+
+                            }else if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY+1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == ' '){
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY++;
+                    
+                                ((ShootParams*)params) -> directionView = 'B';                                
+
+                            }
                         }
                         if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX+2] == 'P'){
-                            if(((ShootParams*)params)->player->shield <= 0){
-                                ((ShootParams*)params)->player->hpMax -= 1;
-                            } else {
-                                ((ShootParams*)params)->player->shield -= 1;
+                             if(((ShootParams*)params)->d->stages[stage].rooms[id].name == 'R'){
+                               playerLoseLife(((ShootParams*)params)->player, 1);   
                             }
                         }
                         if(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].flight == 1){
@@ -395,7 +450,7 @@ void * monsterAttackPlayer(void *params) {
                         }
 
                         }
-
+                        
                     }
 
                 }else{
@@ -407,12 +462,37 @@ void * monsterAttackPlayer(void *params) {
                             ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY--;
                             ((ShootParams*)params) -> directionView = 'T';
 
+                        }else if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX-2] != ' '
+                         && ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX-2] != 'P'
+                         && ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].flight != 1)
+                        {
+                            if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX-2] == ' '){
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX--;
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX--;
+
+                                ((ShootParams*)params) -> directionView = 'L';                                
+
+                            }else if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX+2] == ' '){
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX++;
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX++;
+
+                                ((ShootParams*)params) -> directionView = 'R';                                
+
+                            }else if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY-1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == ' '){
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY--;
+                    
+                                ((ShootParams*)params) -> directionView = 'T';                                
+
+                            }else if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY+1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == ' '){
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY++;
+                    
+                                ((ShootParams*)params) -> directionView = 'B';                                
+
+                            }
                         }
                         if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY-1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == 'P'){
-                            if(((ShootParams*)params)->player->shield <= 0){
-                                ((ShootParams*)params)->player->hpMax -= 1;
-                            } else {
-                                ((ShootParams*)params)->player->shield -= 1;
+                             if(((ShootParams*)params)->d->stages[stage].rooms[id].name == 'R'){
+                               playerLoseLife(((ShootParams*)params)->player, 1);   
                             }
                         }
                         if(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].flight == 1){
@@ -425,7 +505,6 @@ void * monsterAttackPlayer(void *params) {
                             } 
                         }
 
-
                     }else if(DiffPositionY < 0){
                     
                         if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY+1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == ' '){
@@ -433,12 +512,37 @@ void * monsterAttackPlayer(void *params) {
                             ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY++;
                             ((ShootParams*)params) -> directionView = 'B';
 
+                        }else if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX-2] != ' '
+                         && ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX-2] != 'P'
+                         && ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].flight != 1)
+                        {
+                            if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX-2] == ' '){
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX--;
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX--;
+
+                                ((ShootParams*)params) -> directionView = 'L';                                
+
+                            }else if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX+2] == ' '){
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX++;
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX++;
+
+                                ((ShootParams*)params) -> directionView = 'R';                                
+
+                            }else if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY-1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == ' '){
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY--;
+                    
+                                ((ShootParams*)params) -> directionView = 'T';                                
+
+                            }else if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY+1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == ' '){
+                                ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY++;
+                    
+                                ((ShootParams*)params) -> directionView = 'B';                                
+
+                            }
                         }
                         if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY+1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == 'P'){
-                            if(((ShootParams*)params)->player->shield <= 0){
-                                ((ShootParams*)params)->player->hpMax -= 1;
-                            } else {
-                                ((ShootParams*)params)->player->shield -= 1;
+                             if(((ShootParams*)params)->d->stages[stage].rooms[id].name == 'R'){
+                               playerLoseLife(((ShootParams*)params)->player, 1);   
                             }
                         }
                         if(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].flight == 1){
@@ -450,7 +554,7 @@ void * monsterAttackPlayer(void *params) {
                                 ((ShootParams*)params) -> directionView = 'B';
                             } 
                         }
-
+                        
                     }
 
                 }               
@@ -460,16 +564,14 @@ void * monsterAttackPlayer(void *params) {
                 }
 
             }
-            //Le monstre est mort, 5% de chance de drop un shield ou un health sur sa position de mort
+             //Le monstre est mort, 5% de chance de drop un shield ou un health sur sa position de mort
             if(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].hpMax <= 0){
+               ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] = ' ';
                 int random = rand() % 100;
                 if(random < 5){
                     //Prendre un objet qui health ou shield dans d->headObject
-                    
 
                     ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] = 'H';
-                } else if(random < 10){
-                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] = 'G';
                 }
             }
 
@@ -477,8 +579,10 @@ void * monsterAttackPlayer(void *params) {
         }
 
         if (((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].shoot == 1){
-            pthread_t threadM;
             while(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].hpMax > 0){
+                if (((ShootParams*)params)->player->hpMax <= 0){
+                    break;
+                }
                 //Le monstre se depalce se déplacent aléatoirement dans la salle tout en visant le joueur. 
                 //Le projectile part dans la direction jusqu’à entrer en contact avec un élément (mur, joueur ou rocher) sauf cas exceptionnel (tir spectral). 
                 //Le monstre ne peut tirer qu’un seul projectile à la fois
@@ -506,7 +610,8 @@ void * monsterAttackPlayer(void *params) {
                     }
                 }
 
-                int direction = rand() % 8;
+                ((ShootParams*)params)->reload = 1;
+                int direction = rand() % 4;
 
                 if(direction == 0){
                     if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY-1][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == ' '){
@@ -573,26 +678,59 @@ void * monsterAttackPlayer(void *params) {
                     }
 
                 }
+                     
 
-                int shoot = rand() % 2;
+                if (idMonster == 0){
+                    pthread_t threadMZero;
+                    pthread_create(&threadMZero, NULL, MonsterShoot, params);
 
-                if(shoot == 0){
-                    pthread_create(&threadM, NULL, MonsterShoot, params);
                 }
+                if (idMonster == 1){
+                    pthread_t threadMUn;
+                    pthread_create(&threadMUn, NULL, MonsterShoot, params);
 
+                }
+                if (idMonster == 2){
+                    pthread_t threadMDeux;
+                    pthread_create(&threadMDeux, NULL, MonsterShoot, params);
+
+                }
+                if (idMonster == 3){
+                    pthread_t threadMTrois;
+                    pthread_create(&threadMTrois, NULL, MonsterShoot, params);
+
+                }
+                if (idMonster == 4){
+                    pthread_t threadMQuatre;
+                    pthread_create(&threadMQuatre, NULL, MonsterShoot, params);
+
+                }
+                if (idMonster == 5){
+                    pthread_t threadMCinq;
+                    pthread_create(&threadMCinq, NULL, MonsterShoot, params);
+
+                }
+  
                 if(((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] == ' '){
                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] = letter;
                 }
 
-                
+                 //Le monstre est mort, 5% de chance de drop un shield ou un health sur sa position de mort
+                if(((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].hpMax <= 0){
+                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] = ' ';
+                    int random = rand() % 100;
+                    if(random < 5){
+                        //Prendre un objet qui health ou shield dans d->headObject
+
+                        ((ShootParams*)params)->d->stages[stage].rooms[id].room[((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY][((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX] = 'H';
+                }
 
             }
-            //Le monstre est mort, 5% de chance de drop un shield ou un health sur sa position de mort
-
+            
         }
+       }
 
     return NULL;
-
 }
 
 void * BossShoot(void * params){
@@ -626,13 +764,9 @@ void * BossShoot(void * params){
 
                 while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX + 2] == ' ' && ((ShootParams*)params)->reloadBoss  == 0 ){
 
-                        if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 4] == 'P'){
+                        if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] == 'P'){
                             
-                                if(((ShootParams*)params)->player->shield <= 0){
-                                    ((ShootParams*)params)->player->hpMax -= 1;
-                                } else {
-                                    ((ShootParams*)params)->player->shield -= 1;
-                                }
+                                playerLoseLife(((ShootParams*)params)->player, 1);
                                 break;
         
                     }
@@ -663,13 +797,9 @@ void * BossShoot(void * params){
 
                 while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX - 2] == ' ' && ((ShootParams*)params)->reloadBoss  == 0){
 
-                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 4] == 'P'){
+                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] == 'P'){
                             
-                        if(((ShootParams*)params)->player->shield <= 0){
-                            ((ShootParams*)params)->player->hpMax -= 1;
-                        } else {
-                            ((ShootParams*)params)->player->shield -= 1;
-                        }
+                        playerLoseLife(((ShootParams*)params)->player, 1);
                         break;
         
                     }
@@ -700,13 +830,9 @@ void * BossShoot(void * params){
 
                 while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY - 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reloadBoss  == 0){
 
-                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY - 2][shoot->positionX] == 'P'){
+                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY - 1][shoot->positionX] == 'P'){
                             
-                            if(((ShootParams*)params)->player->shield <= 0){
-                                ((ShootParams*)params)->player->hpMax -= 1;
-                            } else {
-                                ((ShootParams*)params)->player->shield -= 1;
-                            }
+                            playerLoseLife(((ShootParams*)params)->player, 1);
                             break;
         
                     }
@@ -736,13 +862,9 @@ void * BossShoot(void * params){
 
                 while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY + 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reloadBoss  == 0){ 
 
-                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY + 2][shoot->positionX] == 'P'){
+                    if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY + 1][shoot->positionX] == 'P'){
                             
-                                if(((ShootParams*)params)->player->shield <= 0){
-                                    ((ShootParams*)params)->player->hpMax -= 1;
-                                } else {
-                                    ((ShootParams*)params)->player->shield -= 1;
-                                }
+                                playerLoseLife(((ShootParams*)params)->player, 1);
                                 break;
         
                     }
@@ -780,16 +902,20 @@ void * MonsterShoot(void * params){
 
     Shoot * shoot = malloc(sizeof(Shoot));
     Monster * monster = malloc(sizeof(Monster));
-
-
     int id = ((ShootParams*)params)->id;
     int stage = ((ShootParams*)params)->stage;
     int idMonster = ((ShootParams*)params)->idMonster;
+    char letter = ((ShootParams*)params)->d->stages[stage].rooms[id].monsters[idMonster].firstLetter;
+    letter = tolower(letter);
+    int positionPlayerX = ((ShootParams*)params)->player->positionX;
+    int positionPlayerY = ((ShootParams*)params)->player->positionY;
+    int DiffPositionX = ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionX - positionPlayerX;
+    int DiffPositionY = ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].positionY - positionPlayerY;
+    int randMonster = rand() % 2;
 
-    char letter = ((ShootParams*)params)->d -> stages[stage].rooms[id].monsters[idMonster].firstLetter;
 
-     for (int i = 0; i < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].height; i++) {
-        for(int y = 0; y < ((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].width; y++){
+     for (int i = 0; i < ((ShootParams*)params)->d->stages[stage].rooms[id].height; i++) {
+        for(int y = 0; y < ((ShootParams*)params)->d->stages[stage].rooms[id].width; y++){
             if(((ShootParams*)params)->d -> stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[i][y] == letter){
                 monster -> positionX = y;
                 monster -> positionY = i;
@@ -800,161 +926,159 @@ void * MonsterShoot(void * params){
         shoot -> positionX = monster -> positionX;
         shoot -> positionY = monster -> positionY;
 
+
+         if(((ShootParams*)params) -> reload == 1){
+
+                if(randMonster == 0){
+                
+                    if(DiffPositionX > 0){
+
+
+                        ((ShootParams*)params)->reloadMonster = 0;
+
+                        while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX - 2] == ' ' && ((ShootParams*)params)->reloadMonster  == 0){
+                        
+                            if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] == 'P'){
+                                    
+                                if(((ShootParams*)params)->d->stages[stage].rooms[id].name == 'R'){
+                                       playerLoseLife(((ShootParams*)params)->player, 1);   
+                                }
+                                break;
+                
+                            }
         
+                            ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] = '*';
+        
+                            #ifdef _WIN32 
+                                Sleep(400); 
+                            #else 
+                                usleep(40000); 
+                            #endif
+        
+                            ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] = ' ';
+                            
+                            
+                            shoot -> positionX = shoot -> positionX - 2;
+        
+                        }
+        
+                        
+                        ((ShootParams*)params)->reloadMonster = 1;
 
-    // if(((ShootParams*)params) -> directionView == 'R'){
 
-    //     ((ShootParams*)params)->reloadMonster = 0;
-
-    //     while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX + 2] == ' ' && ((ShootParams*)params)->reloadMonster  == 0 ){
-
-    //             if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 4] == 'P'){
+                    }else{
                     
-    //                     if(((ShootParams*)params)->player->shield <= 0){
-    //                         ((ShootParams*)params)->player->hpMax -= 1;
-    //                     } else {
-    //                         ((ShootParams*)params)->player->shield -= 1;
-    //                     }
-    //                     break;
-        
-    //         }
+                        if(DiffPositionX < 0){
+                        
+                               ((ShootParams*)params)->reloadMonster = 0;
 
-    //         ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] = '*';
+                                while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX + 2] == ' ' && ((ShootParams*)params)->reloadMonster  == 0 ){
+                                
+                                        if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] == 'P'){
+                                 
+                                        if(((ShootParams*)params)->d->stages[stage].rooms[id].name == 'R'){
+                                            playerLoseLife(((ShootParams*)params)->player,1);
+                                                    break;
+                                        }         
 
-    //         #ifdef _WIN32 
-    //             Sleep(290); 
-    //         #else 
-    //             usleep(29000); 
-    //         #endif
+                                    }
+
+                                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] = '*';
+
+                                    #ifdef _WIN32 
+                                        Sleep(400); 
+                                    #else 
+                                        usleep(40000); 
+                                    #endif
 
 
 
-    //         ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] = ' ';
-            
-    //         shoot -> positionX =  shoot -> positionX + 2;
+                                    ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX + 2] = ' ';
 
-    //     }
-        
-    //     ((ShootParams*)params)->reloadMonster = 1;
-        
-    // }
+                                    shoot -> positionX =  shoot -> positionX + 2;
 
-    // if(((ShootParams*)params) -> directionView == 'L'){
+                                }
 
-    //             ((ShootParams*)params)->reloadMonster = 0;
+                                ((ShootParams*)params)->reloadMonster = 1;
+                        }
 
-    //     while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY][shoot->positionX - 2] == ' ' && ((ShootParams*)params)->reloadMonster  == 0){
+                    }
 
-    //         if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 4] == 'P'){
+                }else{
+                
+                    if(DiffPositionY > 0){
                     
-    //             if(((ShootParams*)params)->player->shield <= 0){
-    //                 ((ShootParams*)params)->player->hpMax -= 1;
-    //             } else {
-    //                 ((ShootParams*)params)->player->shield -= 1;
-    //             }
-    //             break;
-        
-    //         }
+                       ((ShootParams*)params)->reloadMonster = 0;
 
-    //         ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] = '*';
+                        while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY - 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reloadMonster  == 0){
+                        
+                            if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY - 1][shoot->positionX] == 'P'){
 
-    //         #ifdef _WIN32 
-    //             Sleep(290); 
-    //         #else 
-    //             usleep(29000); 
-    //         #endif
+                                    if(((ShootParams*)params)->d->stages[stage].rooms[id].name == 'R'){
+                                       playerLoseLife(((ShootParams*)params)->player, 1);   
+                                    }
+                                    break;
 
-    //         ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY][shoot->positionX - 2] = ' ';
-            
-            
-    //         shoot -> positionX = shoot -> positionX - 2;
+                            }
 
-    //     }
 
-        
-    //     ((ShootParams*)params)->reloadMonster = 1;
-        
-    // }
+                            ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY-1][shoot->positionX] = '*';
 
-    // if(((ShootParams*)params) -> directionView == 'T'){
+                            #ifdef _WIN32 
+                                Sleep(400); 
+                            #else 
+                                usleep(40000); 
+                            #endif
 
-    //             ((ShootParams*)params)->reloadMonster = 0;
+                            ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY-1][shoot->positionX] = ' ';
 
-    //     while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY - 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reloadMonster  == 0){
+                            shoot -> positionY--;
 
-    //         if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY - 2][shoot->positionX] == 'P'){
+                        }
+
+                        ((ShootParams*)params)->reloadMonster = 1;
+
+                    }else if(DiffPositionY < 0){
                     
-    //                 if(((ShootParams*)params)->player->shield <= 0){
-    //                     ((ShootParams*)params)->player->hpMax -= 1;
-    //                 } else {
-    //                     ((ShootParams*)params)->player->shield -= 1;
-    //                 }
-    //                 break;
-        
-    //         }
+                        ((ShootParams*)params)->reloadMonster = 0;
+
+                        while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY + 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reloadMonster  == 0){ 
+                        
+                            if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY + 1][shoot->positionX] == 'P'){
+
+                                    if(((ShootParams*)params)->d->stages[stage].rooms[id].name == 'R'){
+                                       playerLoseLife(((ShootParams*)params)->player, 1);   
+                                    }
+                                        break;
+
+                            }
 
 
-    //         ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY-1][shoot->positionX] = '*';
+                            ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY + 1][shoot->positionX] = '*';
 
-    //         #ifdef _WIN32 
-    //             Sleep(290); 
-    //         #else 
-    //             usleep(29000); 
-    //         #endif
+                            #ifdef _WIN32 
+                                Sleep(400); 
+                            #else 
+                                usleep(40000); 
+                            #endif
 
-    //         ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY-1][shoot->positionX] = ' ';
+                            ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY + 1][shoot->positionX] = ' ';
 
-    //         shoot -> positionY--;
+                            shoot -> positionY++;
 
-    //     }
+                        }
 
-    //     ((ShootParams*)params)->reloadMonster = 1;
+                        ((ShootParams*)params)->reloadMonster = 1;
+                    }
 
-    // }
+                }         
 
-    // if(((ShootParams*)params) -> directionView == 'B'){
-
-    //             ((ShootParams*)params)->reloadMonster = 0;
-
-    //     while(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot->positionY + 1][shoot->positionX] == ' ' && ((ShootParams*)params)->reloadMonster  == 0){ 
-
-    //         if(((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY + 2][shoot->positionX] == 'P'){
-                    
-    //                     if(((ShootParams*)params)->player->shield <= 0){
-    //                         ((ShootParams*)params)->player->hpMax -= 1;
-    //                     } else {
-    //                         ((ShootParams*)params)->player->shield -= 1;
-    //                     }
-    //                     break;
-        
-    //         }
-
-    
-    //         ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY + 1][shoot->positionX] = '*';
-
-    //         #ifdef _WIN32 
-    //             Sleep(290); 
-    //         #else 
-    //             usleep(29000); 
-    //         #endif
-
-    //         ((ShootParams*)params)->d->stages[stage].rooms[id].room[shoot -> positionY + 1][shoot->positionX] = ' ';
-
-    //         shoot -> positionY++;
-
-    //     }
-
-    //     ((ShootParams*)params)->reloadMonster = 1;
-    // }
-
-    (void)params;
-
+        }
     free(shoot);
     free(monster);
     return NULL;
 
 }
-
 
 void * Jagger(void *params){
 
@@ -1235,7 +1359,7 @@ void * LeninaShoot(void * params) {
     
     }
     if(((ShootParams*)params)->d->stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[shoot->positionY][shoot->positionX + 2] == 'P'){
-        playerLoseLife(((ShootParams*)params)->player, 1);
+        playerLoseLife(((ShootParams*)params)->player,1);
     }
 
     // shoot left
@@ -1265,7 +1389,7 @@ void * LeninaShoot(void * params) {
     
     }
     if(((ShootParams*)params)->d->stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[shoot->positionY][shoot->positionX - 2] == 'P'){
-        ((ShootParams*)params)->player->hpMax = ((ShootParams*)params)->player->hpMax - 1;
+        playerLoseLife(((ShootParams*)params)->player,1);
         if(((ShootParams*)params)->player->hpMax <= 0) { // dead player
             //Le joueur est mort, fin partie 
         }
@@ -1301,7 +1425,7 @@ void * LeninaShoot(void * params) {
         ((ShootParams*)params)->reloadBoss = 1;
     }
     if(((ShootParams*)params)->d->stages[((ShootParams*)params)->stage].rooms[((ShootParams*)params)->id].room[shoot->positionY+1][shoot->positionX] == 'P'){
-        ((ShootParams*)params)->player->hpMax = ((ShootParams*)params)->player->hpMax - 1;
+        playerLoseLife(((ShootParams*)params)->player,1);
         if(((ShootParams*)params)->player->hpMax <= 0) { // dead player
             //Le joueur est mort, fin partie 
         }

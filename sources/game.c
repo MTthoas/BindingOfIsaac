@@ -16,6 +16,9 @@
 
 #define KRED "\x1B[31m"
 #define KNRM "\x1B[0m"
+#define YELLOW "\x1b[33m"
+#define CYAN "\x1b[36m"
+#define GREEN "\x1b[32m"
 
 #include "include/mystring.h"
 #include "game.h"
@@ -38,6 +41,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     int iteration = 0;
     bool condition = true;  
     int spawnMonsterVar = 0;
+    // char oldRoom = 'R';
 
 
     Monster * monsterVide = malloc(sizeof(Monster));
@@ -48,20 +52,9 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     pthread_t thread;
     int c;
 
-    for (int i = 0; i < NumberOfRoomsInt; i++) {
-        printf("ID : %d\n", d-> stages[stage].rooms[i].id);
-        printf("AxeX : %d\n", d-> stages[stage].rooms[i].AxeX);
-        printf("AxeY : %d\n", d-> stages[stage].rooms[i].AxeY);
-        
-        for(int y = 0; y < d-> stages[stage].rooms[i].height; y++) {
-            for(int v = 0; v < d-> stages[stage].rooms[i].width; v++) {
-                printf("%c", d-> stages[stage].rooms[i].room[y][v]);
-            }
-        }
-    }
 
     //stats pour cheater :
-    player->hpMax = 100;
+    // player->hpMax = 10;
     // player->flight = 1;
 	while (condition) {
 
@@ -71,17 +64,42 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 		usleep(25000); 
 		#endif 
 
-        if(player->hpMax <= 0){
+        // Pour le boss
+
+        int verifyIfBossIsThere = 0;
+        
+      for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
+			for (int y = 0; y < d->stages[stage].rooms[id].width - 1; y++) {
+					if (y % 2 == 0) {
+                        if(d->stages[stage].rooms[id].room[i][y] == 'J'){
+                            verifyIfBossIsThere = 1;
+                        }
+					}
+				}
+			}
+
+        if(player->hpMax <= 0 && verifyIfBossIsThere == 1){
+            verifyIfBossIsThere = 0;
             *pId = 0;
             condition = false;
             player->stageAxeX = 0;
             player->stageAxeY = 0;
             PurgeRoomOfBoss(d, stage, id);
-            GestionDoorsForMobRoom(d, stage, id, 1);
+            GestionDoorsForMobRoom(d, stage, id, 0);
             d->stages[stage].rooms[id].name = PLAYER;
             pthread_cancel(thread);
             break;
+        }else{
+            if(player->hpMax <= 0 ){
+                *pId = 0;
+                condition = false;
+                player->stageAxeX = 0;
+                player->stageAxeY = 0;
+                d->stages[stage].rooms[id].name = PLAYER;
+            }
         }
+
+
 
         c = 'p';
 		iteration++;
@@ -93,27 +111,6 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 		if (c == 'x') { // glitch to de-lock doors without beating the monsters
             GestionDoorsForMobRoom(d, stage, id, 1);
 		}
-
-        if (c == 'm') { // afficher tous les monstres
-            for(int room=0 ; room < NumberOfRoomsInt ; room+=1) {
-                printf("room : %d\nnumber of monsters : %d\n", room, d->stages[stage].rooms[room].numberOfMonsters);
-                for(int i = 0 ; i < d->stages[stage].rooms[room].numberOfMonsters ; i+=1) {
-                    printf("monster : %s", d->stages[stage].rooms[room].monsters[i].name);
-                }
-                printf("\n");
-            }
-
-            sleep(1);
-        }
-
-        if (c == 'n') { // afficher les monstres de la salle
-            printf("id: %d, number of monsters : %d\n", id, d->stages[stage].rooms[id].numberOfMonsters);
-            for(int i = 0 ; i < d->stages[stage].rooms[id].numberOfMonsters ; i+=1) {
-                printf("monster : %s", d->stages[stage].rooms[id].monsters[i].name);
-                 printf("\n");
-            }
-            sleep(1); 
-        }
 
 		if (c != 'e') {
  
@@ -391,7 +388,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
                 break;
 
-                case '8': ;
+                case 'o': ;
                     // Shoot Up                 
                     if (shootParams->reload == 1){
                         if( shootParams->boss == NULL){
@@ -412,7 +409,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     }
                 break;
                 
-                case '5': ;
+                case 'l': ;
                     // Shoot Down
                     if (shootParams->reload == 1){
                         if( shootParams->boss == NULL){
@@ -431,7 +428,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
                 break;
                 
-                case '4': ;
+                case 'k': ;
                     // Shoot Left
                     if (shootParams->reload == 1){
                         if( shootParams->boss == NULL){
@@ -449,7 +446,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     }
                 break;
 
-                case '6': ;
+                case 'm': ;
                     // Shoot Right
                     pthread_t t5;
                     if (shootParams->reload == 1){
@@ -530,6 +527,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
             gestionPassing(d, player, stage, id, NumberOfRoomsInt);
            
             if(changeOfRoom == 1) {
+                // oldRoom = d->stages[stage].rooms[id].name;
                 *pId = gestionRoom(d, NumberOfRoomsInt, stage, axeX, axeY);   
             
                 OptimiseDoors(d, stage, axeX, axeY, id, NumberOfRoomsInt );
@@ -543,9 +541,10 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
                 //changeRoomMonsterArray(idRoomForMonster, NumberOfRoomsInt, id);
 
-                if( d->stages[stage].rooms[id].name == NORMAL_ROOM_NAME){
+                if( d->stages[stage].rooms[id].name == NORMAL_ROOM_NAME && player->hpMax >= 0 ) {
                     monsterActivity(shootParams);
                 }   
+
             }
             
             if(BossInfinite == 1) {
@@ -591,51 +590,68 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
             // printf("Axe Position X : %d / and Position Y : %d\n", axeX, axeY);
             printf("ETAGE : %d\n", stage);
             printf("Name : %c\n",d->stages[stage].rooms[id].name);
-            printf("ID : %d\n", id);
-            printf("AXE X : %d\n", axeX);
-            printf("AXE Y : %d\n", axeY);
             // printf("ID : %d\n", id);
+            // printf("AXE X : %d\n", axeX);
+            // printf("AXE Y : %d\n", axeY);
+            // printf("ID : %d\n", id);
+
             if(d->stages[stage].rooms[id].name == BASE_ROOM_NAME && BossInfinite == 1){
-                printf("Boss : %s\n", shootParams->boss->name);
                 printf("Boss HP : %.f\n", shootParams->boss->hpMax);
             }
-            printf("\n");
-            printf("HP player: %.2f\n", player->hpMax);
+            printf("      \n");
+            printf("      HP player: %.2f\n", player->hpMax);
 
             if(d->stages[stage].rooms[id].name == ITEM_ROOM_NAME) {
-                printf("Room item : \n");
+                printf("      Room item : \n");
                 displayObject(d->stages[stage].rooms[id].object);
             }
 
 			for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
+                printf("\n       ");
 				for (int y = 0; y < d->stages[stage].rooms[id].width - 1; y++) {
 					if (y % 2 == 0) {
-						if(d-> stages[stage].rooms[id].room[i][y] == PLAYER){
-
-							printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
-		
-						}else{
-							printf("%c ", d-> stages[stage].rooms[id].room[i][y]);
-						}
+                        if(d->stages[stage].rooms[id].room[i][y] == 'L'){
+                            printf("%s", KRED);
+                            printf("%c  ", d->stages[stage].rooms[id].room[i][y]);
+                            printf("%s", KNRM);
+                        }else{
+                            if(d-> stages[stage].rooms[id].room[i][y] == 'D'){
+                                printf("%s", GREEN);
+                                printf("%c  ", d-> stages[stage].rooms[id].room[i][y]);
+                                printf("%s", KNRM);
+                            }else{
+                                if(d-> stages[stage].rooms[id].room[i][y] == 'B'){
+                                    printf("%s", YELLOW);
+                                        printf("%c  ", d-> stages[stage].rooms[id].room[i][y]);
+                                        printf("%s", KNRM);
+                                }else{
+                                    if(d-> stages[stage].rooms[id].room[i][y] == PLAYER){
+                                        printf("%c  ", d-> stages[stage].rooms[id].room[i][y]);
+                                    }else{
+                                        printf("%c  ", d-> stages[stage].rooms[id].room[i][y]);
+                                    }
+                                }
+                            }
+                        }
 					}
 				}
-				printf("\n");
-				
 			}
 
-            printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, iteration);
-            printf("\nHP: %.1f\n", player->hpMax);
-            printf("DAMAGE  : %.1f\n", player->dmg);
-            printf("SHIELD : %.1f\n", player->shield);
-            printf("PIERCING SHOT : %s\n", (player->ps) ? "Yes" : "No");
-            printf("SPECTRAL SHOT: %s\n", (player->ss) ? "Yes" : "No");
-            printf("FLIGHT: %s\n\n", (player->flight) ? "Yes" : "No");
+            printf("\n");
+
+            // printf("Player position : %d, %d / Player direction : %c / Iteration : %d \n", player->positionX, player->positionY, player->directionView, iteration);
+            // printf("\nHP: %.1f\n", player->hpMax);
+            // printf("DAMAGE  : %.1f\n", player->dmg);
+            // printf("SHIELD : %.1f\n", player->shield);
+            // printf("PIERCING SHOT : %s\n", (player->ps) ? "Yes" : "No");
+            // printf("SPECTRAL SHOT: %s\n", (player->ss) ? "Yes" : "No");
+            // printf("FLIGHT: %s\n\n", (player->flight) ? "Yes" : "No");
 
             if( * change == 1){
                 condition = false;
             }
 
-            printf("reload : %d\n",shootParams->reload);
+            // printf("reload : %d\n",shootParams->reload);
 
 
             continue;
@@ -1064,7 +1080,9 @@ void playerMoveLeft(Donjon* donjon, int stage, int roomID, Player* player) {
 }
 
 void playerLoseLife(Player* player, float damageTaken) {
-    if(player->shield > 0) { // player got shield
+
+
+        if(player->shield > 0) { // player got shield
         if(damageTaken > player->shield) { // more damage than shield
             damageTaken -= player->shield;
             player->shield = 0;

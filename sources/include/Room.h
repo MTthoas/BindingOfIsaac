@@ -16,7 +16,7 @@
 #define BASE_ROOM_NAME 'O' // room name used for spawn, boss
 #define NORMAL_ROOM_NAME 'R'
 #define ITEM_ROOM_NAME '$'
-#define BOSS_ROOM_NAME 'B'
+#define BOSS_ROOM_NAME 'O'
 #define BONUS_ITEM_ROOM '@'
 
 #define JAGGER_FIRST_LETTER 'J'

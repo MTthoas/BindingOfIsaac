@@ -55,16 +55,19 @@ int choseCharacter() {
     }
 
     system("clear");
-    printf("\n\n\n\n==========================================================================\n");
-    printf("|%50s", "CHOSE A CHARACTER");
-    printf("%22s|\n", " ");
     printf("==========================================================================\n");
+    printf("|%40s", "CHOOSE A CHARACTER");
+    printf("%32s|\n", " ");
+    printf("==========================================================================\n");
+    printf("\n");
+    printf("\n");
     
     for(int i = 0 ; i < 3 ; i+=1) {
-        printf("                   ");
+        printf("                        ");
         printf("%d.%s %s\n\n", i+1, characters[i].name, (characters[i].usable) ? " " : "(locked)");
     }
 
+    printf("\nSelect your character : ");
     int choice = 0;
     do {
         choice = readInt();
@@ -385,7 +388,6 @@ Object* objectsFileToObjectsList() {
 
     while(fgets(buffer, 255, fichier)) { // lecture fichier ligne par ligne
         firstLetter = buffer[0];
-        //printf("%s", buffer);
 
         if(firstLetter == 'n' || firstLetter == '-' || firstLetter == 'h' || firstLetter == 'd' || firstLetter == 's' || firstLetter == 'p' || firstLetter == 'f' || firstLetter == EOF) {
             if(firstLetter == '-') { 
@@ -477,9 +479,6 @@ Monster* fichierMonsterToListeMonster() {
 
     while(fgets(buffer, 255, fichier)) { // lecture fichier ligne par ligne
         firstLetter = buffer[0];
-        // printf("firstLetter %d\n", firstLetter);
-
-        //printf("%s", buffer);
 
         if(firstLetter == 'n' || firstLetter == '-' || firstLetter == 'h' || firstLetter == 's' || firstLetter == 'f' || firstLetter == EOF) {
             if(firstLetter == '-') { 
@@ -506,7 +505,6 @@ Monster* fichierMonsterToListeMonster() {
                         activated = 1;  
                         shoot = activated;  
                     }
-                    
                 } else if((strcmp(stat, "SS") == 0)) {
                     if((strstr(value, "TRUE") != NULL)){
                         activated = 1;  
@@ -544,6 +542,3 @@ Monster* fichierMonsterToListeMonster() {
     fclose(fichier);
     return arrayMonster;
 }
-
-
-

@@ -95,13 +95,14 @@ void displayCRUD_Room(CRUD_Room* room) {
         return;
     }
 
-    printf("[%d|%d]%d\n", room->lines, room->columns/2, room->id); // columns / 2 because of spaces
+    printf("\n");
+    printf("       [%d|%d]%d", room->lines, room->columns/2, room->id); // columns / 2 because of spaces
 
     for(int i = 0 ; i < room->lines ; i += 1) {
-        for(int j = 0 ; j < room->columns ; j += 1) {
+        printf("\n       ");
+        for(int j = 0 ; j < room->columns ; j += 1){
             printf("%c",room->map[i][j]);
         }
-        printf("\n");
     }
 }
 
@@ -156,6 +157,22 @@ void arrangeRoomsIds(CRUD_Room* head) {
         current = current->next;
     }
 }
+
+// Void deleteSpecificRoom(CRUD_Room* head, int id) {
+//     CRUD_Room* current = head;
+//     CRUD_Room* previous;
+
+//     if(head == NULL || head->id != 1) { // fail if null or not first
+//         return;
+//     }
+
+//     if(current->id == id) { // supprimer premier element
+//         head = current->next;
+//         free(current);
+//         return;
+//     }
+
+
 
 void removeCRUD_Room(CRUD_Room** ptr_head, int id) {
     CRUD_Room* tmp = *ptr_head;

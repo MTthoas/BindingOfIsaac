@@ -169,6 +169,35 @@ void askNumberOfRooms(int* nRooms, int max) {
     } while(success != 1);
 }
 
+// void askNumber(int* nRooms) {
+//     int success = 0;
+//      do {
+//         printf("          How many obstacles do u want to add ??\n");
+//         *nRooms = readInt();
+//         if(*nRooms <= 0 ) {
+//             printf("You only created %d rooms.\n", max);
+//             continue;
+//         }
+//         printf("%d rooms. Is that correct (y/n) ? \n", *nRooms);
+//         success = confirmation();
+//     } while(success != 1);
+// }
+
+// void askNumberOfObstacles(int* number) {
+//     int success = 0;
+//      do {
+//         printf("          How many obstacles do u want to add ??\n");
+//         *number = readInt();
+//         if(*number <= 0 ) {
+//             printf("          DO NOT ENTER 0 IDIOT");
+//             continue;
+//         }
+//         printf("          %d obstacles. Is that correct (y/n) ? \n", *number);
+//         success = confirmation();
+//     } while(success != 1);
+
+// }
+
 void askRoomDimensions(int* lines, int* columns) {
     int success = 0;
     do {
