@@ -570,7 +570,7 @@ void InitialisationGame(Donjon *d, int stageNum, Monster *arrayMonster)
                     allowChampionMonster = (getRandomInt(0, 1) == 1) ? 1 : 0; 
                     initialiseMonstersInsideRoom(d, stageNum, y, arrayMonster, allowChampionMonster);
                     setMonstersInsideRoom(d, stageNum, y);
-                    //wait(1000000);
+                    wait(1000000);
                 }
             }
         }

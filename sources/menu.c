@@ -1175,7 +1175,7 @@ void menuGame() {
 						#ifdef _WIN32 
 						Sleep(100); 
 						#else 
-						usleep(30000); 
+						usleep(60000); 
 						#endif 
 					}
 				}

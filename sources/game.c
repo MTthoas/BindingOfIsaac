@@ -74,10 +74,10 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     }
 
     //stats pour cheater :
-    player->hpMax = 100;
-    player->flight = 1;
-    player->hp=100;
-    player->dmg=300;
+    // player->hpMax = 100;
+    // player->flight = 1;
+    // player->hp=100;
+    // player->dmg=300;
 	while (condition) {
 
         int allMonstersAreDead = 0;
