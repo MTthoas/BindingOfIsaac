@@ -992,19 +992,27 @@ void initialiseMonstersInsideRoom(Donjon *d, int stage, int roomID, Monster *all
 
     Monster *roomMonsters = malloc(sizeof(Monster) * nbMonsters - 1);
     Monster randomMonster;
+    int monsterCanBeChampion = (getRandomInt(0, 10, 20) == 1) ? 1 : 0; // 10% to make monster champion
+
     for (int i = 0; i < nbMonsters - 1; i += 1)
     {
         index = uniqueNumbers[i];
         randomMonster = allMonsters[index];
         roomMonsters[i] = *duplicateMonster(&randomMonster);
+        if(monsterCanBeChampion) {
+            buffMonster(&roomMonsters[i]);
+        } 
     }
 
     d->stages[stage].rooms[roomID].monsters = roomMonsters;
     d->stages[stage].rooms[roomID].numberOfMonsters = nbMonsters - 1;
 
-    // printf("\nListe monstre room n°%d\n", stage, roomID);
+    // printf("\nListe monstre room n°%d\n", roomID);
     // for(int i=0 ; i < nbMonsters-1 ; i+=1) {
     //     printf("%s\n", d->stages[stage].rooms[roomID].monsters[i].name);
+    //     if(monsterCanBeChampion) {
+    //         printf("Monster is champion ! hp : %.2f, damage : %d\n", d->stages[stage].rooms[roomID].monsters[i].hpMax, d->stages[stage].rooms[roomID].monsters[i].damage);
+    //     }
     // }
     // sleep(2);
 }

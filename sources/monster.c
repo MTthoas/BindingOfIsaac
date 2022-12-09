@@ -214,11 +214,12 @@ Monster createMonster(int idMonster, char* name, float hpMax, int shoot, int fli
     monster.shoot = shoot;
     monster.flight = flight;
     monster.ss = ss;
+    monster.damage = 1;
 
     return monster;
 }
 
-void monsterActivity(void *params){
+void monsterActivity(void *params) {
     int id = ((ShootParams*)params)->id;
     int stage = ((ShootParams*)params)->stage;
     pthread_t tZero;
@@ -1347,4 +1348,9 @@ Monster* duplicateMonster(Monster* monster) {
     newMonster->positionX = monster->positionY;
 
     return newMonster;
+}
+
+void buffMonster(Monster* monster) {
+    monster->damage *= 2;
+    monster->hpMax *= 2;
 }
