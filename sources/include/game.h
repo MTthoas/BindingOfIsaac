@@ -107,6 +107,15 @@ void OptimiseDoors(Donjon * d, int stage, int axeX, int axeY, int id, int number
 void printMap(Donjon* d, int stage, int numberOfRooms);
 
 /**
+ * @brief Finds the boss inside the room
+ * 
+ * @param d 
+ * @param stage 
+ * @param roomID 
+ */
+int verifyIfBossIsHere(Donjon* d, int stage, int roomID);
+
+/**
  * @brief Prints the minimap
  * 
  * @param d 

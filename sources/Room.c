@@ -566,11 +566,11 @@ void InitialisationGame(Donjon *d, int stageNum, Monster *arrayMonster)
                 int allowChampionMonster=0; (void)allowChampionMonster;
                 // place monsters in rooms that are not spawn / boss / item / item bonus :
                 if (d->stages[stageNum].rooms[y].id != 0) {
+                     displayWaitMonsters();
                     allowChampionMonster = (getRandomInt(0, 1) == 1) ? 1 : 0; 
                     initialiseMonstersInsideRoom(d, stageNum, y, arrayMonster, allowChampionMonster);
                     setMonstersInsideRoom(d, stageNum, y);
-                    displayWaitMonsters();
-                    wait(1000000);
+                    //wait(1000000);
                 }
             }
         }

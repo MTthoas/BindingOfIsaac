@@ -70,8 +70,10 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     }
 
     //stats pour cheater :
-    // player->hpMax = 10;
-    // player->flight = 1;
+    player->hpMax = 100;
+    player->flight = 1;
+    player->hp=100;
+    player->dmg=300;
 	while (condition) {
 
         #ifdef _WIN32 
@@ -82,20 +84,11 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
         // Pour le boss
 
-        int verifyIfBossIsThere = 0;
-        
-      for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
-			for (int y = 0; y < d->stages[stage].rooms[id].width - 1; y++) {
-					if (y % 2 == 0) {
-                        if(d->stages[stage].rooms[id].room[i][y] == 'J'){
-                            verifyIfBossIsThere = 1;
-                        }
-					}
-				}
-			}
+        int bossIsHere = verifyIfBossIsHere(d, stage, id);
+    
 
-        if(player->hp <= 0 && verifyIfBossIsThere == 1){
-            verifyIfBossIsThere = 0;
+        if(player->hp <= 0 && bossIsHere == 1){
+            bossIsHere = 0;
             *pId = 0;
             condition = false;
             player->stageAxeX = 0;
@@ -650,7 +643,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     usleep(3000000); 
                     #endif 
                     
-
+                    srand(time(NULL));
                     while(1){
 
                         int positionX_N = rand() % (d->stages[stage].rooms[id].width - 2) + 2;
@@ -1211,9 +1204,7 @@ void playerMoveLeft(Donjon* donjon, int stage, int roomID, Player* player, Obsta
 }
 
 void playerLoseLife(Player* player, float damageTaken) {
-
-
-        if(player->shield > 0) { // player got shield
+    if(player->shield > 0) { // player got shield
         if(damageTaken > player->shield) { // more damage than shield
             damageTaken -= player->shield;
             player->shield = 0;
@@ -1369,6 +1360,21 @@ void openItemRoomBonusDoor(Donjon* d, int stage, int roomId) {
             }
         }
     }
+}
+
+int verifyIfBossIsHere(Donjon* d, int stage, int roomID) {
+    char bossFirstLetter = (stage == 0) ? JAGGER_FIRST_LETTER : (stage == 1) ? LENINA_FIRST_LETTER : ATHINA_FIRST_LETTER;
+    int bossIsHere;
+    for (int i = 0; i < d->stages[stage].rooms[roomID].height; i++) {
+        for (int y = 0; y < d->stages[stage].rooms[roomID].width - 1; y++) {
+            if (y % 2 == 0) {
+                if(d->stages[stage].rooms[roomID].room[i][y] == bossFirstLetter){
+                    bossIsHere = 1;
+                }
+            }
+        }
+    }
+    return bossIsHere;
 }
 /*
 int changeIdRoomForMonsters(int idRoomForMonster, int numberOfRooms) {

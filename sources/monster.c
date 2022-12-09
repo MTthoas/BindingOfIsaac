@@ -25,6 +25,7 @@
 
 #include "game.h"
 #include "include/mystring.h"
+#include "myUtils.h"
 
 
 void spawnMonster(Donjon * d, Monster * monster, int stage, int id) {
@@ -1077,8 +1078,6 @@ void * MonsterShoot(void * params){
 }
 
 void * Jagger(void *params){
-    ((ShootParams*)params)->boss->hpMax=0;
-    return NULL;
     // Shoot * shoot = malloc(sizeof(Shoot));
 
     // int condition = 1;
@@ -1214,13 +1213,12 @@ void * Jagger(void *params){
 
 
     }
-
-    if(((ShootParams*)params)->boss->hpMax > 0) {
-        ((ShootParams*)params)->boss->dead=1;
-    }
     
+    //pthread_join(BossShoot);
+        tag(1);
     free(((ShootParams*)params)->boss);
-
+    tag(2);
+    
     return 0;
 }
 
