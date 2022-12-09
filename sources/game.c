@@ -529,8 +529,6 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
                     d->stages[stage].rooms[id].name = BASE_ROOM_NAME;
 
-
-
                     if(stage == 0){
                         InitialiseBossRoom(d, stage, id, 'J');   
                         Boss->idMonster = 0;
@@ -610,7 +608,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 //changeRoomMonsterArray(idRoomForMonster, NumberOfRoomsInt, id);
 
                 if( d->stages[stage].rooms[id].name == NORMAL_ROOM_NAME && player->hp >= 0){
-                    monsterActivity(shootParams);
+                    // monsterActivity(shootParams);
                 }   
 
             }

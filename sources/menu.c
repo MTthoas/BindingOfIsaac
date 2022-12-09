@@ -1118,7 +1118,7 @@ void menuGame() {
 
 			case 'g':
 
-				stage = 1;
+				stage = 0;
 				change = 0;
 
                 Monster * arrayMonster = fichierMonsterToListeMonster();
@@ -1132,7 +1132,7 @@ void menuGame() {
 
                 // Boucle pour chaque étage
 
-				for(int i = 0; i < 62; i+=1) {
+				for(int i = 0; i < 3; i+=1) {
 
                     Donjon * d = malloc(sizeof(Donjon));
                     Boss * Boss = malloc(sizeof(Monster));
@@ -1178,6 +1178,9 @@ void menuGame() {
 						usleep(30000); 
 						#endif 
 					}
+
+                    // printf("TEST");
+                    // sleep(3);
 				}
 
             break;
