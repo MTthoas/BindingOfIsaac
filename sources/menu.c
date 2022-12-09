@@ -1091,11 +1091,12 @@ void SetColorAndPositionForPlayer(Donjon *d, Player *player, int stage, int id) 
 }
 
 void menuGame() {
+    displayEndGame();
 
     bool condition = true, condition2 = true, condition3 = true, condition4 = true, etape = true;
 	int c,c2;
 		
-    int stage;
+    //int stage;
     int change;
     
     int statusRoom = 0;
@@ -1118,7 +1119,7 @@ void menuGame() {
 
 			case 'g':
 
-				stage = 0;
+				//stage = 0;
 				change = 0;
 
                 Monster * arrayMonster = fichierMonsterToListeMonster();
@@ -1132,8 +1133,8 @@ void menuGame() {
 
                 // Boucle pour chaque étage
 
-				for(int i = 0; i < 3; i+=1) {
-
+				for(int stage = 0; stage < 3; stage+=1) {
+                    stage = 2;  
                     Donjon * d = malloc(sizeof(Donjon));
                     Boss * Boss = malloc(sizeof(Monster));
 
@@ -1162,7 +1163,6 @@ void menuGame() {
 					free(d -> stages[stage].stage);
 					free(d);
 
-					stage+=1;
 					// printf("CHANGE : %d", change);
 					change = 0;
 
@@ -1183,7 +1183,11 @@ void menuGame() {
                     // sleep(3);
 				}
 
+                displayEndGame();
+                condition=false;
+
             break;
+
 			case 'i':
                 while (condition2)
                 {
@@ -1322,4 +1326,22 @@ void displayWaitMonsters() {
         printf("=========         Do not forget Jesus !      ==============\n");
     }     
 
+}
+
+void displayEndGame() {
+    system("clear");
+    printf("=============================================================\n");
+    printf("=========        THE BINDING OF BRIATTE        ==============\n");
+    printf("=============================================================\n");
+    printf("\n");
+    printf("=========   You beat Athina, the last boss !   ==============\n");
+    sleep(4);
+    printf("\n========   Congratulations for your courage ! ==============\n");
+
+    //unlockChevailler();
+
+    printf("\n Click ENTER to quit...\n");
+    read(1, stdin, 255);
+
+    exit(EXIT_SUCCESS);
 }

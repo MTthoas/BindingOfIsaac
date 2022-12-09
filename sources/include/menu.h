@@ -32,7 +32,7 @@ int menuDeleteRoom(void);
 void optionError(void);
 void menuControl(void);
 void printGameBanner(void);
-
+void displayEndGame();
 void menuGame();
 void GameRecur(Donjon *d, Boss * boss, ShootParams * shootParams, Player * player, int characterID, int stage, int * change, int NumberOfRoomsInt, int id, int axeX, int axeY);
 #endif
