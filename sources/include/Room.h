@@ -35,7 +35,7 @@
 #define NEXT_STAGE 'N'
 #define END 'E'
 
-#define LOCKED_DOOR 'L'
+#define LOCKED_DOOR '|'
 #define ITEM_ROOM_DOOR '$'
 #define BOSS_ROOM_DOOR 'B'
 #define BONUS_ITEM_DOOR '@'

@@ -1118,7 +1118,7 @@ void menuGame() {
 
 			case 'g':
 
-				stage = 0;
+				stage = 1;
 				change = 0;
 
                 Monster * arrayMonster = fichierMonsterToListeMonster();

@@ -699,7 +699,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 printf("\n       ");
 				for (int y = 0; y < d->stages[stage].rooms[id].width - 1; y++) {
 					if (y % 2 == 0) {
-                        if(d->stages[stage].rooms[id].room[i][y] == 'L'){
+                        if(d->stages[stage].rooms[id].room[i][y] == LOCKED_DOOR){
                             printf("%s", KRED);
                             printf("%c  ", d->stages[stage].rooms[id].room[i][y]);
                             printf("%s", KNRM);

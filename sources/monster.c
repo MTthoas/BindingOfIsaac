@@ -1215,9 +1215,9 @@ void * Jagger(void *params){
     }
     
     //pthread_join(BossShoot);
-        tag(1);
+       
     free(((ShootParams*)params)->boss);
-    tag(2);
+    
     
     return 0;
 }
