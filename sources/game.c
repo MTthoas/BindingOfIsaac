@@ -80,15 +80,6 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     // player->dmg=300;
 	while (condition) {
 
-        int allMonstersAreDead = 0;
-        for (int i = 0; i < d->stages[stage].rooms[id].numberOfMonsters ; i++) {
-                if (d->stages[stage].rooms[id].monsters[i].hpMax >= 0) {
-                    allMonstersAreDead = 1;
-                }   
-        }
-        if(!allMonstersAreDead) {
-            GestionDoorsForMobRoom(d, stage, id, 1);
-        }
 
         #ifdef _WIN32 
 		Sleep(25); 
@@ -688,6 +679,17 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
 
             }
+
+                int allMonstersAreDead = 0;
+        for (int i = 0; i < d->stages[stage].rooms[id].numberOfMonsters ; i++) {
+                if (d->stages[stage].rooms[id].monsters[i].hpMax >= 0) {
+                    allMonstersAreDead = 1;
+                }   
+        }
+
+                    if(!allMonstersAreDead) {
+                GestionDoorsForMobRoom(d, stage, id, 1);
+            }
             
             if(BossInfinite == 1) {
                 if(shootParams->boss->hpMax <=  0){
@@ -777,7 +779,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
             if(d->stages[stage].rooms[id].name == ITEM_ROOM_NAME) {
                 printf("        Room item : \n");
-                displayObject(d->stages[stage].rooms[id].object);
+                //displayObject(d->stages[stage].rooms[id].object);
             }
 
 			for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
@@ -1424,10 +1426,10 @@ void displayGame(Donjon* d, Player* player, int stage, int numberOfRooms, int it
         int playerInBonusItemRoom = d->stages[stage].rooms[roomID].name == BONUS_ITEM_ROOM;
         if(playerInItemRoom) {
             printf("Room item : \n");
-            displayObject(d->stages[stage].rooms[roomID].object);
+            //displayObject(d->stages[stage].rooms[roomID].object);
         } else if(playerInBonusItemRoom) {
             printf("Room item : \n");
-            displayObject(d->stages[stage].rooms[roomID].bonusObject);
+            //displayObject(d->stages[stage].rooms[roomID].bonusObject);
         }
         printf("\n");
 
