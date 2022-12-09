@@ -1299,7 +1299,7 @@ void menuGame() {
 }
 
 void displayWaitMonsters() {
-    int randMessage = getRandomInt(0, 6, 20);
+    int randMessage = getRandomInt(0, 5);
     system("clear");
     printf("===========================================================\n");
     printf("=========      THE BINDING OF BRIATTE        ==============\n");

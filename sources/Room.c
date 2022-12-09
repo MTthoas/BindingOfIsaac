@@ -562,16 +562,15 @@ void InitialisationGame(Donjon *d, int stageNum, Monster *arrayMonster)
             {
                 d->stages[stageNum].rooms[y].roomUsed = 0;
                 d->stages[stageNum].rooms[y].id = d->stages[stageNum].randomNumberRooms[y];
-                // place monsters in rooms that are not spawn / boss / item / item bonus
+                
+                int allowChampionMonster=0; (void)allowChampionMonster;
+                // place monsters in rooms that are not spawn / boss / item / item bonus :
                 if (d->stages[stageNum].rooms[y].id != 0) {
-                    initialiseMonstersInsideRoom(d, stageNum, y, arrayMonster);
+                    allowChampionMonster = (getRandomInt(0, 1) == 1) ? 1 : 0; 
+                    initialiseMonstersInsideRoom(d, stageNum, y, arrayMonster, allowChampionMonster);
                     setMonstersInsideRoom(d, stageNum, y);
                     displayWaitMonsters();
-                    #ifdef _WIN32
-                    Sleep(1000);
-                    #else
-                    usleep(1000000);
-                    #endif
+                    wait(1000000);
                 }
             }
         }
@@ -711,7 +710,6 @@ int NowRoomIsUsed(struct Donjon *d, int NumberOfRoomsInt, int id)
 
 int *RandomArrayForAttribution(int number)
 {
-
     int *tab = malloc(sizeof(int) * number);
     int newNumber = 0;
     int iteration = 1;
@@ -984,27 +982,39 @@ int setMonstersInsideRoom(Donjon *d, int stage, int roomId)
     return 1;
 }
 
-void initialiseMonstersInsideRoom(Donjon *d, int stage, int roomID, Monster *allMonsters)
+void initialiseMonstersInsideRoom(Donjon *d, int stage, int roomID, Monster *allMonsters, int allowChampion)
 {
-    int nbMonsters = getRandomInt(0, 6, 20);
-    int *uniqueNumbers = generateUniqueNumbers(nbMonsters - 1, 8);
+    int nbMonsters = getRandomInt(1, 6);
+    int *uniqueNumbers = generateUniqueNumbers(nbMonsters);
+    
     int index = 0;
 
-    Monster *roomMonsters = malloc(sizeof(Monster) * nbMonsters - 1);
+    Monster *roomMonsters = malloc(sizeof(Monster) * nbMonsters);
     Monster randomMonster;
-    for (int i = 0; i < nbMonsters - 1; i += 1)
+    int monsterCanBeChampion = 0;
+
+    for (int i = 0; i < nbMonsters ; i += 1)
     {
         index = uniqueNumbers[i];
-        randomMonster = allMonsters[index];
+        randomMonster = allMonsters[index]; 
         roomMonsters[i] = *duplicateMonster(&randomMonster);
+
+        if(allowChampion) {
+            monsterCanBeChampion = (getRandomInt(0, 4) == 1) ? 1 : 0; // 10% to make monster champion
+            if(monsterCanBeChampion) {
+                buffMonster(&(roomMonsters[i]));
+                //printf("Monster is champion ! hp : %.2f, damage : %d\n", d->stages[stage].rooms[roomID].monsters[i].hpMax, d->stages[stage].rooms[roomID].monsters[i].damage);
+            }
+            wait(1000000); // wait for 1 second for true randomness
+        }
     }
 
     d->stages[stage].rooms[roomID].monsters = roomMonsters;
-    d->stages[stage].rooms[roomID].numberOfMonsters = nbMonsters - 1;
+    d->stages[stage].rooms[roomID].numberOfMonsters = nbMonsters;
 
-    // printf("\nListe monstre room n°%d\n", stage, roomID);
-    // for(int i=0 ; i < nbMonsters-1 ; i+=1) {
-    //     printf("%s\n", d->stages[stage].rooms[roomID].monsters[i].name);
+    // printf("\nListe monstre room n°%d (%d monsters)\n", nbMonsters, d->stages[stage].rooms[roomID].numberOfMonsters);
+    // for(int i=0 ; i < nbMonsters ; i+=1) {
+    //     printf("%d, %s",d->stages[stage].rooms[roomID].monsters[i].damage, d->stages[stage].rooms[roomID].monsters[i].name);
     // }
     // sleep(2);
 }

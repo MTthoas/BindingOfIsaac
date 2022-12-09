@@ -22,6 +22,7 @@
     int ss;
     int positionX;
     int positionY;
+    int damage;
     int dead;
 
 } Monster;
@@ -88,6 +89,13 @@ typedef struct Boss {
      * @return Monster* 
      */
     Monster* duplicateMonster(Monster* monster);
+
+    /**
+     * @brief Make monster a champion. Doubles hpMax and damage of monster.
+     * 
+     * @param monster 
+     */
+    void buffMonster(Monster* monster);
 
 
     //void* Lenina(void *params);

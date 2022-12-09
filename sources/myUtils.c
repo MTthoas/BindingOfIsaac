@@ -2,15 +2,23 @@
 #include <time.h>
 #include <stdlib.h>
 
-int getRandomInt(int min, int max, int precision) {
-    int random;
 
-    srand(time(NULL));
-    for(int i=0; i<precision; i+=1) { 
-        random = min+1 + rand() %(max-1);
+int getRandomInt(int min, int max) {
+    int result = 0, low = 0, high = 0;
+
+    // to include max 
+    if (min < max)
+    {
+        low = min;
+        high = max + 1; 
+    } else {
+        low = max + 1; 
+        high = min;
     }
 
-    return random;
+    srand(time(NULL));
+    result = (rand() % (high - low)) + low;
+    return result;
 }
 
 void refresh() {
@@ -22,31 +30,41 @@ void refresh() {
     #endif
 }
 
-int* generateUniqueNumbers(int size, int limit) {
-    if(size >= limit) { // combinaison unique impossible  
-        return NULL;
-    }
+void wait(int microseconds) {
+    #ifdef _WIN32 
+    Sleep(microseconds/1000); 
+    #else 
+    usleep(microseconds);
+    #endif
+}
 
-    int* res = malloc(sizeof(int) * size);
-    int newNumber = 1;
-
-    time_t t;
-    srand((unsigned) time(&t));
-
-    for(int i = 0 ; i < size ; i += 1) { // génération des nombres
-
-        while(1) { 
-            newNumber = rand() % limit;
-            if(isUnique(res, newNumber, size) == 1) {
-                res[i] = newNumber;
-                break;
-            } else {
-                continue;
-            }
+void shuffle(int *array, size_t n)
+{
+    srand(time(NULL));
+    if (n > 1) 
+    {
+        size_t i;
+        for (i = 0; i < n - 1; i++) 
+        {
+          size_t j = i + rand() / (RAND_MAX / (n - i) + 1);
+          int t = array[j];
+          array[j] = array[i];
+          array[i] = t;
         }
-
     }
-    return res;
+
+}
+
+int* generateUniqueNumbers(int size)
+{
+    int* array=malloc(sizeof(int)*size);
+
+    for(int i=0 ; i < size ; i+=1) {
+        array[i] = i;
+    }    
+
+    shuffle(array, size);
+    return array;
 }
 
 int isUnique(int* res, int nb, int size) {
