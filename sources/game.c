@@ -538,10 +538,8 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         Boss->shoot = 1;
                         Boss->dead = 0; // alive
                         shootParams->condition = 1;
-
-                        if( shootParams->boss == NULL){
-                            shootParams->boss = Boss;
-                        }
+                        shootParams->boss = Boss;
+                        
 
                         pthread_create(&thread, NULL, Jagger, shootParams);
                         //shootParams->boss->hpMax = 0;
@@ -560,10 +558,8 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         Boss->shoot = 1;           
                         Boss->dead = 0; // alive                                        
                         shootParams->condition = 1; 
-                     
-                        if( shootParams->boss == NULL) {                             
-                            shootParams->boss = Boss;                         
-                        }
+                        shootParams->boss = Boss;                         
+                        
 
                         pthread_create(&thread, NULL, Lenina, shootParams);   
                     } 
@@ -576,9 +572,9 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         Boss->shoot = 1;
                         Boss->dead = 0; // alive
                         shootParams->condition = 1;
-                        if( shootParams->boss == NULL){
+                        
                             shootParams->boss = Boss;
-                        }
+                        
 
                         pthread_create(&thread, NULL, bossAthina, shootParams);
                     }
@@ -610,6 +606,12 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 if( d->stages[stage].rooms[id].name == NORMAL_ROOM_NAME && player->hp >= 0){
                     // monsterActivity(shootParams);
                 }   
+
+                if((d->stages[stage].rooms[id].name == BASE_ROOM_NAME || d->stages[stage].rooms[id].name == BASE_ROOM_NAME) && player->hp >= 0) {
+                    shootParams->boss = Boss;
+                    monsterActivity(shootParams);
+                }   
+
 
             }
             

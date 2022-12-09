@@ -198,9 +198,9 @@ void * bossAthina(void *shootParams) {
         
     }
 
-    if(((ShootParams*)shootParams)->boss->hpMax > 0) {
-        ((ShootParams*)shootParams)->boss->dead=1;
-    }
+    // if(((ShootParams*)shootParams)->boss->hpMax > 0) {
+    //     ((ShootParams*)shootParams)->boss->dead=1;
+    // }
 
     free(shoot);
     return 0;
@@ -1169,7 +1169,7 @@ void * Jagger(void *params){
             }
         
                     
-        }else{
+        } else{
 
             if(DiffPositionY > 0){
 
