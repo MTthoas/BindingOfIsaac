@@ -24,8 +24,8 @@ cd BindingOfIsaac
 
 ## Create a build folder
 ```sh
-mkdir build
-cd build
+mkdir bin
+cd bin
 ```
 
 ## Build
