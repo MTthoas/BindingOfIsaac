@@ -666,7 +666,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                         int positionY_N = rand() % (d->stages[stage].rooms[id].height - 2) + 2;
 
                         if(d->stages[stage].rooms[id].room[positionY_N][positionX_N] == EMPTY && positionX_N % 2 == 0) {
-                            if(stage == d->numberOfStages) {
+                            if(stage == (d->numberOfStages)-1) {
                                 d->stages[stage].rooms[id].room[positionY_N][positionX_N] = END;
                             } else {
                                 d->stages[stage].rooms[id].room[positionY_N][positionX_N] = NEXT_STAGE;
