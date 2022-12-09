@@ -738,18 +738,18 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
             printMinimap(d, stage, NumberOfRoomsInt);
 
             // printf("Axe Position X : %d / and Position Y : %d\n", axeX, axeY);
-            printf("ETAGE : %d\n", stage);
-            printf("Name : %c\n",d->stages[stage].rooms[id].name);
+            printf("        ETAGE : %d\n", stage);
+            printf("        Name : %c\n",d->stages[stage].rooms[id].name);
             // printf("ID : %d\n", id);
             if(d->stages[stage].rooms[id].name == BASE_ROOM_NAME && BossInfinite == 1){
                 printf("Boss HP : %.f\n", shootParams->boss->hpMax);
             }
             printf("      \n");
             printf("        HP player: %.2f / %.2f\n", player->hp, player->hpMax);
-                printf("Name : %c\n",d->stages[stage].rooms[id].name);
+                // printf("        Name : %c\n",d->stages[stage].rooms[id].name);
 
             if(d->stages[stage].rooms[id].name == ITEM_ROOM_NAME) {
-                printf("      Room item : \n");
+                printf("        Room item : \n");
                 displayObject(d->stages[stage].rooms[id].object);
             }
 
@@ -784,7 +784,17 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 				}
 			}
 
-            printf("\n");
+                printf("\n       ");
+                printf("\n");
+
+            printf("        DAMAGE  : %.1f\n", player->dmg);
+            printf("        SHIELD : %.1f\n", player->shield);
+            printf("        PIERCING SHOT : %s\n", (player->ps) ? "Yes" : "No");
+            printf("        SPECTRAL SHOT: %s\n", (player->ss) ? "Yes" : "No");
+            printf("        FLIGHT: %s\n\n", (player->flight) ? "Yes" : "No");
+
+
+                    printf("\n");
 
             if( * change == 1){
                 condition = false;
