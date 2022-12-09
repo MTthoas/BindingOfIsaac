@@ -735,6 +735,12 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 condition = false;
             }
 
+                printf("===========================================================\n");
+                printf("=========      THE BINDING OF BRIATTE        ==============\n");
+                printf("===========================================================\n");
+                printf("\n");
+                printf("\n");
+
             printMinimap(d, stage, NumberOfRoomsInt);
 
             // printf("Axe Position X : %d / and Position Y : %d\n", axeX, axeY);
