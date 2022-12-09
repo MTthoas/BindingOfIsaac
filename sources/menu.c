@@ -1159,6 +1159,10 @@ void menuGame() {
                     SetColorAndPositionForPlayer(d, player, stage, id);
 
                     GameRecur(d, Boss, shootParams, player, characterID, stage, &change, NumberOfRoomsInt, id, axeX, axeY);
+
+                    if(change == 500){
+                        break;
+                    }
     
 					free(d -> stages[stage].stage);
 					free(d);

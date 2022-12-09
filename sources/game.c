@@ -122,9 +122,9 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 			c = getchar();
 		}
         
-		if (c == 'x') { // glitch to de-lock doors without beating the monsters
-            GestionDoorsForMobRoom(d, stage, id, 1);
-		}
+		// if (c == 'x') { // glitch to de-lock doors without beating the monsters
+        //     GestionDoorsForMobRoom(d, stage, id, 1);
+		// }
 
 		if (c != 'e') {
  
@@ -444,7 +444,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
                 break;
 
-                case 'o': ;
+                case '8': 
                     // Shoot Up                 
                     if (shootParams->reload == 1){
                         if( shootParams->boss == NULL){
@@ -464,8 +464,24 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
                     }
                 break;
+
+                case 'x':
+                    // leave the game
+
+                    system("clear");
+                    printf("Vous avez quitté le jeu !\n");
+
+                    #ifdef _WIN32 
+                    Sleep(25); 
+                    #else 
+                    usleep(100000); 
+                    #endif 
+
+                    exit(1);
+
+                break;
                 
-                case 'l': ;
+                case '5': 
                     // Shoot Down
                     if (shootParams->reload == 1){
                         if( shootParams->boss == NULL){
@@ -484,7 +500,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
                 break;
                 
-                case 'k': ;
+                case '4': ;
                     // Shoot Left
                     if (shootParams->reload == 1) {
                         if( shootParams->boss == NULL) {
@@ -502,7 +518,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     }
                 break;
 
-                case 'm': ;
+                case '6': ;
                     // Shoot Right
                     pthread_t t5;
                     if (shootParams->reload == 1){
@@ -761,8 +777,6 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 printf("===========================================================\n");
                 printf("=========      THE BINDING OF BRIATTE        ==============\n");
                 printf("===========================================================\n");
-                printf("\n");
-                printf("\n");
 
             printMinimap(d, stage, NumberOfRoomsInt);
 
