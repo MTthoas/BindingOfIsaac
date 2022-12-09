@@ -30,6 +30,7 @@
 
 #define KRED "\x1B[31m"
 #define KNRM "\x1B[0m"
+#define yellow = "\x1b[33m"
 
 #define PBSTR "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
 #define PBWIDTH 60

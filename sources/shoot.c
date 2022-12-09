@@ -57,10 +57,6 @@ void * shootUp(void *shootParams) {
 			char letter = tolower(((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].firstLetter);
 			if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] == letter){
 				((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax = ((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax - ((ShootParams*)shootParams)->player->dmg;
-				if(((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax <= 0){
-					((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY - 1][shoot->positionX] = ' ';
-					//TODO: Spawn item 5% chance
-				}
 			}
 		}
 
@@ -79,9 +75,6 @@ void * shootUp(void *shootParams) {
 		char letter = tolower(((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].firstLetter);
 		if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->player->positionY-1][((ShootParams*)shootParams)->player->positionX] == letter){
 			((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax = ((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax - ((ShootParams*)shootParams)->player->dmg;
-			if(((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax <= 0){
-				((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->player->positionY-1][((ShootParams*)shootParams)->player->positionX] = ' ';
-			}
 		}
 	}
 	
@@ -121,9 +114,6 @@ void* shootDown(void *shootParams) {
 						char letter = tolower(((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].firstLetter);
 						if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY + 1][shoot->positionX] == letter){
 							((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax = ((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax - ((ShootParams*)shootParams)->player->dmg;
-							if(((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax <= 0){
-								((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY + 1][shoot->positionX] = ' ';
-							}
 						}
 					}
 					if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY + 1][shoot->positionX] == ((ShootParams*)shootParams)->boss->firstLetter){
@@ -140,9 +130,6 @@ void* shootDown(void *shootParams) {
 					char letter = tolower(((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].firstLetter);
 					if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->player->positionY+1][((ShootParams*)shootParams)->player->positionX] == letter){
 						((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax = ((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax - ((ShootParams*)shootParams)->player->dmg;
-						if(((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax <= 0){
-							((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->player->positionY+1][((ShootParams*)shootParams)->player->positionX] = ' ';
-						}
 					}
 				}
 				if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->player->positionY+1][((ShootParams*)shootParams)->player->positionX] == ((ShootParams*)shootParams)->boss->firstLetter){
@@ -181,9 +168,6 @@ void* shootLeft(void *shootParams){
 			char letter = tolower(((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].firstLetter);
 			if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY][shoot->positionX - 2] == letter){
 				((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax = ((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax - ((ShootParams*)shootParams)->player->dmg;
-				if(((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax <= 0){
-					((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY][shoot->positionX - 2] = ' ';
-				}
 			}
 		}
 		if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY][shoot->positionX - 2] == ((ShootParams*)shootParams)->boss->firstLetter){
@@ -200,9 +184,6 @@ void* shootLeft(void *shootParams){
 		char letter = tolower(((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].firstLetter);
 		if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->player->positionY][((ShootParams*)shootParams)->player->positionX-2] == letter){
 			((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax = ((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax - ((ShootParams*)shootParams)->player->dmg;
-			if(((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax <= 0){
-				((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->player->positionY][((ShootParams*)shootParams)->player->positionX-2] = ' ';
-			}
 		}
 	}
 	if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->player->positionY][((ShootParams*)shootParams)->player->positionX-2] == ((ShootParams*)shootParams)->boss->firstLetter){
@@ -241,9 +222,6 @@ void* shootRight(void *shootParams){
 						char letter = tolower(((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].firstLetter);
 						if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY][shoot->positionX + 2] == letter){
 							((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax = ((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax - ((ShootParams*)shootParams)->player->dmg;
-							if(((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax <= 0){
-								((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY][shoot->positionX + 2] = ' ';
-							}
 						}
 					}
 					if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[shoot->positionY][shoot->positionX + 2] == ((ShootParams*)shootParams)->boss->firstLetter){
@@ -260,9 +238,6 @@ void* shootRight(void *shootParams){
 					char letter = tolower(((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].firstLetter);
 					if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->player->positionY][((ShootParams*)shootParams)->player->positionX+2] == letter){
 						((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax = ((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax - ((ShootParams*)shootParams)->player->dmg;
-						if(((ShootParams*)shootParams)->d -> stages[stage].rooms[id].monsters[j].hpMax <= 0){
-							((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->player->positionY][((ShootParams*)shootParams)->player->positionX+2] = ' ';
-						}
 					}
 				}
 				if(((ShootParams*)shootParams)->d->stages[((ShootParams*)shootParams)->stage].rooms[((ShootParams*)shootParams)->id].room[((ShootParams*)shootParams)->player->positionY][((ShootParams*)shootParams)->player->positionX+2] == ((ShootParams*)shootParams)->boss->firstLetter){

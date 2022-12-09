@@ -969,8 +969,8 @@ int setMonstersInsideRoom(Donjon *d, int stage, int roomId)
     int letter;
 
     while (monsterId < numberOfMonsters) {
-        randomPositionY = 1 + rand() % (heightRoom - 1);
-        randomPositionX = 2 + rand() % (widthRoom - 2);
+        randomPositionY = 2 + rand() % (heightRoom - 2);
+        randomPositionX = 4 + rand() % (widthRoom - 4);
         placeIsFreeAndNotNearPlayer = randomPositionX % 2 == 0 && d->stages[stage].rooms[roomId].room[randomPositionY][randomPositionX] == ' ' && d->stages[stage].rooms[roomId].room[randomPositionY][randomPositionX - 2] != 'P' && d->stages[stage].rooms[roomId].room[randomPositionY][randomPositionX + 2] != 'P' && d->stages[stage].rooms[roomId].room[randomPositionY - 1][randomPositionX] != 'P' && d->stages[stage].rooms[roomId].room[randomPositionY + 1][randomPositionX] != 'P';
         if (placeIsFreeAndNotNearPlayer) {
             d->stages[stage].rooms[roomId].monsters[monsterId].positionX = randomPositionX;

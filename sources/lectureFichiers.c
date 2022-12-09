@@ -388,7 +388,6 @@ Object* objectsFileToObjectsList() {
 
     while(fgets(buffer, 255, fichier)) { // lecture fichier ligne par ligne
         firstLetter = buffer[0];
-        //printf("%s", buffer);
 
         if(firstLetter == 'n' || firstLetter == '-' || firstLetter == 'h' || firstLetter == 'd' || firstLetter == 's' || firstLetter == 'p' || firstLetter == 'f' || firstLetter == EOF) {
             if(firstLetter == '-') { 
@@ -480,9 +479,6 @@ Monster* fichierMonsterToListeMonster() {
 
     while(fgets(buffer, 255, fichier)) { // lecture fichier ligne par ligne
         firstLetter = buffer[0];
-        // printf("firstLetter %d\n", firstLetter);
-
-        //printf("%s", buffer);
 
         if(firstLetter == 'n' || firstLetter == '-' || firstLetter == 'h' || firstLetter == 's' || firstLetter == 'f' || firstLetter == EOF) {
             if(firstLetter == '-') { 
@@ -506,10 +502,10 @@ Monster* fichierMonsterToListeMonster() {
                     hpMax = atof(value);
                     // printf("hpMax %f \n", hpMax);
                 }  else if((strcmp(stat, "SHOOT") == 0)) {
-                    // printf("value %s", value);
-                    activated = (strcmp(value, "TRUE") == 0);
-                    // printf("activated %d \n", activated);
-                    shoot = activated;
+                    if((strstr(value, "TRUE") != NULL)){
+                        activated = 1;  
+                        shoot = activated;  
+                    }
                 } else if((strcmp(stat, "SS") == 0)) {
                     if((strstr(value, "TRUE") != NULL)){
                         activated = 1;  
@@ -547,6 +543,3 @@ Monster* fichierMonsterToListeMonster() {
     fclose(fichier);
     return arrayMonster;
 }
-
-
-
