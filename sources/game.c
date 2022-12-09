@@ -604,13 +604,13 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 //changeRoomMonsterArray(idRoomForMonster, NumberOfRoomsInt, id);
 
                 if( d->stages[stage].rooms[id].name == NORMAL_ROOM_NAME && player->hp >= 0){
-                    // monsterActivity(shootParams);
-                }   
-
-                if((d->stages[stage].rooms[id].name == BASE_ROOM_NAME || d->stages[stage].rooms[id].name == BASE_ROOM_NAME) && player->hp >= 0) {
-                    shootParams->boss = Boss;
                     monsterActivity(shootParams);
                 }   
+
+                // if((d->stages[stage].rooms[id].name == BASE_ROOM_NAME || d->stages[stage].rooms[id].name == BASE_ROOM_NAME) && player->hp >= 0) {
+                //     shootParams->boss = Boss;
+                //     monsterActivity(shootParams);
+                // }   
 
 
             }
