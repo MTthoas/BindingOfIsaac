@@ -33,6 +33,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     int itemIsSet = 0;
     int bonusItemIsSet = 0;
     char elementAtFuturePosition = EMPTY;
+                int icomeFromItemBossRoom = 0;
 
     Obstacle* obstacle = malloc(sizeof(Obstacle));
     obstacle->isErased=0;
@@ -53,6 +54,9 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
     monsterVide->hpMax = 999;
     struct Boss * bossVide = malloc(sizeof(Boss));
     bossVide->hpMax = 999;
+
+                int axeXforN = 0;
+            int axeYforN = 0;
     
     pthread_t thread;
     int c;
@@ -128,10 +132,6 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
             switch (c) {
 
 				case 'z':
-
-                    if( d->stages[stage].rooms[id].name == BOSS_ROOM_NAME ){
-                        bossActive = 1;
-                    } 
 
                     // Initialisation
                     player->directionView = 'z';
@@ -217,9 +217,6 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 
 				case 's': // move down
 
-                    if( d->stages[stage].rooms[id].name == BOSS_ROOM_NAME ){
-                        bossActive = 1;
-                    } 
 
                     player->directionView = 's';
                     elementAtFuturePosition = d->stages[stage].rooms[id].room[player->positionY + 1][player->positionX];  
@@ -290,10 +287,7 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
 				break;
 
 				case 'q': // move left
-                
-                    if( d->stages[stage].rooms[id].name == BOSS_ROOM_NAME ){
-                        bossActive = 1;
-                    } 
+            
 
                     player->directionView = 'q';
                     elementAtFuturePosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX - 2];
@@ -371,9 +365,6 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                     
 				case 'd': // move right
 
-                    if( d->stages[stage].rooms[id].name == BOSS_ROOM_NAME ){
-                        bossActive = 1;
-                    } 
 
                     player->directionView = 'd';
                     elementAtFuturePosition = d->stages[stage].rooms[id].room[player->positionY][player->positionX + 2];
@@ -524,8 +515,75 @@ void gestionGame(Donjon * d, ShootParams *shootParams, Boss * Boss, int stage, i
                 
 
 			}
+            
+            int conditionN = 0;
+            for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
+				for (int y = 0; y < d->stages[stage].rooms[id].width - 1; y++) {
+					if (y % 2 == 0) {
+                        if(d->stages[stage].rooms[id].room[i][y] == 'N'){
+                            conditionN = 1;
+                        }
+                    }
+                }
+            }
 
+
+            (void)axeXforN;
+            (void)axeYforN;
+
+             if(d->stages[stage].rooms[id].name == '@'){
+                                icomeFromItemBossRoom = 1;
+                for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
+                    for (int y = 0; y < d->stages[stage].rooms[id].width - 1; y++) { 
+                        if (y % 2 == 0) {
+                            if(d->stages[stage].rooms[id].room[i][y] == 'J'){
+                                d->stages[stage].rooms[id].room[i][y] = ' ';
+                            }
+                            if(d->stages[stage].rooms[id].room[i][y] == 'N'){
+                                axeXforN = i;
+                                axeYforN = y;
+                                d->stages[stage].rooms[id].room[i][y] = ' ';
+                            }
+                        }
+                    }
+                }
+             }
+
+             
+
+            if(d->stages[stage].rooms[id].name == 'B'){
+                for (int i = 0; i < d->stages[stage].rooms[id].height; i++) {
+                    for (int y = 0; y < d->stages[stage].rooms[id].width - 1; y++) { 
+                        if (y % 2 == 0) {
+                            if(d->stages[stage].rooms[id].room[i][y] == 'N'){
+                                conditionN = 1;
+                            }
+                            if(d->stages[stage].rooms[id].room[i][y] == 'I'){
+                                d->stages[stage].rooms[id].room[i][y] = ' ';
+                            }
+                            
+                        }
+                    }
+                }
+                
+            }
+
+
+            if(icomeFromItemBossRoom == 1){
+
+                d->stages[stage].rooms[id].room[axeXforN][axeYforN] = 'N';
+                icomeFromItemBossRoom = 0;
+   
+            }
+
+
+
+            if(conditionN == 0 && d->stages[stage].rooms[id].name == BOSS_ROOM_NAME ){
+                bossActive = 1;
+            } 
+            
             if(bossActive == 1){
+                
 
                     d->stages[stage].rooms[id].name = BASE_ROOM_NAME;
 
