@@ -2,6 +2,29 @@
 
 This game is a simple rpg game written in C.<br>
 
+## DOCKER 
+
+```sh
+FROM  debian:latest
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    git \
+    gcc \
+    pkg-config \
+    cmake-data
+WORKDIR /app 
+RUN git clone https://github.com/MTthoas/BindingOfIsaac.git
+WORKDIR /app/BindingOfIsaac/build
+RUN cmake ..
+RUN make
+
+CMD ["./BindingOfIsaac"]
+
+```
+
+
 ## Dependencies
 
 - [Git]
